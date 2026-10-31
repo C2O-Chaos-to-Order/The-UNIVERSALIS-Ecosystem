@@ -20,9 +20,13 @@ from pathlib import Path
 
 from evidence_states import (
     DECISION_REQUIRED,
+    EXECUTION_OUTCOMES,
     PROGRAMME_CREDITS,
+    STATES,
     assert_authorization_status,
     assert_programme_credit,
+    authorization_record_supports,
+    cross_axis_problems,
     decision_supports,
     require_state_authority,
     EvidenceStateError,
@@ -73,8 +77,14 @@ FORBIDDEN_PRODUCTION = frozenset(
         "PERFORMED",
     }
 )
+# Results at ``independently_reproduced`` or beyond have been reproduced by
+# someone other than the author. ``verified`` alone has not.
 LATER_THAN_REPRODUCED = frozenset(
-    {"reproduced", "reviewed", "accepted", "authorized"}
+    {"independently_reproduced", "validated", "authorized"}
+)
+# Evidence states that a single run may not claim on its own authority.
+DECISION_GATED_LABEL = ", ".join(
+    state for state in STATES if state in DECISION_REQUIRED
 )
 CLAUSE_BODY_KEYS = frozenset({"body", "clause_text", "text", "title", "clause_title"})
 
@@ -104,18 +114,39 @@ PLAN_EVIDENCE_FIELDS = (
     "regression_links",
     "open_obligations",
 )
-SIMULATION_PASS_FIELDS = ("protocol_version", "configuration", "environment")
+# The four Plan simulation-pass fields are required on every simulation
+# result. started_at, ended_at, duration_seconds and exit_code are extra
+# execution detail and do not replace execution_timestamp.
+SIMULATION_PASS_FIELDS = (
+    "protocol_version",
+    "configuration",
+    "environment",
+    "execution_timestamp",
+    "failure_policy",
+    "known_answer_check",
+    "mcse_or_precision_note",
+)
+# Plan values for pass_type. Structure (directory and ledger names) keeps the
+# word simulation; the pass_type value does not.
+PASS_TYPE_RESEARCH = "research"
+PASS_TYPE_EXECUTED_SIMULATION = "executed_simulation"
+PASS_TYPE_VALUES = frozenset({PASS_TYPE_RESEARCH, PASS_TYPE_EXECUTED_SIMULATION})
+EXECUTION_OUTCOME_VALUES = frozenset(EXECUTION_OUTCOMES)
+NAIVE_TIMESTAMP = re.compile(
+    r"^[0-9]{4}-[0-9]{2}-[0-9]{2}T[0-9]{2}:[0-9]{2}(:[0-9]{2}(\.[0-9]+)?)?$"
+)
 ULC_REQUIREMENT_ID = re.compile(r"^ULC-[0-9]{2}-[0-9]{2}$")
 # Collection-level ids use a different register. They are not programme requirements.
 OTHER_REGISTER_ID = re.compile(r"^UNI-[0-9]{3,4}$")
 
 RESEARCH_LEDGER = PLAN_EVIDENCE_FIELDS + (
+    "execution_outcome",
     "simulation_link",
     "programme_credit",
     "clause_ids",
     "release_classification",
 )
-SIMULATION_LEDGER = PLAN_EVIDENCE_FIELDS + SIMULATION_PASS_FIELDS + (
+SIMULATION_LEDGER = PLAN_EVIDENCE_FIELDS + ("execution_outcome",) + SIMULATION_PASS_FIELDS + (
     "research_record_id",
     "execution_status",
     "outcome",
@@ -404,6 +435,12 @@ def records_from_schema(
 def load_package(root: Path, reasons: dict[str, list[str]]) -> dict:
     """Load package JSON and ledgers. File errors stay on the check that owns them."""
     data: dict = {
+        # Raw payloads as parsed, before schema acceptance. The evidence/outcome
+        # cross-axis check reads these so a record that fails schema validation
+        # still yields the specific confusion finding rather than only a
+        # generic "value is not allowed".
+        "raw_research": [],
+        "raw_results": [],
         "research": [],
         "cases": [],
         "results": [],
@@ -429,6 +466,8 @@ def load_package(root: Path, reasons: dict[str, list[str]]) -> dict:
         reasons["traceability"].append(f"TRACEABILITY: {error}")
         data["ready"] = False
     else:
+        if isinstance(research_payload, list):
+            data["raw_research"] = [item for item in research_payload if isinstance(item, dict)]
         research = records_from_schema(
             research_payload,
             {"type": "array", "items": research_schema},
@@ -469,6 +508,7 @@ def load_package(root: Path, reasons: dict[str, list[str]]) -> dict:
 
     result_files = sorted((root / "results").glob("SIM-*.json")) if (root / "results").is_dir() else []
     results = []
+    raw_results = []
     result_ok = True
     for path in result_files:
         payload, error = load_json(path)
@@ -477,6 +517,7 @@ def load_package(root: Path, reasons: dict[str, list[str]]) -> dict:
             reasons["execution_evidence"].append(f"EXECUTION_EVIDENCE: {rel} is not a JSON object")
             result_ok = False
             continue
+        raw_results.append(payload)
         problems = schema_problems(payload, result_schema, rel)
         if problems:
             reasons["execution_evidence"].extend(
@@ -487,6 +528,7 @@ def load_package(root: Path, reasons: dict[str, list[str]]) -> dict:
     if not result_ok:
         data["ready"] = False
     data["results"] = results
+    data["raw_results"] = raw_results
 
     requirement_payload, error = load_json(root / "requirements" / "requirements.json")
     if error:
@@ -598,6 +640,21 @@ def check_traceability(root: Path, data: dict, reasons: dict[str, list[str]]) ->
     clauses = data["clauses"]
     decisions = data["decisions"]
 
+    # Evidence status and execution outcome are separate axes. Scan the raw
+    # payloads so the finding names the confusion even when the schema also
+    # refuses the value: a run outcome must never silently replace the Plan's
+    # evidence terminology, and the reason for the refusal should say so.
+    for record in data.get("raw_research", []):
+        bucket.extend(
+            cross_axis_problems(record, str(record.get("record_id") or "research record"))
+        )
+    for record in data.get("raw_results", []):
+        bucket.extend(
+            cross_axis_problems(record, str(record.get("record_id") or "simulation result"))
+        )
+    if isinstance(data.get("status"), dict):
+        bucket.extend(cross_axis_problems(data["status"], "programme status"))
+
     bucket.extend(
         duplicates_within(
             [evidence_record_id(item) for item in research],
@@ -676,7 +733,14 @@ def check_traceability(root: Path, data: dict, reasons: dict[str, list[str]]) ->
         authorization_decision = record.get("authorization_status") == "AUTHORIZED"
         if record.get("state") not in (None, "") and not evidence_decision:
             bucket.append(
-                f"TRACEABILITY: decision {label} state must be reviewed, accepted, or authorized"
+                f"TRACEABILITY: decision {label} state must be one of {DECISION_GATED_LABEL}"
+            )
+        # An execution outcome is not a decision state. Refuse the confusion
+        # here too so a decision cannot be filed as if it were a run result.
+        if record.get("state") in EXECUTION_OUTCOMES:
+            bucket.append(
+                f"TRACEABILITY: decision {label} state {record.get('state')!r} is an "
+                "execution outcome, not an evidence decision state"
             )
         if not evidence_decision and not authorization_decision:
             bucket.append(
@@ -707,8 +771,11 @@ def check_traceability(root: Path, data: dict, reasons: dict[str, list[str]]) ->
 
     for record in research:
         identifier = evidence_record_id(record)
-        if record.get("pass_type") != "research":
-            bucket.append(f"TRACEABILITY: {identifier} pass_type must be research")
+        if record.get("pass_type") != PASS_TYPE_RESEARCH:
+            bucket.append(
+                f"TRACEABILITY: {identifier} pass_type must be {PASS_TYPE_RESEARCH}"
+            )
+        bucket.extend(cross_axis_problems(record, identifier))
         link = record.get("simulation_link")
         matched_cases = [item for item in cases if item.get("id") == link]
         if len(matched_cases) != 1:
@@ -831,6 +898,122 @@ def check_traceability(root: Path, data: dict, reasons: dict[str, list[str]]) ->
                 )
 
 
+def parse_execution_timestamp(value: object) -> datetime | None:
+    """Parse ``execution_timestamp``, refusing a naive or malformed value."""
+    if not isinstance(value, str):
+        return None
+    if NAIVE_TIMESTAMP.fullmatch(value.strip()):
+        return None
+    return parse_time(value)
+
+
+def check_simulation_pass_fields(
+    result: dict,
+    identifier: str,
+    started: datetime | None,
+    ended: datetime | None,
+    bucket: list[str],
+) -> None:
+    """Check the four Plan simulation-pass fields beyond the lock fields.
+
+    ``execution_timestamp``, ``failure_policy``, ``known_answer_check`` and
+    ``mcse_or_precision_note`` are required on every simulation pass.
+    """
+    stamp = parse_execution_timestamp(result.get("execution_timestamp"))
+    if stamp is None:
+        bucket.append(
+            f"EXECUTION_EVIDENCE: {identifier} execution_timestamp is missing, "
+            "malformed, or has no explicit numeric offset or Z"
+        )
+    elif started is not None and ended is not None and not (started <= stamp <= ended):
+        bucket.append(
+            f"EXECUTION_EVIDENCE: {identifier} execution_timestamp falls outside "
+            "the recorded started_at..ended_at interval"
+        )
+
+    if not nonempty_string(result.get("failure_policy")):
+        bucket.append(
+            f"EXECUTION_EVIDENCE: {identifier} failure_policy must state what is "
+            "recorded on a crash or non-convergence"
+        )
+
+    known = result.get("known_answer_check")
+    if not isinstance(known, dict):
+        bucket.append(
+            f"EXECUTION_EVIDENCE: {identifier} known_answer_check must be an object "
+            "with included, case_id and detail"
+        )
+    else:
+        included = known.get("included")
+        case_id = known.get("case_id")
+        detail = known.get("detail")
+        if not isinstance(included, bool):
+            bucket.append(
+                f"EXECUTION_EVIDENCE: {identifier} known_answer_check.included must be a boolean"
+            )
+        elif included is True:
+            if not nonempty_string(case_id):
+                bucket.append(
+                    f"EXECUTION_EVIDENCE: {identifier} known_answer_check.included is true "
+                    "but case_id is empty"
+                )
+            if not nonempty_string(detail):
+                bucket.append(
+                    f"EXECUTION_EVIDENCE: {identifier} known_answer_check.detail must be "
+                    "a non-empty string"
+                )
+        else:
+            if case_id not in (None, ""):
+                bucket.append(
+                    f"EXECUTION_EVIDENCE: {identifier} known_answer_check.case_id must be "
+                    "null when included is false"
+                )
+            if not nonempty_string(detail):
+                bucket.append(
+                    f"EXECUTION_EVIDENCE: {identifier} known_answer_check.detail must state "
+                    "why no known-answer or negative-control case applies"
+                )
+
+    if not nonempty_string(result.get("mcse_or_precision_note")):
+        bucket.append(
+            f"EXECUTION_EVIDENCE: {identifier} mcse_or_precision_note must be a non-empty "
+            "string that says so explicitly when the model is deterministic or single-run"
+        )
+
+
+def check_execution_outcome_evidence(result: dict, identifier: str, bucket: list[str]) -> None:
+    """Refuse an ``executed`` claim that carries no execution evidence.
+
+    ``execution_outcome`` is what the run did. ``executed`` requires the
+    recorded artefacts of a run: an exit code, a code hash, and a raw
+    evidence location. ``failed`` and ``incomplete`` are execution outcomes
+    too, and neither implies anything about ``evidence_status``.
+    """
+    outcome = result.get("execution_outcome")
+    if outcome not in EXECUTION_OUTCOME_VALUES:
+        bucket.append(
+            f"EXECUTION_EVIDENCE: {identifier} execution_outcome {outcome!r} is not one of "
+            f"{', '.join(sorted(EXECUTION_OUTCOME_VALUES))}"
+        )
+        return
+    if outcome != "executed":
+        return
+    missing = [
+        field
+        for field, present in (
+            ("exit_code", is_int(result.get("exit_code"))),
+            ("code_sha256", isinstance(result.get("code_sha256"), str) and HASH64.fullmatch(result.get("code_sha256", "")) is not None),
+            ("raw_evidence_location", nonempty_string(result.get("raw_evidence_location"))),
+        )
+        if not present
+    ]
+    if missing:
+        bucket.append(
+            f"EXECUTION_EVIDENCE: {identifier} claims execution_outcome executed but has "
+            f"no execution evidence ({', '.join(missing)})"
+        )
+
+
 def check_execution(root: Path, data: dict, reasons: dict[str, list[str]]) -> None:
     bucket = reasons["execution_evidence"]
     cases = {item["id"]: item for item in data["cases"] if item.get("id")}
@@ -905,8 +1088,14 @@ def check_execution(root: Path, data: dict, reasons: dict[str, list[str]]) -> No
             bucket.append(f"EXECUTION_EVIDENCE: {identifier} input does not match the simulation case")
         if not nonempty_string(result.get("uncertainty_and_limitations")):
             bucket.append(f"EXECUTION_EVIDENCE: {identifier} is missing uncertainty_and_limitations")
-        if result.get("pass_type") != "simulation":
-            bucket.append(f"EXECUTION_EVIDENCE: {identifier} pass_type must be simulation")
+        if result.get("pass_type") != PASS_TYPE_EXECUTED_SIMULATION:
+            bucket.append(
+                f"EXECUTION_EVIDENCE: {identifier} pass_type must be "
+                f"{PASS_TYPE_EXECUTED_SIMULATION}"
+            )
+        bucket.extend(cross_axis_problems(result, identifier))
+        check_simulation_pass_fields(result, identifier, started, ended, bucket)
+        check_execution_outcome_evidence(result, identifier, bucket)
 
 
 def check_expectation(root: Path, data: dict, reasons: dict[str, list[str]]) -> None:
@@ -1028,6 +1217,10 @@ def check_counts(root: Path, data: dict, reasons: dict[str, list[str]]) -> None:
                 bucket.append(
                     f"COUNT_ARITHMETIC: research ledger {row.get('record_id')} {field} does not match the research record"
                 )
+        if row.get("execution_outcome") != record.get("execution_outcome"):
+            bucket.append(
+                f"COUNT_ARITHMETIC: research ledger {row.get('record_id')} execution_outcome does not match the research record"
+            )
         for field in ("simulation_link", "programme_credit", "release_classification"):
             if row.get(field) != record.get(field):
                 bucket.append(
@@ -1053,20 +1246,54 @@ def check_counts(root: Path, data: dict, reasons: dict[str, list[str]]) -> None:
                 bucket.append(
                     f"COUNT_ARITHMETIC: simulation ledger {row.get('record_id')} {field} does not match the result"
                 )
-        for field in ("protocol_version", "configuration", "research_record_id", "execution_status", "outcome", "started_at", "ended_at", "code_path", "code_sha256", "fixtures_sha256", "programme_credit", "independent_review", "release_classification"):
+        for field in (
+            "protocol_version",
+            "configuration",
+            "execution_timestamp",
+            "failure_policy",
+            "mcse_or_precision_note",
+            "execution_outcome",
+            "research_record_id",
+            "execution_status",
+            "outcome",
+            "started_at",
+            "ended_at",
+            "code_path",
+            "code_sha256",
+            "fixtures_sha256",
+            "programme_credit",
+            "independent_review",
+            "release_classification",
+        ):
             if row.get(field) != result.get(field):
                 bucket.append(
                     f"COUNT_ARITHMETIC: simulation ledger {row.get('record_id')} {field} does not match the result"
                 )
+        # known_answer_check is an object on the result and a JSON cell in the
+        # ledger. Compare it as JSON so a structural field is not silently dropped.
+        if row.get("known_answer_check") != json.dumps(
+            result.get("known_answer_check"), sort_keys=True
+        ):
+            bucket.append(
+                f"COUNT_ARITHMETIC: simulation ledger {row.get('record_id')} known_answer_check does not match the result"
+            )
         if row.get("environment") != environment_lock(result.get("environment")):
             bucket.append(
                 f"COUNT_ARITHMETIC: simulation ledger {row.get('record_id')} environment does not match the result"
             )
-        exit_code = _parse_ledger_int(row.get("exit_code"), f"simulation ledger {row.get('record_id')} exit_code", bucket)
-        if exit_code is not None and exit_code != result.get("exit_code"):
-            bucket.append(
-                f"COUNT_ARITHMETIC: simulation ledger {row.get('record_id')} exit_code does not match the result"
+        # A result with no exit_code at all is reported by
+        # execution_evidence, which owns the missing-field finding. Only compare
+        # the ledger cell when the result actually carries a value.
+        if "exit_code" in result:
+            exit_code = _parse_ledger_int(
+                row.get("exit_code"),
+                f"simulation ledger {row.get('record_id')} exit_code",
+                bucket,
             )
+            if exit_code is not None and exit_code != result.get("exit_code"):
+                bucket.append(
+                    f"COUNT_ARITHMETIC: simulation ledger {row.get('record_id')} exit_code does not match the result"
+                )
         if row.get("raw_evidence_location") != f"results/{row.get('record_id')}.json":
             bucket.append(
                 f"COUNT_ARITHMETIC: simulation ledger {row.get('record_id')} raw_evidence_location must point at its result file"
@@ -1315,7 +1542,9 @@ def check_honest(data: dict, reasons: dict[str, list[str]]) -> None:
             records.append((record, record.get(key, "record")))
     records.append((status, programme_id))
     for record, identifier in records:
-        # Evidence and authorization are separate columns. Do not pass one into the other.
+        # Evidence and authorization are separate columns. Do not pass one into
+        # the other: assert_authorization_status reads only the authorization
+        # column, and require_state_authority reads only the evidence column.
         state = record.get("evidence_status")
         try:
             require_state_authority(state, decisions, identifier)
@@ -1325,6 +1554,23 @@ def check_honest(data: dict, reasons: dict[str, list[str]]) -> None:
             assert_authorization_status(record.get("authorization_status"), decisions, identifier)
         except EvidenceStateError as exc:
             bucket.append(f"AUTHORIZATION_WITHOUT_RECORD: {identifier} {exc}")
+        # The Plan's ladder now has a state literally named ``authorized``.
+        # Reaching it does not set, and does not imply, authorization_status
+        # AUTHORIZED. Say so explicitly in the failure text so the finding is
+        # not mistaken for a missing decision on the evidence ladder.
+        if (
+            state == "authorized"
+            and record.get("authorization_status") == "AUTHORIZED"
+            and not any(
+                authorization_record_supports(item, identifier) for item in decisions
+            )
+        ):
+            bucket.append(
+                f"AUTHORIZATION_WITHOUT_RECORD: {identifier} sets authorization_status "
+                "AUTHORIZED while carrying evidence_status 'authorized'; the evidence "
+                "state is not an authorization record and does not imply one"
+            )
+        bucket.extend(cross_axis_problems(record, identifier))
         if "programme_credit" not in record:
             continue
         try:
@@ -1372,7 +1618,8 @@ def check_honest(data: dict, reasons: dict[str, list[str]]) -> None:
     )
     if status.get("independent_reproductions") != reproductions:
         bucket.append(
-            "HONEST_STATUS: independent_reproductions does not equal results at reproduced or a later evidence state"
+            "HONEST_STATUS: independent_reproductions does not equal results at "
+            "independently_reproduced or a later evidence state"
         )
     production = status.get("production_validation")
     if production == "NOT_PERFORMED":
@@ -1410,7 +1657,13 @@ def check_honest(data: dict, reasons: dict[str, list[str]]) -> None:
                 f"HONEST_STATUS: {evidence_record_id(result)} claims independent_review without a reviewer decision record"
             )
     for row in data["ledgers"].get("checkpoint", []):
-        if str(row.get("status", "")).strip().upper() in {"ACCEPTED", "AUTHORIZED", "COMPLETE"}:
+        if str(row.get("status", "")).strip().upper() in {
+            "ACCEPTED",
+            "AUTHORIZED",
+            "COMPLETE",
+            "VALIDATED",
+            "VERIFIED",
+        }:
             cited = row.get("checkpoint", "")
             if not any(
                 decision_supports(item, "accepted", cited) or decision_supports(item, "accepted", programme_id)

@@ -2,7 +2,7 @@
   "$schema": "https://json-schema.org/draft/2020-12/schema",
   "$id": "https://universalis.local/scaffold/schemas/research_record.schema.json",
   "title": "Research evidence record",
-  "description": "One research pass. Field names are the governing Plan evidence-record contract. evidence_status and authorization_status are separate required columns. authorization_status is not derived from evidence_status. This record does not award programme credit by existing.",
+  "description": "One research pass. Field names are the governing Plan evidence-record contract. evidence_status carries the Plan's eight evidence states. execution_outcome carries what the run did, on a separate axis, and is never an evidence state. authorization_status is independent: it is not derived from evidence_status, and evidence_status 'authorized' does not set or imply authorization_status 'AUTHORIZED'. This record does not award programme credit by existing.",
   "type": "object",
   "required": [
     "record_id",
@@ -25,6 +25,7 @@
     "review_note",
     "evidence_status",
     "authorization_status",
+    "execution_outcome",
     "regression_links",
     "open_obligations",
     "simulation_link",
@@ -52,9 +53,14 @@
     "uncertainty_and_limitations": {"type": "string", "minLength": 1},
     "review_note": {"type": "string", "minLength": 1},
     "evidence_status": {
-      "enum": ["planned", "executed", "failed", "incomplete", "reproduced", "reviewed", "accepted", "authorized"]
+      "enum": ["proposed", "documented", "implemented", "tested", "verified", "independently_reproduced", "validated", "authorized"]
     },
     "authorization_status": {"enum": ["NOT_AUTHORIZED", "AUTHORIZED"]},
+    "execution_outcome": {
+      "enum": ["not_executed", "executed", "failed", "incomplete"],
+      "default": "not_executed",
+      "description": "What the run actually did. Not an evidence state and never read as one. A failed run can legitimately sit at evidence_status documented."
+    },
     "regression_links": {"type": "string"},
     "open_obligations": {"type": "string"},
     "simulation_link": {"type": "string", "pattern": "^SIM-[0-9]{3,}$"},

@@ -38,11 +38,15 @@ NOT_PERFORMED
 
 ## evidence_status
 
-planned
+proposed
+
+One of the Plan's evidence states. Not an execution outcome.
 
 ## authorization_status
 
 NOT_AUTHORIZED
+
+Separate column. evidence_status `authorized` does not set or imply this.
 
 ## programme_credit
 

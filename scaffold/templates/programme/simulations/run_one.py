@@ -1,8 +1,24 @@
 """Execute one authored case in this process and write an evidence record.
 
 The expected outcome is read from the case file. It is not edited to fit the
-output. evidence_status records the execution. authorization_status is always
-NOT_AUTHORIZED. This script does not award programme credit.
+output.
+
+Two separate axes are written:
+
+``execution_outcome`` -- what the run actually did: ``executed``, ``failed``
+or ``incomplete``. This is not an evidence state.
+
+``evidence_status`` -- how far the evidence for the claim has been
+established, using the governing Plan's ladder. This runner may only reach
+``documented`` or ``implemented``: it wrote a record that documents what it
+ran. It cannot reach ``tested``, ``verified``, ``independently_reproduced``,
+``validated`` or ``authorized``, because those require work this process did
+not do. A failed run still reaches ``documented``: what is documented is that
+the run failed.
+
+``authorization_status`` is always ``NOT_AUTHORIZED``. This script does not
+award programme credit and does not infer authorization from any evidence
+state, including ``evidence_status: authorized``.
 """
 
 from __future__ import annotations
@@ -17,7 +33,11 @@ import time
 from datetime import datetime, timezone
 from pathlib import Path
 
-TOOL_SETTABLE = frozenset({"planned", "executed", "failed", "incomplete", "reproduced"})
+# Evidence states this runner may write from its own work. Both are below
+# ``tested``: the runner records what it did, not that the claim was tested.
+TOOL_SETTABLE = frozenset({"documented", "implemented"})
+# The separate execution-outcome axis. Never mixed with TOOL_SETTABLE.
+EXECUTION_OUTCOMES = frozenset({"not_executed", "executed", "failed", "incomplete"})
 COPY_FIELDS = (
     "programme_unit_id",
     "checkpoint_id",
@@ -87,29 +107,47 @@ def main(argv: list[str] | None = None) -> int:
         execution_status = "COMPLETED"
         outcome = "PASS" if matched else "FAIL"
         error = None
-        evidence_status = "executed" if matched else "failed"
+        # The run completed. A FAIL is still an executed run: the expectation
+        # did not match, which is a result, not an absent execution.
+        execution_outcome = "executed"
     except Exception as exc:
         actual = None
         matched = False
         execution_status = "ERROR"
         outcome = "ERROR"
         error = f"{type(exc).__name__}: {exc}"
-        evidence_status = "failed"
-    if evidence_status not in TOOL_SETTABLE:
+        # The run was attempted and crashed. That is an execution outcome,
+        # not an evidence state. The record below documents the failure.
+        execution_outcome = "failed"
+    if execution_outcome not in EXECUTION_OUTCOMES:
         print(
-            f"tooling cannot set evidence state {evidence_status!r}; "
-            "reviewed, accepted and authorized require an explicit owner or reviewer decision record",
+            f"runner produced execution_outcome {execution_outcome!r}, which is not "
+            f"one of {', '.join(sorted(EXECUTION_OUTCOMES))}",
             file=sys.stderr,
         )
         return 2
-    # Separate column. Never derived from evidence_status.
+    # The record documents what this process did. That reaches ``documented``
+    # whether or not the expectation matched. A pass on one authored case is
+    # not ``tested``: testing is a wider claim than one run of one fixture.
+    evidence_status = "documented"
+    if evidence_status not in TOOL_SETTABLE:
+        print(
+            f"tooling cannot set evidence state {evidence_status!r}; "
+            "verified, independently_reproduced, validated and authorized require "
+            "an explicit owner or reviewer decision record",
+            file=sys.stderr,
+        )
+        return 2
+    # Separate column. Never derived from evidence_status, and an
+    # evidence_status of authorized would not set it.
     authorization_status = "NOT_AUTHORIZED"
     ended = datetime.now(timezone.utc)
     record = {field: research.get(field, "") for field in COPY_FIELDS}
     record.update(
         {
             "record_id": case["id"],
-            "pass_type": "simulation",
+            # Plan value, not the structural directory name.
+            "pass_type": "executed_simulation",
             "research_record_id": research["record_id"],
             "actual_conditions": "Separate subprocess. No network. No authorization.",
             "outcome_summary": json.dumps(
@@ -124,8 +162,36 @@ def main(argv: list[str] | None = None) -> int:
             "review_note": "Runner record only. No review performed. authorization_status remains NOT_AUTHORIZED.",
             "evidence_status": evidence_status,
             "authorization_status": authorization_status,
+            "execution_outcome": execution_outcome,
             "protocol_version": case["protocol_version"],
             "configuration": case["configuration"],
+            # Plan simulation-pass fields. The case may declare them; when it
+            # does not, this runner states its own honest value rather than
+            # leaving the field blank.
+            "execution_timestamp": started.isoformat(),
+            "failure_policy": case.get("failure_policy")
+            or (
+                "On a crash the run is recorded with execution_outcome failed, "
+                "execution_status ERROR, the exception text in error, and exit_code 1. "
+                "A non-convergent model is treated the same way: no output is "
+                "silently discarded and no result is back-filled after the fact."
+            ),
+            "known_answer_check": case.get("known_answer_check")
+            or {
+                "included": False,
+                "case_id": None,
+                "detail": (
+                    "No known-answer or negative-control case is defined for this "
+                    "authored fixture, so none was run. The recorded comparison is "
+                    "against the pre-authored expectation on this case only."
+                ),
+            },
+            "mcse_or_precision_note": case.get("mcse_or_precision_note")
+            or (
+                "This case is deterministic and single-run. No Monte Carlo estimate "
+                "is made, so no MCSE applies; precision is exact for the authored "
+                "input and is not a statement about any wider population."
+            ),
             "environment": {
                 "python": " ".join(sys.version.split()),
                 "platform": platform.platform(),

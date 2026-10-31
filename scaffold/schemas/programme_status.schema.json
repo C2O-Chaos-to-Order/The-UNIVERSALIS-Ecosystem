@@ -2,12 +2,13 @@
   "$schema": "https://json-schema.org/draft/2020-12/schema",
   "$id": "https://universalis.local/scaffold/schemas/programme_status.schema.json",
   "title": "Programme status",
-  "description": "Honest package counts and claims. evidence_status and authorization_status are separate and authorization_status is not inferred from evidence_status. Zero counts stay zero until records exist. This object is not scientific validation or production readiness.",
+  "description": "Honest package counts and claims. evidence_status carries the Plan's eight evidence states; execution_outcome records what the programme's runs did on a separate axis and is never an evidence state. authorization_status is independent and is not inferred from evidence_status: evidence_status 'authorized' neither sets nor implies authorization_status 'AUTHORIZED'. Zero counts stay zero until records exist. This object is not scientific validation or production readiness.",
   "type": "object",
   "required": [
     "programme",
     "edition",
     "evidence_status",
+    "execution_outcome",
     "authorization_status",
     "owner_acceptance",
     "independent_reviews",
@@ -32,7 +33,11 @@
     "programme": {"type": "string", "minLength": 1},
     "edition": {"type": "string", "minLength": 1},
     "evidence_status": {
-      "enum": ["planned", "executed", "failed", "incomplete", "reproduced", "reviewed", "accepted", "authorized"]
+      "enum": ["proposed", "documented", "implemented", "tested", "verified", "independently_reproduced", "validated", "authorized"]
+    },
+    "execution_outcome": {
+      "enum": ["not_executed", "executed", "failed", "incomplete"],
+      "default": "not_executed"
     },
     "authorization_status": {"enum": ["NOT_AUTHORIZED", "AUTHORIZED"]},
     "owner_acceptance": {"enum": ["PENDING", "ACCEPTED"]},

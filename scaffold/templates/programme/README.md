@@ -4,7 +4,7 @@ Edition {{EDITION}}. Empty programme package instantiated from the public scaffo
 
 ## Status
 
-Evidence status: planned. Authorization status: NOT_AUTHORIZED. These are separate columns. Authorization is not inferred from evidence.
+Evidence status: proposed. Execution outcome: not_executed. Authorization status: NOT_AUTHORIZED. These are three separate fields. Authorization is not inferred from evidence, and an evidence_status of `authorized` does not set or imply authorization_status `AUTHORIZED`.
 
 Owner acceptance: PENDING. Independent reviews: 0. Independent reproductions: 0. Owner-accepted research credits: 0. Owner-accepted simulation credits: 0. Production validation: NOT_PERFORMED. Release authorized: false.
 

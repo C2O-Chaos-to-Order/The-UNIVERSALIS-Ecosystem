@@ -73,8 +73,9 @@ def _research_record() -> dict:
         "raw_evidence_location": "results/SIM-001.json",
         "uncertainty_and_limitations": "Validator fixture. Not scientific validation, security certification, or production evidence.",
         "review_note": "No reviewer. Self-authored fixture.",
-        "evidence_status": "executed",
+        "evidence_status": "documented",
         "authorization_status": "NOT_AUTHORIZED",
+        "execution_outcome": "executed",
         "regression_links": "none",
         "open_obligations": "none",
         "simulation_link": "SIM-001",
@@ -113,7 +114,7 @@ def _requirement() -> dict:
         "classification": "PROPOSED_NOT_BASELINED",
         "implementation": "NOT_STARTED",
         "production_validation": "NOT_PERFORMED",
-        "evidence_status": "planned",
+        "evidence_status": "proposed",
         "authorization_status": "NOT_AUTHORIZED",
         "programme_credit": "NONE",
         "release_classification": "PUBLICLY_CLEARED",
@@ -131,6 +132,9 @@ def _simulation_row(result: dict) -> dict:
     row["environment"] = environment_lock(result.get("environment"))
     row["exit_code"] = result.get("exit_code", "")
     row["duration_seconds"] = result.get("duration_seconds", "")
+    row["known_answer_check"] = json.dumps(
+        result.get("known_answer_check"), sort_keys=True
+    )
     return row
 
 
@@ -359,14 +363,95 @@ def build_self_credit(dest: Path) -> Path:
     return root
 
 
-def build_accepted_without_decision(dest: Path) -> Path:
+def build_verified_without_decision(dest: Path) -> Path:
+    """Claim an evidence state that only an owner or reviewer decision may enter."""
     root = build_executed(dest)
     research_path = root / "research" / "research_records.json"
     research = _load(research_path)
-    research[0]["evidence_status"] = "accepted"
+    research[0]["evidence_status"] = "verified"
     _save(research_path, research)
-    _replace_ledger_field(root / "ledgers" / "research_ledger.csv", "evidence_status", "accepted")
+    _replace_ledger_field(root / "ledgers" / "research_ledger.csv", "evidence_status", "verified")
     write_manifest(root)
+    return root
+
+
+def build_evidence_outcome_confusion(dest: Path) -> Path:
+    """Put an execution outcome on the evidence axis and an evidence state on the outcome axis.
+
+    ``failed`` is a real execution outcome, and ``documented`` is a real
+    evidence state. Each is refused on the other's field.
+    """
+    root = build_executed(dest)
+    research_path = root / "research" / "research_records.json"
+    research = _load(research_path)
+    research[0]["evidence_status"] = "failed"
+    research[0]["execution_outcome"] = "documented"
+    _save(research_path, research)
+    _replace_ledger_field(root / "ledgers" / "research_ledger.csv", "evidence_status", "failed")
+    _replace_ledger_field(root / "ledgers" / "research_ledger.csv", "execution_outcome", "documented")
+    write_manifest(root)
+    return root
+
+
+def build_executed_without_execution_evidence(dest: Path) -> Path:
+    """Claim execution_outcome executed on a result that carries no exit code."""
+    root = build_executed(dest)
+    result_path = root / "results" / "SIM-001.json"
+    result = _load(result_path)
+    result.pop("exit_code", None)
+    _save(result_path, result)
+    _replace_ledger_field(root / "ledgers" / "simulation_ledger.csv", "exit_code", "")
+    write_manifest(root)
+    return root
+
+
+def build_evidence_authorized_without_authorization(dest: Path) -> Path:
+    """Set authorization_status AUTHORIZED on the strength of evidence_status alone.
+
+    The record does carry evidence_status ``authorized``, so this is the exact
+    confusion Kyle asked to be refused: an evidence state treated as an
+    authorization. No authorization record exists.
+    """
+    root = build_executed(dest)
+    research_path = root / "research" / "research_records.json"
+    research = _load(research_path)
+    research[0]["evidence_status"] = "authorized"
+    research[0]["authorization_status"] = "AUTHORIZED"
+    _save(research_path, research)
+    _replace_ledger_field(root / "ledgers" / "research_ledger.csv", "evidence_status", "authorized")
+    _replace_ledger_field(root / "ledgers" / "research_ledger.csv", "authorization_status", "AUTHORIZED")
+    write_manifest(root)
+    return root
+
+
+def build_evidence_authorized_default_authorization(dest: Path) -> Path:
+    """A record at evidence_status authorized with the default authorization status.
+
+    This package must validate: reaching the Plan's top evidence state does
+    not, by itself, authorize anything.
+    """
+    root = build_executed(dest)
+    research_path = root / "research" / "research_records.json"
+    research = _load(research_path)
+    research[0]["evidence_status"] = "authorized"
+    _save(research_path, research)
+    _replace_ledger_field(root / "ledgers" / "research_ledger.csv", "evidence_status", "authorized")
+    decisions = root / "decisions"
+    decisions.mkdir(exist_ok=True)
+    write_json(
+        decisions / "DEC-001.json",
+        {
+            "decision_id": "DEC-001",
+            "state": "authorized",
+            "authority": "owner",
+            "decided_by": "Owner cited in the decision record",
+            "citation": "decisions/DEC-001.json",
+            "target_ids": ["RES-001"],
+            "statement": "Evidence decision only. Authorization is not granted by this record.",
+            "release_classification": "PUBLICLY_CLEARED",
+        },
+    )
+    rebuild_locks(root)
     return root
 
 
@@ -404,8 +489,12 @@ def build_fixture(kind: str, dest: Path) -> Path:
         "unclassified": build_unclassified,
         "altered_expected": build_altered_expected,
         "self_credit": build_self_credit,
-        "accepted_without_decision": build_accepted_without_decision,
+        "verified_without_decision": build_verified_without_decision,
         "authorization_without_record": build_authorization_without_record,
+        "evidence_outcome_confusion": build_evidence_outcome_confusion,
+        "executed_without_execution_evidence": build_executed_without_execution_evidence,
+        "evidence_authorized_without_authorization": build_evidence_authorized_without_authorization,
+        "evidence_authorized_default_authorization": build_evidence_authorized_default_authorization,
     }
     if kind not in builders:
         raise SystemExit(f"unknown fixture {kind}")

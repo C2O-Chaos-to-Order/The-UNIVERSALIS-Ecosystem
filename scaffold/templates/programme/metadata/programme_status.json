@@ -1,7 +1,8 @@
 {
   "programme": "{{PROGRAMME_ID}}",
   "edition": "{{EDITION}}",
-  "evidence_status": "planned",
+  "evidence_status": "proposed",
+  "execution_outcome": "not_executed",
   "authorization_status": "NOT_AUTHORIZED",
   "owner_acceptance": "PENDING",
   "independent_reviews": 0,

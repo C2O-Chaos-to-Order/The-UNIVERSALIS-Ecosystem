@@ -2,7 +2,7 @@
   "$schema": "https://json-schema.org/draft/2020-12/schema",
   "$id": "https://universalis.local/scaffold/schemas/simulation_result.schema.json",
   "title": "Simulation evidence record",
-  "description": "One executed simulation pass. It carries the Plan evidence-record fields plus protocol_version, configuration, and environment. evidence_status and authorization_status are separate. The runner must not set authorization_status from evidence_status.",
+  "description": "One simulation pass. It carries the 22 Plan evidence-record fields plus the four required Plan simulation-pass fields. protocol_version, configuration and environment are lock fields; execution_timestamp, failure_policy, known_answer_check and mcse_or_precision_note are the additional execution-information fields the Plan requires on every simulation pass. evidence_status carries the Plan's eight evidence states; execution_outcome carries what the run did on a separate axis and is never an evidence state. evidence_status and authorization_status are separate, and the runner must not set authorization_status from evidence_status.",
   "type": "object",
   "required": [
     "record_id",
@@ -30,6 +30,11 @@
     "protocol_version",
     "configuration",
     "environment",
+    "execution_timestamp",
+    "failure_policy",
+    "known_answer_check",
+    "mcse_or_precision_note",
+    "execution_outcome",
     "research_record_id",
     "input",
     "expected",
@@ -52,7 +57,7 @@
   "properties": {
     "record_id": {"type": "string", "pattern": "^SIM-[0-9]{3,}$"},
     "programme_unit_id": {"type": "string", "minLength": 1},
-    "pass_type": {"const": "simulation"},
+    "pass_type": {"const": "executed_simulation"},
     "checkpoint_id": {"type": "string", "minLength": 1},
     "objective_question": {"type": "string", "minLength": 1},
     "claim_class": {"type": "string", "minLength": 1},
@@ -69,7 +74,7 @@
     "uncertainty_and_limitations": {"type": "string", "minLength": 1},
     "review_note": {"type": "string", "minLength": 1},
     "evidence_status": {
-      "enum": ["planned", "executed", "failed", "incomplete", "reproduced", "reviewed", "accepted", "authorized"]
+      "enum": ["proposed", "documented", "implemented", "tested", "verified", "independently_reproduced", "validated", "authorized"]
     },
     "authorization_status": {"enum": ["NOT_AUTHORIZED", "AUTHORIZED"]},
     "regression_links": {"type": "string"},
@@ -83,6 +88,37 @@
         "python": {"type": "string", "minLength": 1},
         "platform": {"type": "string", "minLength": 1}
       }
+    },
+    "execution_timestamp": {
+      "type": "string",
+      "minLength": 1,
+      "pattern": "^[0-9]{4}-[0-9]{2}-[0-9]{2}T[0-9]{2}:[0-9]{2}(:[0-9]{2}(\\.[0-9]+)?)?(Z|[+-][0-9]{2}:[0-9]{2})$",
+      "description": "ISO 8601 with an explicit numeric offset or Z. A naive timestamp is refused. started_at, ended_at and duration_seconds are extra execution detail and do not replace this field."
+    },
+    "failure_policy": {
+      "type": "string",
+      "minLength": 1,
+      "description": "What is recorded on a crash or non-convergence."
+    },
+    "known_answer_check": {
+      "type": "object",
+      "required": ["included", "case_id", "detail"],
+      "description": "Whether a known-answer or negative-control case was included. When included is false, detail must state why no such case applies. When included is true, case_id must be non-empty.",
+      "properties": {
+        "included": {"type": "boolean"},
+        "case_id": {"type": ["string", "null"]},
+        "detail": {"type": "string", "minLength": 1}
+      }
+    },
+    "mcse_or_precision_note": {
+      "type": "string",
+      "minLength": 1,
+      "description": "Monte Carlo standard error or equivalent precision note. When the model is deterministic or single-run, it must say so explicitly rather than being blank."
+    },
+    "execution_outcome": {
+      "enum": ["not_executed", "executed", "failed", "incomplete"],
+      "default": "not_executed",
+      "description": "What the run actually did. Not an evidence state and never read as one. A failed run can legitimately sit at evidence_status documented."
     },
     "research_record_id": {"type": "string", "pattern": "^RES-[0-9]{3,}$"},
     "input": {},

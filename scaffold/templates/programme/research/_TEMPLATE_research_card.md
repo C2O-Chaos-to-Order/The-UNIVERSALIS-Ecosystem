@@ -56,13 +56,27 @@ No finding is recorded in this template. A disposition written here is not autho
 
 ## evidence_status
 
-planned
+proposed
+
+One of the Plan's evidence states: proposed, documented, implemented, tested, verified,
+independently_reproduced, validated, authorized. This is how far the evidence has been
+established, not what a run did.
+
+## execution_outcome
+
+not_executed
+
+One of not_executed, executed, failed, incomplete. What the run actually did. This is a
+separate axis and is never an evidence state. A failed run can legitimately sit at
+evidence_status `documented`: what is documented is that the run failed.
 
 ## authorization_status
 
 NOT_AUTHORIZED
 
-Do not set this from evidence_status. Authorization requires a separate cited decision record.
+Do not set this from evidence_status. Authorization requires a separate cited decision
+record. An evidence_status of `authorized` does not set and does not imply
+authorization_status `AUTHORIZED`.
 
 ## regression_links
 
