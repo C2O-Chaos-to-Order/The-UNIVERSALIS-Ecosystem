@@ -1,0 +1,18 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "$id": "https://universalis.local/scaffold/schemas/source_register_entry.schema.json",
+  "title": "Source-register entry",
+  "description": "A source pinned, when it is a git object, to an exact commit and blob SHA, with a declared review_scope.",
+  "type": "object",
+  "required": ["id", "kind", "review_scope", "release_classification"],
+  "properties": {
+    "id": {"type": "string", "minLength": 1},
+    "kind": {"type": "string", "minLength": 1},
+    "path": {"type": "string"},
+    "url": {"type": "string"},
+    "commit": {"type": "string", "pattern": "^[0-9a-f]{40}$"},
+    "blob_sha": {"type": "string", "pattern": "^[0-9a-f]{40}$"},
+    "review_scope": {"type": "string", "minLength": 1},
+    "release_classification": {"const": "PUBLICLY_CLEARED"}
+  }
+}

@@ -1,0 +1,9 @@
+{
+  "python": null,
+  "platform": null,
+  "dependencies": "Python standard library only",
+  "network_used_by_simulations": false,
+  "real_personal_data": false,
+  "simulation_randomness": "none",
+  "note": "No simulation has been executed. Do not read these empty fields as an environment attestation."
+}
