@@ -39,9 +39,3 @@ Do not interpret this README, a successful build, or an experimental prototype a
 - Require explicit owner authorization for release and deployment.
 
 **Research informs design. Evidence supports claims. Authorization governs consequential change.**
-
-## Research and evidence scaffold
-
-Programmes of research, simulation, and requirements in this repository can use the evidence-discipline scaffold in [`scaffold/`](scaffold/README.md). The scaffold is corpus-agnostic: it references tablet clauses by identifier only and does not contain tablet text. Evidence records use the governing Plan's field names, with `evidence_status` and `authorization_status` kept as separate columns. A passing scaffold validation checks package consistency. It is not implementation acceptance, scientific validation, security certification, or production readiness.
-
-The private C2O corpus stays outside this repository. See [`scaffold/tools/CORPUS.md`](scaffold/tools/CORPUS.md).
