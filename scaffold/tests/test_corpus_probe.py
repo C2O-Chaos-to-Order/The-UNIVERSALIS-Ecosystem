@@ -9,6 +9,7 @@ from __future__ import annotations
 
 import hashlib
 import json
+import os
 import re
 import subprocess
 import sys
@@ -23,8 +24,10 @@ sys.path.insert(0, str(TOOLS))
 from corpus_probe import build_index, clause_heading, roman_to_int
 
 EM = "\u2014"
-# The real corpus root, used only by the opt-in integration test below.
-REAL_CORPUS = Path("/workspace/c2o-repos/Research-for-the-C2O-Ecosystem")
+# The opt-in integration test reads a corpus only when the caller names one.
+# Nothing here knows any machine's directory layout, so the test cannot depend
+# on a path that happens to exist on one workstation.
+CORPUS_ENV = "C2O_CORPUS_ROOT"
 
 
 def _technical(number: int, gem: str, titles: list[str], body: str = "Placeholder technical body.") -> str:
@@ -333,12 +336,15 @@ class RealCorpusIntegrationTests(unittest.TestCase):
     """
 
     def test_real_corpus_parses_with_thirteen_clauses_per_file(self):
-        technical = REAL_CORPUS / "C2O Tablets" / "tablets"
-        human = REAL_CORPUS / "Human Tablets" / "tablets"
+        root = os.environ.get(CORPUS_ENV)
+        if not root:
+            self.skipTest(f"set {CORPUS_ENV} to a private corpus root to run this")
+        technical = Path(root) / "C2O Tablets" / "tablets"
+        human = Path(root) / "Human Tablets" / "tablets"
         # Checked at run time rather than at class-definition time, so the test
-        # still skips cleanly when the corpus is absent on the machine.
+        # still skips cleanly when the named root has no corpus in it.
         if not (technical.is_dir() and human.is_dir()):
-            self.skipTest("real private corpus is not present on this machine")
+            self.skipTest(f"{CORPUS_ENV} does not name a root containing both tablet sets")
         index = build_index(technical, human)
         self.assertEqual(index["problems"], [])
         self.assertEqual(

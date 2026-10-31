@@ -166,3 +166,18 @@ The tool refuses a corpus path inside this repository (`CORPUS_INSIDE_REPOSITORY
 
 Its tests use synthetic placeholder bodies in a temporary directory. No real clause text is
 stored in this repository, including in the tests.
+
+## The opt-in test against a real corpus
+
+`tests/test_corpus_probe.py` includes one integration test that parses a real corpus and
+asserts thirteen clauses per file across all pairs. It names no directory: it reads the
+environment variable `C2O_CORPUS_ROOT` and skips with a message when that is unset or does
+not contain both tablet sets. So the suite passes on a machine with no corpus, passes on a
+machine that has one, and never depends on a path that happens to exist on one workstation.
+
+```
+C2O_CORPUS_ROOT=/path/to/research-checkout python3 -m unittest discover -s tests
+```
+
+Nothing in this repository records where that checkout lives. Keep the path in your shell,
+not in a file that would be published.
