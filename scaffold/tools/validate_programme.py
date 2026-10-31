@@ -870,6 +870,36 @@ def check_traceability(root: Path, data: dict, reasons: dict[str, list[str]]) ->
             )
 
     for source in sources:
+        # A witness siglum is a claim about what a cited edition assigns. It is
+        # refused without a locator into that edition, and the repository never
+        # assigns one of its own.
+        if "witness_siglum" in source:
+            if not nonempty_string(source.get("witness_siglum_locator")):
+                bucket.append(
+                    f"TRACEABILITY: source {source.get('id')} records a witness_siglum "
+                    "without a locator into the edition that assigns it"
+                )
+            if source.get("source_role") != "critical_edition":
+                bucket.append(
+                    f"TRACEABILITY: source {source.get('id')} records a witness_siglum "
+                    "but its source_role is not critical_edition; only the citing "
+                    "edition may assign a siglum"
+                )
+        elif "witness_siglum_locator" in source:
+            bucket.append(
+                f"TRACEABILITY: source {source.get('id')} records a witness_siglum_locator "
+                "without a witness_siglum"
+            )
+        for dependency in source.get("independence_from") or []:
+            if dependency == source.get("id"):
+                bucket.append(
+                    f"TRACEABILITY: source {source.get('id')} lists itself in independence_from"
+                )
+            elif dependency not in source_ids:
+                bucket.append(
+                    f"TRACEABILITY: source {source.get('id')} independence_from names "
+                    f"{dependency}, which is not in the source register"
+                )
         for field in ("commit", "blob_sha"):
             value = source.get(field)
             if value in (None, ""):

@@ -313,12 +313,16 @@ def build_duplicate_id(dest: Path) -> Path:
             {
                 "id": "SRC-001",
                 "kind": "fixture",
+                "source_role": "other",
+                "independence_from": [],
                 "review_scope": "Fixture source. Nothing was reviewed.",
                 "release_classification": "PUBLICLY_CLEARED",
             },
             {
                 "id": "SRC-001",
                 "kind": "fixture",
+                "source_role": "other",
+                "independence_from": [],
                 "review_scope": "Duplicate fixture source.",
                 "release_classification": "PUBLICLY_CLEARED",
             },

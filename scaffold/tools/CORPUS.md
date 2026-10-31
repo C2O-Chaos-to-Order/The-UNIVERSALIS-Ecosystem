@@ -52,3 +52,31 @@ It exits non-zero, and writes nothing, when the output path is inside the corpus
 - It will not write, rename, or delete anything inside the corpus directory.
 - It will not decide that a clause identifier in a programme package matches a private file. That comparison, if you need it, stays on the machine where the corpus is authorized to be read.
 - It will not accept, review, or authorize anything. Evidence states for those steps live in `evidence_states.py` and require a cited decision record.
+
+## Leak check
+
+`clause_leak_check.py` measures how much character-level text a public file shares with a
+private clause body. Run it on a machine that already has the corpus, before publishing a
+change that touched prose:
+
+```bash
+python scaffold/tools/clause_leak_check.py /path/outside/this/repo/private-corpus scaffold/
+python scaffold/tools/clause_leak_check.py /path/outside/this/repo/private-corpus scaffold/ --threshold 60
+```
+
+It normalises whitespace on both sides, then reports the longest shared character run
+between any public file and any clause body, and exits non-zero when any pair exceeds the
+threshold (default 40 characters). The threshold is configurable with `--threshold`.
+
+A shared run is a signal to look, not a verdict. A short shared run is normal in any
+language and the default threshold sits well above that noise floor. The tool does not
+classify a match as a quotation, a paraphrase, or a coincidence; it reports the extent and
+the pair so a person can decide.
+
+The tool refuses a corpus path inside this repository (`CORPUS_INSIDE_REPOSITORY`), exits
+`2` for it and for an absent corpus (`CORPUS_ABSENT`), and never writes into the corpus. It
+reads clause bodies using the same heading split as `corpus_probe.py`, so the two tools do
+not disagree about where a clause begins.
+
+Its tests use synthetic placeholder bodies in a temporary directory. No real clause text is
+stored in this repository, including in the tests.
