@@ -784,6 +784,16 @@ def check_traceability(root: Path, data: dict, reasons: dict[str, list[str]]) ->
                 f"TRACEABILITY: {identifier} pass_type must be {PASS_TYPE_RESEARCH}"
             )
         bucket.extend(cross_axis_problems(record, identifier))
+        # A research record that claims execution must point at execution
+        # evidence. It has no exit code or code hash of its own; the run's
+        # artefacts are named by raw_evidence_location.
+        if record.get("execution_outcome") == "executed" and not nonempty_string(
+            record.get("raw_evidence_location")
+        ):
+            bucket.append(
+                f"TRACEABILITY: {identifier} claims execution_outcome executed but has "
+                "no raw_evidence_location"
+            )
         link = record.get("simulation_link")
         matched_cases = [item for item in cases if item.get("id") == link]
         if len(matched_cases) != 1:
