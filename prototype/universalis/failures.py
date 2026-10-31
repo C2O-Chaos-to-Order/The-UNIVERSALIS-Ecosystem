@@ -2,8 +2,8 @@
 
 Genuine emptiness is the only result whose outcome is ``empty``. A failed
 request, an absent record, a truncated response, a denial, and an unavailable
-source each keep their own outcome. None of those five is converted into an
-empty corpus.
+source each keep their own outcome. None of those five may be written down as
+though no material existed.
 """
 
 from __future__ import annotations
@@ -72,7 +72,7 @@ class RouteResult:
             )
         if self.outcome != "empty" and self.transport == TransportOutcome.EMPTY.value:
             raise FailedRouteIsNotEmpty(
-                "ULC-21-06: a failed route is never an empty corpus "
+                "ULC-21-06: a route that failed is never reported as though it found nothing "
                 f"(outcome {self.outcome})"
             )
         if self.outcome == "empty" and self.transport != TransportOutcome.EMPTY.value:
@@ -106,7 +106,7 @@ def present_as_empty(result: RouteResult) -> RouteResult:
     if result.outcome != RouteOutcome.EMPTY.value:
         raise FailedRouteIsNotEmpty(
             "ULC-21-06: refusing to present "
-            f"{result.outcome} as an empty corpus"
+            f"{result.outcome} as though nothing was there"
         )
     return result
 
@@ -214,7 +214,7 @@ def resolve(store: Store, request: RouteRequest) -> RouteResult:
             complete=False,
             source_id=request.source_id,
             detail="request failed",
-            omission_note="request failed before a result; the route is not an empty corpus",
+            omission_note="request failed before a result; this is a fault, not an absence of material",
         )
         _log(store, request, result)
         return result

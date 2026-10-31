@@ -38,7 +38,7 @@ class ViewSpec:
             )
         if not self.scope_boundary or not str(self.scope_boundary).strip():
             raise ViewScopeRequired(
-                "ULC-21-02: a view declares its scope boundary before reporting a total"
+                "ULC-21-02: a view states where it stops before it states a total"
             )
 
 
@@ -122,7 +122,7 @@ def create_view(
     resolved_only = _is_resolved_only(active_filters)
     if label_complete and (partial or resolved_only):
         raise CompleteLabelRefused(
-            "ULC-21-05: a filtered or resolved-only projection cannot be labelled complete"
+            "ULC-21-05: a projection that omits rows cannot be labelled complete"
         )
     excluded = set(store.exclusions(spec.corpus_id))
     in_scope = [

@@ -22,7 +22,7 @@ class UntypedReferenceRejected(UniversalisError):
 
 
 class FieldDerivationRefused(UniversalisError):
-    """ULC-00-05: source, history, and present-use authorization are not derived."""
+    """ULC-00-05: no permission to use a record now may be inferred from where it came from or what has changed it."""
 
 
 class TraceLinksRequired(UniversalisError):

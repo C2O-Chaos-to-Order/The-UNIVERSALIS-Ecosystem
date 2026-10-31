@@ -70,7 +70,7 @@ class InMemoryAuthorizationStub:
         credential: str,
         action: str,
     ) -> None:
-        self._grants.add((principal, purpose, project, credential, action))
+        self._grants.add((project, principal, action, purpose, credential))
 
     def show_path(self, path: str) -> None:
         self._visible.add(path)
@@ -109,11 +109,11 @@ class InMemoryAuthorizationStub:
                 reason="missing authorization dimensions: " + ", ".join(failed),
             )
         key = (
-            str(principal),
-            str(purpose),
             str(project),
-            str(credential),
+            str(principal),
             str(action),
+            str(purpose),
+            str(credential),
         )
         permitted = key in self._grants
         if visible and not permitted:

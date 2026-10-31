@@ -1104,7 +1104,7 @@ class Store:
             raise KeyError(claim_id)
         if review_state == "reopened" and decision == "rejected":
             raise ReopeningIsNotRejection(
-                "ULC-21-07: reopening is not automatic rejection"
+                "ULC-21-07: a reopened claim has not been judged against"
             )
         recorded = require_timestamp_or_unknown(recorded_at)
         if recorded == EXPLICIT_UNKNOWN:
@@ -1204,7 +1204,7 @@ class Store:
 
     def derive_present_use_authorization(self, record_id: str) -> None:
         raise FieldDerivationRefused(
-            "ULC-00-05: present-use authorization is not derived from source "
+            "ULC-00-05: whether a record may be used now is not inferred from its origin "
             "or from transformation history"
         )
 
@@ -1487,7 +1487,7 @@ class Store:
 
     def fill_unknown(self, record_id: str, role: str, plausible_value: str) -> None:
         raise PlausibleSubstituteRejected(
-            "ULC-18-07: a missing author, source, or required time stays unknown; "
+            "ULC-18-07: where provenance is missing the field stays unknown; "
             f"no plausible value may be substituted for {role}"
         )
 

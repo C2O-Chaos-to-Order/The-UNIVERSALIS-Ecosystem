@@ -97,7 +97,7 @@ def reconcile_boundary(
     observed: int,
     round_residual: bool = False,
 ) -> dict:
-    """Reconcile declared sources, sinks, and boundary exclusions.
+    """Reconcile the declared inbound, outbound, and rule-excluded populations.
 
     A non-zero residual is raised as an investigation item. Asking for the
     residual to be rounded is refused, and the unrounded residual is what the

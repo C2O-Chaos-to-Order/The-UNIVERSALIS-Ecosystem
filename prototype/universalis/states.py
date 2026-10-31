@@ -232,7 +232,7 @@ def assert_readiness(state: Readiness, *, evaluated: bool, passing: bool) -> Non
     if state is not Readiness.EVALUATED_PASSING:
         raise ReadinessRefused(
             "ULC-00-12: "
-            f"{state.value} is not readiness; absent, failed, and unexecuted stay distinct"
+            f"{state.value} is not a readiness verdict; no readiness value may stand in for another"
         )
     if not evaluated or not passing:
         raise ReadinessRefused(
