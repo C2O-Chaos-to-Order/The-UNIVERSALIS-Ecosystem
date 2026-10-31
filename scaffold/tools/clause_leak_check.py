@@ -303,6 +303,7 @@ def check(
     return {
         "corpus": str(corpus),
         "threshold": threshold,
+        "width": width,
         "public_files": len(public_paths),
         "clause_bodies": len(clause_bodies),
         "residual_bodies": len(residual_bodies),
@@ -346,12 +347,19 @@ def main(argv: list[str] | None = None) -> int:
         f"{report['residual_bodies']} outside-clause-body target(s)"
     )
     print(
-        f"longest shared run: {worst['length']} characters "
-        f"(threshold {report['threshold']})"
+        f"search width: {report['width']} characters "
+        f"(threshold {report['threshold']} plus one)"
     )
     if worst["public"]:
+        print(f"longest shared run: {worst['length']} characters")
         print(f"  between {worst['public']}")
         print(f"  and     {worst['clause']}")
+    else:
+        print(
+            "longest shared run: none reaches the search width; "
+            f"no run of {report['width']} characters or more was found. "
+            "Shorter runs are below the search width and are not measured."
+        )
     if args.list:
         for finding in report["over_threshold"]:
             print(

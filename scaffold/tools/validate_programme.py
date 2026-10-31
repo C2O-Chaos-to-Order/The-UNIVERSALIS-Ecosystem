@@ -1590,9 +1590,9 @@ def check_honest(data: dict, reasons: dict[str, list[str]]) -> None:
             records.append((record, record.get(key, "record")))
     records.append((status, programme_id))
     for record, identifier in records:
-        # Evidence and authorization are separate columns. Do not pass one into
-        # the other: assert_authorization_status reads only the authorization
-        # column, and require_state_authority reads only the evidence column.
+        # Two independent axes are read here and never cross-fed: the evidence
+        # column goes only to require_state_authority, and the authorization
+        # column goes only to assert_authorization_status.
         state = record.get("evidence_status")
         try:
             require_state_authority(state, decisions, identifier)

@@ -38,8 +38,8 @@ Evidence-record fields follow the governing Plan. The mapping is in [PLAN_SCHEMA
 9. Write a report from `reports/_TEMPLATE_report.md`. The ten sections are task and scope, source of truth, method, evidence, findings, execution status, build status, risk and governance, repository disposition, and next action. A report file does not create programme credit.
 10. `verified`, `independently_reproduced`, `validated` and `authorized` evidence states, and
     `authorization_status` of `AUTHORIZED`, require a JSON decision in `decisions/` that cites the owner or
-    reviewer. Authorization is a separate column. An evidence state does not set it, and
-    `evidence_status: authorized` does not imply `authorization_status: AUTHORIZED`.
+    reviewer. Whether something is authorized is tracked in its own column, which no
+    evidence state ever assigns; `evidence_status: authorized` does not imply `authorization_status: AUTHORIZED`.
 
 Requirement ids are `ULC-<tablet>-<clause>`. One requirement belongs to one research card and must name a declared clause identifier. `ULC-00-01` in the requirement template is an example placeholder. It is not the separate collection-level register `UNI-001`…`UNI-015`.
 

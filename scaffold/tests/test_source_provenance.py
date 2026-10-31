@@ -188,7 +188,7 @@ class ProvenanceDocTests(unittest.TestCase):
         self.assertIn("ff. 2v–170r", self.doc)
         self.assertIn("Three treatises on natural philosophy and medicine", self.doc)
         self.assertIn("different scopes", self.doc)
-        # The two counts must not be presented as one number.
+        # The volume count and the item count must never be collapsed into a single figure.
         self.assertNotIn("384-item", self.doc)
         self.assertNotIn("704", self.doc)
 

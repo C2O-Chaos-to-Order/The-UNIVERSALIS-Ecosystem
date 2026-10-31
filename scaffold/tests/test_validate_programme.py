@@ -266,7 +266,7 @@ class ValidatorTests(unittest.TestCase):
         )
 
     def test_evidence_authorized_does_not_grant_authorization(self):
-        """The sharpest distinction: evidence state is not authorization.
+        """The sharpest distinction: an evidence state cannot stand in for authorization.
 
         The fixture carries ``evidence_status: authorized`` and sets
         ``authorization_status: AUTHORIZED`` on the strength of it alone. No

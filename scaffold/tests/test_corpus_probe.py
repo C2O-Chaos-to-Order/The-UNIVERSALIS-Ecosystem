@@ -84,8 +84,8 @@ class ClauseHeadingTests(unittest.TestCase):
         self.assertEqual(clause_heading(f"**V {EM} Distinction.**"), ("V", "Distinction"))
 
     def test_non_numeral_heading_is_not_a_clause(self):
-        self.assertIsNone(clause_heading("### A Note on This Version"))
-        self.assertIsNone(clause_heading("## For the One Who Must Hold"))
+        self.assertIsNone(clause_heading("### SYNTHETIC FRONT MATTER HEADING"))
+        self.assertIsNone(clause_heading("## SYNTHETIC DEDICATION HEADING"))
         self.assertIsNone(clause_heading("### Glossary"))
 
     def test_roman_numerals_convert(self):

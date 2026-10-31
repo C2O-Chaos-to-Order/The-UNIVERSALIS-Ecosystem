@@ -144,7 +144,7 @@ The validator exits `0` when all seven pass and `1` when any fail. A missing pac
 - Result records contain execution fields, and the recorded code hash matches the named file.
 - The recorded expected outcome matches the case file, and the case file still has the hash recorded at execution.
 - Declared counts match the ledgers, and cases are not listed twice inside a coverage ledger.
-- Claims of verification, reproduction, validation, programme credit, production validation, and authorization are backed by decision records when they are not the honest empty or pending values.
+- Claims of verification, reproduction, validation, programme credit, production validation and permission to proceed are backed by decision records whenever the honest value would otherwise be empty or pending.
 - Evidence state and execution outcome are carried on their own fields, and neither appears where the other belongs.
 - Every artefact in the package is marked `PUBLICLY_CLEARED`.
 
@@ -155,7 +155,7 @@ The validator exits `0` when all seven pass and `1` when any fail. A missing pac
 - That a person reviewed, accepted, or authorized the work. A decision record of the required shape is a citation, not a check that the cited person exists.
 - That `evidence_status` of `validated` or `authorized` authorizes anything. Authorization is only `authorization_status`, and an evidence `authorized` is not an authorization.
 - That a run succeeded because `evidence_status` is high, or that its evidence is weak because `execution_outcome` is `failed`. The two axes are independent.
-- Scientific validation, security certification, production readiness, implementation acceptance, or permission to release.
+- Scientific validation, security certification, production readiness, a judgement that the implementation is acceptable, or leave to release.
 - That a clause identifier matches private corpus text. The corpus is outside the package.
 - Programme credit. The validator never grants it. `CANDIDATE_PENDING_OWNER_REVIEW` means the credit is not awarded.
 

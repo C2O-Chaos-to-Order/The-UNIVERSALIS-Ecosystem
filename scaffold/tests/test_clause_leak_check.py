@@ -212,6 +212,31 @@ class LeakCheckTests(unittest.TestCase):
             self.assertEqual(under.returncode, 0, under.stdout + under.stderr)
             self.assertIn("no shared run exceeds the threshold", under.stdout)
 
+    def test_cli_reports_that_short_runs_were_not_measured(self):
+        """A clean run must not claim zero overlap; it never looked that far down."""
+        with tempfile.TemporaryDirectory() as tmp:
+            base = Path(tmp)
+            corpus = _make_corpus(base / "corpus")
+            public = base / "public.md"
+            public.write_text(PLACEHOLDER_BODY + "\n", encoding="utf-8")
+            result = subprocess.run(
+                [
+                    sys.executable,
+                    str(LEAK_CHECK),
+                    str(corpus),
+                    str(public),
+                    "--threshold",
+                    "5000",
+                ],
+                capture_output=True,
+                text=True,
+            )
+            self.assertEqual(result.returncode, 0, result.stdout + result.stderr)
+            self.assertIn("search width: 5001 characters", result.stdout)
+            self.assertIn("no run of 5001 characters or more was found", result.stdout)
+            self.assertIn("are not measured", result.stdout)
+            self.assertNotIn("longest shared run: 0 characters", result.stdout)
+
     def test_refuses_a_corpus_inside_the_repository(self):
         repo = Path(__file__).resolve().parents[2]
         fake_corpus = repo / "scaffold" / "not-a-real-corpus"
