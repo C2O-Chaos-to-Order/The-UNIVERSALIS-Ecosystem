@@ -64,8 +64,8 @@ end with `Human Version`.
 The two sides mark clauses differently. All of these are accepted:
 
 ```text
-### I — Of the many        technical, and the human side where it uses level-3 headings
-**I — Of the many.**      human side, bold style
+### I — <clause title>        technical side, and the human side where it uses level-3
+**I — <clause title>.**      human side, bold style
 ```
 
 A clause heading is a Roman numeral, an em dash, then the title. The title is free-form: it

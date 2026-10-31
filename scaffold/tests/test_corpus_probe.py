@@ -76,10 +76,10 @@ def _make_corpus(root: Path, tablets: int = 1, human_bold: bool = True) -> tuple
 
 class ClauseHeadingTests(unittest.TestCase):
     def test_level_three_heading_is_a_clause(self):
-        self.assertEqual(clause_heading(f"### I {EM} Of the many"), ("I", "Of the many"))
+        self.assertEqual(clause_heading(f"### I {EM} SYNTHETIC CLAUSE TITLE"), ("I", "SYNTHETIC CLAUSE TITLE"))
 
     def test_bold_human_heading_is_a_clause(self):
-        self.assertEqual(clause_heading(f"**I {EM} Of the many.**"), ("I", "Of the many"))
+        self.assertEqual(clause_heading(f"**I {EM} SYNTHETIC CLAUSE TITLE.**"), ("I", "SYNTHETIC CLAUSE TITLE"))
 
     def test_title_need_not_begin_with_of(self):
         # Requiring a leading "Of" was the defect that caused false mismatches.

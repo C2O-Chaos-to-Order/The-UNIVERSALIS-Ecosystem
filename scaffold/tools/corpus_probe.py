@@ -27,9 +27,9 @@ HUMAN_FILE_RE = re.compile(r"^(\d{1,3})_([A-Z][A-Z0-9_]*)_HUMAN\.md$")
 # "# 00 \u2014 The <Gemstone> Tablet"  and  "# 00 \u2014 The <Gemstone> Tablet \u2014 Human Version"
 H1_RE = re.compile(r"^#[ \t]+(?:(\d{1,3})[ \t]*\u2014[ \t]*)?(\S.*?)[ \t]*$")
 HUMAN_H1_SUFFIX_RE = re.compile(r"[ \t]*\u2014[ \t]*Human[ \t]+Version[ \t]*$", re.IGNORECASE)
-# "### I — Of the many" on either side.
+# "### I — <title>" on either side.
 H3_CLAUSE_RE = re.compile(r"^###[ \t]+([IVXLCDM]+)[ \t]*\u2014[ \t]*(\S.*?)[ \t]*$")
-# "**I — Of the many.**" on the human side.
+# "**I — <title>.**" on the human side.
 BOLD_CLAUSE_RE = re.compile(r"^\*\*[ \t]*([IVXLCDM]+)[ \t]*\u2014[ \t]*(\S.*?)[ \t]*\*\*[ \t]*$")
 
 ROMAN_VALUES = {"I": 1, "V": 5, "X": 10, "L": 50, "C": 100, "D": 500, "M": 1000}
