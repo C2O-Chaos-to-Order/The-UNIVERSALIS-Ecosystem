@@ -470,6 +470,41 @@ def build_authorization_without_record(dest: Path) -> Path:
     return root
 
 
+def build_owner_acceptance_without_decision(dest: Path) -> Path:
+    """Claim ACCEPTED owner acceptance with no decision record at all."""
+    root = build_executed(dest)
+    status = _load(root / "metadata" / "programme_status.json")
+    status["owner_acceptance"] = "ACCEPTED"
+    _save(root / "metadata" / "programme_status.json", status)
+    write_manifest(root)
+    return root
+
+
+def build_owner_acceptance_with_decision(dest: Path) -> Path:
+    """Claim ACCEPTED owner acceptance backed by a cited validated decision."""
+    root = build_executed(dest)
+    status = _load(root / "metadata" / "programme_status.json")
+    status["owner_acceptance"] = "ACCEPTED"
+    _save(root / "metadata" / "programme_status.json", status)
+    decisions = root / "decisions"
+    decisions.mkdir(exist_ok=True)
+    write_json(
+        decisions / "DEC-001.json",
+        {
+            "decision_id": "DEC-001",
+            "state": "validated",
+            "authority": "owner",
+            "decided_by": "Owner cited in the decision record",
+            "citation": "decisions/DEC-001.json",
+            "target_ids": [PROGRAMME_ID],
+            "statement": "Owner accepts the programme records. authorization_status is not set.",
+            "release_classification": "PUBLICLY_CLEARED",
+        },
+    )
+    rebuild_locks(root)
+    return root
+
+
 def _replace_ledger_field(path: Path, field: str, value: str) -> None:
     with path.open(encoding="utf-8", newline="") as handle:
         reader = csv.DictReader(handle)
@@ -499,6 +534,8 @@ def build_fixture(kind: str, dest: Path) -> Path:
         "executed_without_execution_evidence": build_executed_without_execution_evidence,
         "evidence_authorized_without_authorization": build_evidence_authorized_without_authorization,
         "evidence_authorized_default_authorization": build_evidence_authorized_default_authorization,
+        "owner_acceptance_without_decision": build_owner_acceptance_without_decision,
+        "owner_acceptance_with_decision": build_owner_acceptance_with_decision,
     }
     if kind not in builders:
         raise SystemExit(f"unknown fixture {kind}")

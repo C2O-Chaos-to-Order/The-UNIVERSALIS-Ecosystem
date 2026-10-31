@@ -82,6 +82,14 @@ FORBIDDEN_PRODUCTION = frozenset(
 LATER_THAN_REPRODUCED = frozenset(
     {"independently_reproduced", "validated", "authorized"}
 )
+# The Plan's ladder has no state called "accepted". Owner acceptance, programme
+# completion and recorded production validation are human judgements that the
+# evidence is adequate, so they are supported by a decision at ``validated`` or
+# above (``decision_supports`` treats a higher decision as covering a lower
+# one). This mapping is a scaffold decision, not a Plan term: it keeps the
+# claims gated on a cited human decision without inventing a state the Plan
+# does not define.
+OWNER_DECISION_STATE = "validated"
 # Evidence states that a single run may not claim on its own authority.
 DECISION_GATED_LABEL = ", ".join(
     state for state in STATES if state in DECISION_REQUIRED
@@ -1615,7 +1623,7 @@ def check_honest(data: dict, reasons: dict[str, list[str]]) -> None:
                 "HONEST_STATUS: owner_acceptance is PENDING while owner-accepted credits are non-zero"
             )
     elif acceptance == "ACCEPTED":
-        if not any(decision_supports(item, "accepted", programme_id) for item in decisions):
+        if not any(decision_supports(item, OWNER_DECISION_STATE, programme_id) for item in decisions):
             bucket.append(
                 "HONEST_STATUS: owner_acceptance is ACCEPTED without an explicit owner or reviewer decision record citing the programme"
             )
@@ -1626,7 +1634,7 @@ def check_honest(data: dict, reasons: dict[str, list[str]]) -> None:
         supported = any(
             isinstance(item, dict)
             and item.get("programme_complete") is True
-            and decision_supports(item, "accepted", programme_id)
+            and decision_supports(item, OWNER_DECISION_STATE, programme_id)
             for item in decisions
         )
         if not supported:
@@ -1658,7 +1666,7 @@ def check_honest(data: dict, reasons: dict[str, list[str]]) -> None:
         supported = any(
             isinstance(item, dict)
             and item.get("production_validation") == "RECORDED"
-            and decision_supports(item, "accepted", programme_id)
+            and decision_supports(item, OWNER_DECISION_STATE, programme_id)
             for item in decisions
         )
         if not supported:
@@ -1696,7 +1704,7 @@ def check_honest(data: dict, reasons: dict[str, list[str]]) -> None:
         }:
             cited = row.get("checkpoint", "")
             if not any(
-                decision_supports(item, "accepted", cited) or decision_supports(item, "accepted", programme_id)
+                decision_supports(item, OWNER_DECISION_STATE, cited) or decision_supports(item, OWNER_DECISION_STATE, programme_id)
                 for item in decisions
             ):
                 bucket.append(

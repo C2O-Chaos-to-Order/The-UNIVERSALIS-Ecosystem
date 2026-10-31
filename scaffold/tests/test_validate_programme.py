@@ -31,6 +31,8 @@ from support import (
     build_evidence_outcome_confusion,
     build_executed,
     build_executed_without_execution_evidence,
+    build_owner_acceptance_with_decision,
+    build_owner_acceptance_without_decision,
     build_self_credit,
     build_unclassified,
     build_verified_without_decision,
@@ -278,6 +280,33 @@ class ValidatorTests(unittest.TestCase):
             "while carrying evidence_status 'authorized'; the evidence state is not an "
             "authorization record and does not imply one",
         )
+
+    def test_owner_acceptance_needs_a_cited_decision(self):
+        """Owner acceptance is gated on a decision, because the Plan has no 'accepted' state.
+
+        The Plan's ladder has no state called ``accepted``. Owner acceptance is
+        therefore supported by a decision at ``validated`` or above, which is a
+        named scaffold decision rather than an invented evidence state.
+        """
+        self._expect(
+            "owner_acceptance_without_decision",
+            build_owner_acceptance_without_decision,
+            "honest_status",
+            "HONEST_STATUS: owner_acceptance is ACCEPTED without an explicit owner "
+            "or reviewer decision record citing the programme",
+        )
+
+    def test_owner_acceptance_with_a_cited_decision_validates(self):
+        with tempfile.TemporaryDirectory() as tmp:
+            package = build_owner_acceptance_with_decision(Path(tmp) / "programme")
+            code, payload, stderr = run_validator(package)
+            self.assertEqual(code, 0, stderr + "\n" + json.dumps(payload, indent=2))
+            status = json.loads(
+                (package / "metadata" / "programme_status.json").read_text(encoding="utf-8")
+            )
+            self.assertEqual(status["owner_acceptance"], "ACCEPTED")
+            # Acceptance of the records is still not an authorization.
+            self.assertEqual(status["authorization_status"], "NOT_AUTHORIZED")
 
     def test_evidence_authorized_with_default_authorization_validates(self):
         """Reaching the top evidence state does not authorize anything.
