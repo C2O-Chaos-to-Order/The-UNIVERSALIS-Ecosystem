@@ -1,0 +1,46 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "$id": "https://universalis.local/scaffold/schemas/source_register_entry.schema.json",
+  "title": "Source-register entry",
+  "description": "A source pinned, when it is a git object, to an exact commit and blob SHA, with a declared review_scope. source_role records what kind of source this is so a catalogue transcription, an independent manuscript-image transcription, and a critical edition cannot be cited as though they were each other. witness_siglum may only be filled when the cited edition itself assigns that siglum and a locator into that edition is recorded; no siglum is assigned by this repository.",
+  "type": "object",
+  "required": ["id", "kind", "review_scope", "release_classification", "source_role", "independence_from"],
+  "properties": {
+    "id": {"type": "string", "minLength": 1},
+    "kind": {"type": "string", "minLength": 1},
+    "path": {"type": "string"},
+    "url": {"type": "string"},
+    "commit": {"type": "string", "pattern": "^[0-9a-f]{40}$"},
+    "blob_sha": {"type": "string", "pattern": "^[0-9a-f]{40}$"},
+    "source_role": {
+      "enum": [
+        "catalogue_transcription",
+        "manuscript_image_transcription",
+        "critical_edition",
+        "edition_page_image",
+        "secondary_study",
+        "dataset",
+        "software",
+        "other"
+      ],
+      "description": "What this source is. A catalogue transcription, our own independent manuscript-image transcription, and a critical edition are distinct roles and are never treated as substitutes for one another."
+    },
+    "independence_from": {
+      "type": "array",
+      "items": {"type": "string", "minLength": 1},
+      "description": "Source ids that this source derives from or is not independent of. A transcription made from an edition is not independent of that edition and must name it here."
+    },
+    "witness_siglum": {
+      "type": "string",
+      "minLength": 1,
+      "description": "Optional. May only be filled when the cited edition itself assigns this siglum to this witness, and the entry records a locator into that edition for the assignment. No siglum is assigned by this repository, and none may be inferred from the mere presence of a manuscript in an edition."
+    },
+    "witness_siglum_locator": {
+      "type": "string",
+      "minLength": 1,
+      "description": "Required whenever witness_siglum is present: the page or section of the citing edition where the siglum is assigned."
+    },
+    "review_scope": {"type": "string", "minLength": 1},
+    "release_classification": {"const": "PUBLICLY_CLEARED"}
+  }
+}

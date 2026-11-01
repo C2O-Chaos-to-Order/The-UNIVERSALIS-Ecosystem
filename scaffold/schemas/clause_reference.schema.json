@@ -1,0 +1,17 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "$id": "https://universalis.local/scaffold/schemas/clause_reference.schema.json",
+  "title": "Clause reference",
+  "description": "An identifier for a corpus clause. No clause title and no clause body. Example placeholders must say so in note.",
+  "type": "object",
+  "required": ["clause_id", "release_classification"],
+  "properties": {
+    "clause_id": {"type": "string", "minLength": 1, "pattern": "^[A-Za-z0-9][A-Za-z0-9._:-]{0,127}$"},
+    "tablet_number": {"type": "integer"},
+    "clause_number": {"type": "integer"},
+    "side": {"enum": ["technical", "human", "unspecified"]},
+    "placeholder": {"type": "boolean"},
+    "note": {"type": "string", "maxLength": 240},
+    "release_classification": {"const": "PUBLICLY_CLEARED"}
+  }
+}

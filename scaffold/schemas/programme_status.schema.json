@@ -1,0 +1,62 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "$id": "https://universalis.local/scaffold/schemas/programme_status.schema.json",
+  "title": "Programme status",
+  "description": "Honest package counts and claims. evidence_status carries the Plan's eight evidence states; execution_outcome records what the programme's runs did on a separate axis and is never an evidence state. authorization_status is independent and is not inferred from evidence_status: evidence_status 'authorized' neither sets nor implies authorization_status 'AUTHORIZED'. Zero counts stay zero until records exist. This object is not scientific validation or production readiness.",
+  "type": "object",
+  "required": [
+    "programme",
+    "edition",
+    "evidence_status",
+    "execution_outcome",
+    "authorization_status",
+    "owner_acceptance",
+    "independent_reviews",
+    "independent_reproductions",
+    "owner_accepted_research_credits",
+    "owner_accepted_simulation_credits",
+    "production_validation",
+    "programme_complete",
+    "release_authorized",
+    "research_records",
+    "simulation_cases",
+    "simulation_results",
+    "requirements",
+    "reports",
+    "expectations_matched",
+    "expectation_failures",
+    "execution_errors",
+    "release_classification",
+    "limits"
+  ],
+  "properties": {
+    "programme": {"type": "string", "minLength": 1},
+    "edition": {"type": "string", "minLength": 1},
+    "evidence_status": {
+      "enum": ["proposed", "documented", "implemented", "tested", "verified", "independently_reproduced", "validated", "authorized"]
+    },
+    "execution_outcome": {
+      "enum": ["not_executed", "executed", "failed", "incomplete"],
+      "default": "not_executed"
+    },
+    "authorization_status": {"enum": ["NOT_AUTHORIZED", "AUTHORIZED"]},
+    "owner_acceptance": {"enum": ["PENDING", "ACCEPTED"]},
+    "independent_reviews": {"type": "integer", "minimum": 0},
+    "independent_reproductions": {"type": "integer", "minimum": 0},
+    "owner_accepted_research_credits": {"type": "integer", "minimum": 0},
+    "owner_accepted_simulation_credits": {"type": "integer", "minimum": 0},
+    "production_validation": {"type": "string", "minLength": 1},
+    "programme_complete": {"type": "boolean"},
+    "release_authorized": {"type": "boolean"},
+    "research_records": {"type": "integer", "minimum": 0},
+    "simulation_cases": {"type": "integer", "minimum": 0},
+    "simulation_results": {"type": "integer", "minimum": 0},
+    "requirements": {"type": "integer", "minimum": 0},
+    "reports": {"type": "integer", "minimum": 0},
+    "expectations_matched": {"type": "integer", "minimum": 0},
+    "expectation_failures": {"type": "integer", "minimum": 0},
+    "execution_errors": {"type": "integer", "minimum": 0},
+    "release_classification": {"const": "PUBLICLY_CLEARED"},
+    "limits": {"type": "string", "minLength": 1}
+  }
+}

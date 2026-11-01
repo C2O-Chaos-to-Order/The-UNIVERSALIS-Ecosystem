@@ -1,0 +1,34 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "$id": "https://universalis.local/scaffold/schemas/simulation_case.schema.json",
+  "title": "Simulation case",
+  "description": "Inputs and the expected outcome, authored before execution. A case file is not an execution record.",
+  "type": "object",
+  "required": [
+    "id",
+    "research_record_id",
+    "checkpoint_id",
+    "family",
+    "protocol_version",
+    "configuration",
+    "input",
+    "expected",
+    "limitations",
+    "release_classification"
+  ],
+  "properties": {
+    "id": {"type": "string", "pattern": "^SIM-[0-9]{3,}$"},
+    "research_record_id": {"type": "string", "pattern": "^RES-[0-9]{3,}$"},
+    "checkpoint_id": {"type": "string", "minLength": 1},
+    "family": {"type": "string", "minLength": 1},
+    "title": {"type": "string"},
+    "protocol_version": {"type": "string", "minLength": 1},
+    "configuration": {"type": "string", "minLength": 1},
+    "input": {},
+    "expected": {},
+    "source_ids": {"type": "array", "items": {"type": "string"}},
+    "clause_ids": {"type": "array", "items": {"type": "string"}},
+    "limitations": {"type": "string", "minLength": 1},
+    "release_classification": {"const": "PUBLICLY_CLEARED"}
+  }
+}
