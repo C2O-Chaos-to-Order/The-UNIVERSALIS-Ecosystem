@@ -231,12 +231,6 @@ class StepFact:
             return "computed_from_residual_and_epsilon"
         return "caller_asserted"
 
-    #: The boolean exactly as supplied, before any computation. ``None`` when
-    #: the caller supplied only residual and epsilon. Kept so that
-    #: ``premise_basis`` can report what actually happened rather than inferring
-    #: it from the normalised field.
-    asserted_premise_holds: bool | None = None
-
 
 #: Fixed scope statements carried on every guarantee this module issues. They
 #: are part of the result rather than only of the documentation, so a reader of
