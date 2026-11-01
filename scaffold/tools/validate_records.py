@@ -17,9 +17,20 @@ SUPPORTED KEYWORDS
 ``additionalProperties``, ``items``, ``minLength``, ``maxLength``,
 ``pattern``, ``minimum``, ``maximum``.
 
-Every keyword in that list is applied with JSON Schema semantics, and each
-one has positive, negative and boundary fixtures in
-``scaffold/tests/test_validate_records.py``.
+Every keyword in that list is implemented, and each one has a positive
+fixture and a negative fixture in ``scaffold/tests/test_validate_records.py``.
+The four keywords that carry a numeric limit — ``minLength``, ``maxLength``,
+``minimum`` and ``maximum`` — also have boundary fixtures, where the value
+sits exactly on the limit and must pass: a ``minLength`` of 1 must accept a
+one-character string, a ``maximum`` of 10 must accept 10. Without those, a
+constraint that rejected everything would still pass a negative-only test.
+
+That paragraph is itself checked: ``test_every_supported_keyword_has_a_negative_fixture``
+fails if a keyword in ``SUPPORTED_KEYWORDS`` has no fixture, and
+``test_every_bounded_keyword_has_a_boundary_fixture`` fails if one of the four
+limit keywords loses its boundary case. An earlier version of this docstring
+claimed coverage before ``maxLength`` and ``maximum`` had any fixture at all,
+and the suite was asserting that the gap existed rather than closing it.
 
 UNSUPPORTED KEYWORDS ARE AN ERROR, NOT A SILENT PASS
 ----------------------------------------------------
@@ -27,12 +38,19 @@ If a schema uses a keyword this tool does not implement (``$ref``,
 ``oneOf``, ``anyOf``, ``allOf``, ``not``, ``format``, ``minItems``,
 ``maxItems``, ``uniqueItems``, ``multipleOf``, ``exclusiveMinimum``,
 ``exclusiveMaximum``, ``patternProperties``, ``propertyNames``,
-``dependentRequired``, ``if``/``then``/``else``, ``contains``, ``prefixItems``),
-the run stops with exit 2 and names the keyword and the schema path. A
-validator that ignored a constraint it does not understand would report a
-pass it has not earned, which is the specific failure mode this tool exists
-to prevent. The check is recursive, so an unsupported keyword buried in one
-nested subschema stops the run too.
+``dependentRequired``, ``if``/``then``/``else``, ``contains``,
+``prefixItems``), the run stops with exit 2 and names the keyword and the
+schema path. A validator that ignored a constraint it does not understand
+would report a pass it has not earned, which is the specific failure mode
+this tool exists to prevent. The check is recursive, so an unsupported
+keyword buried in one nested subschema stops the run too.
+
+A keyword whose argument this tool cannot read is refused for the same
+reason. ``{"maxLength": "3"}``, ``{"minimum": "5"}``, ``{"required": "abc"}``,
+``{"items": [ ... ]}`` (the tuple-validation form), a boolean subschema
+under ``properties``, and an unknown or empty ``type`` name all stop the
+run with exit 2. Applying half of a constraint is the same lie as applying
+none of it.
 
 This is therefore NOT a complete JSON Schema implementation. It is a
 deliberate subset, sized to the keyword set the scaffold's own schemas use,
@@ -41,28 +59,75 @@ against the JSON Schema specification as a whole.
 
 SEMANTICS THAT DIFFER FROM A NAIVE READING
 ------------------------------------------
-``additionalProperties`` follows the specification, including its default.
-JSON Schema permits extra properties unless a schema says
-``"additionalProperties": false``. None of the scaffold's schemas declares
-it, so extra properties are permitted here and are reported as a WARNING,
-not a failure. A schema that wants them forbidden must say so. Rejecting
-them unconditionally would be this tool inventing a constraint the schema
-never stated, and the two scaffold validators previously disagreed on
-exactly this point.
+``additionalProperties`` follows the specification, including its default,
+and its three states are kept apart rather than collapsed:
 
-``enum`` and ``const`` compare by JSON type as well as value, so ``true``
-does not equal ``1`` and ``1`` does not equal ``1.0``. In Python those pairs
-compare equal, which would let a boolean satisfy an integer enum.
+* **Absent.** JSON Schema permits extra properties unless a schema says
+  otherwise. An extra property is permitted and reported as
+  ``UNDECLARED_FIELD``, which lands in the report's
+  ``permitted_extra_fields`` list, as a warning and never a failure.
+* **``"additionalProperties": false``.** An extra property is a
+  ``UNKNOWN_FIELD`` failure.
+* **``"additionalProperties": <schema>``.** The extra property is checked
+  against that subschema, and any problem is reported at the property's own
+  path.
+
+The rule belongs to the schema, not to this tool. Rejecting extra
+properties unconditionally would be inventing a constraint the schema never
+stated.
+
+For contrast, ``validate_programme.schema_problems`` does not read
+``additionalProperties`` at all: it returns no problem for an undeclared
+property whether the schema forbids one or says nothing. The two tools
+therefore differ on this keyword by design, and that difference is the
+reason this module documents its own behaviour rather than deferring to the
+other.
+
+The actual state of the seven schemas in ``scaffold/schemas`` at the time
+of writing is not uniform, so neither is the behaviour:
+
+* Six declare ``"additionalProperties": false`` at the root:
+  ``clause_reference``, ``programme_status``, ``requirement_record``,
+  ``research_record``, ``simulation_case`` and ``simulation_result``. A
+  stray top-level key in any of those six fails.
+* ``simulation_result`` declares it again on two nested objects,
+  ``properties.environment`` and ``properties.known_answer_check``, so a
+  stray key inside either one fails at the property's own path.
+* ``source_register_entry`` declares no ``additionalProperties`` at all, so
+  a stray key there is permitted and reported as a warning.
+
+The scaffold test suite re-derives that state from the schema files and
+checks the tool's behaviour against it, rather than trusting this
+paragraph.
+
+``enum`` and ``const`` compare by JSON type as well as by value.
+
+* A boolean is not a number: ``true`` does not equal ``1``, and ``false``
+  does not equal ``0``. In Python both pairs compare equal, which would let
+  a boolean satisfy an integer ``enum``.
+* A string is not a number: ``"1"`` does not equal ``1``.
+* ``1`` and ``1.0`` *do* compare equal. JSON has a single number type, so
+  the specification treats them as the same value, and Python agrees.
+* Arrays and objects compare element by element under the same rules.
 
 ``pattern`` uses ``re.search`` as the specification requires, not
 ``re.fullmatch``: an unanchored pattern is a substring match, and anchoring
 it here would reject values the schema permits.
 
-TYPE SEMANTICS
---------------
-Type checking is imported from ``validate_programme`` rather than rewritten,
-so ``integer`` means an ``int`` and never a ``bool`` or a float such as
-``1.0``, and ``number`` rejects a non-finite float.
+TYPE SEMANTICS, AND ONE DELIBERATE DEVIATION
+--------------------------------------------
+Type checking is imported from ``validate_programme`` rather than rewritten.
+``number`` rejects a non-finite float, and no type accepts a ``bool`` where
+a number is meant.
+
+The deviation: draft 2020-12 counts any number with a zero fractional part
+as an ``integer``, so a conforming validator accepts ``1.0`` against
+``{"type": "integer"}``. This tool does not. It requires an ``int`` that is
+not a ``bool``. The reasoning is that a record writing ``1.0`` into an
+integer field is far more likely a defect than an intentional zero
+fraction, and this is a records checker rather than a general-purpose
+validator. The consequence is real and is not hidden: a record that a
+conforming validator would pass can fail here.
 
 THE UNSPECIFIED SENTINEL
 ------------------------
@@ -71,6 +136,14 @@ WARNING, not a failure: a record may declare a field unspecified rather than
 invent a value. The exception is a field the schema constrains by ``enum`` or
 ``const``: there the schema's vocabulary governs, ``"UNSPECIFIED"`` is not in
 it, and the record fails. This tool does not widen a schema's vocabulary.
+
+NON-STANDARD JSON IS REFUSED
+----------------------------
+``json.loads`` accepts ``NaN``, ``Infinity`` and ``-Infinity`` by default,
+and none of the three is a JSON value. A file containing one fails as
+``NOT_JSON`` instead of being read as a number, so a record cannot carry a
+non-JSON literal past the type checks and the report cannot emit invalid
+JSON of its own.
 
 EMPTY INPUT IS AN ERROR
 -----------------------
@@ -93,7 +166,7 @@ scientific validation and never substitutes for it.
 
 Exit codes: 0 for no failures (warnings alone still exit 0), 1 when any
 record fails, 2 when the run could not be performed at all, which includes
-an unsupported schema keyword.
+an unsupported or unreadable schema keyword.
 """
 
 from __future__ import annotations
@@ -254,6 +327,23 @@ class UnsupportedKeyword(ValueError):
     """A schema uses a keyword this validator does not implement."""
 
 
+# Keywords whose argument is a map from a name to a subschema. Only
+# ``properties`` is supported; the rest are refused by name. None of them is a
+# subschema itself, so the gate must not treat the map as one.
+NAME_TO_SUBSCHEMA = frozenset(
+    {"properties", "patternProperties", "dependentSchemas", "$defs", "definitions"}
+)
+
+# Keywords whose argument is data, not a schema. The gate must never descend
+# into these: a ``const`` of ``{"format": "date-time"}`` is a permitted value,
+# not a use of the unsupported ``format`` keyword, and walking it would refuse
+# a schema that is entirely within the subset.
+VALUE_KEYWORDS = frozenset({"enum", "const", "default", "examples", "required", "type"})
+
+# The JSON Schema type names this tool can check.
+KNOWN_TYPES = frozenset({"array", "boolean", "integer", "number", "object", "string", "null"})
+
+
 def unsupported_keywords(schema: object, path: str = "") -> list[tuple[str, str]]:
     """Return ``(schema path, keyword)`` for every keyword the tool cannot apply.
 
@@ -265,10 +355,20 @@ def unsupported_keywords(schema: object, path: str = "") -> list[tuple[str, str]
     walk descends into each property's subschema and does not judge the names
     themselves. The same applies to keys under ``$defs``-style maps, which this
     tool refuses wholesale anyway.
+
+    Values held by ``enum``, ``const``, ``default``, ``examples``, ``required``
+    and ``type`` are data. They are never walked as schemas, because a record
+    value that happens to contain a key named ``format`` is not the ``format``
+    keyword and must not stop the run.
     """
     found: list[tuple[str, str]] = []
 
     def walk(node: object, where: str) -> None:
+        if isinstance(node, bool):
+            # A boolean is a valid subschema only where the caller handles it:
+            # ``additionalProperties``. Everywhere else it is refused by
+            # ``schema_argument_problems``, which reports the real reason.
+            return
         if not isinstance(node, dict):
             if isinstance(node, list):
                 for index, item in enumerate(node):
@@ -276,7 +376,7 @@ def unsupported_keywords(schema: object, path: str = "") -> list[tuple[str, str]
             return
         for key, value in node.items():
             here = f"{where}.{key}" if where else key
-            if key in ("properties", "patternProperties", "dependentSchemas", "$defs", "definitions"):
+            if key in NAME_TO_SUBSCHEMA:
                 # These maps hold field names or definition names, not keywords.
                 if key in KNOWN_UNSUPPORTED_KEYWORDS:
                     found.append((where or "(root)", key))
@@ -285,10 +385,112 @@ def unsupported_keywords(schema: object, path: str = "") -> list[tuple[str, str]
                     for name, subschema in value.items():
                         walk(subschema, f"{here}.{name}")
                 continue
-            if key in ANNOTATION_KEYWORDS:
+            if key in VALUE_KEYWORDS or key in ANNOTATION_KEYWORDS:
                 continue
             if key not in SUPPORTED_KEYWORDS:
                 found.append((where or "(root)", key))
+                continue
+            if key == "items" and isinstance(value, list):
+                # Draft-07 tuple validation. ``items`` here means a single
+                # subschema applied to every element; the list form is a
+                # different constraint this tool does not implement.
+                found.append((here, "items (tuple form)"))
+                continue
+            if isinstance(value, bool) and key != "additionalProperties":
+                found.append((here, f"{key} (boolean subschema)"))
+                continue
+            walk(value, here)
+
+    walk(schema, path)
+    return found
+
+
+def schema_argument_problems(schema: object, path: str = "") -> list[tuple[str, str, str]]:
+    """Return ``(schema path, keyword, reason)`` for arguments this tool cannot read.
+
+    A keyword whose argument has the wrong shape cannot be applied, and applying
+    part of a constraint is the same lie as applying none of it. ``maxLength``
+    of ``"3"`` would otherwise be silently skipped by an ``isinstance`` guard
+    and the record would pass a constraint that was never checked. Each such
+    argument is reported here and stops the run.
+
+    A schema node that is not an object is reported too, except where a boolean
+    is meaningful: ``additionalProperties`` is handled by the caller.
+    """
+    found: list[tuple[str, str, str]] = []
+
+    def add(where: str, keyword: str, reason: str) -> None:
+        found.append((where or "(root)", keyword, reason))
+
+    def positive_int(value: object) -> bool:
+        return isinstance(value, int) and not isinstance(value, bool) and value >= 0
+
+    def walk(node: object, where: str) -> None:
+        if isinstance(node, bool):
+            return
+        if not isinstance(node, dict):
+            add(where, "(schema)", f"must be an object, found {json_type(node)}")
+            return
+        for key, value in node.items():
+            here = f"{where}.{key}" if where else key
+            if key in NAME_TO_SUBSCHEMA:
+                if key in KNOWN_UNSUPPORTED_KEYWORDS:
+                    continue  # reported by the keyword gate
+                if not isinstance(value, dict):
+                    add(here, key, f"must be an object mapping names to subschemas, found {json_type(value)}")
+                    continue
+                for name, subschema in value.items():
+                    child = f"{here}.{name}"
+                    if isinstance(subschema, bool):
+                        add(child, key, "holds a boolean subschema, which is not supported")
+                        continue
+                    walk(subschema, child)
+                continue
+            if key in VALUE_KEYWORDS or key in ANNOTATION_KEYWORDS:
+                if key == "required" and not (
+                    isinstance(value, list) and all(isinstance(item, str) for item in value)
+                ):
+                    add(here, key, f"must be an array of strings, found {json_type(value)}")
+                if key == "type":
+                    names = [value] if isinstance(value, str) else value
+                    if not isinstance(names, list) or not names:
+                        add(here, key, f"must be a type name or a non-empty array of names, found {render(value)}")
+                    elif any(name not in KNOWN_TYPES for name in names):
+                        unknown = sorted(str(name) for name in names if name not in KNOWN_TYPES)
+                        add(here, key, f"names a type this tool cannot check: {', '.join(unknown)}")
+                if key == "enum" and (not isinstance(value, list) or not value):
+                    # An enum that is not a non-empty array cannot be applied:
+                    # ``"abc"`` would be read as three single-character
+                    # permitted values, which no schema meant.
+                    add(here, key, f"must be a non-empty array, found {render(value)}")
+                continue
+            if key not in SUPPORTED_KEYWORDS:
+                continue  # reported by the keyword gate
+            if key in ("minLength", "maxLength"):
+                if not positive_int(value):
+                    add(here, key, f"must be a non-negative integer, found {render(value)}")
+                continue
+            if key in ("minimum", "maximum"):
+                if not is_number(value):
+                    add(here, key, f"must be a number, found {render(value)}")
+                continue
+            if key == "pattern":
+                if not isinstance(value, str):
+                    add(here, key, f"must be a string, found {json_type(value)}")
+                continue
+            if key == "items":
+                if isinstance(value, list):
+                    add(here, key, "uses the tuple form, which this tool does not implement")
+                    continue
+                walk(value, here)
+                continue
+            if key == "additionalProperties":
+                if isinstance(value, bool):
+                    continue
+                if not isinstance(value, dict):
+                    add(here, key, f"must be a boolean or a schema, found {json_type(value)}")
+                    continue
+                walk(value, here)
                 continue
             walk(value, here)
 
@@ -297,26 +499,40 @@ def unsupported_keywords(schema: object, path: str = "") -> list[tuple[str, str]
 
 
 def require_supported_keywords(schema: dict, schema_name: str) -> None:
-    """Raise ``UnsupportedKeyword`` naming every keyword the tool cannot apply."""
-    problems = unsupported_keywords(schema)
-    if not problems:
+    """Raise ``UnsupportedKeyword`` naming every keyword the tool cannot apply.
+
+    Two things stop the run: a keyword that is not implemented, and a keyword
+    that is implemented but whose argument this tool cannot read. Both are
+    named, with the schema path they were found at.
+    """
+    unknown = unsupported_keywords(schema)
+    unreadable = schema_argument_problems(schema)
+    if not unknown and not unreadable:
         return
-    listed = ", ".join(f"{keyword!r} at {where}" for where, keyword in problems)
+    parts: list[str] = []
+    for where, keyword in unknown:
+        parts.append(f"{keyword!r} at {where}")
+    for where, keyword, reason in unreadable:
+        parts.append(f"{keyword!r} at {where} ({reason})")
     raise UnsupportedKeyword(
-        f"UNSUPPORTED_KEYWORD: schema {schema_name} uses {listed}. "
+        f"UNSUPPORTED_KEYWORD: schema {schema_name} uses " + ", ".join(parts) + ". "
         "This tool implements only "
         + ", ".join(sorted(SUPPORTED_KEYWORDS))
-        + ". Ignoring an unimplemented constraint would report a pass that was "
-        "not earned, so the run stops instead."
+        + ", with the argument shapes documented in this module. Ignoring a "
+        "constraint, or part of one, would report a pass that was not earned, "
+        "so the run stops instead."
     )
 
 
 def json_equal(left: object, right: object) -> bool:
     """Compare two JSON values by type as well as by value.
 
-    ``True == 1`` and ``1 == 1.0`` in Python, but JSON distinguishes boolean,
-    integer and number. Without this, a boolean would satisfy an integer enum
-    and ``1.0`` would satisfy ``1``.
+    JSON has one number type, so ``1`` and ``1.0`` are the same value and this
+    function says so. It does distinguish a boolean from a number, because
+    ``True == 1`` in Python and a boolean would otherwise satisfy an integer
+    ``enum``; and it distinguishes a string from a number, because ``"1"``
+    must not satisfy ``1``. Arrays compare element by element and objects
+    compare key by key under the same rules.
     """
     if isinstance(left, bool) != isinstance(right, bool):
         return False
@@ -351,6 +567,18 @@ def schema_problems(value: object, node: dict, path: str) -> list[dict]:
     ``enum`` or ``const`` mismatch and a ``type`` mismatch each stop descent
     into that value, because every further constraint would be checked against
     a value the schema has already rejected.
+
+    ``additionalProperties`` keeps its three states apart:
+
+    * absent — an extra property is permitted and reported as
+      ``UNDECLARED_FIELD``, which the caller keeps out of ``failures``;
+    * ``false`` — an extra property is a ``UNKNOWN_FIELD`` failure;
+    * a schema — the extra property is checked against that schema, and any
+      problem is reported at the property's own path.
+
+    ``UNDECLARED_FIELD`` is the only kind the caller downgrades. It is returned
+    here rather than dropped so the reader can see which properties were
+    permitted rather than declared.
     """
     problems: list[dict] = []
 
@@ -433,8 +661,10 @@ def schema_problems(value: object, node: dict, path: str) -> list[dict]:
                 problems.extend(schema_problems(value[key], properties[key], child))
             elif key not in properties:
                 # JSON Schema permits undeclared properties unless the schema
-                # sets additionalProperties to false. The record may not state a
-                # constraint the schema never made.
+                # says otherwise, so the three states are kept apart rather
+                # than collapsed into "reject": absent warns, false fails, and
+                # a schema recurses. Rejecting unconditionally would be this
+                # tool inventing a constraint the schema never stated.
                 if extra is False:
                     add(
                         "UNKNOWN_FIELD",
@@ -449,6 +679,17 @@ def schema_problems(value: object, node: dict, path: str) -> list[dict]:
                         "field is not declared by the schema; permitted, because the schema does not set additionalProperties: false",
                         child,
                     )
+            elif isinstance(properties[key], bool):
+                # A boolean subschema is only meaningful as
+                # additionalProperties. The support gate refuses one here, so
+                # this branch is unreachable from the CLI; it is kept so a
+                # direct library caller gets a reported problem rather than a
+                # silent pass.
+                add(
+                    "UNSUPPORTED_SUBSCHEMA",
+                    "property declares a boolean subschema, which this tool cannot apply",
+                    child,
+                )
     elif isinstance(value, list):
         items = node.get("items")
         if isinstance(items, dict):
@@ -479,6 +720,23 @@ def top_field(path: str) -> str:
     return path.split(".", 1)[0].split("[", 1)[0]
 
 
+NON_JSON_CONSTANT = re.compile(r"^(NaN|-?Infinity)$")
+
+
+def _reject_constant(name: str) -> object:
+    """Refuse ``NaN`` and ``Infinity``, which ``json.loads`` accepts but JSON does not.
+
+    ``json.loads`` maps these three tokens to floats by default. None of them is
+    a JSON value, so a file containing one is not a JSON record. Accepting it
+    would let a non-JSON literal past the type checks, and ``json.dump`` would
+    write it back out as invalid JSON in the machine-readable report.
+    """
+    raise ValueError(
+        f"{name} is not a JSON value; a record must be plain JSON "
+        "(RFC 8259 has no NaN or Infinity)"
+    )
+
+
 def read_record(path: Path) -> tuple[object | None, str | None]:
     """Return the parsed JSON, or a reason the file could not be read as JSON."""
     try:
@@ -488,9 +746,11 @@ def read_record(path: Path) -> tuple[object | None, str | None]:
     except OSError as exc:
         return None, f"file could not be read ({exc.strerror or exc})"
     try:
-        return json.loads(text), None
+        return json.loads(text, parse_constant=_reject_constant), None
     except json.JSONDecodeError as exc:
         return None, f"not valid JSON (line {exc.lineno} column {exc.colno}: {exc.msg})"
+    except ValueError as exc:
+        return None, f"not valid JSON ({exc})"
 
 
 def validate_directory(directory: Path, schema_name: str, recursive: bool = False) -> dict:
@@ -582,12 +842,14 @@ def validate_directory(directory: Path, schema_name: str, recursive: bool = Fals
     if ok:
         verdict = (
             f"VERDICT: PASS — {count} record(s) checked, 0 failed, "
-            f"{len(warnings)} unspecified warning(s)"
+            f"{len(warnings)} unspecified warning(s), "
+            f"{len(permitted_extra)} permitted undeclared field(s)"
         )
     else:
         verdict = (
             f"VERDICT: FAIL — {failed_files} of {count} record(s) failed "
-            f"({len(failures)} problem(s)), {len(warnings)} unspecified warning(s)"
+            f"({len(failures)} problem(s)), {len(warnings)} unspecified warning(s), "
+            f"{len(permitted_extra)} permitted undeclared field(s)"
         )
 
     return {
@@ -629,12 +891,20 @@ def render_human(report: dict) -> str:
             lines.append(
                 f"  FAIL {failure['kind']} {failure['field']}: {failure['reason']}"
             )
+    if report["permitted_extra_fields"]:
+        # A permitted extra field is a warning, so it must reach the human
+        # reader too. Reporting it only in the JSON payload hid it from every
+        # CLI user, which made the warning exist but never arrive.
+        lines.append("")
+        lines.append("Undeclared fields the schema permits — warnings, not failures:")
+        for item in report["permitted_extra_fields"]:
+            lines.append(f"  {item['file']}: {item['field']}")
     if report["unspecified_counts"]:
         lines.append("")
         lines.append("UNSPECIFIED values — warnings, not failures:")
         for field, count in report["unspecified_counts"].items():
             lines.append(f"  {field}: {count} record(s)")
-    if not report["failures"] and not report["unspecified_counts"]:
+    if not report["failures"] and not report["unspecified_counts"] and not report["permitted_extra_fields"]:
         lines.append("")
         lines.append("  (no problems found)")
     lines.append("")
