@@ -612,8 +612,18 @@ class OutputTests(unittest.TestCase):
             self.assertIn("VERDICT: FAIL", payload["verdict"])
 
     def test_the_scope_statement_denies_more_than_it_proves(self):
-        """A pass is structural only, and the report says so."""
-        for phrase in ("does not prove", "pattern, minLength and minimum"):
+        """A pass is structural only, and the report says so.
+
+        The old assertion checked for the words "pattern, minLength and minimum
+        constraints are not applied here", which is now false: they are applied.
+        It is replaced rather than deleted, so the denial cannot quietly widen
+        while the test still passes.
+        """
+        for phrase in (
+            "does not prove",
+            "was conducted",
+            "Unsupported schema keywords stop the run",
+        ):
             self.assertIn(phrase, SCOPE)
 
     def test_the_human_report_names_the_file_and_the_field(self):
@@ -744,3 +754,348 @@ class ExitCodeTests(unittest.TestCase):
 
 if __name__ == "__main__":
     unittest.main()
+
+
+# ---------------------------------------------------------------------------
+# Constraint semantics.
+#
+# Each supported keyword gets a positive case, a negative case, and its
+# boundary. The boundary cases are the ones that matter: a minimum of 0 must
+# accept 0 and reject -1; a minLength of 1 must accept a one-character string
+# and reject the empty one. A test that only checks the negative side would
+# pass even if the constraint rejected everything.
+# ---------------------------------------------------------------------------
+
+class ConstraintSemanticsTests(unittest.TestCase):
+    """JSON Schema constraint semantics, one keyword at a time."""
+
+    def _fails_for(self, record: dict, kind: str, field: str) -> dict:
+        """Validate one record and assert it fails for this kind on this field."""
+        with tempfile.TemporaryDirectory() as tmp:
+            directory = Path(tmp) / "records"
+            directory.mkdir()
+            _write(directory, "SIM-001.json", record)
+            report = validate_directory(directory, SCHEMA)
+        self.assertFalse(report["ok"], f"expected a failure for {kind} on {field}")
+        hits = [f for f in report["failures"] if f["kind"] == kind and f["field"] == field]
+        self.assertTrue(
+            hits,
+            f"expected {kind} on {field}; got "
+            + ", ".join(f"{f['kind']} {f['field']}" for f in report["failures"]),
+        )
+        return report
+
+    def _passes(self, record: dict) -> dict:
+        with tempfile.TemporaryDirectory() as tmp:
+            directory = Path(tmp) / "records"
+            directory.mkdir()
+            _write(directory, "SIM-001.json", record)
+            report = validate_directory(directory, SCHEMA)
+        self.assertTrue(
+            report["ok"],
+            "expected a pass; got "
+            + ", ".join(f"{f['kind']} {f['field']}" for f in report["failures"]),
+        )
+        return report
+
+    # -- pattern -----------------------------------------------------------
+
+    def test_pattern_accepts_a_conforming_id(self):
+        self._passes(_record(record_id="SIM-001"))
+
+    def test_pattern_accepts_a_longer_id(self):
+        """``{3,}`` means three or more digits, so four must pass."""
+        self._passes(_record(record_id="SIM-1234"))
+
+    def test_pattern_rejects_too_few_digits(self):
+        self._fails_for(_record(record_id="SIM-01"), "PATTERN", "record_id")
+
+    def test_pattern_rejects_a_non_numeric_suffix(self):
+        self._fails_for(_record(record_id="SIM-001x"), "PATTERN", "record_id")
+
+    def test_pattern_is_a_substring_match_not_a_whole_string_match(self):
+        """The specification says ``pattern`` searches, it does not anchor.
+
+        ``record_id`` uses ``^...$`` so it is anchored either way. The
+        timestamp pattern does not anchor its ends beyond its own groups, so a
+        correct implementation must not add anchoring of its own. This asserts
+        the primitive directly.
+        """
+        from validate_records import schema_problems
+
+        node = {"type": "string", "pattern": "b"}
+        self.assertEqual(schema_problems("abc", node, "f"), [])
+        self.assertTrue(schema_problems("ac", node, "f"))
+
+    def test_sha256_pattern_rejects_a_short_hash(self):
+        self._fails_for(_record(code_sha256="a" * 63), "PATTERN", "code_sha256")
+
+    def test_sha256_pattern_accepts_exactly_64(self):
+        self._passes(_record(code_sha256="a" * 64))
+
+    def test_sha256_pattern_rejects_uppercase_hex(self):
+        """The pattern is ``[0-9a-f]``, so uppercase is not conformant."""
+        self._fails_for(_record(code_sha256="A" * 64), "PATTERN", "code_sha256")
+
+    # -- minLength ---------------------------------------------------------
+
+    def test_minLength_one_rejects_the_empty_string(self):
+        self._fails_for(_record(objective_question=""), "MIN_LENGTH", "objective_question")
+
+    def test_minLength_one_accepts_a_single_character(self):
+        """The boundary: length 1 satisfies ``minLength: 1``."""
+        self._passes(_record(objective_question="q"))
+
+    def test_minLength_counts_characters_not_bytes(self):
+        """A one-character non-ASCII string has length 1, though several bytes."""
+        self._passes(_record(objective_question="\u03a9"))
+
+    # -- minimum -----------------------------------------------------------
+
+    def test_minimum_zero_accepts_zero(self):
+        """The boundary: 0 satisfies ``minimum: 0``."""
+        self._passes(_record(programme_unit_id="EXAMPLE-PROGRAMME", input={"n": 0}))
+
+    def test_minimum_zero_rejects_a_negative(self):
+        self._fails_for(
+            _record(duration_seconds=-0.001), "MINIMUM", "duration_seconds"
+        )
+
+    def test_minimum_accepts_a_positive(self):
+        self._passes(_record(duration_seconds=0.001))
+
+    def test_a_negative_exit_code_is_permitted_because_the_schema_sets_no_minimum(self):
+        """A POSIX signal death reports a negative exit code.
+
+        The schema declares ``type: integer`` for ``exit_code`` and no
+        ``minimum``, so the validator must not invent one. This fixture exists
+        because an earlier draft of these tests wrongly expected a failure here.
+        """
+        self._passes(_record(exit_code=-9))
+
+    def test_duration_minimum_rejects_a_negative(self):
+        self._fails_for(
+            _record(duration_seconds=-0.5), "MINIMUM", "duration_seconds"
+        )
+
+    def test_duration_minimum_accepts_zero_float(self):
+        self._passes(_record(duration_seconds=0.0))
+
+    # -- type --------------------------------------------------------------
+
+    def test_a_boolean_does_not_satisfy_an_integer(self):
+        """``True`` is an ``int`` in Python; in JSON it is not an integer."""
+        self._fails_for(_record(exit_code=True), "TYPE", "exit_code")
+
+    def test_a_float_does_not_satisfy_an_integer(self):
+        self._fails_for(_record(exit_code=1.0), "TYPE", "exit_code")
+
+    def test_an_integer_satisfies_a_declared_number(self):
+        self._passes(_record(duration_seconds=2))
+
+    def test_a_string_does_not_satisfy_a_number(self):
+        self._fails_for(_record(duration_seconds="1.0"), "TYPE", "duration_seconds")
+
+    def test_an_integer_does_not_satisfy_a_boolean(self):
+        self._fails_for(_record(expectation_matched=1), "TYPE", "expectation_matched")
+
+    def test_null_satisfies_a_declared_nullable_field(self):
+        self._passes(_record(error=None))
+
+    # -- enum and const: type-aware comparison -----------------------------
+
+    def test_enum_comparison_is_type_aware(self):
+        """An integer must not match a string enum value by coercion."""
+        from validate_records import matches_any_json
+
+        self.assertFalse(matches_any_json(1, ["1", "2"]))
+        self.assertTrue(matches_any_json("1", ["1", "2"]))
+
+    def test_const_comparison_is_type_aware(self):
+        from validate_records import json_equal
+
+        self.assertFalse(json_equal(True, 1))
+        self.assertFalse(json_equal(1, "1"))
+        self.assertTrue(json_equal("PUBLICLY_CLEARED", "PUBLICLY_CLEARED"))
+
+    def test_const_comparison_treats_an_integral_float_as_equal_to_an_integer(self):
+        """JSON Schema says 1.0 and 1 are the same number, unlike 1 and true."""
+        from validate_records import json_equal
+
+        self.assertTrue(json_equal(1.0, 1))
+
+    def test_enum_rejects_a_value_outside_the_vocabulary(self):
+        self._fails_for(_record(outcome="APPROVED"), "ENUM", "outcome")
+
+    def test_const_rejects_a_different_string(self):
+        self._fails_for(_record(pass_type="simulation"), "CONST", "pass_type")
+
+    # -- required and additionalProperties ---------------------------------
+
+    def test_a_missing_required_field_fails(self):
+        record = _record()
+        del record["objective_question"]
+        self._fails_for(record, "MISSING_REQUIRED", "objective_question")
+
+    def test_an_undeclared_top_level_field_fails_because_the_schema_forbids_it(self):
+        """The schemas now state ``additionalProperties: false`` explicitly.
+
+        Before that, this tool rejected extra fields while the schemas stayed
+        silent, so the strictness was the tool's invention. The schema owns the
+        rule now, and this test would fail if the declaration were removed.
+        """
+        self._fails_for(_record(reviewer_comment="x"), "UNKNOWN_FIELD", "reviewer_comment")
+
+    def test_an_undeclared_field_inside_a_declared_object_fails(self):
+        self._fails_for(
+            _record(environment={"python": "x", "platform": "y", "hostname": "z"}),
+            "UNKNOWN_FIELD",
+            "environment.hostname",
+        )
+
+    def test_a_field_the_schema_leaves_unconstrained_accepts_any_shape(self):
+        """``input`` is declared as ``{}``: no constraint at all, so any JSON."""
+        self._passes(_record(input={"anything": [1, 2, {"nested": True}]}))
+
+    def test_a_missing_required_field_inside_a_nested_object_fails(self):
+        self._fails_for(
+            _record(environment={"python": "x"}), "MISSING_REQUIRED", "environment.platform"
+        )
+
+    def test_an_empty_schema_constrains_nothing(self):
+        from validate_records import schema_problems
+
+        for value in ({}, {"a": 1}, [1, 2], "x", 5, None, True):
+            self.assertEqual(schema_problems(value, {}, "f"), [])
+
+    def test_every_supported_keyword_has_a_negative_fixture(self):
+        """Guard against a keyword being added to the set without a test.
+
+        The list below is the set of keywords whose rejection any fixture in
+        this file demonstrates. If someone adds a keyword to
+        ``SUPPORTED_KEYWORDS`` and forgets its fixtures, this fails.
+        """
+        from validate_records import SUPPORTED_KEYWORDS
+
+        exercised = {
+            "type", "enum", "const", "required", "properties",
+            "additionalProperties", "items", "minLength",
+            "pattern", "minimum",
+        }
+        self.assertLessEqual(
+            exercised,
+            set(SUPPORTED_KEYWORDS),
+            "a keyword in this test is no longer supported",
+        )
+        missing = set(SUPPORTED_KEYWORDS) - exercised
+        self.assertEqual(
+            missing,
+            {"maxLength", "maximum"},
+            f"keyword(s) {sorted(missing)} are supported but have no fixture here",
+        )
+
+
+class UnsupportedKeywordGateTests(unittest.TestCase):
+    """A constraint the tool cannot apply must stop the run, never pass."""
+
+    def _schema_with(self, keyword: str, value) -> dict:
+        schema = json.loads(
+            (ROOT / "schemas" / "simulation_result.schema.json").read_text(encoding="utf-8")
+        )
+        schema["properties"]["objective_question"][keyword] = value
+        return schema
+
+    def test_a_ref_in_a_schema_is_refused(self):
+        from validate_records import require_supported_keywords, UnsupportedKeyword
+
+        schema = self._schema_with("$ref", "#/$defs/x")
+        with self.assertRaises(UnsupportedKeyword) as caught:
+            require_supported_keywords(schema, "example.schema.json")
+        self.assertIn("$ref", str(caught.exception))
+
+    def test_a_one_of_is_refused(self):
+        from validate_records import require_supported_keywords, UnsupportedKeyword
+
+        schema = self._schema_with("oneOf", [{"type": "string"}])
+        with self.assertRaises(UnsupportedKeyword):
+            require_supported_keywords(schema, "example.schema.json")
+
+    def test_a_format_is_refused(self):
+        """``format`` asserts nothing here, and silently ignoring it would be a lie."""
+        from validate_records import require_supported_keywords, UnsupportedKeyword
+
+        schema = self._schema_with("format", "date-time")
+        with self.assertRaises(UnsupportedKeyword):
+            require_supported_keywords(schema, "example.schema.json")
+
+    def test_an_unsupported_keyword_nested_in_properties_is_refused(self):
+        from validate_records import require_supported_keywords, UnsupportedKeyword
+
+        schema = json.loads(
+            (ROOT / "schemas" / "simulation_result.schema.json").read_text(encoding="utf-8")
+        )
+        schema["properties"]["environment"]["properties"]["python"]["minItems"] = 1
+        with self.assertRaises(UnsupportedKeyword) as caught:
+            require_supported_keywords(schema, "example.schema.json")
+        self.assertIn("minItems", str(caught.exception))
+
+    def test_a_made_up_keyword_is_refused(self):
+        """Unknown is not the same as allowed."""
+        from validate_records import require_supported_keywords, UnsupportedKeyword
+
+        schema = self._schema_with("requiredUnless", ["x"])
+        with self.assertRaises(UnsupportedKeyword):
+            require_supported_keywords(schema, "example.schema.json")
+
+    def test_every_real_scaffold_schema_is_within_the_supported_subset(self):
+        """The gate must not make the tool useless on the schemas it exists for."""
+        from validate_records import require_supported_keywords, schema_file
+
+        for path in sorted((ROOT / "schemas").glob("*.schema.json")):
+            with self.subTest(schema=path.name):
+                require_supported_keywords(
+                    json.loads(path.read_text(encoding="utf-8")), path.name
+                )
+
+    def test_the_cli_exits_two_on_an_unsupported_schema_keyword(self):
+        """Exit 2, not 1: the run could not be performed, so nothing was cleared.
+
+        Both modules hold their own ``SCHEMA_DIR`` — this tool imports one from
+        the programme validator and the loader resolves against its own — so a
+        copy of the whole schema directory is redirected rather than a single
+        lookup function. Redirecting only the lookup left the loader still
+        reading the real directory, which is how an earlier draft of this test
+        passed a broken schema to a loader that never saw it.
+        """
+        import shutil
+
+        import validate_programme
+        import validate_records
+
+        with tempfile.TemporaryDirectory() as tmp:
+            schema_dir = Path(tmp) / "schemas"
+            shutil.copytree(ROOT / "schemas", schema_dir)
+            schema = self._schema_with("oneOf", [{"type": "string"}])
+            (schema_dir / "broken.schema.json").write_text(
+                json.dumps(schema), encoding="utf-8"
+            )
+            records = Path(tmp) / "records"
+            records.mkdir()
+            _write(records, "SIM-001.json", _record())
+
+            originals = (
+                validate_records.SCHEMA_DIR,
+                validate_programme.SCHEMA_DIR,
+            )
+            try:
+                validate_records.SCHEMA_DIR = schema_dir
+                validate_programme.SCHEMA_DIR = schema_dir
+                buffer = io.StringIO()
+                with contextlib.redirect_stderr(buffer):
+                    code = main([str(records), "--schema", "broken"])
+            finally:
+                validate_records.SCHEMA_DIR, validate_programme.SCHEMA_DIR = originals
+
+            self.assertEqual(code, 2)
+            self.assertIn("UNSUPPORTED_KEYWORD", buffer.getvalue())
+            self.assertIn("oneOf", buffer.getvalue())

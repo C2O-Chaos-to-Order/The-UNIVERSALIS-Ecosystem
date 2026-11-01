@@ -87,7 +87,8 @@
       "properties": {
         "python": {"type": "string", "minLength": 1},
         "platform": {"type": "string", "minLength": 1}
-      }
+      },
+      "additionalProperties": false
     },
     "execution_timestamp": {
       "type": "string",
@@ -108,7 +109,8 @@
         "included": {"type": "boolean"},
         "case_id": {"type": ["string", "null"]},
         "detail": {"type": "string", "minLength": 1}
-      }
+      },
+      "additionalProperties": false
     },
     "mcse_or_precision_note": {
       "type": "string",
@@ -139,5 +141,6 @@
     "independent_review": {"type": "string", "minLength": 1},
     "randomness": {"type": "string"},
     "release_classification": {"const": "PUBLICLY_CLEARED"}
-  }
+  },
+  "additionalProperties": false
 }

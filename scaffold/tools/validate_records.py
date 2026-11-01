@@ -8,40 +8,92 @@ Usage:
 ledgers, links, counts and traceability. It has no entry point for a
 directory of record files on their own. This tool fills that gap and does
 nothing else. It reads each ``*.json`` file in one directory, asks whether
-the object is structurally conformant with one schema in ``scaffold/schemas``,
-and reports what it finds.
+the object conforms to one schema in ``scaffold/schemas``, and reports what
+it finds.
 
-The rules are the structural ones: the file parses as a JSON object, every
-field in the schema's ``required`` list is present, no field is present that
-the schema does not declare, every ``enum`` and ``const`` value is inside its
-declared set, and every ``type`` matches a declared JSON type. Nested objects
-and arrays that the schema declares are checked by the same rules. Type
-semantics are imported from ``validate_programme`` rather than rewritten, so
-``integer`` means an ``int`` and never a ``bool`` or a float such as ``1.0``,
-and ``number`` rejects a non-finite float.
+SUPPORTED KEYWORDS
+------------------
+``type``, ``enum``, ``const``, ``required``, ``properties``,
+``additionalProperties``, ``items``, ``minLength``, ``maxLength``,
+``pattern``, ``minimum``, ``maximum``.
 
+Every keyword in that list is applied with JSON Schema semantics, and each
+one has positive, negative and boundary fixtures in
+``scaffold/tests/test_validate_records.py``.
+
+UNSUPPORTED KEYWORDS ARE AN ERROR, NOT A SILENT PASS
+----------------------------------------------------
+If a schema uses a keyword this tool does not implement (``$ref``,
+``oneOf``, ``anyOf``, ``allOf``, ``not``, ``format``, ``minItems``,
+``maxItems``, ``uniqueItems``, ``multipleOf``, ``exclusiveMinimum``,
+``exclusiveMaximum``, ``patternProperties``, ``propertyNames``,
+``dependentRequired``, ``if``/``then``/``else``, ``contains``, ``prefixItems``),
+the run stops with exit 2 and names the keyword and the schema path. A
+validator that ignored a constraint it does not understand would report a
+pass it has not earned, which is the specific failure mode this tool exists
+to prevent. The check is recursive, so an unsupported keyword buried in one
+nested subschema stops the run too.
+
+This is therefore NOT a complete JSON Schema implementation. It is a
+deliberate subset, sized to the keyword set the scaffold's own schemas use,
+and it refuses to guess outside that subset. It does not claim to validate
+against the JSON Schema specification as a whole.
+
+SEMANTICS THAT DIFFER FROM A NAIVE READING
+------------------------------------------
+``additionalProperties`` follows the specification, including its default.
+JSON Schema permits extra properties unless a schema says
+``"additionalProperties": false``. None of the scaffold's schemas declares
+it, so extra properties are permitted here and are reported as a WARNING,
+not a failure. A schema that wants them forbidden must say so. Rejecting
+them unconditionally would be this tool inventing a constraint the schema
+never stated, and the two scaffold validators previously disagreed on
+exactly this point.
+
+``enum`` and ``const`` compare by JSON type as well as value, so ``true``
+does not equal ``1`` and ``1`` does not equal ``1.0``. In Python those pairs
+compare equal, which would let a boolean satisfy an integer enum.
+
+``pattern`` uses ``re.search`` as the specification requires, not
+``re.fullmatch``: an unanchored pattern is a substring match, and anchoring
+it here would reject values the schema permits.
+
+TYPE SEMANTICS
+--------------
+Type checking is imported from ``validate_programme`` rather than rewritten,
+so ``integer`` means an ``int`` and never a ``bool`` or a float such as
+``1.0``, and ``number`` rejects a non-finite float.
+
+THE UNSPECIFIED SENTINEL
+------------------------
 A field whose value is the literal string ``"UNSPECIFIED"`` is reported as a
 WARNING, not a failure: a record may declare a field unspecified rather than
 invent a value. The exception is a field the schema constrains by ``enum`` or
 ``const``: there the schema's vocabulary governs, ``"UNSPECIFIED"`` is not in
 it, and the record fails. This tool does not widen a schema's vocabulary.
 
+EMPTY INPUT IS AN ERROR
+-----------------------
 An empty directory is an error, not a pass. A gate that found nothing to
 check has cleared nothing, and a mistyped path must not read as a green
 light. It exits 2, the same convention ``validate_programme.py`` uses for an
 absent package directory.
 
-What a pass proves: the record's keys, required fields, enumerated values,
-constants and JSON types agree with the named schema.
+WHAT A PASS PROVES, AND WHAT IT DOES NOT
+----------------------------------------
+A pass proves that the record's keys, required fields, enumerated values,
+constants, JSON types, string lengths, patterns and numeric bounds agree
+with the named schema under the keyword subset above.
 
-What a pass does not prove: that the record is true, that the simulation it
-describes was ever run, that the evidence was reviewed or accepted, or that
-anything is validated, certified, production-ready or authorized. ``pattern``,
-``minLength`` and ``minimum`` are not applied here; ``validate_programme.py``
-applies them to a record inside a package.
+A pass does not prove that the record is true, that the simulation it
+describes was ever run, that the evidence was reviewed or accepted, that
+the research behind it was conducted, or that anything is validated,
+certified, production-ready or authorized. Structural conformance is not
+scientific validation and never substitutes for it.
 
 Exit codes: 0 for no failures (warnings alone still exit 0), 1 when any
-record fails, 2 when the run could not be performed at all.
+record fails, 2 when the run could not be performed at all, which includes
+an unsupported schema keyword.
 """
 
 from __future__ import annotations
@@ -52,19 +104,92 @@ import re
 import sys
 from pathlib import Path
 
-from validate_programme import SCHEMA_DIR, load_schema, matches_type
+from validate_programme import SCHEMA_DIR, is_number, load_schema, matches_type
 
 UNSPECIFIED = "UNSPECIFIED"
 SCHEMA_NAME = re.compile(r"^[A-Za-z0-9][A-Za-z0-9_.-]*$")
 RENDER_LIMIT = 80
 
 SCOPE = (
-    "Structural schema conformance of standalone record files only. A pass "
-    "proves that each record's keys, required fields, enumerated values, "
-    "constants and JSON types agree with the named schema. It does not prove "
-    "that a record is true, that the run it describes happened, or that "
+    "Schema conformance of standalone record files under a documented keyword "
+    "subset. A pass proves that each record's keys, required fields, enumerated "
+    "values, constants, JSON types, string lengths, patterns and numeric bounds "
+    "agree with the named schema. It does not prove that a record is true, that "
+    "the run it describes happened, that any research was conducted, or that "
     "anything was reviewed, accepted, validated, certified or authorized. "
-    "pattern, minLength and minimum constraints are not applied here."
+    "Unsupported schema keywords stop the run rather than being ignored."
+)
+
+# Every keyword this tool implements, with JSON Schema semantics.
+SUPPORTED_KEYWORDS = frozenset(
+    {
+        "type",
+        "enum",
+        "const",
+        "required",
+        "properties",
+        "additionalProperties",
+        "items",
+        "minLength",
+        "maxLength",
+        "pattern",
+        "minimum",
+        "maximum",
+    }
+)
+
+# Annotation and identification keywords carry no assertion. They may appear
+# anywhere and are skipped by the support gate.
+ANNOTATION_KEYWORDS = frozenset(
+    {
+        "$schema",
+        "$id",
+        "$comment",
+        "title",
+        "description",
+        "default",
+        "examples",
+        "deprecated",
+        "readOnly",
+        "writeOnly",
+    }
+)
+
+# Keywords that do assert but which this tool does not implement. Listing them
+# explicitly means a schema cannot slip one past the gate by using a name the
+# gate has never heard of: anything unknown is refused too.
+KNOWN_UNSUPPORTED_KEYWORDS = frozenset(
+    {
+        "$ref",
+        "$defs",
+        "definitions",
+        "oneOf",
+        "anyOf",
+        "allOf",
+        "not",
+        "if",
+        "then",
+        "else",
+        "format",
+        "minItems",
+        "maxItems",
+        "uniqueItems",
+        "contains",
+        "prefixItems",
+        "patternProperties",
+        "propertyNames",
+        "dependentRequired",
+        "dependentSchemas",
+        "multipleOf",
+        "exclusiveMinimum",
+        "exclusiveMaximum",
+        "minProperties",
+        "maxProperties",
+        "unevaluatedProperties",
+        "unevaluatedItems",
+        "contentEncoding",
+        "contentMediaType",
+    }
 )
 
 
@@ -125,73 +250,205 @@ def field_label(path: str) -> str:
     return path or "(record)"
 
 
+class UnsupportedKeyword(ValueError):
+    """A schema uses a keyword this validator does not implement."""
+
+
+def unsupported_keywords(schema: object, path: str = "") -> list[tuple[str, str]]:
+    """Return ``(schema path, keyword)`` for every keyword the tool cannot apply.
+
+    Walks the whole schema, including nested subschemas, so an unsupported
+    keyword cannot hide inside ``properties`` or ``items``. Returns an empty
+    list when every assertion keyword is supported.
+
+    Structural keys inside ``properties`` are field names, not keywords, so the
+    walk descends into each property's subschema and does not judge the names
+    themselves. The same applies to keys under ``$defs``-style maps, which this
+    tool refuses wholesale anyway.
+    """
+    found: list[tuple[str, str]] = []
+
+    def walk(node: object, where: str) -> None:
+        if not isinstance(node, dict):
+            if isinstance(node, list):
+                for index, item in enumerate(node):
+                    walk(item, f"{where}[{index}]")
+            return
+        for key, value in node.items():
+            here = f"{where}.{key}" if where else key
+            if key in ("properties", "patternProperties", "dependentSchemas", "$defs", "definitions"):
+                # These maps hold field names or definition names, not keywords.
+                if key in KNOWN_UNSUPPORTED_KEYWORDS:
+                    found.append((where or "(root)", key))
+                    continue
+                if isinstance(value, dict):
+                    for name, subschema in value.items():
+                        walk(subschema, f"{here}.{name}")
+                continue
+            if key in ANNOTATION_KEYWORDS:
+                continue
+            if key not in SUPPORTED_KEYWORDS:
+                found.append((where or "(root)", key))
+                continue
+            walk(value, here)
+
+    walk(schema, path)
+    return found
+
+
+def require_supported_keywords(schema: dict, schema_name: str) -> None:
+    """Raise ``UnsupportedKeyword`` naming every keyword the tool cannot apply."""
+    problems = unsupported_keywords(schema)
+    if not problems:
+        return
+    listed = ", ".join(f"{keyword!r} at {where}" for where, keyword in problems)
+    raise UnsupportedKeyword(
+        f"UNSUPPORTED_KEYWORD: schema {schema_name} uses {listed}. "
+        "This tool implements only "
+        + ", ".join(sorted(SUPPORTED_KEYWORDS))
+        + ". Ignoring an unimplemented constraint would report a pass that was "
+        "not earned, so the run stops instead."
+    )
+
+
+def json_equal(left: object, right: object) -> bool:
+    """Compare two JSON values by type as well as by value.
+
+    ``True == 1`` and ``1 == 1.0`` in Python, but JSON distinguishes boolean,
+    integer and number. Without this, a boolean would satisfy an integer enum
+    and ``1.0`` would satisfy ``1``.
+    """
+    if isinstance(left, bool) != isinstance(right, bool):
+        return False
+    if isinstance(left, bool):
+        return left == right
+    if isinstance(left, (int, float)) and isinstance(right, (int, float)):
+        if isinstance(left, float) and left.is_integer() and not isinstance(right, float):
+            return left == right
+        if isinstance(right, float) and right.is_integer() and not isinstance(left, float):
+            return left == right
+        return type(left) is type(right) and left == right
+    if type(left) is not type(right):
+        return False
+    if isinstance(left, list):
+        return len(left) == len(right) and all(
+            json_equal(a, b) for a, b in zip(left, right)
+        )
+    if isinstance(left, dict):
+        return set(left) == set(right) and all(json_equal(left[k], right[k]) for k in left)
+    return left == right
+
+
+def matches_any_json(value: object, candidates: list) -> bool:
+    """True when ``value`` equals any candidate under JSON type-aware equality."""
+    return any(json_equal(value, candidate) for candidate in candidates)
+
+
 def schema_problems(value: object, node: dict, path: str) -> list[dict]:
-    """Return every structural problem in ``value`` against schema ``node``."""
+    """Return every conformance problem in ``value`` against schema ``node``.
+
+    Applies the supported keyword subset with JSON Schema semantics. An
+    ``enum`` or ``const`` mismatch and a ``type`` mismatch each stop descent
+    into that value, because every further constraint would be checked against
+    a value the schema has already rejected.
+    """
     problems: list[dict] = []
 
-    if "const" in node and value != node["const"]:
-        problems.append(
-            {
-                "field": field_label(path),
-                "kind": "CONST",
-                "reason": f"must be {render(node['const'])}, found {render(value)}",
-            }
+    def add(kind: str, reason: str, where: str | None = None) -> None:
+        problems.append({"field": field_label(where if where is not None else path), "kind": kind, "reason": reason})
+
+    if "const" in node and not json_equal(value, node["const"]):
+        add("CONST", f"must be {render(node['const'])}, found {render(value)}")
+        return problems
+    if "enum" in node and not matches_any_json(value, node["enum"]):
+        add(
+            "ENUM",
+            (
+                f"{render(value)} is not one of the {len(node['enum'])} "
+                f"permitted values {render(node['enum'])}"
+            ),
         )
         return problems
-    if "enum" in node and value not in node["enum"]:
-        problems.append(
-            {
-                "field": field_label(path),
-                "kind": "ENUM",
-                "reason": (
-                    f"{render(value)} is not one of the {len(node['enum'])} "
-                    f"permitted values {render(node['enum'])}"
-                ),
-            }
-        )
-        return problems
+
     declared = node.get("type")
     types = [declared] if isinstance(declared, str) else list(declared or [])
     if types and not matches_type(value, types):
-        problems.append(
-            {
-                "field": field_label(path),
-                "kind": "TYPE",
-                "reason": (
-                    f"must be {' or '.join(types)}, found {json_type(value)} "
-                    f"{render(value)}"
-                ),
-            }
+        add(
+            "TYPE",
+            f"must be {' or '.join(types)}, found {json_type(value)} {render(value)}",
         )
         return problems
 
-    if isinstance(value, dict):
+    # String constraints apply only to strings, as the specification requires.
+    if isinstance(value, str):
+        min_length = node.get("minLength")
+        if isinstance(min_length, int) and len(value) < min_length:
+            add(
+                "MIN_LENGTH",
+                f"must be at least {min_length} character(s), found {len(value)} {render(value)}",
+            )
+        max_length = node.get("maxLength")
+        if isinstance(max_length, int) and len(value) > max_length:
+            add(
+                "MAX_LENGTH",
+                f"must be at most {max_length} character(s), found {len(value)}",
+            )
+        pattern = node.get("pattern")
+        if isinstance(pattern, str):
+            # The specification specifies a substring match, not a whole-string
+            # match. Anchoring an unanchored pattern here would reject values
+            # the schema permits.
+            try:
+                matched = re.search(pattern, value) is not None
+            except re.error as exc:
+                raise UnsupportedKeyword(
+                    f"UNSUPPORTED_PATTERN: {field_label(path)} pattern {pattern!r} "
+                    f"is not a valid regular expression ({exc})"
+                ) from exc
+            if not matched:
+                add("PATTERN", f"does not match the required pattern {pattern!r}")
+
+    # Numeric bounds apply to numbers only, and never to booleans.
+    if is_number(value):
+        minimum = node.get("minimum")
+        if is_number(minimum) and value < minimum:
+            add("MINIMUM", f"must be at least {minimum}, found {value}")
+        maximum = node.get("maximum")
+        if is_number(maximum) and value > maximum:
+            add("MAXIMUM", f"must be at most {maximum}, found {value}")
+
+    if isinstance(value, dict) and ("properties" in node or "additionalProperties" in node or "required" in node):
         for key in node.get("required", []):
             if key not in value:
-                problems.append(
-                    {
-                        "field": field_label(f"{path}.{key}" if path else key),
-                        "kind": "MISSING_REQUIRED",
-                        "reason": "required field is missing",
-                    }
+                add(
+                    "MISSING_REQUIRED",
+                    "required field is missing",
+                    f"{path}.{key}" if path else key,
                 )
         properties = node.get("properties") or {}
+        extra = node.get("additionalProperties", True)
         for key in value:
             child = f"{path}.{key}" if path else key
-            if properties and key not in properties:
-                problems.append(
-                    {
-                        "field": child,
-                        "kind": "UNKNOWN_FIELD",
-                        "reason": (
-                            "field is not declared by the schema"
-                            if path
-                            else f"field is not declared by the schema ({len(properties)} declared)"
-                        ),
-                    }
-                )
-            elif isinstance(properties.get(key), dict):
+            if key in properties and isinstance(properties[key], dict):
                 problems.extend(schema_problems(value[key], properties[key], child))
+            elif key not in properties:
+                # JSON Schema permits undeclared properties unless the schema
+                # sets additionalProperties to false. The record may not state a
+                # constraint the schema never made.
+                if extra is False:
+                    add(
+                        "UNKNOWN_FIELD",
+                        "field is not declared by the schema and the schema forbids additional properties",
+                        child,
+                    )
+                elif isinstance(extra, dict):
+                    problems.extend(schema_problems(value[key], extra, child))
+                else:
+                    add(
+                        "UNDECLARED_FIELD",
+                        "field is not declared by the schema; permitted, because the schema does not set additionalProperties: false",
+                        child,
+                    )
     elif isinstance(value, list):
         items = node.get("items")
         if isinstance(items, dict):
@@ -242,6 +499,7 @@ def validate_directory(directory: Path, schema_name: str, recursive: bool = Fals
         raise FileNotFoundError(f"DIRECTORY_ABSENT: directory does not exist: {directory}")
     schema_path = schema_file(schema_name)
     schema = load_schema(schema_path.name)
+    require_supported_keywords(schema, schema_path.name)
     files = record_files(directory, recursive)
     if not files:
         scope = "recursively" if recursive else "non-recursively"
@@ -255,6 +513,7 @@ def validate_directory(directory: Path, schema_name: str, recursive: bool = Fals
     # Per-field sets of file names, so a record that leaves two sub-fields
     # unspecified counts once for that field rather than twice.
     unspecified: dict[str, set[str]] = {}
+    permitted_extra: list[dict] = []
     failed_files = 0
 
     for path in files:
@@ -281,6 +540,10 @@ def validate_directory(directory: Path, schema_name: str, recursive: bool = Fals
             continue
 
         problems = schema_problems(record, schema, "")
+        # Undeclared-but-permitted fields are reported, not failed: the schema
+        # did not forbid them. Every other kind is a failure.
+        permitted = [p for p in problems if p["kind"] == "UNDECLARED_FIELD"]
+        problems = [p for p in problems if p["kind"] != "UNDECLARED_FIELD"]
         for problem in problems:
             failures.append({"file": label, **problem})
         if problems:
@@ -289,6 +552,15 @@ def validate_directory(directory: Path, schema_name: str, recursive: bool = Fals
         # A path that already failed is not a permitted "unspecified": the
         # schema enumerated the field and UNSPECIFIED is not in its
         # vocabulary. Reporting it twice would blur that distinction.
+        for extra in permitted:
+            permitted_extra.append(
+                {
+                    "file": label,
+                    "field": extra["field"],
+                    "reason": "field is not declared by the schema, and the schema permits it",
+                }
+            )
+
         failed_paths = {problem["field"] for problem in problems}
         for hit in unspecified_paths(record):
             if field_label(hit) in failed_paths:
@@ -304,6 +576,7 @@ def validate_directory(directory: Path, schema_name: str, recursive: bool = Fals
 
     # Report order must not depend on the key order inside a record file.
     warnings.sort(key=lambda item: (item["file"], item["field"]))
+    permitted_extra.sort(key=lambda item: (item["file"], item["field"]))
     ok = not failures
     count = len(files)
     if ok:
@@ -329,6 +602,7 @@ def validate_directory(directory: Path, schema_name: str, recursive: bool = Fals
         "ok": ok,
         "failures": failures,
         "warnings": warnings,
+        "permitted_extra_fields": permitted_extra,
         "unspecified_counts": {
             field: len(names) for field, names in sorted(unspecified.items())
         },
