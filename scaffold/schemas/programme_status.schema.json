@@ -58,5 +58,6 @@
     "execution_errors": {"type": "integer", "minimum": 0},
     "release_classification": {"const": "PUBLICLY_CLEARED"},
     "limits": {"type": "string", "minLength": 1}
-  }
+  },
+  "additionalProperties": false
 }

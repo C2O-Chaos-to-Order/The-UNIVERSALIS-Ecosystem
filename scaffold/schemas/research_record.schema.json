@@ -67,5 +67,6 @@
     "programme_credit": {"enum": ["NONE", "CANDIDATE_PENDING_OWNER_REVIEW", "AWARDED"]},
     "clause_ids": {"type": "array", "items": {"type": "string", "minLength": 1}},
     "release_classification": {"const": "PUBLICLY_CLEARED"}
-  }
+  },
+  "additionalProperties": false
 }
