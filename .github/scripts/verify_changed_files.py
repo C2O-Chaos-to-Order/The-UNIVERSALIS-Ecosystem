@@ -27,12 +27,34 @@ def changed_paths() -> list[Path]:
     return [Path(name) for name in git("diff", "--name-only", base, head).splitlines() if name.strip()]
 
 def changed_whitespace_check() -> list[str]:
+    """Reject new trailing spaces/tabs, allowing CRLF and Markdown hard breaks."""
     base = os.environ.get("BASE_SHA", "").strip()
     head = os.environ.get("HEAD_SHA", "HEAD").strip() or "HEAD"
     if not base or base == ZERO_SHA or not re.fullmatch(r"[0-9a-fA-F]{40}", base):
         base = git("rev-parse", "HEAD^").strip()
-    result = subprocess.run(["git", "-c", "core.whitespace=cr-at-eol", "diff", "--check", base, head], cwd=ROOT, text=True, capture_output=True, check=False)
-    return [] if result.returncode == 0 else [result.stdout + result.stderr]
+    diff = git("-c", "core.whitespace=cr-at-eol", "diff", "--no-ext-diff", "--unified=0", "--no-color", base, head)
+    current_file = ""
+    errors: list[str] = []
+    for line in diff.splitlines():
+        if line.startswith("+++ b/"):
+            current_file = line[6:]
+            continue
+        if not line.startswith("+") or line.startswith("+++"):
+            continue
+        added = line[1:]
+        trimmed = added.rstrip(" \t")
+        trailing = len(added) - len(trimmed)
+        if trailing == 0:
+            continue
+        suffix = Path(current_file).suffix.lower()
+        # Two trailing spaces on a nonblank Markdown line are the standard
+        # hard-line-break convention; blank-line whitespace and larger runs fail.
+        if suffix in {".md", ".markdown"} and trailing == 2 and trimmed.strip():
+            continue
+        errors.append(
+            f"{current_file}: added line has {trailing} trailing whitespace character(s): {added[-120:]}"
+        )
+    return errors
 
 def markdown_without_fences(content: str, path: Path, errors: list[str]) -> str:
     kept: list[str] = []
