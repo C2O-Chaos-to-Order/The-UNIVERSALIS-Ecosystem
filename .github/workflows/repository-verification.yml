@@ -1,0 +1,60 @@
+name: Repository Verification
+
+on:
+  pull_request:
+    types: [opened, synchronize, reopened, ready_for_review]
+  push:
+    branches:
+      - verification/**
+  workflow_dispatch:
+
+permissions:
+  contents: read
+
+jobs:
+  changed-content:
+    name: Changed documentation and data checks
+    runs-on: ubuntu-latest
+    steps:
+      - name: Check out exact revision
+        uses: actions/checkout@3d3c42e5aac5ba805825da76410c181273ba90b1 # v7.0.1
+        with:
+          ref: ${{ github.event.pull_request.head.sha || github.sha }}
+          fetch-depth: 0
+
+      - name: Set up Python
+        uses: actions/setup-python@6d4fd22b20465ccc0f7354476588e8df7c9ca0e0 # v7.1.0
+        with:
+          python-version: "3.11"
+
+      - name: Install pinned YAML parser
+        run: python -m pip install --disable-pip-version-check PyYAML==6.0.2
+
+      - name: Validate changed text, Markdown links, JSON, CSV, YAML, and Python syntax
+        env:
+          BASE_SHA: ${{ github.event.pull_request.base.sha || github.event.before }}
+          HEAD_SHA: ${{ github.event.pull_request.head.sha || github.sha }}
+        run: python .github/scripts/verify_changed_files.py
+
+  product-regression:
+    name: UNIVERSALIS scaffold and prototype regression
+    runs-on: ubuntu-latest
+    steps:
+      - name: Check out exact revision
+        uses: actions/checkout@3d3c42e5aac5ba805825da76410c181273ba90b1 # v7.0.1
+        with:
+          ref: ${{ github.event.pull_request.head.sha || github.sha }}
+
+      - name: Set up Python
+        uses: actions/setup-python@6d4fd22b20465ccc0f7354476588e8df7c9ca0e0 # v7.1.0
+        with:
+          python-version: "3.11"
+
+      - name: Compile scaffold and prototype
+        run: python -m compileall -q scaffold prototype
+
+      - name: Run scaffold tests
+        run: python -m unittest discover -s scaffold/tests -p "test_*.py" -v
+
+      - name: Run prototype tests
+        run: python -m unittest discover -s prototype/tests -p "test_*.py" -v
