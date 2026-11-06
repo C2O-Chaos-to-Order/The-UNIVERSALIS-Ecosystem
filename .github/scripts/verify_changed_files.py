@@ -37,7 +37,7 @@ def changed_whitespace_check() -> list[str]:
     errors: list[str] = []
     for line in diff.splitlines():
         if line.startswith("+++ b/"):
-            current_file = line[6:]
+            current_file = line[6:].split("\\t", 1)[0]
             continue
         if not line.startswith("+") or line.startswith("+++"):
             continue
