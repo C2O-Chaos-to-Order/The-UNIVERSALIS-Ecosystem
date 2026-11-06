@@ -31,7 +31,7 @@ def changed_whitespace_check() -> list[str]:
     head = os.environ.get("HEAD_SHA", "HEAD").strip() or "HEAD"
     if not base or base == ZERO_SHA or not re.fullmatch(r"[0-9a-fA-F]{40}", base):
         base = git("rev-parse", "HEAD^").strip()
-    result = subprocess.run(["git", "diff", "--check", base, head], cwd=ROOT, text=True, capture_output=True, check=False)
+    result = subprocess.run(["git", "-c", "core.whitespace=cr-at-eol", "diff", "--check", base, head], cwd=ROOT, text=True, capture_output=True, check=False)
     return [] if result.returncode == 0 else [result.stdout + result.stderr]
 
 def markdown_without_fences(content: str, path: Path, errors: list[str]) -> str:
