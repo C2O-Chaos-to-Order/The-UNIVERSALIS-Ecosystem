@@ -136,7 +136,7 @@ credit (`CANDIDATE_PENDING_OWNER_REVIEW`) is not an award.
 7. **Classification gate.** Every file and every record carries a release classification. A missing classification is an unclassified artefact. The allowed values depend on the profile:
    - no `--profile` (historical default, reported as `public-label-consistency`): only `PUBLICLY_CLEARED`. The result is never `release_ready`.
    - `--profile internal-candidate`: `INTERNAL_CANDIDATE` or `PUBLICLY_CLEARED`. Use this for uncleared work, which belongs in a private repository. The result is never `release_ready`.
-   - `--profile public-release`: only `PUBLICLY_CLEARED`, **and** an eighth check, `release_authorization`, must pass: `metadata/programme_status.json` has `release_authorized: true` and a decision record with `authority: owner` and `authorization_status: AUTHORIZED` cites the programme id. Only this profile can report `release_ready: true`. The validator checks that an owner decision is cited; it cannot authenticate the owner or confirm the decision was made.
+   - `--profile public-release`: only `PUBLICLY_CLEARED`, **and** two extra checks must pass. The eighth check, `release_authorization`, requires `metadata/programme_status.json` to have `release_authorized: true` and a decision record with `authority: owner` and `authorization_status: AUTHORIZED` that cites the programme id. The ninth check, `public_source_repository`, refuses any git-pinned source (one that declares `commit` or `blob_sha`) whose `repository` is not this package's own public repository (`metadata/programme_status.json` `repository`), unless an owner exception record in `decisions/` names that source (`authority: owner` and the source id in `target_ids`). Only this profile can report `release_ready: true`. The validator checks that an owner decision is cited; it cannot authenticate the owner or confirm the decision was made.
 
 The validator exits `0` when every check in the selected profile passes and `1` when any fail. A missing package directory exits `2`.
 
@@ -150,7 +150,7 @@ The validator exits `0` when every check in the selected profile passes and `1` 
 - Claims of verification, reproduction, validation, programme credit, production validation and permission to proceed are backed by decision records whenever the honest value would otherwise be empty or pending.
 - Evidence state and execution outcome are carried on their own fields, and neither appears where the other belongs.
 - Every artefact in the package carries a classification the selected profile admits (`PUBLICLY_CLEARED` only, unless `--profile internal-candidate`).
-- Under `--profile public-release` only: the package cites an owner decision authorizing release. Labels alone never make a package release-ready.
+- Under `--profile public-release` only: the package cites an owner decision authorizing release, and every git-pinned source either belongs to this package's declared repository or is named by an owner exception record in `decisions/`. Labels alone never make a package release-ready.
 
 ## What a passing validation does not prove
 

@@ -13,9 +13,11 @@ Contract pinned here:
 - ``--profile public-release`` requires every label to be ``PUBLICLY_CLEARED``
   *and* an owner release authorization: ``release_authorized: true`` plus a
   decision record with ``authority: owner`` and ``authorization_status:
-  AUTHORIZED`` citing the programme. Labels alone never make a package
-  release-ready. The validator cannot authenticate the owner; it checks that
-  the package cites an owner decision, nothing more.
+  AUTHORIZED`` citing the programme. It also refuses a git-pinned source
+  whose ``repository`` is not the package's declared repository, unless an
+  owner exception record in ``decisions/`` names that source. Labels alone
+  never make a package release-ready. The validator cannot authenticate the
+  owner; it checks that the package cites an owner decision, nothing more.
 - With no ``--profile`` the historical gate is unchanged (only
   ``PUBLICLY_CLEARED``), and the output says ``release_ready: false``.
 """

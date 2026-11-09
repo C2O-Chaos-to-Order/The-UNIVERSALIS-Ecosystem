@@ -58,6 +58,24 @@ so that its apparatus can refer to that manuscript in shorthand.
 - A manuscript identified by shelfmark and repository needs no siglum to be cited. The
   shelfmark is the durable identifier.
 
+## Public-release source repository
+
+On `--profile public-release` only, a git-pinned source (one that declares `commit` or
+`blob_sha`) must belong to this package's own public repository. The package declares that
+repository in `metadata/programme_status.json` as `repository`. The source declares its
+repository on the source-register entry. The two names must match.
+
+A source pinned to a different repository is refused unless an owner exception record in
+`decisions/` names that source: `authority: owner`, a cited `decided_by` and `citation`,
+and the source id in `target_ids`. The validator checks that such a record is cited; it
+cannot authenticate the owner or confirm the exception was granted.
+
+This rule is corpus-agnostic. It compares repository names and does not hard-code any
+corpus, remote, or repository. The default profile and `--profile internal-candidate` do
+not apply it. A package that cites another repository remains representable as an
+`INTERNAL_CANDIDATE`; it cannot be reported `release_ready` until the citation is replaced,
+the owner excepts that source, or the source is no longer git-pinned.
+
 ## Corpus boundary
 
 - No clause text, no transcription, and no distinctive wording from a private corpus

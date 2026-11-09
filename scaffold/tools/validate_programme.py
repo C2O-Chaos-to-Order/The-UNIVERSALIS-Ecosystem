@@ -1808,6 +1808,104 @@ def check_classification(
             )
 
 
+def git_pin_fields(source: dict) -> list[str]:
+    """Return the git-pin fields present on ``source`` (``commit`` and/or ``blob_sha``)."""
+    fields = []
+    for field in ("commit", "blob_sha"):
+        if source.get(field) not in (None, ""):
+            fields.append(field)
+    return fields
+
+
+def declared_repository(value: object) -> str | None:
+    if isinstance(value, str) and value.strip():
+        return value.strip()
+    return None
+
+
+def owner_exception_names_source(decisions: list, source_id: str) -> bool:
+    """Return whether an owner decision record names ``source_id``.
+
+    An owner exception record is a decision in ``decisions/`` with
+    ``authority: owner`` whose ``target_ids`` names the source and that cites
+    a ``decided_by`` actor and a record locator. This is a citation check
+    only: the validator cannot authenticate the owner or confirm the
+    exception was really granted.
+    """
+    if not isinstance(source_id, str) or not source_id:
+        return False
+    for item in decisions:
+        if not isinstance(item, dict):
+            continue
+        if item.get("authority") != "owner":
+            continue
+        if not nonempty_string(item.get("decided_by")):
+            continue
+        if not nonempty_string(item.get("citation")):
+            continue
+        targets = item.get("target_ids")
+        if isinstance(targets, list) and source_id in targets:
+            return True
+    return False
+
+
+def check_public_source_repository(data: dict, reasons: dict[str, list[str]]) -> None:
+    """Refuse git-pinned sources from another repository on public-release.
+
+    Scoped to the public-release profile. A git-pinned source (``commit`` or
+    ``blob_sha`` present) must declare a ``repository`` that matches
+    ``metadata/programme_status.json`` ``repository``, unless an owner
+    exception record names that source. The rule is corpus-agnostic: it
+    compares repository names and does not hard-code any corpus or remote.
+    """
+    bucket = reasons["public_source_repository"]
+    status = data.get("status") if isinstance(data.get("status"), dict) else {}
+    package_repo = declared_repository(status.get("repository"))
+    decisions = data.get("decisions") or []
+    sources = [item for item in (data.get("sources") or []) if isinstance(item, dict)]
+    pinned = [item for item in sources if git_pin_fields(item)]
+    if pinned and package_repo is None:
+        bucket.append(
+            "PUBLIC_SOURCE_REPOSITORY: metadata/programme_status.json must declare "
+            "repository so public-release can check whether git-pinned sources "
+            "belong to this package's own public repository"
+        )
+    for source in pinned:
+        source_id = source.get("id")
+        if owner_exception_names_source(decisions, source_id):
+            continue
+        repo = declared_repository(source.get("repository"))
+        if package_repo is not None and repo == package_repo:
+            continue
+        if package_repo is None:
+            detail = (
+                f"to repository {repo!r}" if repo is not None else "without a repository"
+            )
+            bucket.append(
+                f"PUBLIC_SOURCE_REPOSITORY: source {source_id} is git-pinned {detail} "
+                "and this package does not declare its own repository; public-release "
+                "refuses a git-pinned source from another repository unless an owner "
+                "exception record in decisions/ names that source"
+            )
+            continue
+        if repo is None:
+            bucket.append(
+                f"PUBLIC_SOURCE_REPOSITORY: source {source_id} is git-pinned but does "
+                f"not declare a repository matching this package's repository "
+                f"{package_repo!r}; public-release refuses a git-pinned source from "
+                "another repository unless an owner exception record in decisions/ "
+                "names that source"
+            )
+        else:
+            bucket.append(
+                f"PUBLIC_SOURCE_REPOSITORY: source {source_id} is git-pinned to "
+                f"repository {repo!r}, which is not this package's repository "
+                f"{package_repo!r}; public-release refuses a git-pinned source from "
+                "another repository unless an owner exception record in decisions/ "
+                "names that source"
+            )
+
+
 def owner_release_authorized(status: object, decisions: list, programme_id: str | None) -> bool:
     """Return whether the package cites an owner decision authorizing release.
 
@@ -1844,7 +1942,10 @@ def validate(root: Path, profile: str | None = None) -> dict:
     if profile is not None and profile not in PROFILES:
         raise ValueError(f"unknown profile {profile!r}; expected one of {', '.join(PROFILES)}")
     root = root.resolve()
-    check_names = CHECKS + (("release_authorization",) if profile == PUBLIC_RELEASE_PROFILE else ())
+    extra = ()
+    if profile == PUBLIC_RELEASE_PROFILE:
+        extra = ("release_authorization", "public_source_repository")
+    check_names = CHECKS + extra
     reasons = {name: [] for name in check_names}
     if not root.is_dir():
         reasons["manifest_integrity"].append(
@@ -1862,6 +1963,7 @@ def validate(root: Path, profile: str | None = None) -> dict:
         check_classification(root, files, data, reasons, profile)
         if profile == PUBLIC_RELEASE_PROFILE:
             check_release_authorization(data, reasons)
+            check_public_source_repository(data, reasons)
     if profile == PUBLIC_RELEASE_PROFILE and not root.is_dir():
         reasons["release_authorization"].append("RELEASE_NOT_AUTHORIZED: package absent")
     checks = []
@@ -1901,7 +2003,9 @@ def main(argv: list[str] | None = None) -> int:
         default=None,
         help=(
             "internal-candidate: admit INTERNAL_CANDIDATE labels, never release-ready. "
-            "public-release: only PUBLICLY_CLEARED and a cited owner release authorization. "
+            "public-release: only PUBLICLY_CLEARED, a cited owner release authorization, "
+            "and git-pinned sources from this package's repository (or an owner "
+            "exception record that names the source). "
             "Omitted: historical PUBLICLY_CLEARED-only gate, never release-ready."
         ),
     )

@@ -57,6 +57,11 @@
     "expectation_failures": {"type": "integer", "minimum": 0},
     "execution_errors": {"type": "integer", "minimum": 0},
     "release_classification": {"enum": ["INTERNAL_CANDIDATE", "PUBLICLY_CLEARED"]},
+    "repository": {
+      "type": "string",
+      "minLength": 1,
+      "description": "Optional. This package's own public repository. The public-release profile requires it when any source is git-pinned: a git-pinned source whose repository is not this value is refused unless an owner exception record in decisions/ names that source."
+    },
     "limits": {"type": "string", "minLength": 1}
   },
   "additionalProperties": false

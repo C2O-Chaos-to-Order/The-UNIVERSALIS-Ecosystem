@@ -39,7 +39,9 @@ Evidence-record fields follow the governing Plan. The mapping is in [PLAN_SCHEMA
    Uncleared work may be labelled `INTERNAL_CANDIDATE` and checked with
    `--profile internal-candidate` (never release-ready; keep such packages out of this public
    repository). A public release is checked with `--profile public-release`, which additionally
-   requires `release_authorized: true` and a cited owner authorization decision.
+   requires `release_authorized: true`, a cited owner authorization decision, and that every
+   git-pinned source belongs to this package's declared repository unless an owner exception
+   record in `decisions/` names that source.
 9. Write a report from `reports/_TEMPLATE_report.md`. The ten sections are task and scope, source of truth, method, evidence, findings, execution status, build status, risk and governance, repository disposition, and next action. A report file does not create programme credit.
 10. `verified`, `independently_reproduced`, `validated` and `authorized` evidence states, and
     `authorization_status` of `AUTHORIZED`, require a JSON decision in `decisions/` that cites the owner or
