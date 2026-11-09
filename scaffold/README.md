@@ -35,6 +35,11 @@ Evidence-record fields follow the governing Plan. The mapping is in [PLAN_SCHEMA
    ```bash
    python scaffold/tools/validate_programme.py path/to/programme
    ```
+
+   Uncleared work may be labelled `INTERNAL_CANDIDATE` and checked with
+   `--profile internal-candidate` (never release-ready; keep such packages out of this public
+   repository). A public release is checked with `--profile public-release`, which additionally
+   requires `release_authorized: true` and a cited owner authorization decision.
 9. Write a report from `reports/_TEMPLATE_report.md`. The ten sections are task and scope, source of truth, method, evidence, findings, execution status, build status, risk and governance, repository disposition, and next action. A report file does not create programme credit.
 10. `verified`, `independently_reproduced`, `validated` and `authorized` evidence states, and
     `authorization_status` of `AUTHORIZED`, require a JSON decision in `decisions/` that cites the owner or
@@ -72,5 +77,5 @@ The tests use the Python standard library only. Negative fixtures must fail, and
   authorization value is `NOT_AUTHORIZED`. An execution outcome is never an evidence state, and tooling
   cannot infer authorization from the evidence ladder.
 - Passing validation is not owner acceptance, independent review, scientific validation, security certification, production readiness, or release authorization.
-- This repository is public. Do not place private corpus text, credentials, or non-public material in a package. The classification gate rejects anything that is not `PUBLICLY_CLEARED`, and it does not review the words inside a file.
+- This repository is public. Do not place private corpus text, credentials, or non-public material in a package. The default and `public-release` classification gates reject anything that is not `PUBLICLY_CLEARED`, and no gate reviews the words inside a file.
 - No third-party packages are required. Do not add a dependency for this scaffold.

@@ -5,6 +5,11 @@ review file contents and it is not a clearance decision. ``new_programme``
 uses it for the public template only. Do not point it at a private corpus.
 
 ``write_manifest`` refreshes hashes. It never changes classifications.
+
+``INTERNAL_CANDIDATE`` (K02) marks an uncleared candidate. It is admitted only
+by ``validate_programme.py --profile internal-candidate`` and is never
+release-ready. ``PUBLICLY_CLEARED`` on its own does not authorize release:
+``--profile public-release`` also requires a cited owner authorization.
 """
 
 from __future__ import annotations
@@ -16,6 +21,11 @@ import sys
 from pathlib import Path
 
 PUBLIC_CLASSIFICATION = "PUBLICLY_CLEARED"
+#: K02: an uncleared candidate. Valid only under the internal-candidate
+#: validation profile; never release-ready and never accepted by the default
+#: or public-release gates.
+INTERNAL_CANDIDATE_CLASSIFICATION = "INTERNAL_CANDIDATE"
+CLASSIFICATIONS = frozenset({PUBLIC_CLASSIFICATION, INTERNAL_CANDIDATE_CLASSIFICATION})
 MANIFEST_REL = "metadata/sha256_manifest.json"
 CLASSIFICATION_REL = "metadata/classifications.json"
 SKIP_DIR_NAMES = frozenset({"__pycache__", ".git"})

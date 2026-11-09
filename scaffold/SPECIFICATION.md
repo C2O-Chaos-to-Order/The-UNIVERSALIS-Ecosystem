@@ -51,7 +51,7 @@ decisions/
 
 `metadata/sha256_manifest.json` maps every other file's relative path to a lowercase SHA-256 of its bytes. Paths are package-relative. The manifest does not list itself, and it does not list absolute paths or `..`.
 
-`metadata/classifications.json` maps every file, including the manifest, to a release classification. The only value this package may contain is `PUBLICLY_CLEARED`.
+`metadata/classifications.json` maps every file, including the manifest, to a release classification. Two values exist: `INTERNAL_CANDIDATE` (an uncleared candidate) and `PUBLICLY_CLEARED`. Which values a package may contain depends on the validation profile (see the classification gate below). A package in this public repository must contain only `PUBLICLY_CLEARED` material.
 
 ## Record types
 
@@ -133,9 +133,12 @@ credit (`CANDIDATE_PENDING_OWNER_REVIEW`) is not an award.
 4. **Expectation discipline.** The expected outcome stored on the result equals the expected outcome in `simulations/scenarios.json`. The result's `fixtures_sha256` matches the current bytes of that case file.
 5. **Count arithmetic.** Status totals match the records and the ledgers. Checkpoint recorded counts match the records that name that checkpoint. A simulation id appears at most once in each coverage ledger (reports, dimensions, levels, phases, relationships). Coverage across those ledgers does not multiply the status totals.
 6. **Honest status and axis separation.** The status object and the records do not claim an evidence state above `tested`, programme credit, production validation, or authorization without a matching decision record. `authorization_status` other than `NOT_AUTHORIZED` fails when no authorization record cites that target, and it fails specifically when the record carries `evidence_status: authorized`, because an evidence state is not an authorization record. An `execution_outcome` value that is an evidence state, or an `evidence_status` value that is an execution outcome, is refused.
-7. **Classification gate.** Every file and every record carries a release classification, and the only allowed value is `PUBLICLY_CLEARED`. A missing classification is an unclassified artefact.
+7. **Classification gate.** Every file and every record carries a release classification. A missing classification is an unclassified artefact. The allowed values depend on the profile:
+   - no `--profile` (historical default, reported as `public-label-consistency`): only `PUBLICLY_CLEARED`. The result is never `release_ready`.
+   - `--profile internal-candidate`: `INTERNAL_CANDIDATE` or `PUBLICLY_CLEARED`. Use this for uncleared work, which belongs in a private repository. The result is never `release_ready`.
+   - `--profile public-release`: only `PUBLICLY_CLEARED`, **and** an eighth check, `release_authorization`, must pass: `metadata/programme_status.json` has `release_authorized: true` and a decision record with `authority: owner` and `authorization_status: AUTHORIZED` cites the programme id. Only this profile can report `release_ready: true`. The validator checks that an owner decision is cited; it cannot authenticate the owner or confirm the decision was made.
 
-The validator exits `0` when all seven pass and `1` when any fail. A missing package directory exits `2`.
+The validator exits `0` when every check in the selected profile passes and `1` when any fail. A missing package directory exits `2`.
 
 ## What a passing validation proves
 
@@ -146,7 +149,8 @@ The validator exits `0` when all seven pass and `1` when any fail. A missing pac
 - Declared counts match the ledgers, and cases are not listed twice inside a coverage ledger.
 - Claims of verification, reproduction, validation, programme credit, production validation and permission to proceed are backed by decision records whenever the honest value would otherwise be empty or pending.
 - Evidence state and execution outcome are carried on their own fields, and neither appears where the other belongs.
-- Every artefact in the package is marked `PUBLICLY_CLEARED`.
+- Every artefact in the package carries a classification the selected profile admits (`PUBLICLY_CLEARED` only, unless `--profile internal-candidate`).
+- Under `--profile public-release` only: the package cites an owner decision authorizing release. Labels alone never make a package release-ready.
 
 ## What a passing validation does not prove
 

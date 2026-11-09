@@ -33,6 +33,8 @@ from evidence_states import (
 )
 from package_files import (
     CLASSIFICATION_REL,
+    CLASSIFICATIONS,
+    INTERNAL_CANDIDATE_CLASSIFICATION,
     MANIFEST_REL,
     PUBLIC_CLASSIFICATION,
     iter_package_files,
@@ -50,6 +52,13 @@ CHECKS = (
     "honest_status",
     "classification_gate",
 )
+
+#: K02 validation profiles. ``None`` is the historical default: the gate admits
+#: only ``PUBLICLY_CLEARED`` and the result is never release-ready.
+DEFAULT_PROFILE_NAME = "public-label-consistency"
+INTERNAL_PROFILE = "internal-candidate"
+PUBLIC_RELEASE_PROFILE = "public-release"
+PROFILES = (INTERNAL_PROFILE, PUBLIC_RELEASE_PROFILE)
 
 SCOPE = (
     "Package evidence-discipline consistency only. A passing validation proves "
@@ -1754,8 +1763,20 @@ def iter_release_records(data: dict) -> list[tuple[dict, str]]:
     return labeled
 
 
-def check_classification(root: Path, files: list[str], data: dict, reasons: dict[str, list[str]]) -> None:
+def check_classification(
+    root: Path,
+    files: list[str],
+    data: dict,
+    reasons: dict[str, list[str]],
+    profile: str | None = None,
+) -> None:
     bucket = reasons["classification_gate"]
+    if profile == INTERNAL_PROFILE:
+        allowed = CLASSIFICATIONS
+        allowed_text = " or ".join(sorted(CLASSIFICATIONS))
+    else:
+        allowed = frozenset({PUBLIC_CLASSIFICATION})
+        allowed_text = PUBLIC_CLASSIFICATION
     loaded, error = load_json(root / CLASSIFICATION_REL)
     if error:
         bucket.append(f"CLASSIFICATION_GATE: {error}")
@@ -1771,25 +1792,60 @@ def check_classification(root: Path, files: list[str], data: dict, reasons: dict
         bucket.append(f"CLASSIFICATION_GATE: classifications.json lists {name} which is not a package file")
     for name in sorted(actual & declared):
         value = loaded[name]
-        if value != PUBLIC_CLASSIFICATION:
+        if value not in allowed:
             bucket.append(
                 f"CLASSIFICATION_GATE: {name} is classified {value!r}; "
-                f"this package may contain only {PUBLIC_CLASSIFICATION}"
+                f"this package may contain only {allowed_text}"
             )
     for record, label in iter_release_records(data):
         value = record.get("release_classification")
         if value is None:
             bucket.append(f"UNCLASSIFIED_ARTEFACT: unclassified artefact {label} has no release_classification")
-        elif value != PUBLIC_CLASSIFICATION:
+        elif value not in allowed:
             bucket.append(
                 f"CLASSIFICATION_GATE: {label} release_classification is {value!r}; "
-                f"this package may contain only {PUBLIC_CLASSIFICATION}"
+                f"this package may contain only {allowed_text}"
             )
 
 
-def validate(root: Path) -> dict:
+def owner_release_authorized(status: object, decisions: list, programme_id: str | None) -> bool:
+    """Return whether the package cites an owner decision authorizing release.
+
+    Requires ``release_authorized: true`` in programme status and a decision
+    record with ``authority: owner`` and ``authorization_status: AUTHORIZED``
+    that cites the programme id. This is a citation check only: the validator
+    cannot authenticate the owner or confirm the decision was really made.
+    """
+    if not isinstance(status, dict) or status.get("release_authorized") is not True:
+        return False
+    if not isinstance(programme_id, str) or not programme_id:
+        return False
+    return any(
+        isinstance(item, dict)
+        and item.get("authority") == "owner"
+        and authorization_record_supports(item, programme_id)
+        for item in decisions
+    )
+
+
+def check_release_authorization(data: dict, reasons: dict[str, list[str]]) -> None:
+    bucket = reasons["release_authorization"]
+    status = data.get("status")
+    programme_id = status.get("programme") if isinstance(status, dict) else None
+    if not owner_release_authorized(status, data.get("decisions") or [], programme_id):
+        bucket.append(
+            "RELEASE_NOT_AUTHORIZED: public release needs release_authorized true and an "
+            "owner decision record (authority owner, authorization_status AUTHORIZED) citing "
+            f"programme {programme_id!r}; classification labels alone do not authorize release"
+        )
+
+
+def validate(root: Path, profile: str | None = None) -> dict:
+    if profile is not None and profile not in PROFILES:
+        raise ValueError(f"unknown profile {profile!r}; expected one of {', '.join(PROFILES)}")
     root = root.resolve()
-    reasons = {name: [] for name in CHECKS}
+    check_names = CHECKS + (("release_authorization",) if profile == PUBLIC_RELEASE_PROFILE else ())
+    reasons = {name: [] for name in check_names}
     if not root.is_dir():
         reasons["manifest_integrity"].append(
             f"PACKAGE_ABSENT: package directory does not exist: {root}"
@@ -1803,9 +1859,13 @@ def validate(root: Path) -> dict:
         check_expectation(root, data, reasons)
         check_counts(root, data, reasons)
         check_honest(data, reasons)
-        check_classification(root, files, data, reasons)
+        check_classification(root, files, data, reasons, profile)
+        if profile == PUBLIC_RELEASE_PROFILE:
+            check_release_authorization(data, reasons)
+    if profile == PUBLIC_RELEASE_PROFILE and not root.is_dir():
+        reasons["release_authorization"].append("RELEASE_NOT_AUTHORIZED: package absent")
     checks = []
-    for name in CHECKS:
+    for name in check_names:
         item_reasons = reasons[name]
         checks.append(
             {
@@ -1814,10 +1874,15 @@ def validate(root: Path) -> dict:
                 "reasons": item_reasons,
             }
         )
+    ok = all(item["outcome"] == "PASS" for item in checks)
     return {
         "scope": SCOPE,
         "package": str(root),
-        "ok": all(item["outcome"] == "PASS" for item in checks),
+        "profile": profile or DEFAULT_PROFILE_NAME,
+        "ok": ok,
+        # Only the public-release profile, which requires a cited owner release
+        # authorization, can report a package as release-ready.
+        "release_ready": bool(ok and profile == PUBLIC_RELEASE_PROFILE),
         "checks": checks,
     }
 
@@ -1830,12 +1895,22 @@ def main(argv: list[str] | None = None) -> int:
         )
     )
     parser.add_argument("package", help="Programme package directory")
+    parser.add_argument(
+        "--profile",
+        choices=PROFILES,
+        default=None,
+        help=(
+            "internal-candidate: admit INTERNAL_CANDIDATE labels, never release-ready. "
+            "public-release: only PUBLICLY_CLEARED and a cited owner release authorization. "
+            "Omitted: historical PUBLICLY_CLEARED-only gate, never release-ready."
+        ),
+    )
     args = parser.parse_args(argv)
     root = Path(args.package)
     if not root.is_dir():
         print(f"PACKAGE_ABSENT: package directory does not exist: {root}", file=sys.stderr)
         return 2
-    result = validate(root)
+    result = validate(root, args.profile)
     json.dump(result, sys.stdout, indent=2)
     sys.stdout.write("\n")
     for item in result["checks"]:

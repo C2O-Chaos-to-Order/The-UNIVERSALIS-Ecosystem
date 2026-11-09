@@ -41,6 +41,6 @@
       "description": "Required whenever witness_siglum is present: the page or section of the citing edition where the siglum is assigned."
     },
     "review_scope": {"type": "string", "minLength": 1},
-    "release_classification": {"const": "PUBLICLY_CLEARED"}
+    "release_classification": {"enum": ["INTERNAL_CANDIDATE", "PUBLICLY_CLEARED"]}
   }
 }

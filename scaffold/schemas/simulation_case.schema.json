@@ -29,6 +29,6 @@
     "source_ids": {"type": "array", "items": {"type": "string"}},
     "clause_ids": {"type": "array", "items": {"type": "string"}},
     "limitations": {"type": "string", "minLength": 1},
-    "release_classification": {"const": "PUBLICLY_CLEARED"}
+    "release_classification": {"enum": ["INTERNAL_CANDIDATE", "PUBLICLY_CLEARED"]}
   }
 }

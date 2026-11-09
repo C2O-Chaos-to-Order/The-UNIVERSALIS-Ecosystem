@@ -56,7 +56,7 @@
     "expectations_matched": {"type": "integer", "minimum": 0},
     "expectation_failures": {"type": "integer", "minimum": 0},
     "execution_errors": {"type": "integer", "minimum": 0},
-    "release_classification": {"const": "PUBLICLY_CLEARED"},
+    "release_classification": {"enum": ["INTERNAL_CANDIDATE", "PUBLICLY_CLEARED"]},
     "limits": {"type": "string", "minLength": 1}
   }
 }
