@@ -139,5 +139,6 @@
     "independent_review": {"type": "string", "minLength": 1},
     "randomness": {"type": "string"},
     "release_classification": {"enum": ["INTERNAL_CANDIDATE", "PUBLICLY_CLEARED"]}
-  }
+  },
+  "additionalProperties": false
 }

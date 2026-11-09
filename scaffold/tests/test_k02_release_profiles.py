@@ -201,6 +201,24 @@ class K02ReleaseProfilesTest(unittest.TestCase):
                 self.assertEqual(sorted(spec.get("enum", [])), [INTERNAL, "PUBLICLY_CLEARED"])
                 self.assertNotIn("const", spec)
 
+    def test_conflicted_schemas_keep_hf06_additional_properties_false(self):
+        """Intended merge resolution with UNIVERSALIS #4/#5 (hf06/hf07):
+        K02 enum plus the #4/#5 ``additionalProperties: false`` constraint.
+        source_register_entry.schema.json did not gain that constraint on #4/#5.
+        """
+        expected = {
+            "clause_reference.schema.json",
+            "requirement_record.schema.json",
+            "research_record.schema.json",
+            "simulation_case.schema.json",
+            "simulation_result.schema.json",
+            "programme_status.schema.json",
+        }
+        for name in sorted(expected):
+            schema = json.loads((ROOT / "schemas" / name).read_text())
+            with self.subTest(schema=name):
+                self.assertIs(schema.get("additionalProperties"), False)
+
 
 class K02MutationTest(unittest.TestCase):
     def test_disabling_owner_authorization_check_is_detected(self):

@@ -35,5 +35,6 @@
     "authorization_status": {"enum": ["NOT_AUTHORIZED", "AUTHORIZED"]},
     "programme_credit": {"enum": ["NONE", "CANDIDATE_PENDING_OWNER_REVIEW", "AWARDED"]},
     "release_classification": {"enum": ["INTERNAL_CANDIDATE", "PUBLICLY_CLEARED"]}
-  }
+  },
+  "additionalProperties": false
 }
