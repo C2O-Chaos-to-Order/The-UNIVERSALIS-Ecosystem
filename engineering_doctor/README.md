@@ -10,7 +10,12 @@ conflicting status language, and can run optional public demo unittest
 adapters. It writes an immutable JSON run record plus a Markdown brief.
 
 It is not a dashboard, scheduler, model, authorization service, or release
-authority. The default repository allowlist is empty: operators pass `--repo`
+authority.
+
+This core is registered as `tool-001` in the repository-root
+[Tool Registry](../registry/tools/tool-001.json). The registry itself is
+LIMITED. A pass is not authorization, scientific validation, or independent
+verification. The default repository allowlist is empty: operators pass `--repo`
 and/or `--allowlist-file`. There is no built-in private corpus list.
 
 ## What exists

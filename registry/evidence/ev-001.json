@@ -1,0 +1,19 @@
+{
+  "schema_id": "universalis.evidence-record",
+  "schema_version": "0.1.0",
+  "id": "ev-001",
+  "kind": "unittest_suite",
+  "tool_ids": [
+    "tool-001"
+  ],
+  "title": "Engineering Doctor public core unittest suite",
+  "description": "The unittest suite shipped with the public Engineering Doctor core. Operators can re-run it locally with the command in locator.command. This record does not include a test count or score.",
+  "locator": {
+    "kind": "local_path",
+    "path": "engineering_doctor/tests",
+    "command": "python -m unittest discover -s engineering_doctor/tests -t . -v"
+  },
+  "reproducible": true,
+  "classification": "PUBLIC",
+  "does_not_authorize": "A pass is not authorization, scientific validation, or independent verification."
+}

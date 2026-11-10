@@ -1,0 +1,161 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "$id": "universalis.tool-record/v0.1",
+  "title": "Universalis tool record v0.1",
+  "description": "Public tool registration record. additionalProperties is false. Records must not include score or confidence fields.",
+  "type": "object",
+  "additionalProperties": false,
+  "required": [
+    "schema_id",
+    "schema_version",
+    "id",
+    "name",
+    "version",
+    "status",
+    "classification",
+    "owner",
+    "implementation",
+    "requirement_references",
+    "test_locators",
+    "evidence_ids",
+    "known_limitations",
+    "does_not_authorize",
+    "private_evidence_note"
+  ],
+  "properties": {
+    "schema_id": {
+      "const": "universalis.tool-record"
+    },
+    "schema_version": {
+      "const": "0.1.0"
+    },
+    "id": {
+      "type": "string",
+      "pattern": "^tool-[0-9]{3,}$"
+    },
+    "name": {
+      "type": "string",
+      "minLength": 1
+    },
+    "version": {
+      "type": "string",
+      "minLength": 1
+    },
+    "status": {
+      "type": "string",
+      "enum": [
+        "LIMITED"
+      ]
+    },
+    "classification": {
+      "type": "string",
+      "enum": [
+        "PUBLIC_CANDIDATE"
+      ]
+    },
+    "owner": {
+      "type": "string",
+      "minLength": 1
+    },
+    "implementation": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": [
+        "kind",
+        "locator",
+        "entrypoint"
+      ],
+      "properties": {
+        "kind": {
+          "type": "string",
+          "enum": [
+            "python_package"
+          ]
+        },
+        "locator": {
+          "type": "string",
+          "minLength": 1
+        },
+        "entrypoint": {
+          "type": "string",
+          "minLength": 1
+        }
+      }
+    },
+    "requirement_references": {
+      "type": "array",
+      "minItems": 1,
+      "items": {
+        "type": "object",
+        "additionalProperties": false,
+        "required": [
+          "id",
+          "summary"
+        ],
+        "properties": {
+          "id": {
+            "type": "string",
+            "pattern": "^REQ-[A-Z0-9-]+$"
+          },
+          "summary": {
+            "type": "string",
+            "minLength": 1
+          }
+        }
+      }
+    },
+    "test_locators": {
+      "type": "array",
+      "minItems": 1,
+      "items": {
+        "type": "object",
+        "additionalProperties": false,
+        "required": [
+          "kind",
+          "path"
+        ],
+        "properties": {
+          "kind": {
+            "type": "string",
+            "enum": [
+              "unittest_dir",
+              "workflow_file"
+            ]
+          },
+          "path": {
+            "type": "string",
+            "minLength": 1
+          },
+          "command": {
+            "type": "string",
+            "minLength": 1
+          }
+        }
+      }
+    },
+    "evidence_ids": {
+      "type": "array",
+      "minItems": 1,
+      "items": {
+        "type": "string",
+        "pattern": "^ev-[0-9]{3,}$"
+      }
+    },
+    "known_limitations": {
+      "type": "array",
+      "minItems": 1,
+      "items": {
+        "type": "string",
+        "minLength": 1
+      }
+    },
+    "does_not_authorize": {
+      "type": "string",
+      "minLength": 1
+    },
+    "private_evidence_note": {
+      "type": "string",
+      "minLength": 1
+    }
+  }
+}

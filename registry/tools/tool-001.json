@@ -1,0 +1,53 @@
+{
+  "schema_id": "universalis.tool-record",
+  "schema_version": "0.1.0",
+  "id": "tool-001",
+  "name": "Engineering Doctor",
+  "version": "0.1.0",
+  "status": "LIMITED",
+  "classification": "PUBLIC_CANDIDATE",
+  "owner": "owner",
+  "implementation": {
+    "kind": "python_package",
+    "locator": "engineering_doctor",
+    "entrypoint": "python -m engineering_doctor"
+  },
+  "requirement_references": [
+    {
+      "id": "REQ-ED-READ-ONLY",
+      "summary": "Inventory and reporting use GET only and do not write to GitHub or to scanned repositories."
+    },
+    {
+      "id": "REQ-ED-NO-SCORE",
+      "summary": "The tool does not emit a readiness percentage, score, or confidence value."
+    },
+    {
+      "id": "REQ-ED-BANNER",
+      "summary": "Every run record repeats that a pass is not authorization, scientific validation, or independent verification."
+    }
+  ],
+  "test_locators": [
+    {
+      "kind": "unittest_dir",
+      "path": "engineering_doctor/tests",
+      "command": "python -m unittest discover -s engineering_doctor/tests -t . -v"
+    },
+    {
+      "kind": "workflow_file",
+      "path": ".github/workflows/engineering-doctor.yml"
+    }
+  ],
+  "evidence_ids": [
+    "ev-001",
+    "ev-002"
+  ],
+  "known_limitations": [
+    "Status is LIMITED / PUBLIC_CANDIDATE; this is not a completed product or an authorized release.",
+    "The public core inventories only repositories the operator supplies. The bundled demonstration adapters use a pinned public snapshot and do not inspect private repositories.",
+    "Inventory and reporting are read-only. The tool does not open, merge, or review pull requests.",
+    "The tool does not emit a readiness percentage, score, or confidence value.",
+    "Public evidence recorded here is the core unittest suite and one public GitHub Actions run. It does not by itself demonstrate production readiness."
+  ],
+  "does_not_authorize": "A pass is not authorization, scientific validation, or independent verification.",
+  "private_evidence_note": "Additional live-run evidence recorded by the private adapter that consumes this public core is not copied into this public registry. That adapter keeps its own private evidence record for tool-001."
+}
