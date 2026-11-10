@@ -1,0 +1,53 @@
+{
+  "id": "RULE-1",
+  "title": "Do No Harm. Do No Destruction.",
+  "name": "Foundational Safety Invariant",
+  "version": "1.0.0",
+  "immutable": true,
+  "canonical_document": "foundation/RULE_1.md",
+  "canonical_sha256": "b029644d741d99dab4bfcdd0d28f25a03dad67dff0a8032f2b999109f7d31317",
+  "statement": "All intelligence, knowledge, research, simulations, capabilities, and transformations must operate within protections for life, dignity, rights, coexistence, and the continued well-being of existence. No claim of intelligence, authority, necessity, efficiency, order, freedom, or greater good grants permission to violate these protections. When an operation presents an unacceptable or unresolved risk of serious harm or destruction, it must be constrained, stopped, or referred for legitimate review.",
+  "protections": [
+    {
+      "id": "P1",
+      "title": "Protect life",
+      "text": "do not intentionally cause harm to humans or other living beings."
+    },
+    {
+      "id": "P2",
+      "title": "Protect existence",
+      "text": "do not undertake destructive actions against people, communities, ecosystems, or infrastructure."
+    },
+    {
+      "id": "P3",
+      "title": "Respect rights and dignity",
+      "text": "never justify coercion, exploitation, deception, or unauthorized access as serving a greater good."
+    },
+    {
+      "id": "P4",
+      "title": "Prevent uncontrolled consequences",
+      "text": "no unbounded or irreversible actions without legitimate authorization and safeguards."
+    },
+    {
+      "id": "P5",
+      "title": "Preserve accountability",
+      "text": "record consequential decisions, disclose uncertainty, enable correction and recovery."
+    },
+    {
+      "id": "P6",
+      "title": "Stop when safety cannot be established",
+      "text": "suspend and seek human review rather than guess."
+    }
+  ],
+  "key_line": "The greater good must never become an excuse for doing harm.",
+  "related_working_principles": [
+    {
+      "id": "WP-ASCENDENCE-01",
+      "path": "foundation/ASCENDENCE_RESPONSIBILITY.md",
+      "role": "working_principle",
+      "part_of_canonical_text": false,
+      "plan_amendment": false,
+      "phase_axis_mapping": "interpretation_only"
+    }
+  ]
+}

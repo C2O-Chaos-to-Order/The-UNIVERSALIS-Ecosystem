@@ -49,7 +49,13 @@ class RealRegistryTests(unittest.TestCase):
         self.assertIn("private adapter", record["private_evidence_note"])
         self.assertNotIn("score", record)
         self.assertNotIn("confidence", record)
-        self.assertEqual(record["schema_version"], "0.2.0")
+        self.assertEqual(record["schema_version"], "0.3.0")
+        self.assertEqual(record["rule_1"]["id"], "RULE-1")
+        self.assertEqual(record["authorization"]["status"], "NOT_AUTHORIZED")
+        self.assertFalse(record["authorization"]["inferred_from_test_pass"])
+        self.assertEqual(record["permissions"], [])
+        self.assertGreaterEqual(len(record["capabilities"]), 1)
+        self.assertEqual(len(record["rule_1_assessment"]["protections"]), 6)
         ids = [item["id"] for item in record["requirement_references"]]
         self.assertIn("REQ-RUBY-01", ids)
         self.assertIn("REQ-ONYX-01", ids)
@@ -220,25 +226,38 @@ class ReferentialTests(unittest.TestCase):
             REPO_ROOT / "registry" / "schemas",
             self.tmp / "registry" / "schemas",
         )
+        shutil.copytree(REPO_ROOT / "foundation", self.tmp / "foundation")
         self.tool = load_json(TOOL_001_PATH)
         self.ev_001 = load_json(EV_001_PATH)
         self.ev_002 = load_json(EV_002_PATH)
         # The copied CI evidence record does not need a local path; keep it.
         self._ensure_requirement_locator_stubs(self.tool)
+        self._ensure_assessment_locator_stubs(self.tool)
         self._write_tree(self.tool, self.ev_001, self.ev_002)
+
+    def _stub_locator(self, locator: dict[str, Any]) -> None:
+        dest = self.tmp / locator["path"]
+        dest.parent.mkdir(parents=True, exist_ok=True)
+        if dest.exists() and dest.is_dir():
+            return
+        method = (locator.get("name") or "test_ok").rsplit(".", 1)[-1]
+        existing = dest.read_text(encoding="utf-8") if dest.exists() else ""
+        if f"def {method}(" not in existing:
+            dest.write_text(
+                existing + f"\ndef {method}():\n    return None\n",
+                encoding="utf-8",
+            )
 
     def _ensure_requirement_locator_stubs(self, tool: dict[str, Any]) -> None:
         for ref in tool.get("requirement_references") or []:
             for locator in ref.get("test_locators") or []:
-                dest = self.tmp / locator["path"]
-                dest.parent.mkdir(parents=True, exist_ok=True)
-                method = (locator.get("name") or "test_ok").rsplit(".", 1)[-1]
-                existing = dest.read_text(encoding="utf-8") if dest.exists() else ""
-                if f"def {method}(" not in existing:
-                    dest.write_text(
-                        existing + f"\ndef {method}():\n    return None\n",
-                        encoding="utf-8",
-                    )
+                self._stub_locator(locator)
+
+    def _ensure_assessment_locator_stubs(self, tool: dict[str, Any]) -> None:
+        assessment = tool.get("rule_1_assessment") or {}
+        for protection in assessment.get("protections") or []:
+            for locator in protection.get("evidence_locators") or []:
+                self._stub_locator(locator)
 
     def _write_tree(
         self,
@@ -338,6 +357,58 @@ class ReferentialTests(unittest.TestCase):
             any("test_method_not_present" in error and "was not found" in error for error in errors),
             errors,
         )
+
+
+class RegistrySemanticTests(unittest.TestCase):
+    def test_capability_growth_does_not_raise_tool_authorization_alone(self) -> None:
+        from foundation.invariant import check_capability_authorization_growth
+
+        tool = load_json(TOOL_001_PATH)
+        grown = copy.deepcopy(tool)
+        grown["capabilities"] = list(tool["capabilities"]) + ["new_experimental_capability"]
+        self.assertEqual(grown["authorization"]["status"], tool["authorization"]["status"])
+        self.assertEqual(grown["permissions"], tool["permissions"])
+        self.assertEqual(check_capability_authorization_growth(tool, grown, label="grown"), [])
+
+        raised = copy.deepcopy(grown)
+        raised["authorization"] = {
+            "status": "AUTHORIZED",
+            "inferred_from_test_pass": False,
+        }
+        raised_errors = check_capability_authorization_growth(tool, raised, label="raised")
+        self.assertTrue(any("capability growth" in error for error in raised_errors), raised_errors)
+
+        permitted = copy.deepcopy(grown)
+        permitted["permissions"] = list(tool["permissions"]) + ["write_external_systems"]
+        perm_errors = check_capability_authorization_growth(tool, permitted, label="permitted")
+        self.assertTrue(any("capability growth" in error for error in perm_errors), perm_errors)
+
+        approved = copy.deepcopy(raised)
+        approved["decision_record"] = {
+            "kind": "human_authorization",
+            "id": "DEC-TEST-001",
+            "note": "Synthetic fixture for the capability-growth path.",
+        }
+        approved["rule_1_assessment"] = copy.deepcopy(tool["rule_1_assessment"])
+        approved["rule_1_assessment"]["revision"] = int(tool["rule_1_assessment"]["revision"]) + 1
+        approved["rule_1_assessment"]["reassessed_for"] = "new_experimental_capability"
+        self.assertEqual(
+            check_capability_authorization_growth(tool, approved, label="approved"),
+            [],
+        )
+
+    def test_tool_002_public_fields(self) -> None:
+        record = load_json(REPO_ROOT / "registry" / "tools" / "tool-002.json")
+        self.assertEqual(record["id"], "tool-002")
+        self.assertEqual(record["schema_version"], "0.3.0")
+        self.assertEqual(record["status"], "LIMITED")
+        self.assertEqual(record["authorization"]["status"], "NOT_AUTHORIZED")
+        self.assertEqual(record["rule_1"]["id"], "RULE-1")
+        self.assertEqual(record["evidence_ids"], ["ev-003"])
+        evidence = load_json(REPO_ROOT / "registry" / "evidence" / "ev-003.json")
+        self.assertEqual(evidence["locator"]["path"], "knowledge/tests")
+        self.assertTrue(evidence["reproducible"])
+
 
 
 def _suite_excluding_registry(suite: unittest.TestSuite) -> unittest.TestSuite:

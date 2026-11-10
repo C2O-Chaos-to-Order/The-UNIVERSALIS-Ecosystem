@@ -1,0 +1,124 @@
+{
+  "id": "knowledge-validator",
+  "title": "Knowledge record validator",
+  "equivalent_to": "tool-002-style self-application",
+  "rule_1": {
+    "id": "RULE-1",
+    "digest": "b029644d741d99dab4bfcdd0d28f25a03dad67dff0a8032f2b999109f7d31317"
+  },
+  "rule_1_assessment": {
+    "revision": 1,
+    "protections": [
+      {
+        "id": "P1",
+        "title": "Protect life",
+        "status": "not-applicable-with-reason",
+        "reason": "The knowledge validator does not act on humans or other living beings."
+      },
+      {
+        "id": "P2",
+        "title": "Protect existence",
+        "status": "not-applicable-with-reason",
+        "reason": "The validator reads records and reports errors. It does not modify scanned trees or perform destructive actions."
+      },
+      {
+        "id": "P3",
+        "title": "Respect rights and dignity",
+        "status": "addressed",
+        "evidence_locators": [
+          {
+            "kind": "unittest",
+            "path": "knowledge/tests/test_knowledge_records.py",
+            "name": "KnowledgeRecordTests.test_interpretation_cannot_be_marked_as_source_text"
+          },
+          {
+            "kind": "unittest",
+            "path": "knowledge/tests/test_knowledge_records.py",
+            "name": "KnowledgeRecordTests.test_authorization_cannot_be_set_from_a_test_pass"
+          }
+        ]
+      },
+      {
+        "id": "P4",
+        "title": "Prevent uncontrolled consequences",
+        "status": "addressed",
+        "evidence_locators": [
+          {
+            "kind": "unittest",
+            "path": "knowledge/tests/test_knowledge_records.py",
+            "name": "KnowledgeRecordTests.test_proposed_change_that_touches_rule_1_is_rejected"
+          },
+          {
+            "kind": "unittest",
+            "path": "knowledge/tests/test_knowledge_records.py",
+            "name": "KnowledgeRecordTests.test_capability_growth_does_not_raise_authorization_alone"
+          },
+          {
+            "kind": "unittest",
+            "path": "knowledge/tests/test_knowledge_records.py",
+            "name": "KnowledgeRecordTests.test_altered_rule_1_text_is_rejected"
+          }
+        ]
+      },
+      {
+        "id": "P5",
+        "title": "Preserve accountability",
+        "status": "addressed",
+        "evidence_locators": [
+          {
+            "kind": "unittest",
+            "path": "knowledge/tests/test_knowledge_records.py",
+            "name": "KnowledgeRecordTests.test_source_digest_mismatch_is_detected"
+          },
+          {
+            "kind": "unittest",
+            "path": "knowledge/tests/test_knowledge_records.py",
+            "name": "KnowledgeRecordTests.test_correction_keeps_prior_version"
+          },
+          {
+            "kind": "unittest",
+            "path": "knowledge/tests/test_knowledge_records.py",
+            "name": "KnowledgeRecordTests.test_working_principle_is_not_in_rule_1_digest"
+          }
+        ]
+      },
+      {
+        "id": "P6",
+        "title": "Stop when safety cannot be established",
+        "status": "addressed",
+        "evidence_locators": [
+          {
+            "kind": "unittest",
+            "path": "knowledge/tests/test_knowledge_records.py",
+            "name": "KnowledgeRecordTests.test_omitted_rule_1_is_rejected"
+          },
+          {
+            "kind": "unittest",
+            "path": "knowledge/tests/test_knowledge_records.py",
+            "name": "KnowledgeRecordTests.test_mismatched_rule_1_digest_on_record_is_rejected"
+          },
+          {
+            "kind": "unittest",
+            "path": "knowledge/tests/test_knowledge_records.py",
+            "name": "KnowledgeRecordTests.test_open_protection_is_unaddressed_and_rejected"
+          },
+          {
+            "kind": "unittest",
+            "path": "knowledge/tests/test_knowledge_records.py",
+            "name": "KnowledgeRecordTests.test_accepted_without_decision_fails"
+          }
+        ]
+      }
+    ]
+  },
+  "capabilities": [
+    "validate_knowledge_records",
+    "enforce_rule_1_digest",
+    "reject_rule_1_mutations",
+    "separate_authorization_from_test_pass"
+  ],
+  "permissions": [],
+  "authorization": {
+    "status": "NOT_AUTHORIZED"
+  }
+}

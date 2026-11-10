@@ -14,6 +14,12 @@ import sys
 from pathlib import Path
 from typing import Any
 
+from foundation.invariant import (
+    check_rule_1_assessment,
+    check_rule_1_document,
+    check_rule_1_reference,
+)
+
 PACKAGE_DIR = Path(__file__).resolve().parent
 DEFAULT_REPO_ROOT = PACKAGE_DIR.parent
 
@@ -295,6 +301,7 @@ def _iter_record_files(directory: Path) -> list[Path]:
 def validate_registry(repo_root: Path | None = None) -> list[str]:
     repo_root = (repo_root or DEFAULT_REPO_ROOT).resolve()
     errors: list[str] = []
+    errors.extend(check_rule_1_document(repo_root))
 
     try:
         tool_schema = load_json(TOOL_SCHEMA_PATH)
@@ -340,6 +347,8 @@ def validate_registry(repo_root: Path | None = None) -> list[str]:
                     )
         if isinstance(record, dict):
             errors.extend(check_requirement_test_locators(record, repo_root, pointer))
+            errors.extend(check_rule_1_reference(record, repo_root, label=pointer))
+            errors.extend(check_rule_1_assessment(record, repo_root, label=pointer))
 
     for path in _iter_record_files(evidence_dir):
         pointer = f"registry/evidence/{path.name}"

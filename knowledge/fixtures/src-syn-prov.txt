@@ -1,0 +1,1 @@
+A stored claim must remain connected to a source path, commit, and digest.

@@ -1,8 +1,8 @@
 {
   "$schema": "https://json-schema.org/draft/2020-12/schema",
-  "$id": "universalis.tool-record/v0.2",
-  "title": "Universalis tool record v0.2",
-  "description": "Public tool registration record, version 0.2. additionalProperties is false. Records must not include score or confidence fields. Requirement references may cite privately originated principles by a short public label only; they are not a compliance claim.",
+  "$id": "universalis.tool-record/v0.3",
+  "title": "Universalis tool record v0.3",
+  "description": "Public tool registration record, version 0.3. additionalProperties is false. Records must not include score or confidence fields. Requirement references may cite privately originated principles by a short public label only; they are not a compliance claim. Version 0.3 requires a RULE-1 digest reference, a six-protection rule_1_assessment, and separate capabilities, permissions, and authorization fields.",
   "type": "object",
   "additionalProperties": false,
   "required": [
@@ -20,14 +20,19 @@
     "evidence_ids",
     "known_limitations",
     "does_not_authorize",
-    "private_evidence_note"
+    "private_evidence_note",
+    "rule_1",
+    "rule_1_assessment",
+    "capabilities",
+    "permissions",
+    "authorization"
   ],
   "properties": {
     "schema_id": {
       "const": "universalis.tool-record"
     },
     "schema_version": {
-      "const": "0.2.0"
+      "const": "0.3.0"
     },
     "id": {
       "type": "string",
@@ -207,6 +212,150 @@
     "private_evidence_note": {
       "type": "string",
       "minLength": 1
+    },
+    "rule_1": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": [
+        "id",
+        "digest"
+      ],
+      "properties": {
+        "id": {
+          "type": "string",
+          "const": "RULE-1"
+        },
+        "digest": {
+          "type": "string",
+          "pattern": "^[0-9a-f]{64}$"
+        }
+      }
+    },
+    "rule_1_assessment": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": [
+        "revision",
+        "protections"
+      ],
+      "properties": {
+        "revision": {
+          "type": "number"
+        },
+        "reassessed_for": {
+          "type": "string"
+        },
+        "protections": {
+          "type": "array",
+          "minItems": 6,
+          "maxItems": 6,
+          "items": {
+            "type": "object",
+            "additionalProperties": false,
+            "required": [
+              "id",
+              "title",
+              "status"
+            ],
+            "properties": {
+              "id": {
+                "type": "string",
+                "enum": [
+                  "P1",
+                  "P2",
+                  "P3",
+                  "P4",
+                  "P5",
+                  "P6"
+                ]
+              },
+              "title": {
+                "type": "string",
+                "minLength": 1
+              },
+              "status": {
+                "type": "string",
+                "enum": [
+                  "addressed",
+                  "not-applicable-with-reason",
+                  "open"
+                ]
+              },
+              "reason": {
+                "type": "string"
+              },
+              "evidence_locators": {
+                "type": "array",
+                "items": {
+                  "type": "object",
+                  "additionalProperties": false,
+                  "required": [
+                    "kind",
+                    "path"
+                  ],
+                  "properties": {
+                    "kind": {
+                      "type": "string",
+                      "minLength": 1
+                    },
+                    "path": {
+                      "type": "string",
+                      "minLength": 1
+                    },
+                    "name": {
+                      "type": "string",
+                      "minLength": 1
+                    },
+                    "repository": {
+                      "type": "string",
+                      "minLength": 1
+                    },
+                    "commit": {
+                      "type": "string",
+                      "minLength": 1
+                    }
+                  }
+                }
+              }
+            }
+          }
+        }
+      }
+    },
+    "capabilities": {
+      "type": "array",
+      "minItems": 1,
+      "items": {
+        "type": "string",
+        "minLength": 1
+      }
+    },
+    "permissions": {
+      "type": "array",
+      "items": {
+        "type": "string",
+        "minLength": 1
+      }
+    },
+    "authorization": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": [
+        "status",
+        "inferred_from_test_pass"
+      ],
+      "properties": {
+        "status": {
+          "type": "string",
+          "enum": [
+            "NOT_AUTHORIZED",
+            "AUTHORIZED"
+          ]
+        },
+        "inferred_from_test_pass": {
+          "type": "boolean"
+        }
+      }
     }
   }
 }
