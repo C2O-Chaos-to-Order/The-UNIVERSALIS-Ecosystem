@@ -1,0 +1,62 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "$id": "engineering-doctor-run-record/v0.1",
+  "title": "Engineering Doctor run record",
+  "type": "object",
+  "required": [
+    "schema_id",
+    "tool_name",
+    "tool_version",
+    "tool_status",
+    "classification",
+    "banner",
+    "run_id",
+    "started_at",
+    "finished_at",
+    "python_version",
+    "inputs",
+    "inputs_sha256",
+    "repo_shas",
+    "inventory",
+    "suites",
+    "findings",
+    "severity_counts",
+    "limitations"
+  ],
+  "unevaluatedProperties": true,
+  "properties": {
+    "schema_id": { "const": "engineering-doctor-run-record/v0.1" },
+    "tool_name": { "const": "Engineering Doctor" },
+    "tool_version": { "type": "string" },
+    "tool_status": { "const": "LIMITED" },
+    "classification": { "type": "string", "minLength": 1 },
+    "banner": {
+      "const": "A pass is not authorization, scientific validation, or independent verification."
+    },
+    "run_id": { "type": "string" },
+    "started_at": { "type": "string" },
+    "finished_at": { "type": "string" },
+    "python_version": { "type": "string" },
+    "inputs": { "type": "object" },
+    "inputs_sha256": { "type": "string", "pattern": "^[a-f0-9]{64}$" },
+    "repo_shas": { "type": "object" },
+    "inventory": { "type": "array" },
+    "suites": { "type": "array" },
+    "findings": { "type": "array" },
+    "severity_counts": {
+      "type": "object",
+      "required": ["Critical", "High", "Medium", "Low"]
+    },
+    "limitations": { "type": "array", "items": { "type": "string" } },
+    "notes": { "type": "array", "items": { "type": "string" } }
+  },
+  "not": {
+    "anyOf": [
+      { "required": ["confidence"] },
+      { "required": ["confidence_percent"] },
+      { "required": ["readiness"] },
+      { "required": ["readiness_percent"] },
+      { "required": ["readiness_score"] }
+    ]
+  }
+}
