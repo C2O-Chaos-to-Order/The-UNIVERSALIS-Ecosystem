@@ -60,6 +60,21 @@ class SourceSchemaTests(unittest.TestCase):
         self.assertIn("locator", description)
         self.assertIn("no siglum is assigned by this repository", description)
 
+    def test_schema_declares_repository_and_note(self):
+        repo = SCHEMA["properties"]["repository"]
+        self.assertEqual(repo["type"], "string")
+        self.assertGreaterEqual(repo["minLength"], 1)
+        self.assertIn("repository that commit belongs to", repo["description"])
+        note = SCHEMA["properties"]["note"]
+        self.assertEqual(note["type"], "string")
+        self.assertNotIn("note", SCHEMA["required"])
+        self.assertNotIn("repository", SCHEMA["required"])
+        self.assertEqual(
+            sorted(SCHEMA["properties"]["release_classification"]["enum"]),
+            ["INTERNAL_CANDIDATE", "PUBLICLY_CLEARED"],
+        )
+        self.assertNotIn("const", SCHEMA["properties"]["release_classification"])
+
 
 class SourceValidationTests(unittest.TestCase):
     def _run(self, sources: list[dict]) -> tuple[int, dict, str]:
