@@ -201,6 +201,59 @@ def check_test_locator(locator: dict[str, Any], repo_root: Path, path: str) -> l
     return errors
 
 
+def check_requirement_test_locators(
+    record: dict[str, Any], repo_root: Path, pointer: str
+) -> list[str]:
+    """Fail closed when a requirement reference points at a missing test."""
+
+    errors: list[str] = []
+    refs = record.get("requirement_references")
+    if not isinstance(refs, list):
+        return errors
+    for index, ref in enumerate(refs):
+        if not isinstance(ref, dict):
+            continue
+        locators = ref.get("test_locators")
+        if locators is None:
+            continue
+        if not isinstance(locators, list):
+            errors.append(
+                f"{pointer}.requirement_references[{index}].test_locators: "
+                "must be an array"
+            )
+            continue
+        for loc_index, locator in enumerate(locators):
+            loc_ptr = (
+                f"{pointer}.requirement_references[{index}].test_locators[{loc_index}]"
+            )
+            if not isinstance(locator, dict):
+                errors.append(f"{loc_ptr}: test locator must be an object")
+                continue
+            rel = locator.get("path")
+            if not isinstance(rel, str) or not rel:
+                errors.append(f"{loc_ptr}.path: missing test locator path")
+                continue
+            target = repo_root / rel
+            if not target.exists():
+                errors.append(
+                    f"{loc_ptr}.path: requirement test locator {rel!r} does not exist"
+                )
+                continue
+            name = locator.get("name")
+            if isinstance(name, str) and name:
+                method = name.rsplit(".", 1)[-1]
+                try:
+                    source = target.read_text(encoding="utf-8")
+                except OSError as exc:
+                    errors.append(f"{loc_ptr}.path: unable to read {rel!r} ({exc})")
+                    continue
+                if f"def {method}(" not in source:
+                    errors.append(
+                        f"{loc_ptr}.name: test {name!r} was not found in {rel!r}"
+                    )
+    return errors
+
+
 def check_evidence_locator(record: dict[str, Any], repo_root: Path, path: str) -> list[str]:
     errors: list[str] = []
     locator = record.get("locator")
@@ -285,6 +338,8 @@ def validate_registry(repo_root: Path | None = None) -> list[str]:
                             locator, repo_root, f"{pointer}.test_locators[{index}]"
                         )
                     )
+        if isinstance(record, dict):
+            errors.extend(check_requirement_test_locators(record, repo_root, pointer))
 
     for path in _iter_record_files(evidence_dir):
         pointer = f"registry/evidence/{path.name}"

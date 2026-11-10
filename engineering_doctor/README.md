@@ -15,7 +15,8 @@ authority.
 This core is registered as `tool-001` in the repository-root
 [Tool Registry](../registry/tools/tool-001.json). The registry itself is
 LIMITED. A pass is not authorization, scientific validation, or independent
-verification. The default repository allowlist is empty: operators pass `--repo`
+verification. Public requirement references `REQ-RUBY-01` and `REQ-ONYX-01`
+point at existing tests; they are not a tablet-compliance claim. The default repository allowlist is empty: operators pass `--repo`
 and/or `--allowlist-file`. There is no built-in private corpus list.
 
 ## What exists

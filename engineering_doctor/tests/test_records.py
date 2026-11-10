@@ -96,3 +96,23 @@ class RecordTests(unittest.TestCase):
             with self.assertRaises(ValueError):
                 verify_record_sidecar(run_dir)
             self.assertEqual(sha256_text(payload), sha256_text(payload))
+
+    def test_record_preserves_run_id_and_repo_shas(self) -> None:
+        started = datetime(2026, 11, 10, 20, 0, tzinfo=timezone.utc)
+        repo_shas = {"example-public": "abc123def4567890abc123def4567890abc123de"}
+        record = build_record(
+            run_id="test-run-exact",
+            started_at=started,
+            finished_at=started,
+            python_version="3.14.10",
+            inputs={"tool_version": "0.1.0"},
+            inventory=[],
+            suites=[],
+            findings=[_sample_finding()],
+            limitations=["test"],
+            repo_shas=repo_shas,
+        )
+        self.assertEqual(record["run_id"], "test-run-exact")
+        self.assertEqual(record["repo_shas"], repo_shas)
+        self.assertRegex(record["inputs_sha256"], r"^[a-f0-9]{64}$")
+        self.assertEqual(record["banner"], BANNER)

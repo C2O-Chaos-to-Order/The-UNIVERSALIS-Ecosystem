@@ -1,8 +1,8 @@
 {
   "$schema": "https://json-schema.org/draft/2020-12/schema",
-  "$id": "universalis.tool-record/v0.1",
-  "title": "Universalis tool record v0.1",
-  "description": "Public tool registration record. additionalProperties is false. Records must not include score or confidence fields.",
+  "$id": "universalis.tool-record/v0.2",
+  "title": "Universalis tool record v0.2",
+  "description": "Public tool registration record, version 0.2. additionalProperties is false. Records must not include score or confidence fields. Requirement references may cite privately originated principles by a short public label only; they are not a compliance claim.",
   "type": "object",
   "additionalProperties": false,
   "required": [
@@ -27,7 +27,7 @@
       "const": "universalis.tool-record"
     },
     "schema_version": {
-      "const": "0.1.0"
+      "const": "0.2.0"
     },
     "id": {
       "type": "string",
@@ -98,6 +98,57 @@
             "pattern": "^REQ-[A-Z0-9-]+$"
           },
           "summary": {
+            "type": "string",
+            "minLength": 1
+          },
+          "source": {
+            "type": "object",
+            "additionalProperties": false,
+            "required": [
+              "kind",
+              "label"
+            ],
+            "properties": {
+              "kind": {
+                "const": "private_origin_principle"
+              },
+              "label": {
+                "type": "string",
+                "minLength": 1,
+                "maxLength": 64,
+                "pattern": "^[A-Za-z][A-Za-z -]*$"
+              }
+            }
+          },
+          "test_locators": {
+            "type": "array",
+            "minItems": 1,
+            "items": {
+              "type": "object",
+              "additionalProperties": false,
+              "required": [
+                "kind",
+                "path"
+              ],
+              "properties": {
+                "kind": {
+                  "type": "string",
+                  "enum": [
+                    "unittest"
+                  ]
+                },
+                "path": {
+                  "type": "string",
+                  "minLength": 1
+                },
+                "name": {
+                  "type": "string",
+                  "minLength": 1
+                }
+              }
+            }
+          },
+          "note": {
             "type": "string",
             "minLength": 1
           }

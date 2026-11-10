@@ -18,3 +18,10 @@ product, an authorized release, or a scoreboard.
 - Records do not contain scores or confidence values.
 - A pass is not authorization, scientific validation, or independent
   verification.
+
+Requirement references `REQ-RUBY-01` and `REQ-ONYX-01` on `tool-001` are
+public-safe statements of existing Engineering Doctor behaviour, with locators
+to the tests that demonstrate that behaviour. They cite privately originated
+principles only by the short labels Ruby and Onyx. They are not a
+tablet-compliance claim, not authorization, and they do not change the
+LIMITED status of this registry.

@@ -49,6 +49,34 @@ class RealRegistryTests(unittest.TestCase):
         self.assertIn("private adapter", record["private_evidence_note"])
         self.assertNotIn("score", record)
         self.assertNotIn("confidence", record)
+        self.assertEqual(record["schema_version"], "0.2.0")
+        ids = [item["id"] for item in record["requirement_references"]]
+        self.assertIn("REQ-RUBY-01", ids)
+        self.assertIn("REQ-ONYX-01", ids)
+        self.assertNotIn("REQ-LAPIS-01", ids)
+        self.assertNotIn("REQ-CHALCEDONY-01", ids)
+
+    def test_ruby_and_onyx_requirement_refs_are_public_safe(self) -> None:
+        record = load_json(TOOL_001_PATH)
+        blob = json.dumps(record)
+        self.assertNotIn("25_RUBY_TABLET", blob)
+        self.assertNotIn("24_ONYX_TABLET", blob)
+        refs = {item["id"]: item for item in record["requirement_references"]}
+        ruby = refs["REQ-RUBY-01"]
+        onyx = refs["REQ-ONYX-01"]
+        self.assertEqual(ruby["source"], {"kind": "private_origin_principle", "label": "Ruby"})
+        self.assertEqual(onyx["source"], {"kind": "private_origin_principle", "label": "Onyx"})
+        self.assertIn("not a tablet-compliance claim", ruby["note"])
+        self.assertIn("not a tablet-compliance claim", onyx["note"])
+        self.assertIn("LIMITED", ruby["note"])
+        self.assertIn("LIMITED", onyx["note"])
+        for ref in (ruby, onyx):
+            self.assertGreaterEqual(len(ref["test_locators"]), 1)
+            for locator in ref["test_locators"]:
+                target = REPO_ROOT / locator["path"]
+                self.assertTrue(target.is_file(), locator["path"])
+                method = locator["name"].rsplit(".", 1)[-1]
+                self.assertIn(f"def {method}(", target.read_text(encoding="utf-8"))
 
     def test_public_evidence_points_only_at_reproducible_sources(self) -> None:
         ev_001 = load_json(EV_001_PATH)
@@ -196,7 +224,21 @@ class ReferentialTests(unittest.TestCase):
         self.ev_001 = load_json(EV_001_PATH)
         self.ev_002 = load_json(EV_002_PATH)
         # The copied CI evidence record does not need a local path; keep it.
+        self._ensure_requirement_locator_stubs(self.tool)
         self._write_tree(self.tool, self.ev_001, self.ev_002)
+
+    def _ensure_requirement_locator_stubs(self, tool: dict[str, Any]) -> None:
+        for ref in tool.get("requirement_references") or []:
+            for locator in ref.get("test_locators") or []:
+                dest = self.tmp / locator["path"]
+                dest.parent.mkdir(parents=True, exist_ok=True)
+                method = (locator.get("name") or "test_ok").rsplit(".", 1)[-1]
+                existing = dest.read_text(encoding="utf-8") if dest.exists() else ""
+                if f"def {method}(" not in existing:
+                    dest.write_text(
+                        existing + f"\ndef {method}():\n    return None\n",
+                        encoding="utf-8",
+                    )
 
     def _write_tree(
         self,
@@ -251,6 +293,51 @@ class ReferentialTests(unittest.TestCase):
         _write_json(path, record)
         errors = validate_registry(self.tmp)
         self.assertTrue(any("does not match id" in error for error in errors), errors)
+
+    def test_requirement_ref_missing_test_locator_is_rejected(self) -> None:
+        tool = copy.deepcopy(self.tool)
+        tool["requirement_references"] = list(tool["requirement_references"]) + [
+            {
+                "id": "REQ-MISSING-01",
+                "summary": "Synthetic locator used only to test fail-closed validation.",
+                "test_locators": [
+                    {
+                        "kind": "unittest",
+                        "path": "engineering_doctor/tests/test_does_not_exist.py",
+                        "name": "MissingTests.test_never",
+                    }
+                ],
+            }
+        ]
+        self._write_tree(tool, self.ev_001, self.ev_002)
+        errors = validate_registry(self.tmp)
+        self.assertTrue(
+            any("test_does_not_exist" in error and "does not exist" in error for error in errors),
+            errors,
+        )
+
+    def test_requirement_ref_missing_test_name_is_rejected(self) -> None:
+        tool = copy.deepcopy(self.tool)
+        stub = "engineering_doctor/tests/test_placeholder.py"
+        tool["requirement_references"] = list(tool["requirement_references"]) + [
+            {
+                "id": "REQ-MISSING-02",
+                "summary": "Synthetic named locator used only to test fail-closed validation.",
+                "test_locators": [
+                    {
+                        "kind": "unittest",
+                        "path": stub,
+                        "name": "MissingTests.test_method_not_present",
+                    }
+                ],
+            }
+        ]
+        self._write_tree(tool, self.ev_001, self.ev_002)
+        errors = validate_registry(self.tmp)
+        self.assertTrue(
+            any("test_method_not_present" in error and "was not found" in error for error in errors),
+            errors,
+        )
 
 
 def _suite_excluding_registry(suite: unittest.TestSuite) -> unittest.TestSuite:
