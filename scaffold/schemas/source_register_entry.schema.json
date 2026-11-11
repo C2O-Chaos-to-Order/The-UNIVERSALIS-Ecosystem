@@ -2,13 +2,21 @@
   "$schema": "https://json-schema.org/draft/2020-12/schema",
   "$id": "https://universalis.local/scaffold/schemas/source_register_entry.schema.json",
   "title": "Source-register entry",
-  "description": "A source pinned, when it is a git object, to an exact commit and blob SHA, with a declared review_scope. source_role records what kind of source this is so a catalogue transcription, an independent manuscript-image transcription, and a critical edition cannot be cited as though they were each other. witness_siglum may only be filled when the cited edition itself assigns that siglum and a locator into that edition is recorded; no siglum is assigned by this repository.",
+  "description": "A source pinned, when it is a git object, to a repository, a repository-relative path, a commit, and a blob SHA, with a declared review_scope. source_role records what kind of source this is so a catalogue transcription, an independent manuscript-image transcription, and a critical edition cannot be cited as though they were each other. witness_siglum may only be filled when the cited edition itself assigns that siglum and a locator into that edition is recorded; no siglum is assigned by this repository.",
   "type": "object",
   "required": ["id", "kind", "review_scope", "release_classification", "source_role", "independence_from"],
   "properties": {
     "id": {"type": "string", "minLength": 1},
     "kind": {"type": "string", "minLength": 1},
-    "path": {"type": "string"},
+    "repository": {
+      "type": "string",
+      "minLength": 1,
+      "description": "Required whenever the source is git-pinned (commit or blob_sha present): the repository that commit belongs to. The path is relative to that repository. A commit from one repository must not be paired with a path that exists only in another."
+    },
+    "path": {
+      "type": "string",
+      "description": "Repository-relative path of a git-pinned object, used together with repository, commit, and blob_sha."
+    },
     "url": {"type": "string"},
     "commit": {"type": "string", "pattern": "^[0-9a-f]{40}$"},
     "blob_sha": {"type": "string", "pattern": "^[0-9a-f]{40}$"},

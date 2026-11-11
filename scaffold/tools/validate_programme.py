@@ -918,13 +918,35 @@ def check_traceability(root: Path, data: dict, reasons: dict[str, list[str]]) ->
                     f"TRACEABILITY: source {source.get('id')} independence_from names "
                     f"{dependency}, which is not in the source register"
                 )
-        for field in ("commit", "blob_sha"):
-            value = source.get(field)
-            if value in (None, ""):
-                continue
-            if not isinstance(value, str) or GIT_SHA.fullmatch(value) is None:
+        # D09: a git-pinned source declares repository, path, commit, and
+        # blob_sha together so a commit from one repository cannot be paired
+        # with a path that exists only in another.
+        locator_fields = ("repository", "path", "commit", "blob_sha")
+        present_locator_fields = [
+            field for field in locator_fields if source.get(field) not in (None, "")
+        ]
+        if present_locator_fields:
+            source_id = source.get("id")
+            for field in locator_fields:
+                if not nonempty_string(source.get(field)):
+                    label = {"repository": "a repository", "path": "a path"}.get(field, field)
+                    bucket.append(
+                        f"TRACEABILITY: source {source_id} is git-pinned "
+                        f"but does not declare {label}; "
+                        "D09 requires repository, path, commit, and blob_sha together"
+                    )
+            for field in ("commit", "blob_sha"):
+                value = source.get(field)
+                if value not in (None, "") and (
+                    not isinstance(value, str) or GIT_SHA.fullmatch(value) is None
+                ):
+                    bucket.append(
+                        f"TRACEABILITY: source {source_id} {field} must be a 40-character git SHA or omitted"
+                    )
+            if nonempty_string(source.get("path")) and not safe_relative(source.get("path")):
                 bucket.append(
-                    f"TRACEABILITY: source {source.get('id')} {field} must be a 40-character git SHA or omitted"
+                    f"TRACEABILITY: source {source_id} path must be a "
+                    "repository-relative path without '..' or a leading '/'"
                 )
 
     for rel, column in (

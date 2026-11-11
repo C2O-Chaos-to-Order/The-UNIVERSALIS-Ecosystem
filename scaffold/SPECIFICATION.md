@@ -67,7 +67,7 @@ A requirement record resolves to exactly one research record and one declared cl
 
 A clause reference is an identifier. It has no clause title and no clause body. A placeholder must say that it is an example placeholder.
 
-A source-register entry has a `review_scope`. When `commit` or `blob_sha` is present, each is a 40-character hexadecimal SHA.
+A source-register entry has a `review_scope`. When the source is a git object, the entry declares `repository`, a repository-relative `path`, `commit`, and `blob_sha` together. `commit` and `blob_sha` are 40-character hexadecimal SHAs. A commit from one repository must not be paired with a path that exists only in another. Sources that are not git objects omit those fields.
 
 A decision file in `decisions/*.json` cites an owner or reviewer. An evidence decision sets `state` to one of `verified`, `independently_reproduced`, `validated`, `authorized`. An authorization record sets `authorization_status` to `AUTHORIZED`. One file may do both only when both fields are written. An evidence `state` does not authorize by itself, and a decision whose `state` is `authorized` does not authorize anything unless it also sets the authorization column.
 
