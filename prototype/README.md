@@ -23,6 +23,10 @@ P5 is not claimed to close anything besides ULC-21-07. P6 and P7 are not claimed
 
 The corrected mapping does not assign a close list to P4. Invalidation is P5, presentation is P6, and the authorization stub is P7.
 
+## Reciprocal stewardship policy prototype
+
+`universalis/stewardship.py` is an isolated advisory policy prototype described in [`STEWARDSHIP.md`](STEWARDSHIP.md). It never grants execution authority, changes permissions, performs containment, restores capabilities, or starts delegated systems. Its caller-supplied identity, evidence, and prohibition references are not authenticated by the module. It is not wired into the store or authorization stub and is not a governing policy.
+
 ## What it deliberately is not
 
 - No network, no model inference, no credentials, and no third-party packages. The Python standard library is the only dependency.
