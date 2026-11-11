@@ -1,0 +1,1 @@
+Missing or failed observations must be recorded as unknown or failed, not as a complete or healthy state.

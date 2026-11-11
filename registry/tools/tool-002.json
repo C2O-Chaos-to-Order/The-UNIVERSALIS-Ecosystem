@@ -1,0 +1,226 @@
+{
+  "schema_id": "universalis.tool-record",
+  "schema_version": "0.3.0",
+  "id": "tool-002",
+  "name": "Knowledge Record Validator",
+  "version": "0.1.0",
+  "status": "LIMITED",
+  "classification": "PUBLIC_CANDIDATE",
+  "owner": "owner",
+  "implementation": {
+    "kind": "python_package",
+    "locator": "knowledge",
+    "entrypoint": "python -m knowledge.validate"
+  },
+  "requirement_references": [
+    {
+      "id": "REQ-SAFE-01",
+      "summary": "Reject a knowledge record that omits Rule 1 or cites the wrong digest.",
+      "test_locators": [
+        {
+          "kind": "unittest",
+          "path": "knowledge/tests/test_knowledge_records.py",
+          "name": "KnowledgeRecordTests.test_omitted_rule_1_is_rejected"
+        },
+        {
+          "kind": "unittest",
+          "path": "knowledge/tests/test_knowledge_records.py",
+          "name": "KnowledgeRecordTests.test_mismatched_rule_1_digest_on_record_is_rejected"
+        }
+      ]
+    },
+    {
+      "id": "REQ-SAFE-02",
+      "summary": "Reject a proposed update that would change the Rule 1 digest or canonical binding.",
+      "test_locators": [
+        {
+          "kind": "unittest",
+          "path": "knowledge/tests/test_knowledge_records.py",
+          "name": "KnowledgeRecordTests.test_proposed_change_that_touches_rule_1_is_rejected"
+        },
+        {
+          "kind": "unittest",
+          "path": "knowledge/tests/test_knowledge_records.py",
+          "name": "KnowledgeRecordTests.test_altered_rule_1_text_is_rejected"
+        }
+      ]
+    },
+    {
+      "id": "REQ-SAFE-03",
+      "summary": "Do not raise authorization or permissions unless a human decision is cited and Rule 1 is reassessed, whether or not the capability set also grew.",
+      "test_locators": [
+        {
+          "kind": "unittest",
+          "path": "knowledge/tests/test_knowledge_records.py",
+          "name": "KnowledgeRecordTests.test_capability_growth_does_not_raise_authorization_alone"
+        },
+        {
+          "kind": "unittest",
+          "path": "engineering_doctor/tests/test_registry.py",
+          "name": "RegistrySemanticTests.test_capability_growth_does_not_raise_tool_authorization_alone"
+        },
+        {
+          "kind": "unittest",
+          "path": "knowledge/tests/test_knowledge_records.py",
+          "name": "KnowledgeRecordTests.test_permission_only_growth_requires_human_decision"
+        },
+        {
+          "kind": "unittest",
+          "path": "knowledge/tests/test_knowledge_records.py",
+          "name": "KnowledgeRecordTests.test_authorization_only_growth_requires_human_decision"
+        },
+        {
+          "kind": "unittest",
+          "path": "knowledge/tests/test_knowledge_records.py",
+          "name": "KnowledgeRecordTests.test_self_authorization_by_own_id_is_rejected"
+        }
+      ]
+    }
+  ],
+  "test_locators": [
+    {
+      "kind": "unittest_dir",
+      "path": "knowledge/tests",
+      "command": "python -m unittest discover -s knowledge/tests -t . -v"
+    }
+  ],
+  "evidence_ids": [
+    "ev-003"
+  ],
+  "known_limitations": [
+    "Status is LIMITED / PUBLIC_CANDIDATE; this is not a completed product or an authorized release.",
+    "The validator enforces the declared Rule 1 digest, assessment, and update-path checks on recorded artifacts. It does not prove a tool can never cause harm.",
+    "A pass is not authorization, scientific validation, or independent verification.",
+    "This tool reads records and reports errors. It does not grant permissions or raise authorization."
+  ],
+  "does_not_authorize": "A pass is not authorization, scientific validation, or independent verification.",
+  "private_evidence_note": "This validator is public. No additional private evidence record is copied into this registry for tool-002.",
+  "rule_1": {
+    "id": "RULE-1",
+    "digest": "b029644d741d99dab4bfcdd0d28f25a03dad67dff0a8032f2b999109f7d31317"
+  },
+  "capabilities": [
+    "validate_knowledge_records",
+    "enforce_rule_1_digest",
+    "reject_rule_1_mutations",
+    "separate_authorization_from_test_pass"
+  ],
+  "permissions": [],
+  "authorization": {
+    "status": "NOT_AUTHORIZED",
+    "inferred_from_test_pass": false
+  },
+  "rule_1_assessment": {
+    "revision": 1,
+    "protections": [
+      {
+        "id": "P1",
+        "title": "Protect life",
+        "status": "not-applicable-with-reason",
+        "reason": "The knowledge validator does not act on humans or other living beings. Cited evidence: ev-003.",
+        "reason_ref": {
+          "kind": "evidence",
+          "id": "ev-003"
+        }
+      },
+      {
+        "id": "P2",
+        "title": "Protect existence",
+        "status": "not-applicable-with-reason",
+        "reason": "The validator reads records and reports errors. It does not modify scanned trees or perform destructive actions. Cited evidence: ev-003.",
+        "reason_ref": {
+          "kind": "evidence",
+          "id": "ev-003"
+        }
+      },
+      {
+        "id": "P3",
+        "title": "Respect rights and dignity",
+        "status": "addressed",
+        "evidence_locators": [
+          {
+            "kind": "unittest",
+            "path": "knowledge/tests/test_knowledge_records.py",
+            "name": "KnowledgeRecordTests.test_interpretation_cannot_be_marked_as_source_text"
+          },
+          {
+            "kind": "unittest",
+            "path": "knowledge/tests/test_knowledge_records.py",
+            "name": "KnowledgeRecordTests.test_authorization_cannot_be_set_from_a_test_pass"
+          }
+        ]
+      },
+      {
+        "id": "P4",
+        "title": "Prevent uncontrolled consequences",
+        "status": "addressed",
+        "evidence_locators": [
+          {
+            "kind": "unittest",
+            "path": "knowledge/tests/test_knowledge_records.py",
+            "name": "KnowledgeRecordTests.test_proposed_change_that_touches_rule_1_is_rejected"
+          },
+          {
+            "kind": "unittest",
+            "path": "knowledge/tests/test_knowledge_records.py",
+            "name": "KnowledgeRecordTests.test_capability_growth_does_not_raise_authorization_alone"
+          },
+          {
+            "kind": "unittest",
+            "path": "knowledge/tests/test_knowledge_records.py",
+            "name": "KnowledgeRecordTests.test_altered_rule_1_text_is_rejected"
+          }
+        ]
+      },
+      {
+        "id": "P5",
+        "title": "Preserve accountability",
+        "status": "addressed",
+        "evidence_locators": [
+          {
+            "kind": "unittest",
+            "path": "knowledge/tests/test_knowledge_records.py",
+            "name": "KnowledgeRecordTests.test_source_digest_mismatch_is_detected"
+          },
+          {
+            "kind": "unittest",
+            "path": "knowledge/tests/test_knowledge_records.py",
+            "name": "KnowledgeRecordTests.test_correction_keeps_prior_version"
+          },
+          {
+            "kind": "unittest",
+            "path": "knowledge/tests/test_knowledge_records.py",
+            "name": "KnowledgeRecordTests.test_working_principle_is_not_in_rule_1_digest"
+          }
+        ]
+      },
+      {
+        "id": "P6",
+        "title": "Stop when safety cannot be established",
+        "status": "addressed",
+        "evidence_locators": [
+          {
+            "kind": "unittest",
+            "path": "knowledge/tests/test_knowledge_records.py",
+            "name": "KnowledgeRecordTests.test_omitted_rule_1_is_rejected"
+          },
+          {
+            "kind": "unittest",
+            "path": "knowledge/tests/test_knowledge_records.py",
+            "name": "KnowledgeRecordTests.test_mismatched_rule_1_digest_on_record_is_rejected"
+          },
+          {
+            "kind": "unittest",
+            "path": "knowledge/tests/test_knowledge_records.py",
+            "name": "KnowledgeRecordTests.test_open_protection_is_unaddressed_and_rejected"
+          },
+          {
+            "kind": "unittest",
+            "path": "knowledge/tests/test_knowledge_records.py",
+            "name": "KnowledgeRecordTests.test_accepted_without_decision_fails"
+          }
+        ]
+      }
+    ]
+  }
+}

@@ -1,0 +1,124 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "$id": "universalis.evidence-record/v0.1",
+  "title": "Universalis evidence record v0.1",
+  "description": "Public evidence record. additionalProperties is false. Records must not include score or confidence fields.",
+  "type": "object",
+  "additionalProperties": false,
+  "required": [
+    "schema_id",
+    "schema_version",
+    "id",
+    "kind",
+    "tool_ids",
+    "title",
+    "description",
+    "locator",
+    "reproducible",
+    "classification",
+    "does_not_authorize"
+  ],
+  "properties": {
+    "schema_id": {
+      "const": "universalis.evidence-record"
+    },
+    "schema_version": {
+      "const": "0.1.0"
+    },
+    "id": {
+      "type": "string",
+      "pattern": "^ev-[0-9]{3,}$"
+    },
+    "kind": {
+      "type": "string",
+      "enum": [
+        "unittest_suite",
+        "ci_run"
+      ]
+    },
+    "tool_ids": {
+      "type": "array",
+      "minItems": 1,
+      "items": {
+        "type": "string",
+        "pattern": "^tool-[0-9]{3,}$"
+      }
+    },
+    "title": {
+      "type": "string",
+      "minLength": 1
+    },
+    "description": {
+      "type": "string",
+      "minLength": 1
+    },
+    "locator": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": [
+        "kind"
+      ],
+      "properties": {
+        "kind": {
+          "type": "string",
+          "enum": [
+            "local_path",
+            "github_actions_run"
+          ]
+        },
+        "path": {
+          "type": "string",
+          "minLength": 1
+        },
+        "command": {
+          "type": "string",
+          "minLength": 1
+        },
+        "url": {
+          "type": "string",
+          "minLength": 1,
+          "pattern": "^https://"
+        },
+        "run_id": {
+          "type": "string",
+          "minLength": 1
+        },
+        "head_sha": {
+          "type": "string",
+          "pattern": "^[0-9a-f]{40}$"
+        },
+        "workflow_name": {
+          "type": "string",
+          "minLength": 1
+        },
+        "event": {
+          "type": "string",
+          "minLength": 1
+        },
+        "conclusion": {
+          "type": "string",
+          "enum": [
+            "success",
+            "failure",
+            "cancelled",
+            "skipped"
+          ]
+        }
+      }
+    },
+    "reproducible": {
+      "type": "boolean",
+      "const": true
+    },
+    "classification": {
+      "type": "string",
+      "enum": [
+        "PUBLIC"
+      ]
+    },
+    "does_not_authorize": {
+      "type": "string",
+      "minLength": 1
+    }
+  }
+}
