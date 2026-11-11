@@ -47,7 +47,7 @@
     },
     {
       "id": "REQ-SAFE-03",
-      "summary": "Do not raise authorization or permissions when a capability set grows unless a human decision is cited and Rule 1 is reassessed.",
+      "summary": "Do not raise authorization or permissions unless a human decision is cited and Rule 1 is reassessed, whether or not the capability set also grew.",
       "test_locators": [
         {
           "kind": "unittest",
@@ -58,6 +58,21 @@
           "kind": "unittest",
           "path": "engineering_doctor/tests/test_registry.py",
           "name": "RegistrySemanticTests.test_capability_growth_does_not_raise_tool_authorization_alone"
+        },
+        {
+          "kind": "unittest",
+          "path": "knowledge/tests/test_knowledge_records.py",
+          "name": "KnowledgeRecordTests.test_permission_only_growth_requires_human_decision"
+        },
+        {
+          "kind": "unittest",
+          "path": "knowledge/tests/test_knowledge_records.py",
+          "name": "KnowledgeRecordTests.test_authorization_only_growth_requires_human_decision"
+        },
+        {
+          "kind": "unittest",
+          "path": "knowledge/tests/test_knowledge_records.py",
+          "name": "KnowledgeRecordTests.test_self_authorization_by_own_id_is_rejected"
         }
       ]
     }
@@ -102,13 +117,21 @@
         "id": "P1",
         "title": "Protect life",
         "status": "not-applicable-with-reason",
-        "reason": "The knowledge validator does not act on humans or other living beings."
+        "reason": "The knowledge validator does not act on humans or other living beings. Cited evidence: ev-003.",
+        "reason_ref": {
+          "kind": "evidence",
+          "id": "ev-003"
+        }
       },
       {
         "id": "P2",
         "title": "Protect existence",
         "status": "not-applicable-with-reason",
-        "reason": "The validator reads records and reports errors. It does not modify scanned trees or perform destructive actions."
+        "reason": "The validator reads records and reports errors. It does not modify scanned trees or perform destructive actions. Cited evidence: ev-003.",
+        "reason_ref": {
+          "kind": "evidence",
+          "id": "ev-003"
+        }
       },
       {
         "id": "P3",

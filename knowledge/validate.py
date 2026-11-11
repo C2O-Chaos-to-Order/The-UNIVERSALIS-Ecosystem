@@ -147,13 +147,21 @@ def check_sources(record: dict[str, Any], repo_root: Path, *, label: str) -> lis
         local = Path(repo_root) / path
         checked = False
         if isinstance(commit, str) and commit:
-            blob = git_blob_sha256(repo_root, commit, path)
-            if blob is not None:
-                checked = True
-                if blob != digest:
-                    errors.append(
-                        f"{prefix}: sha256 does not match git object {commit}:{path}"
-                    )
+            compact = commit.strip().lower().replace("_", "-")
+            if compact in {"working-tree", "workingtree"} or re.fullmatch(
+                r"(?:[0-9a-f]{40}|[0-9a-f]{64})", commit
+            ) is None:
+                errors.append(
+                    f"{prefix}: commit must be a 40- or 64-character lowercase hexadecimal SHA, not {commit!r}"
+                )
+            else:
+                blob = git_blob_sha256(repo_root, commit, path)
+                if blob is not None:
+                    checked = True
+                    if blob != digest:
+                        errors.append(
+                            f"{prefix}: sha256 does not match git object {commit}:{path}"
+                        )
         if local.is_file():
             actual = sha256_bytes(local.read_bytes())
             if actual != digest:

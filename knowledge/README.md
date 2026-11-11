@@ -28,9 +28,10 @@ knowledge-record tests in this package.
 The validator applies Rule 1 recursively to itself. Publicly that is `tool-002`.
 The same assessment is also stored in [`SELF_ASSESSMENT.json`](SELF_ASSESSMENT.json).
 
-Capability growth cannot raise authorization or permissions in the same change
-unless a cited human decision record is present and the Rule 1 assessment is
-re-done. That rule enforces the companion working principle in
+Authorization or permission growth cannot occur in the same change, whether or
+not the capability set also grew, unless a cited human decision record is
+present and the Rule 1 assessment is re-done. A record may not cite its own id
+as that decision. The decision check does not verify signatures or authority. That rule enforces the companion working principle in
 `foundation/ASCENDENCE_RESPONSIBILITY.md`. The principle is not part of the
 RULE-1 digest and is not a Research Plan amendment. Mapping it onto the phase
 axis (Ascendence → Transcendence) is an interpretation only.

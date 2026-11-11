@@ -10,4 +10,4 @@ You don't transcend responsibility; you transcend the limitations that prevent y
 
 ## Enforcement
 
-A tool record or knowledge record whose capability set grows must not have its authorization or permissions grow in the same change, unless a cited human decision record is present and the Rule 1 assessment is re-done. A capability increase alone never raises authorization.
+A tool record or knowledge record must not grow its authorization or permissions unless a cited human decision record is present and the Rule 1 assessment is re-done, whether or not the capability set also grew. A capability increase alone never raises authorization. The cited human decision is a structural reference only; this check does not verify a signature or that the cited party had authority.

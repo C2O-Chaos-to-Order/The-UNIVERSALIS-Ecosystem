@@ -131,7 +131,11 @@
         "id": "P1",
         "title": "Protect life",
         "status": "not-applicable-with-reason",
-        "reason": "The Engineering Doctor has no capability to act on humans or other living beings. This is not a claim that software cannot cause downstream harm."
+        "reason": "The Engineering Doctor has no capability to act on humans or other living beings. This is not a claim that software cannot cause downstream harm. Cited evidence: ev-001.",
+        "reason_ref": {
+          "kind": "evidence",
+          "id": "ev-001"
+        }
       },
       {
         "id": "P2",

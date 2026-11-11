@@ -397,6 +397,54 @@ class RegistrySemanticTests(unittest.TestCase):
             [],
         )
 
+
+    def test_permission_only_growth_requires_human_decision(self) -> None:
+        from foundation.invariant import check_capability_authorization_growth
+
+        tool = load_json(TOOL_001_PATH)
+        permitted = copy.deepcopy(tool)
+        permitted["permissions"] = list(tool["permissions"]) + ["write_external_systems"]
+        errors = check_capability_authorization_growth(tool, permitted, label="permitted")
+        self.assertTrue(
+            any("authorization or permission increase" in error for error in errors),
+            errors,
+        )
+
+    def test_authorization_only_growth_requires_human_decision(self) -> None:
+        from foundation.invariant import check_capability_authorization_growth
+
+        tool = load_json(TOOL_001_PATH)
+        raised = copy.deepcopy(tool)
+        raised["authorization"] = {
+            "status": "AUTHORIZED",
+            "inferred_from_test_pass": False,
+        }
+        errors = check_capability_authorization_growth(tool, raised, label="raised")
+        self.assertTrue(
+            any("authorization or permission increase" in error for error in errors),
+            errors,
+        )
+
+    def test_self_authorization_by_own_id_is_rejected(self) -> None:
+        from foundation.invariant import check_capability_authorization_growth
+
+        tool = load_json(TOOL_001_PATH)
+        raised = copy.deepcopy(tool)
+        raised["authorization"] = {
+            "status": "AUTHORIZED",
+            "inferred_from_test_pass": False,
+        }
+        raised["decision_record"] = {
+            "kind": "human_authorization",
+            "id": tool["id"],
+            "note": "Synthetic self-authorization attempt.",
+        }
+        raised["rule_1_assessment"] = copy.deepcopy(tool["rule_1_assessment"])
+        raised["rule_1_assessment"]["revision"] = int(tool["rule_1_assessment"]["revision"]) + 1
+        raised["rule_1_assessment"]["reassessed_for"] = "authorization status AUTHORIZED"
+        errors = check_capability_authorization_growth(tool, raised, label="self")
+        self.assertTrue(any("self-authorization" in error for error in errors), errors)
+
     def test_tool_002_public_fields(self) -> None:
         record = load_json(REPO_ROOT / "registry" / "tools" / "tool-002.json")
         self.assertEqual(record["id"], "tool-002")

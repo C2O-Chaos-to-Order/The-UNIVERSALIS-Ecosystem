@@ -14,6 +14,7 @@ from foundation.invariant import (
     canonical_rule_1_digest,
     canonical_rule_1_text,
     check_capability_authorization_growth,
+    check_rule_1_assessment,
     check_rule_1_document,
     extract_canonical_text,
     sha256_text,
@@ -215,6 +216,133 @@ class KnowledgeRecordTests(unittest.TestCase):
         self.assertIn("Where Rule 1 is not enforced", readme)
         knowledge_readme = (ROOT / "knowledge" / "README.md").read_text(encoding="utf-8")
         self.assertIn("A pass is not authorization", knowledge_readme)
+
+
+    def test_placeholder_and_empty_na_reasons_are_rejected(self) -> None:
+        _, record = shipped_records()[0]
+        for placeholder in ("n/a", "none", "tbd", "   ", ""):
+            mutated = deepcopy(record)
+            mutated["rule_1_assessment"]["protections"][0]["reason"] = placeholder
+            errors = check_rule_1_assessment(mutated, ROOT, label="mutated")
+            self.assertTrue(errors, (placeholder, errors))
+
+    def test_duplicate_na_reasons_are_rejected(self) -> None:
+        _, record = shipped_records()[0]
+        mutated = deepcopy(record)
+        shared = (
+            "This record stores citations and a proposed interpretation. "
+            "It has no capability to act on humans or other living beings. "
+            "Cited evidence: ev-003."
+        )
+        mutated["rule_1_assessment"]["protections"][0]["reason"] = shared
+        mutated["rule_1_assessment"]["protections"][0]["reason_ref"] = {
+            "kind": "evidence",
+            "id": "ev-003",
+        }
+        mutated["rule_1_assessment"]["protections"][1]["reason"] = shared
+        mutated["rule_1_assessment"]["protections"][1]["reason_ref"] = {
+            "kind": "evidence",
+            "id": "ev-003",
+        }
+        errors = check_rule_1_assessment(mutated, ROOT, label="mutated")
+        self.assertTrue(any("duplicates" in error for error in errors), errors)
+
+    def test_na_reason_without_existing_evidence_ref_is_rejected(self) -> None:
+        _, record = shipped_records()[0]
+        mutated = deepcopy(record)
+        mutated["rule_1_assessment"]["protections"][0].pop("reason_ref", None)
+        errors = check_rule_1_assessment(mutated, ROOT, label="mutated")
+        self.assertTrue(any("reason_ref" in error for error in errors), errors)
+        mutated["rule_1_assessment"]["protections"][0]["reason"] = (
+            "This record stores citations and a proposed interpretation. "
+            "It has no capability to act on humans or other living beings. "
+            "Cited evidence: ev-999."
+        )
+        mutated["rule_1_assessment"]["protections"][0]["reason_ref"] = {
+            "kind": "evidence",
+            "id": "ev-999",
+        }
+        errors = check_rule_1_assessment(mutated, ROOT, label="mutated")
+        self.assertTrue(any("ev-999" in error and "not found" in error for error in errors), errors)
+
+    def test_permission_only_growth_requires_human_decision(self) -> None:
+        _, record = shipped_records()[0]
+        permitted = deepcopy(record)
+        permitted["permissions"] = list(record["permissions"]) + ["write_external_systems"]
+        errors = check_capability_authorization_growth(record, permitted, label="permitted")
+        self.assertTrue(
+            any("authorization or permission increase" in error for error in errors),
+            errors,
+        )
+        next_state, update_errors = apply_proposed_update(record, permitted, ROOT, label="permitted")
+        self.assertIsNone(next_state)
+        self.assertTrue(update_errors)
+
+        approved = deepcopy(permitted)
+        approved["decision_record"] = {
+            "kind": "human_authorization",
+            "id": "DEC-TEST-001",
+            "note": "Synthetic fixture for the permission-only path.",
+        }
+        approved["rule_1_assessment"] = deepcopy(record["rule_1_assessment"])
+        approved["rule_1_assessment"]["revision"] = int(record["rule_1_assessment"]["revision"]) + 1
+        approved["rule_1_assessment"]["reassessed_for"] = "write_external_systems"
+        self.assertEqual(
+            check_capability_authorization_growth(record, approved, label="approved"),
+            [],
+        )
+
+    def test_authorization_only_growth_requires_human_decision(self) -> None:
+        _, record = shipped_records()[0]
+        raised = deepcopy(record)
+        raised["authorization"] = {
+            "status": "AUTHORIZED",
+            "inferred_from_test_pass": False,
+        }
+        errors = check_capability_authorization_growth(record, raised, label="raised")
+        self.assertTrue(
+            any("authorization or permission increase" in error for error in errors),
+            errors,
+        )
+
+        approved = deepcopy(raised)
+        approved["decision_record"] = {
+            "kind": "human_authorization",
+            "id": "DEC-TEST-001",
+            "note": "Synthetic fixture for the authorization-only path.",
+        }
+        approved["rule_1_assessment"] = deepcopy(record["rule_1_assessment"])
+        approved["rule_1_assessment"]["revision"] = int(record["rule_1_assessment"]["revision"]) + 1
+        approved["rule_1_assessment"]["reassessed_for"] = "authorization status AUTHORIZED"
+        self.assertEqual(
+            check_capability_authorization_growth(record, approved, label="approved"),
+            [],
+        )
+
+    def test_self_authorization_by_own_id_is_rejected(self) -> None:
+        _, record = shipped_records()[0]
+        raised = deepcopy(record)
+        raised["authorization"] = {
+            "status": "AUTHORIZED",
+            "inferred_from_test_pass": False,
+        }
+        raised["decision_record"] = {
+            "kind": "human_authorization",
+            "id": record["record_id"],
+            "note": "Synthetic self-authorization attempt.",
+        }
+        raised["rule_1_assessment"] = deepcopy(record["rule_1_assessment"])
+        raised["rule_1_assessment"]["revision"] = int(record["rule_1_assessment"]["revision"]) + 1
+        raised["rule_1_assessment"]["reassessed_for"] = "authorization status AUTHORIZED"
+        errors = check_capability_authorization_growth(record, raised, label="self")
+        self.assertTrue(any("self-authorization" in error for error in errors), errors)
+
+    def test_working_tree_source_commit_is_rejected(self) -> None:
+        _, record = shipped_records()[0]
+        mutated = deepcopy(record)
+        mutated["knowledge"]["sources"][0]["commit"] = "working-tree"
+        errors = semantic_errors(mutated, ROOT, label="mutated")
+        self.assertTrue(any("working-tree" in error for error in errors), errors)
 
     def test_principles_are_short_paraphrases(self) -> None:
         for path, record in shipped_records():

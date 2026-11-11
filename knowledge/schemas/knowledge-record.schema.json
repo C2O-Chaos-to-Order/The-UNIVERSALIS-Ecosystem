@@ -105,7 +105,29 @@
                 ]
               },
               "reason": {
-                "type": "string"
+                "type": "string",
+                "minLength": 1
+              },
+              "reason_ref": {
+                "type": "object",
+                "additionalProperties": false,
+                "required": [
+                  "kind",
+                  "id"
+                ],
+                "properties": {
+                  "kind": {
+                    "type": "string",
+                    "enum": [
+                      "evidence",
+                      "human_decision"
+                    ]
+                  },
+                  "id": {
+                    "type": "string",
+                    "minLength": 1
+                  }
+                }
               },
               "evidence_locators": {
                 "type": "array",
@@ -134,9 +156,9 @@
                       "minLength": 1
                     },
                     "commit": {
-                      "type": "string",
-                      "minLength": 1
-                    }
+                "type": "string",
+                "pattern": "^[0-9a-f]{40}$|^[0-9a-f]{64}$"
+              }
                   }
                 }
               }
@@ -205,7 +227,7 @@
               },
               "commit": {
                 "type": "string",
-                "minLength": 1
+                "pattern": "^[0-9a-f]{40}$|^[0-9a-f]{64}$"
               },
               "sha256": {
                 "type": "string",
@@ -302,9 +324,9 @@
                   "minLength": 1
                 },
                 "commit": {
-                  "type": "string",
-                  "minLength": 1
-                }
+                "type": "string",
+                "pattern": "^[0-9a-f]{40}$|^[0-9a-f]{64}$"
+              }
               }
             }
           }
@@ -340,9 +362,9 @@
             "minLength": 1
           },
           "commit": {
-            "type": "string",
-            "minLength": 1
-          }
+                "type": "string",
+                "pattern": "^[0-9a-f]{40}$|^[0-9a-f]{64}$"
+              }
         }
       }
     },
@@ -388,7 +410,7 @@
               },
               "commit": {
                 "type": "string",
-                "minLength": 1
+                "pattern": "^[0-9a-f]{40}$|^[0-9a-f]{64}$"
               }
             }
           }

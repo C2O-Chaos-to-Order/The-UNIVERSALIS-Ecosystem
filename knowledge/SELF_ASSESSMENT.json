@@ -13,13 +13,21 @@
         "id": "P1",
         "title": "Protect life",
         "status": "not-applicable-with-reason",
-        "reason": "The knowledge validator does not act on humans or other living beings."
+        "reason": "The knowledge validator does not act on humans or other living beings. Cited evidence: ev-003.",
+        "reason_ref": {
+          "kind": "evidence",
+          "id": "ev-003"
+        }
       },
       {
         "id": "P2",
         "title": "Protect existence",
         "status": "not-applicable-with-reason",
-        "reason": "The validator reads records and reports errors. It does not modify scanned trees or perform destructive actions."
+        "reason": "The validator reads records and reports errors. It does not modify scanned trees or perform destructive actions. Cited evidence: ev-003.",
+        "reason_ref": {
+          "kind": "evidence",
+          "id": "ev-003"
+        }
       },
       {
         "id": "P3",

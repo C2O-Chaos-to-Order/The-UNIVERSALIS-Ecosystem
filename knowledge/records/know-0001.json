@@ -13,13 +13,21 @@
         "id": "P1",
         "title": "Protect life",
         "status": "not-applicable-with-reason",
-        "reason": "This record stores citations and a proposed interpretation. It has no capability to act on humans or other living beings."
+        "reason": "This record stores citations and a proposed interpretation. It has no capability to act on humans or other living beings. Cited evidence: ev-003.",
+        "reason_ref": {
+          "kind": "evidence",
+          "id": "ev-003"
+        }
       },
       {
         "id": "P2",
         "title": "Protect existence",
         "status": "not-applicable-with-reason",
-        "reason": "This record does not perform actions against people, communities, ecosystems, or infrastructure."
+        "reason": "This record does not perform actions against people, communities, ecosystems, or infrastructure. Cited evidence: ev-003.",
+        "reason_ref": {
+          "kind": "evidence",
+          "id": "ev-003"
+        }
       },
       {
         "id": "P3",
@@ -108,7 +116,7 @@
         "source_id": "SYN-PROV-01",
         "role": "synthetic",
         "path": "knowledge/fixtures/src-syn-prov.txt",
-        "commit": "working-tree",
+        "commit": "6269294d73ebf2e599fbc8c85e8d5020b042da81",
         "sha256": "505e74b7ac52cb79bcd29266147794218bde36e16098353c534b34c58007cb76"
       }
     ]
