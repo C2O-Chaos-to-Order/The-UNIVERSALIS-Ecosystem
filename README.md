@@ -55,6 +55,8 @@ A pass is not authorization, scientific validation, or independent verification.
 
 Two things are in this repository. The first is a bounded, local-first, read-only continuity prototype. The second is a research and evidence scaffold: a package format, schemas, and validation tools intended to hold research records once that research exists. Neither is an accepted implementation or a research result.
 
+The separate Engineering Doctor and Tool Registry sections above describe their own limited tools; they do not upgrade the scaffold or prototype to accepted status or demonstrate an end-to-end research workflow.
+
 ### What exists and has been executed
 
 | Component | What it does | How far it is verified |
