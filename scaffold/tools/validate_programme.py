@@ -1866,10 +1866,11 @@ def check_public_source_repository(data: dict, reasons: dict[str, list[str]]) ->
     sources = [item for item in (data.get("sources") or []) if isinstance(item, dict)]
     located = [item for item in sources if git_locator_fields(item)]
     if located and package_repo is None:
+        source_ids = ", ".join(str(item.get("id")) for item in located)
         bucket.append(
             "PUBLIC_SOURCE_REPOSITORY: metadata/programme_status.json must declare "
             "repository so public-release can check whether Git locators belong "
-            "to this package's own public repository"
+            f"to this package's own public repository; affected sources: {source_ids}"
         )
     for source in located:
         source_id = source.get("id")
@@ -1879,11 +1880,18 @@ def check_public_source_repository(data: dict, reasons: dict[str, list[str]]) ->
             for field in ("repository", "path", "commit", "blob_sha")
         )
         if not complete:
-            bucket.append(
-                f"PUBLIC_SOURCE_REPOSITORY: source {source_id} has an incomplete "
-                f"D09 Git locator ({', '.join(fields)}); public-release requires "
-                "repository, path, commit, and blob_sha together"
-            )
+            missing = [
+                field for field in ("repository", "path", "commit", "blob_sha")
+                if not isinstance(source.get(field), str) or not source.get(field).strip()
+            ]
+            labels = {"repository": "a repository", "path": "a path"}
+            for field in missing:
+                label = labels.get(field, field)
+                bucket.append(
+                    f"PUBLIC_SOURCE_REPOSITORY: source {source_id} is git-located "
+                    f"but does not declare {label}; D09 requires repository, path, "
+                    "commit, and blob_sha together"
+                )
         if owner_exception_names_source(decisions, source_id):
             continue
         source_repo = declared_repository(source.get("repository"))
