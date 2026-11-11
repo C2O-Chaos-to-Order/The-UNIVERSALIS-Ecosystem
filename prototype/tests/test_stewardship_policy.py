@@ -1,8 +1,11 @@
 """Focused tests for the advisory stewardship policy."""
 import unittest
+from datetime import datetime, timezone
+
 from universalis.stewardship import (
-    DelegationContract, Gate, Likelihood, RestorationEvidence, Severity,
-    StewardshipCase, evaluate_case, evaluate_restoration,
+    DelegationContract, Gate, Likelihood, ProhibitionReference,
+    RestorationEvidence, Severity, StewardshipCase, evaluate_case,
+    evaluate_restoration,
 )
 
 
@@ -58,11 +61,58 @@ class PolicyTests(unittest.TestCase):
         self.assertIs(result.gate, Gate.HALT)
         self.assertTrue(result.decision_maker_recusal_required)
 
-    def test_prohibited_action_is_denied(self):
+    def prohibition(self, **changes):
+        values = dict(
+            rule_id="POLICY-17",
+            source_id="SRC-POLICY-17",
+            source_version="1.0",
+            source_locator="governance/policies/POLICY-17.md#section-4",
+            authority_id="human-governance-board",
+            decision_record_ref="decisions/DEC-17.json",
+            human_reviewed=True,
+            non_overridable=True,
+        )
+        values.update(changes)
+        return ProhibitionReference(**values)
+
+    def test_unreviewed_prohibition_reference_pauses_instead_of_prohibiting(self):
         result = evaluate_case(case(
-            non_overridable_prohibition="POLICY-17"
+            prohibition_reference=self.prohibition(human_reviewed=False)
         ))
+        self.assertIs(result.gate, Gate.PAUSE)
+        self.assertTrue(result.independent_review_required)
+        self.assertFalse(result.execution_authorized)
+        self.assertIn("prohibition_basis_not_human_reviewed", result.reason_codes)
+
+    def test_human_reviewed_prohibition_requires_a_source_and_decision_reference(self):
+        result = evaluate_case(case(prohibition_reference=self.prohibition()))
         self.assertIs(result.gate, Gate.PROHIBITED)
+        self.assertFalse(result.execution_authorized)
+        self.assertIn(
+            "human_reviewed_non_overridable_prohibition_applies",
+            result.reason_codes,
+        )
+
+    def test_raw_prohibition_string_is_not_accepted_as_authority(self):
+        with self.assertRaises(TypeError):
+            case(prohibition_reference="POLICY-17")
+
+    def test_reviewed_but_overridable_rule_does_not_prohibit(self):
+        result = evaluate_case(case(
+            prohibition_reference=self.prohibition(non_overridable=False)
+        ))
+        self.assertIs(result.gate, Gate.CLEAR)
+        self.assertFalse(result.execution_authorized)
+
+    def test_imminent_harm_without_high_confidence_pauses_for_review(self):
+        result = evaluate_case(case(
+            severity=Severity.HIGH,
+            likelihood=Likelihood.UNKNOWN,
+            imminent_harm=True,
+            mitigations=("sandbox",),
+        ))
+        self.assertIs(result.gate, Gate.PAUSE)
+        self.assertIn("imminent_harm_requires_human_review", result.reason_codes)
 
     def test_missing_evidence_pauses(self):
         self.assertIs(
@@ -127,6 +177,15 @@ class DelegationTests(unittest.TestCase):
     def test_expiry_must_be_timezone_aware(self):
         with self.assertRaises(ValueError):
             self.contract(expires_at="2026-12-31T23:59:59")
+
+    def test_expired_contract_is_not_active(self):
+        contract = self.contract(expires_at="2026-01-01T00:00:00Z")
+        self.assertFalse(contract.is_active(datetime(2026, 1, 1, tzinfo=timezone.utc)))
+
+    def test_timezone_naive_comparison_time_is_refused(self):
+        contract = self.contract()
+        with self.assertRaises(ValueError):
+            contract.is_active(datetime(2026, 1, 1))
 
 
 if __name__ == "__main__":
