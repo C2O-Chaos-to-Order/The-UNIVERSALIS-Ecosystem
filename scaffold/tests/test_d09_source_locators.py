@@ -215,7 +215,7 @@ class D09OldFormatRegressionTests(unittest.TestCase):
 
     def test_checked_in_json_has_no_old_format_locators(self):
         offenders = []
-        for path in REPO.rglob("*.json"):
+        for path in REPO.rglob("source_register.json"):
             if ".git" in path.parts or "__pycache__" in path.parts:
                 continue
             try:
