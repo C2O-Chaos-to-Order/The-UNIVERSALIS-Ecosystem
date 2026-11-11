@@ -18,6 +18,10 @@ This repository must contain only material approved for public release under the
 
 No automatic mirroring or synchronization from C2O is permitted. Any future interoperability must use a separately reviewed and authorized interface that preserves identity, data, permission, ownership, audit, and revocation boundaries.
 
+## Public repository catalog
+
+The [UNIVERSALIS Public Repository Catalog and Integration Contract](ARCHITECTURE/UNIVERSALIS_PUBLIC_REPOSITORY_CATALOG_v0.1.0.md) identifies the public product, research, ontology, Human/Intelligence domain, and encyclopedia repositories. It defines public-only source, provenance, version, and compatibility boundaries. It does not list or expose private-source repository identities or grant source-transfer authorization.
+
 ## Engineering Doctor
 
 **Status: LIMITED**
