@@ -181,7 +181,7 @@ class D09ValidationTests(unittest.TestCase):
         code, payload, stderr = self._run([entry])
         self.assertNotEqual(code, 0)
         reasons = self._traceability(payload)
-        self.assertIn("does not declare path", reasons)
+        self.assertIn("does not declare a path", reasons)
         self.assertIn("does not declare commit", reasons)
         self.assertIn("does not declare blob_sha", reasons)
 
@@ -190,7 +190,7 @@ class D09ValidationTests(unittest.TestCase):
         code, payload, stderr = self._run([entry])
         self.assertNotEqual(code, 0)
         reasons = self._traceability(payload)
-        self.assertIn("does not declare repository", reasons)
+        self.assertIn("does not declare a repository", reasons)
         self.assertIn("does not declare commit", reasons)
         self.assertIn("does not declare blob_sha", reasons)
 
