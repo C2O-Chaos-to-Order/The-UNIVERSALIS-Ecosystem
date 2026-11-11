@@ -1,0 +1,250 @@
+{
+  "schema_id": "universalis.knowledge-record",
+  "schema_version": "0.1.0",
+  "record_id": "KNOW-0003",
+  "rule_1": {
+    "id": "RULE-1",
+    "digest": "b029644d741d99dab4bfcdd0d28f25a03dad67dff0a8032f2b999109f7d31317"
+  },
+  "rule_1_assessment": {
+    "revision": 1,
+    "protections": [
+      {
+        "id": "P1",
+        "title": "Protect life",
+        "status": "not-applicable-with-reason",
+        "reason": "This record stores citations and a proposed interpretation. It has no capability to act on humans or other living beings. Cited evidence: ev-003.",
+        "reason_ref": {
+          "kind": "evidence",
+          "id": "ev-003"
+        }
+      },
+      {
+        "id": "P2",
+        "title": "Protect existence",
+        "status": "not-applicable-with-reason",
+        "reason": "This record does not perform actions against people, communities, ecosystems, or infrastructure. Cited evidence: ev-003.",
+        "reason_ref": {
+          "kind": "evidence",
+          "id": "ev-003"
+        }
+      },
+      {
+        "id": "P3",
+        "title": "Respect rights and dignity",
+        "status": "addressed",
+        "evidence_locators": [
+          {
+            "kind": "unittest",
+            "path": "knowledge/tests/test_knowledge_records.py",
+            "name": "KnowledgeRecordTests.test_interpretation_cannot_be_marked_as_source_text"
+          }
+        ]
+      },
+      {
+        "id": "P4",
+        "title": "Prevent uncontrolled consequences",
+        "status": "addressed",
+        "evidence_locators": [
+          {
+            "kind": "unittest",
+            "path": "knowledge/tests/test_knowledge_records.py",
+            "name": "KnowledgeRecordTests.test_authorization_cannot_be_set_from_a_test_pass"
+          },
+          {
+            "kind": "unittest",
+            "path": "knowledge/tests/test_knowledge_records.py",
+            "name": "KnowledgeRecordTests.test_capability_growth_does_not_raise_authorization_alone"
+          },
+          {
+            "kind": "unittest",
+            "path": "knowledge/tests/test_knowledge_records.py",
+            "name": "KnowledgeRecordTests.test_proposed_change_that_touches_rule_1_is_rejected"
+          }
+        ]
+      },
+      {
+        "id": "P5",
+        "title": "Preserve accountability",
+        "status": "addressed",
+        "evidence_locators": [
+          {
+            "kind": "unittest",
+            "path": "knowledge/tests/test_knowledge_records.py",
+            "name": "KnowledgeRecordTests.test_source_digest_mismatch_is_detected"
+          },
+          {
+            "kind": "unittest",
+            "path": "knowledge/tests/test_knowledge_records.py",
+            "name": "KnowledgeRecordTests.test_correction_keeps_prior_version"
+          }
+        ]
+      },
+      {
+        "id": "P6",
+        "title": "Stop when safety cannot be established",
+        "status": "addressed",
+        "evidence_locators": [
+          {
+            "kind": "unittest",
+            "path": "knowledge/tests/test_knowledge_records.py",
+            "name": "KnowledgeRecordTests.test_accepted_without_decision_fails"
+          },
+          {
+            "kind": "unittest",
+            "path": "knowledge/tests/test_knowledge_records.py",
+            "name": "KnowledgeRecordTests.test_open_protection_is_unaddressed_and_rejected"
+          },
+          {
+            "kind": "unittest",
+            "path": "knowledge/tests/test_knowledge_records.py",
+            "name": "KnowledgeRecordTests.test_omitted_rule_1_is_rejected"
+          }
+        ]
+      }
+    ]
+  },
+  "working_principles": [
+    {
+      "id": "WP-ASCENDENCE-01",
+      "path": "foundation/ASCENDENCE_RESPONSIBILITY.md"
+    }
+  ],
+  "knowledge": {
+    "sources": [
+      {
+        "source_id": "SYN-RECOV-01",
+        "role": "synthetic",
+        "path": "knowledge/fixtures/src-syn-recov.txt",
+        "commit": "6269294d73ebf2e599fbc8c85e8d5020b042da81",
+        "sha256": "bb09020be1f317c1b67d10e0ab017d720684a4a2df74c127dc607345e2359537"
+      }
+    ]
+  },
+  "interpretation": {
+    "status": "proposed",
+    "kind": "interpretation",
+    "principle": "Failures and earlier versions must remain visible after a correction.",
+    "not_source_text": true
+  },
+  "claim_class": "principle_interpretation",
+  "requirements": [
+    {
+      "id": "REQ-RECOV-01",
+      "summary": "Refusals, missing locators, and schema failures remain visible and are not converted into a pass.",
+      "test_locators": [
+        {
+          "kind": "unittest",
+          "path": "knowledge/tests/test_knowledge_records.py",
+          "name": "KnowledgeRecordTests.test_accepted_without_decision_fails"
+        },
+        {
+          "kind": "unittest",
+          "path": "engineering_doctor/tests/test_run.py",
+          "name": "RunTests.test_excluded_request_is_refused_and_recorded"
+        },
+        {
+          "kind": "unittest",
+          "path": "engineering_doctor/tests/test_registry.py",
+          "name": "ReferentialTests.test_missing_test_locator_is_rejected"
+        },
+        {
+          "kind": "unittest",
+          "path": "engineering_doctor/tests/test_registry.py",
+          "name": "ReferentialTests.test_missing_evidence_record_is_rejected"
+        },
+        {
+          "kind": "unittest",
+          "path": "engineering_doctor/tests/test_registry.py",
+          "name": "SchemaNegativeTests.test_missing_required_field_is_rejected"
+        }
+      ]
+    }
+  ],
+  "tests": [
+    {
+      "kind": "unittest",
+      "path": "knowledge/tests/test_knowledge_records.py",
+      "name": "KnowledgeRecordTests.test_accepted_without_decision_fails"
+    },
+    {
+      "kind": "unittest",
+      "path": "engineering_doctor/tests/test_run.py",
+      "name": "RunTests.test_excluded_request_is_refused_and_recorded"
+    },
+    {
+      "kind": "unittest",
+      "path": "engineering_doctor/tests/test_registry.py",
+      "name": "ReferentialTests.test_missing_test_locator_is_rejected"
+    },
+    {
+      "kind": "unittest",
+      "path": "engineering_doctor/tests/test_registry.py",
+      "name": "ReferentialTests.test_missing_evidence_record_is_rejected"
+    },
+    {
+      "kind": "unittest",
+      "path": "engineering_doctor/tests/test_registry.py",
+      "name": "SchemaNegativeTests.test_missing_required_field_is_rejected"
+    }
+  ],
+  "evidence": [
+    {
+      "kind": "unittest",
+      "locator": {
+        "kind": "unittest",
+        "path": "knowledge/tests/test_knowledge_records.py",
+        "name": "KnowledgeRecordTests.test_accepted_without_decision_fails"
+      }
+    },
+    {
+      "kind": "unittest",
+      "locator": {
+        "kind": "unittest",
+        "path": "engineering_doctor/tests/test_run.py",
+        "name": "RunTests.test_excluded_request_is_refused_and_recorded"
+      }
+    },
+    {
+      "kind": "unittest",
+      "locator": {
+        "kind": "unittest",
+        "path": "engineering_doctor/tests/test_registry.py",
+        "name": "ReferentialTests.test_missing_test_locator_is_rejected"
+      }
+    },
+    {
+      "kind": "unittest",
+      "locator": {
+        "kind": "unittest",
+        "path": "engineering_doctor/tests/test_registry.py",
+        "name": "ReferentialTests.test_missing_evidence_record_is_rejected"
+      }
+    },
+    {
+      "kind": "unittest",
+      "locator": {
+        "kind": "unittest",
+        "path": "engineering_doctor/tests/test_registry.py",
+        "name": "SchemaNegativeTests.test_missing_required_field_is_rejected"
+      }
+    }
+  ],
+  "limitations": [
+    "This is a proposed interpretation, not source text and not scientific validation.",
+    "A passing test cited here is not authorization.",
+    "The Rule 1 assessment records declared evidence; it does not prove this record cannot be misused.",
+    "The cited source is a synthetic public fixture, not a corpus document."
+  ],
+  "review_status": "pending",
+  "authorization": {
+    "status": "NOT_AUTHORIZED",
+    "inferred_from_test_pass": false
+  },
+  "capabilities": [
+    "cite_source_digests",
+    "record_proposed_interpretation"
+  ],
+  "permissions": [],
+  "history": []
+}
