@@ -39,7 +39,20 @@
     "python_version": { "type": "string" },
     "inputs": { "type": "object" },
     "inputs_sha256": { "type": "string", "pattern": "^[a-f0-9]{64}$" },
-    "repo_shas": { "type": "object" },
+    "repo_shas": {
+      "type": "object",
+      "additionalProperties": {
+        "type": "string",
+        "pattern": "^[a-f0-9]{40}$|^[a-f0-9]{64}$"
+      }
+    },
+    "unresolved_repo_shas": {
+      "type": "object",
+      "additionalProperties": {
+        "type": "string",
+        "minLength": 1
+      }
+    },
     "inventory": { "type": "array" },
     "suites": { "type": "array" },
     "findings": { "type": "array" },
