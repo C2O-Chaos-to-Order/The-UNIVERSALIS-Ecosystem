@@ -20,7 +20,7 @@ All commit identifiers below are the observed main-branch snapshots on 2026-11-1
 
 | Repository | Main snapshot | Current state | Canonical responsibility |
 |---|---|---|---|
-| [The-UNIVERSALIS-Ecosystem](https://github.com/C2O-Chaos-to-Order/The-UNIVERSALIS-Ecosystem) | 6679b9720f3dbf8878fddd6f5d06f776edf8f29c | Product source; LIMITED | Public product architecture, portable implementation, prototype, research/evidence scaffold, public registries, tests, developer documentation, build/verification workflows, and authorized releases. |
+| [The-UNIVERSALIS-Ecosystem](https://github.com/C2O-Chaos-to-Order/The-UNIVERSALIS-Ecosystem) | 9b183caa928857f0d1e5818cf99b37bfe1918936 | Product source; LIMITED | Public product architecture, portable implementation, prototype, research/evidence scaffold, public registries, tests, developer documentation, build/verification workflows, and authorized releases. |
 | [Research-for-the-UNIVERSALIS-Ecosystem](https://github.com/C2O-Chaos-to-Order/Research-for-the-UNIVERSALIS-Ecosystem) | 8e65021ba3e6e6c3a9333d16e98c87b00e4c6fb5 | Research workspace; 1 open PR (#8) | Public research methods, public source registers, research charters, evidence, requirements, reports, simulation protocols, independent review, and build/no-build recommendations. |
 | [The-UNIVERSALIS-Ontology](https://github.com/C2O-Chaos-to-Order/The-UNIVERSALIS-Ontology) | 96bc06a41017b83f001e69493e52a6956c746138 | Master ontology documents | Canonical public master ontology for Human and Intelligence. Markdown is the canonical text; DOCX is a companion copy. |
 | [The-UNIVERSALIS-Human-Knowledge](https://github.com/C2O-Chaos-to-Order/The-UNIVERSALIS-Human-Knowledge) | 5bb83c319c759193dfd3aed9054c5b419edf65f5 | Domain documents | Human Subjects of Knowledge (H-K). |
@@ -31,7 +31,7 @@ All commit identifiers below are the observed main-branch snapshots on 2026-11-1
 | [The-UNIVERSALIS-Intelligence-Capabilities](https://github.com/C2O-Chaos-to-Order/The-UNIVERSALIS-Intelligence-Capabilities) | d728ae02a84f97f6b0115f0db20d0355bff85800 | Domain documents | Intelligence Capabilities (I-C). |
 | [The-UNIVERSALIS-Intelligence-Skills](https://github.com/C2O-Chaos-to-Order/The-UNIVERSALIS-Intelligence-Skills) | bf8ef3f6629cdd31b78f85bac6a1fac22ef2f849 | Domain documents | Intelligence Skills (I-S). |
 | [The-UNIVERSALIS-Intelligence-Powers](https://github.com/C2O-Chaos-to-Order/The-UNIVERSALIS-Intelligence-Powers) | 1884b513281269e488d1a38ab05a97538f8d6020 | Domain documents | Intelligence Powers (I-P). |
-| [The-UNIVERSALIS-Encyclopedias](https://github.com/C2O-Chaos-to-Order/The-UNIVERSALIS-Encyclopedias) | Empty | Uninitialized | Planned public encyclopedia destination. It may contain only public-safe, rights-cleared, provenance-preserving material. |
+| [The-UNIVERSALIS-Encyclopedias](https://github.com/C2O-Chaos-to-Order/The-UNIVERSALIS-Encyclopedias) | 98320924d4adb4867cc07122cd9c276521dfbd20 | README-only bootstrap; no encyclopedia corpus | Planned public encyclopedia destination. Its initial README defines the proposed scope and release boundary only; substantive content, collection schemas, rights review, and editorial acceptance remain unstarted. |
 
 The eight Human/Intelligence domain repositories currently identify a canonical Markdown document and a companion DOCX file. The Markdown file remains authoritative when the two differ. The ontology repository follows the same canonical-text rule.
 
