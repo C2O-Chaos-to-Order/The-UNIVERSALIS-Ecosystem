@@ -1,0 +1,84 @@
+{
+  "programme_unit_id": "UNI-RP-001",
+  "checkpoint_id": "CP-04",
+  "objective_question": "Does the premise of 01.E05 survive iteration? Specifically, can a trajectory satisfy the bound while the residual bound that justifies it has already failed, so that the guarantee is vacuous before any violation is visible?",
+  "claim_class": "PROPOSED",
+  "relevant_dimensions": "formal_correctness, traceability_and_provenance",
+  "phase": "formalization",
+  "level": "BASE",
+  "method_summary": "Iterate a non-contracting squaring family from (2,0) with eps=1 and L=4 on a declared box of [-10,10], recording at each step the true error, the claimed bound, whether the point is inside the declared domain, and whether the residual is still within eps.",
+  "sources_or_inputs": "SRC-EMERALD-TECH (01.E05), SRC-EMERALD-HUMAN (clause X), SRC-EMERALD-COMPENDIUM (01.E01, 01.E02, 01.E05)",
+  "assumptions": "X is the real plane and Y the real line, all quantities dimensionless, d_Y the absolute difference, and phi the arithmetic mean, matching the tablet's own worked example in section 5. Delta is taken as F_Y(phi(x)) minus phi(F_X(x)) in absolute value. All arithmetic is exact rationals, so no floating-point tolerance is involved. The declared domain is treated as a closed box in both coordinates.",
+  "acceptance_or_falsification_criteria": "Acceptance: the bound is violated at some step, and the premise is shown to fail at or before that step, establishing that the bound cannot serve as an engineering guarantee without a forward-invariance check. Falsification: the premise holds at every step up to and including the first violation, which would mean the bound fails while its justification remains intact.",
+  "regression_links": "none",
+  "open_obligations": "Establish whether premise failure before bound failure is generic or specific to fast-growing maps.",
+  "record_id": "SIM-003",
+  "pass_type": "executed_simulation",
+  "research_record_id": "RES-003",
+  "actual_conditions": "Separate subprocess. No network. No authorization.",
+  "outcome_summary": "{\"actual\": {\"first_step_bound_violated\": 2, \"first_step_hypothesis_broken\": 1, \"first_step_outside_domain\": 2, \"hypothesis_broke_before_bound\": true, \"max_true_error\": \"9223372036854775807\"}, \"expectation_matched\": true}",
+  "raw_evidence_location": "results/SIM-003.json",
+  "uncertainty_and_limitations": "The declared domain and the chosen L are both authored inputs. A different L on the same box would change every reported step number. This expectation was CORRECTED after run 1, where my first version (steps 4, 4, 4 and max error 36) was arithmetically wrong. The hand derivation is x_n = 2^(2^n) with phi(x_n) - y_n = 2^(2^n - 1) - 1, giving 1, 7, 127, 32767, 2147483647, 2^63-1. The original wrong values remain recorded in results/run_01_original/ and results/run_01_diagnosis.json.",
+  "review_note": "Runner record only. No review performed. authorization_status remains NOT_AUTHORIZED.",
+  "evidence_status": "documented",
+  "authorization_status": "NOT_AUTHORIZED",
+  "execution_outcome": "executed",
+  "protocol_version": "1.0.0",
+  "configuration": "exact rational arithmetic; case kind domain_escape",
+  "execution_timestamp": "2026-11-01T01:02:29.372713+00:00",
+  "failure_policy": "On a crash the run is recorded with execution_outcome failed, execution_status ERROR, the exception text in error, and exit_code 1. A non-convergent model is treated the same way: no output is silently discarded and no result is back-filled after the fact.",
+  "known_answer_check": {
+    "included": false,
+    "case_id": null,
+    "detail": "No known-answer or negative-control case is defined for this authored fixture, so none was run. The recorded comparison is against the pre-authored expectation on this case only."
+  },
+  "mcse_or_precision_note": "This case is deterministic and single-run. No Monte Carlo estimate is made, so no MCSE applies; precision is exact for the authored input and is not a statement about any wider population.",
+  "environment": {
+    "python": "3.13.5 (main, Aug 10 2026, 12:06:59) [GCC 14.2.0]",
+    "platform": "Linux-6.12.94+-x86_64-with-glibc2.41"
+  },
+  "input": {
+    "kind": "domain_escape",
+    "family": "squaring",
+    "start": [
+      2,
+      0
+    ],
+    "steps": 6,
+    "epsilon": "1",
+    "L": "4",
+    "domain": [
+      -10,
+      10
+    ]
+  },
+  "expected": {
+    "first_step_outside_domain": 2,
+    "first_step_bound_violated": 2,
+    "first_step_hypothesis_broken": 1,
+    "hypothesis_broke_before_bound": true,
+    "max_true_error": "9223372036854775807"
+  },
+  "actual": {
+    "first_step_outside_domain": 2,
+    "first_step_bound_violated": 2,
+    "first_step_hypothesis_broken": 1,
+    "hypothesis_broke_before_bound": true,
+    "max_true_error": "9223372036854775807"
+  },
+  "expectation_matched": true,
+  "execution_status": "COMPLETED",
+  "outcome": "PASS",
+  "error": null,
+  "started_at": "2026-11-01T01:02:29.372713+00:00",
+  "ended_at": "2026-11-01T01:02:29.375326+00:00",
+  "duration_seconds": 0.005711076999432407,
+  "exit_code": 0,
+  "code_path": "simulations/model.py",
+  "code_sha256": "d21c2613b01655726d0c7b6e6cd3efaba3b652a9bfd1ec1c9f90dd5f383ac453",
+  "fixtures_sha256": "af61dcb345b4c00eb2dda06b59a64a993ee44878b299d6d0875b94f95300d33f",
+  "programme_credit": "CANDIDATE_PENDING_OWNER_REVIEW",
+  "independent_review": "NOT_PERFORMED",
+  "randomness": "none",
+  "release_classification": "PUBLICLY_CLEARED"
+}

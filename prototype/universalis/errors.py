@@ -189,3 +189,24 @@ class LineageNotFound(UniversalisError):
 
 class PopulationMemberMissing(UniversalisError):
     """The population member is not in the declared population."""
+
+
+class DomainNotForwardInvariant(UniversalisError):
+    """ULC-01-05: a trajectory bound is not a guarantee on a domain that
+    iteration escapes.
+
+    A bound derived under a premise is only a guarantee where the premise
+    actually holds along the trajectory. If the state leaves the declared
+    domain, or the per-step premise has already failed, the bound may still
+    appear numerically satisfied while the guarantee it seemed to give is
+    gone. This refusal is recorded rather than repaired by widening the
+    domain after the fact.
+    """
+
+    def __init__(self, step, reason, bound_holder=None):
+        self.step = step
+        self.reason = reason
+        self.bound_holder = bound_holder
+        super().__init__(
+            f"trajectory guarantee refused at step {step}: {reason}"
+        )
