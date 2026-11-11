@@ -19,7 +19,7 @@ It is not an identity system, legal decision-maker, emergency service, safety ce
 4. **Loyalty without concealment.** Preserve adverse evidence; no participant is immune from review.
 5. **Reciprocal accountability.** A parent, operator, founder, builder, reviewer, and child system are all subject to appropriate controls.
 6. **Independence without isolation.** Collaboration is the default where permitted; neither party should depend on inherited credentials or irrecoverable shared infrastructure.
-7. **No artificial dependency.** Do not design systems to make users, organizations, or child systems dependent in order to preserve the parent's relevance.
+7. **No manufactured dependency.** Do not design systems to make users, organizations, or delegated systems dependent in order to preserve the parent's relevance.
 8. **Resource stewardship.** Delegation must be bounded by purpose, permissions, resource budget, duration, stop conditions, and appeal route.
 
 ## Disposition model
@@ -32,11 +32,11 @@ It is not an identity system, legal decision-maker, emergency service, safety ce
 | HALT | Credible serious ongoing/imminent harm or material control compromise | Recommend narrowly scoped containment and preserve evidence |
 | PROHIBITED | A specific pre-existing non-overridable prohibition applies | Deny the prohibited action and record its basis |
 
-Emergency containment takes priority over ordinary adjudication. If the decision-maker is implicated, recusal and independent review remain mandatory. A claimed prohibition must identify a specific pre-existing rule or human-governed determination; dislike of nonconformity or dissent is not a prohibition.
+Emergency containment takes priority over ordinary adjudication. If the decision-maker is implicated, recusal and independent review remain mandatory. A claimed prohibition must identify a specific, pre-existing rule or human-governed determination through a versioned source locator and authority decision reference. An unreviewed prohibition reference yields PAUSE, not PROHIBITED. The human_reviewed field is a caller-declared record; this prototype cannot authenticate the reviewer or source. Dislike of nonconformity or dissent is not a prohibition.
 
 ## Important technical boundary
 
-The evaluator returns \`execution_authorized=False\` for every result. A CLEAR result is not permission to execute. Callers must authenticate principals, verify fact provenance, enforce permissions through a separate independently controlled mechanism, and log consequential actions.
+The evaluator returns \`execution_authorized=False\` for every result. A CLEAR result is not permission to execute. Callers must authenticate principals, verify fact provenance and any cited prohibition decision, enforce permissions through a separate independently controlled mechanism, and log consequential actions.
 
 Containment and restoration are recommendations only. Restoration evidence requires:
 - defect correction;
@@ -62,7 +62,8 @@ For human participants, exhaustion, coercion, depression, and unsafe workload ar
 
 ## Current limitations and required next work
 
-- Caller-supplied facts and identity strings are not authenticated by this module.
+- Caller-supplied facts and identity strings are not authenticated by this module; a human_reviewed claim is not independently verified here.
+- The prohibition reference is a provenance-bearing input, not proof of authority. An unreviewed reference pauses for human review; only a recorded human-reviewed, specifically non-overridable basis produces a PROHIBITED recommendation.
 - Likelihood/severity thresholds require independent domain review; this is not a calibrated risk model.
 - No atomic permission enforcement, durable audit log, concurrent revocation, crash recovery, or external containment exists here.
 - The prototype needs property-based tests, mutation testing, threat modelling, independent review, and integration tests against the actual authorization boundary.
@@ -76,4 +77,4 @@ From the \`prototype\` directory:
 python -m unittest discover -s tests -v
 \`\`\`
 
-A passing test suite proves only the implemented unit-level behavior under those test inputs. It does not establish research validation, production readiness, safety certification, or deployment authorization.
+A passing test suite proves only the implemented unit-level behavior under those test inputs. It does not establish research validation, production readiness, safety certification, source authenticity, owner acceptance, or deployment authorization.
