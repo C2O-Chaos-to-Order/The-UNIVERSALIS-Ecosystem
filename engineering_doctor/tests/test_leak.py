@@ -7,8 +7,10 @@ import unittest
 from pathlib import Path
 
 from engineering_doctor.tests.leakscan import (
+    SKIP_TOP_LEVEL,
     candidates_from_text,
     digest,
+    iter_public_files,
     load_denylist,
     scan_text,
     scan_tree,
@@ -38,7 +40,7 @@ class LeakScanTests(unittest.TestCase):
         self.assertEqual(scan_text("completely unrelated public documentation", {hashed}), [])
 
     def test_public_tree_has_no_denied_phrases(self) -> None:
-        """Scan Doctor files and other non-prototype/scaffold paths."""
+        """Scan Doctor files, registry/, and other non-prototype/scaffold paths."""
         denylist = load_denylist(DENYLIST_PATH)
         findings = scan_tree(REPO_ROOT, denylist)
         if findings:
@@ -51,3 +53,18 @@ class LeakScanTests(unittest.TestCase):
                 "phrases (repository names, collection names, corpus path "
                 f"fragments, and internal classification words). Hits: {summary}"
             )
+
+    def test_registry_directory_is_included_in_public_scan(self) -> None:
+        """registry/ must stay inside the leak scan (it is not in SKIP_TOP_LEVEL)."""
+        self.assertNotIn("registry", SKIP_TOP_LEVEL)
+        scanned = set(iter_public_files(REPO_ROOT))
+        expected = [
+            REPO_ROOT / "registry" / "tools" / "tool-001.json",
+            REPO_ROOT / "registry" / "evidence" / "ev-001.json",
+            REPO_ROOT / "registry" / "evidence" / "ev-002.json",
+            REPO_ROOT / "registry" / "validate.py",
+            REPO_ROOT / "registry" / "schemas" / "tool-record.schema.json",
+            REPO_ROOT / "registry" / "schemas" / "evidence-record.schema.json",
+        ]
+        missing = [path for path in expected if path not in scanned]
+        self.assertEqual(missing, [], f"registry files not scanned: {missing}")

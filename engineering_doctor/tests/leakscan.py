@@ -17,7 +17,8 @@ from urllib.parse import unquote
 _WORD = re.compile(r"[^a-z0-9_-]+")
 SKIP_DIR_NAMES = {".git", "__pycache__", ".pytest_cache", ".mypy_cache", ".venv", "venv"}
 # Pre-existing public trees that already carry their own clause-leak tooling.
-# This Doctor leak test does not rewrite them.
+# This Doctor leak test does not rewrite them. registry/ is intentionally
+# not skipped: public tool and evidence records are scanned.
 SKIP_TOP_LEVEL = {"prototype", "scaffold"}
 
 

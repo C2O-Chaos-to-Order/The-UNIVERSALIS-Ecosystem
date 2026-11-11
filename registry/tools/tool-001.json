@@ -1,0 +1,111 @@
+{
+  "schema_id": "universalis.tool-record",
+  "schema_version": "0.2.0",
+  "id": "tool-001",
+  "name": "Engineering Doctor",
+  "version": "0.1.0",
+  "status": "LIMITED",
+  "classification": "PUBLIC_CANDIDATE",
+  "owner": "owner",
+  "implementation": {
+    "kind": "python_package",
+    "locator": "engineering_doctor",
+    "entrypoint": "python -m engineering_doctor"
+  },
+  "requirement_references": [
+    {
+      "id": "REQ-ED-READ-ONLY",
+      "summary": "Inventory and reporting use GET only and do not write to GitHub or to scanned repositories."
+    },
+    {
+      "id": "REQ-ED-NO-SCORE",
+      "summary": "The tool does not emit a readiness percentage, score, or confidence value."
+    },
+    {
+      "id": "REQ-ED-BANNER",
+      "summary": "Every run record repeats that a pass is not authorization, scientific validation, or independent verification."
+    },
+    {
+      "id": "REQ-RUBY-01",
+      "summary": "A passing run is not acceptance or authorization. Any later acceptance must name the exact run record by its run identifier together with the record's input digest and the repository SHAs stored on that record.",
+      "source": {
+        "kind": "private_origin_principle",
+        "label": "Ruby"
+      },
+      "test_locators": [
+        {
+          "kind": "unittest",
+          "path": "engineering_doctor/tests/test_records.py",
+          "name": "RecordTests.test_record_includes_banner_and_rejects_scores"
+        },
+        {
+          "kind": "unittest",
+          "path": "engineering_doctor/tests/test_records.py",
+          "name": "RecordTests.test_tampered_inputs_hash_is_detected"
+        },
+        {
+          "kind": "unittest",
+          "path": "engineering_doctor/tests/test_records.py",
+          "name": "RecordTests.test_record_preserves_run_id_and_repo_shas"
+        }
+      ],
+      "note": "This is not a tablet-compliance claim and is not authorization. Status remains LIMITED. The listed tests show the not-authorization banner and that run identity fields are stored and digest-checked. They do not show an acceptance workflow."
+    },
+    {
+      "id": "REQ-ONYX-01",
+      "summary": "Run records are immutable once written. Failures and UNKNOWN results are retained in the record; they are not overwritten or converted into a pass.",
+      "source": {
+        "kind": "private_origin_principle",
+        "label": "Onyx"
+      },
+      "test_locators": [
+        {
+          "kind": "unittest",
+          "path": "engineering_doctor/tests/test_records.py",
+          "name": "RecordTests.test_writes_are_immutable"
+        },
+        {
+          "kind": "unittest",
+          "path": "engineering_doctor/tests/test_inventory.py",
+          "name": "InventoryTests.test_api_failure_is_unknown_not_pass"
+        },
+        {
+          "kind": "unittest",
+          "path": "engineering_doctor/tests/test_run.py",
+          "name": "RunTests.test_mocked_inventory_run_writes_outputs_outside_repo_by_default"
+        },
+        {
+          "kind": "unittest",
+          "path": "engineering_doctor/tests/test_run.py",
+          "name": "RunTests.test_excluded_request_is_refused_and_recorded"
+        }
+      ],
+      "note": "This is not a tablet-compliance claim and is not authorization. Status remains LIMITED. The listed tests show refuse-to-overwrite writes, UNKNOWN query status that is not treated as a pass, UNKNOWN values written into a run record, and refused requests recorded as findings. They do not show a general restoration workflow."
+    }
+  ],
+  "test_locators": [
+    {
+      "kind": "unittest_dir",
+      "path": "engineering_doctor/tests",
+      "command": "python -m unittest discover -s engineering_doctor/tests -t . -v"
+    },
+    {
+      "kind": "workflow_file",
+      "path": ".github/workflows/engineering-doctor.yml"
+    }
+  ],
+  "evidence_ids": [
+    "ev-001",
+    "ev-002"
+  ],
+  "known_limitations": [
+    "Status is LIMITED / PUBLIC_CANDIDATE; this is not a completed product or an authorized release.",
+    "The public core inventories only repositories the operator supplies. The bundled demonstration adapters use a pinned public snapshot and do not inspect private repositories.",
+    "Inventory and reporting are read-only. The tool does not open, merge, or review pull requests.",
+    "The tool does not emit a readiness percentage, score, or confidence value.",
+    "Public evidence recorded here is the core unittest suite and one public GitHub Actions run. It does not by itself demonstrate production readiness.",
+    "REQ-RUBY-01 and REQ-ONYX-01 are public-safe references to privately originated principles labelled Ruby and Onyx. They do not claim tablet compliance, do not authorize this tool, and do not change its LIMITED status."
+  ],
+  "does_not_authorize": "A pass is not authorization, scientific validation, or independent verification.",
+  "private_evidence_note": "Additional live-run evidence recorded by the private adapter that consumes this public core is not copied into this public registry. That adapter keeps its own private evidence record for tool-001."
+}

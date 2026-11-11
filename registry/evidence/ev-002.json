@@ -1,0 +1,23 @@
+{
+  "schema_id": "universalis.evidence-record",
+  "schema_version": "0.1.0",
+  "id": "ev-002",
+  "kind": "ci_run",
+  "tool_ids": [
+    "tool-001"
+  ],
+  "title": "Public GitHub Actions run of the Engineering Doctor core workflow",
+  "description": "Public GitHub Actions run 42900738045 of the workflow 'Engineering Doctor core' on pull request event against head commit 6824f912af38be1dee963b59e1a2b0d630db0133. Operators can inspect the public run page and re-run the same unittest command locally. This record does not include a test count or score.",
+  "locator": {
+    "kind": "github_actions_run",
+    "url": "https://github.com/C2O-Chaos-to-Order/The-UNIVERSALIS-Ecosystem/actions/runs/42900738045",
+    "run_id": "42900738045",
+    "head_sha": "6824f912af38be1dee963b59e1a2b0d630db0133",
+    "workflow_name": "Engineering Doctor core",
+    "event": "pull_request",
+    "conclusion": "success"
+  },
+  "reproducible": true,
+  "classification": "PUBLIC",
+  "does_not_authorize": "A pass is not authorization, scientific validation, or independent verification."
+}

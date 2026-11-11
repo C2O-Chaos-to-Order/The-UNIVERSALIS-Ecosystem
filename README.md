@@ -33,13 +33,23 @@ python -m engineering_doctor run --output-dir /tmp/engineering-doctor-runs --rep
 python -m unittest discover -s engineering_doctor/tests -t . -v
 ```
 
-Core tests include an automated leak test. The test hashes identifiers and sliding word n-grams from Engineering Doctor files and other repository paths except the pre-existing prototype and scaffold trees, and compares those SHA-256 digests to a denylist that stores only hex digests, so it does not restate private names. A match fails the build.
+Core tests include an automated leak test. The test hashes identifiers and sliding word n-grams from Engineering Doctor files, the public `registry/`, and other repository paths except the pre-existing prototype and scaffold trees, and compares those SHA-256 digests to a denylist that stores only hex digests, so it does not restate private names. A match fails the build.
 
 See [engineering_doctor/README.md](engineering_doctor/README.md) for scope, limitations, and what is not verified.
 
+## Tool Registry and Evidence Registry
+
+**Status: LIMITED**
+
+`registry/` is a minimal public registry for tool records and evidence records. It ships versioned JSON Schemas (`registry/schemas/`) and a fail-closed stdlib validator (`python -m registry.validate`) that rejects unknown fields, missing fields, bad identifiers, and evidence or test links that do not resolve.
+
+The first record is [`registry/tools/tool-001.json`](registry/tools/tool-001.json) (Engineering Doctor, LIMITED / PUBLIC_CANDIDATE). The owner field is the placeholder `owner`. Evidence attached there is public and reproducible only: the core unittest suite and public GitHub Actions run [42900738045](https://github.com/C2O-Chaos-to-Order/The-UNIVERSALIS-Ecosystem/actions/runs/42900738045). Additional live-run evidence recorded by the private adapter that consumes this public core is not copied here. Records do not contain scores or confidence values. `REQ-RUBY-01` and `REQ-ONYX-01` record existing Doctor behaviour (a pass is not acceptance; run records are immutable and keep failures and UNKNOWN results) as public-safe references to privately originated principles labelled Ruby and Onyx. They are not a tablet-compliance claim and are not authorization.
+
+A pass is not authorization, scientific validation, or independent verification.
+
 ## Development status
 
-**Status: Documentation foundation initialized; product implementation not yet started.**
+**Status: Documentation foundation initialized; product implementation is not complete.** A LIMITED Engineering Doctor core and a minimal public Tool/Evidence registry exist as draft candidates. They are not a completed product or an authorized release.
 
 The first proposed implementation target is a bounded, local-first, read-only continuity and research capability. The exact requirements, architecture, dependencies, test criteria, and implementation stages remain subject to the research reports and owner review.
 
