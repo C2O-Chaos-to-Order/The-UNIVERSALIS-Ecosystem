@@ -359,6 +359,13 @@ def certify_trajectory(
     The earliest failing step is always the one reported: a later failure does
     not displace an earlier one.
     """
+    # Audit item N11: a truthy string such as "false" must not be accepted as
+    # the enforcement option and copied into the result.
+    if not isinstance(require_forward_invariance, bool):
+        raise TypeError(
+            "require_forward_invariance must be a bool; got "
+            f"{type(require_forward_invariance).__name__}"
+        )
     supplied = list(steps)
     if not supplied:
         raise ValueError("no trajectory steps supplied; nothing to certify")
@@ -452,6 +459,48 @@ def certify_trajectory(
     )
 
 
+def _validated_path(path) -> list[tuple[Fraction, ...]]:
+    """Return ``path`` as a list of points, or refuse it as not a trajectory.
+
+    Audit item K01: a string, a list of scalars, or a list of non-numeric
+    "points" used to pass straight through, so a predicate that ignored its
+    argument produced a clean "not escaped" report about nothing. A point is a
+    non-empty, non-string sequence of quantities (``int``, ``Fraction``, finite
+    ``float``; never ``bool``), and every point has the same dimension.
+    """
+    if isinstance(path, (str, bytes, bytearray)):
+        raise TypeError("a trajectory is a sequence of points, not a string")
+    try:
+        supplied = list(path)
+    except TypeError:
+        raise TypeError(
+            f"a trajectory must be a sequence of points; got {type(path).__name__}"
+        ) from None
+    if not supplied:
+        raise ValueError("no points supplied; an empty path is not evidence of containment")
+    points: list[tuple[Fraction, ...]] = []
+    dimension = None
+    for index, point in enumerate(supplied):
+        if isinstance(point, (str, bytes, bytearray)) or not isinstance(point, Sequence):
+            raise TypeError(
+                f"point {index} must be a sequence of coordinates; got {type(point).__name__}"
+            )
+        if len(point) == 0:
+            raise ValueError(f"point {index} has no coordinates")
+        coordinates = tuple(
+            _as_quantity(value, f"point {index} coordinate {axis}")
+            for axis, value in enumerate(point)
+        )
+        if dimension is None:
+            dimension = len(coordinates)
+        elif len(coordinates) != dimension:
+            raise ValueError(
+                f"point {index} has dimension {len(coordinates)}; earlier points have {dimension}"
+            )
+        points.append(coordinates)
+    return points
+
+
 def forward_invariance_report(
     path: Sequence[Sequence[Fraction]],
     in_domain: Callable[[Sequence[Fraction]], bool],
@@ -461,14 +510,31 @@ def forward_invariance_report(
     This reports what it saw. It does not claim the domain is invariant for
     every starting point, which would need an argument this function cannot
     make: it only has one trajectory.
+
+    The path is validated before the predicate runs (see ``_validated_path``),
+    and the predicate must return a real ``bool``. ``points_checked`` is the
+    number of points the predicate actually evaluated; it stops at the first
+    escape. ``points_supplied`` is the length of the path. The predicate is
+    still caller-supplied: a predicate that lies is not detected here.
     """
+    if not callable(in_domain):
+        raise TypeError("in_domain must be callable")
+    points = _validated_path(path)
     escaped_at = None
-    for index, point in enumerate(path):
-        if not in_domain(point):
+    evaluated = 0
+    for index, point in enumerate(points):
+        inside = in_domain(point)
+        evaluated += 1
+        if not isinstance(inside, bool):
+            raise TypeError(
+                f"in_domain must return a bool; got {type(inside).__name__} at point {index}"
+            )
+        if not inside:
             escaped_at = index
             break
     return {
-        "points_checked": len(path),
+        "points_checked": evaluated,
+        "points_supplied": len(points),
         "escaped": escaped_at is not None,
         "first_step_outside_domain": escaped_at,
         "scope": (
