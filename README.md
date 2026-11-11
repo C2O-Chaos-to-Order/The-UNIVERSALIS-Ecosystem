@@ -49,9 +49,11 @@ A pass is not authorization, scientific validation, or independent verification.
 
 ## Development status
 
-**Status: Documentation foundation initialized; product implementation is not complete.** A LIMITED Engineering Doctor core and a minimal public Tool/Evidence registry exist as draft candidates. They are not a completed product or an authorized release.
+**Status: bounded implementation and tooling exist; no research programme has been conducted in this repository, and nothing here is independently verified.**
 
-The first proposed implementation target is a bounded, local-first, read-only continuity and research capability. The exact requirements, architecture, dependencies, test criteria, and implementation stages remain subject to the research reports and owner review.
+This repository contains a bounded, local-first, read-only continuity prototype and a research/evidence scaffold. Neither is an accepted implementation or a research result.
+
+The separate Engineering Doctor and Tool Registry sections above describe their own limited tools; they do not upgrade the prototype or scaffold to accepted status or demonstrate an end-to-end research workflow.
 
 Do not interpret this README, a successful build, or an experimental prototype as implementation acceptance, production readiness, deployment permission, or release authorization.
 
