@@ -180,7 +180,12 @@ class K02ReleaseProfilesTest(unittest.TestCase):
         write_manifest(root)
         code, payload, stderr = _run(root, "--profile", "internal-candidate")
         self.assertEqual(code, 1, stderr)
-        self.assertIn("classification must be a classification string", " ".join(_check(payload, "classification_gate")["reasons"]))
+        # programme_status.json is schema-validated before the classification
+        # gate receives loaded records. A non-string enum value is therefore
+        # refused by honest_status, which is the correct owning check.
+        reasons = " ".join(_check(payload, "honest_status")["reasons"])
+        self.assertIn("metadata/programme_status.json", reasons)
+        self.assertIn("release_classification", reasons)
 
     def test_unknown_label_is_refused_under_internal_profile(self):
         root = build_executed(self.tmp / "pkg")
