@@ -149,6 +149,16 @@ def _result(
     )
 
 
+def _corpus_registered(store: Store, corpus_id: str) -> bool:
+    if not corpus_id:
+        return False
+    try:
+        store.corpus(corpus_id)
+    except KeyError:
+        return False
+    return True
+
+
 def _lookup(store: Store, request: RouteRequest) -> list[Record] | None:
     """Return matches, or None when a requested record id is absent."""
 
@@ -169,7 +179,10 @@ def resolve(store: Store, request: RouteRequest) -> RouteResult:
     """Resolve one local query to one distinguishable outcome.
 
     Authorization is applied before lookup. A visible path does not change
-    a denial into success or into emptiness. Source resolution is next: if
+    a denial into success or into emptiness. Corpus resolution is next: a
+    corpus that was never registered is ``unavailable`` and incomplete, never
+    ``empty``, because no scope was declared that could be empty. Source
+    resolution follows: if
     the named source cannot be resolved within its limit, the result is
     unavailable and no assertion is synthesised.
     """
@@ -185,6 +198,21 @@ def resolve(store: Store, request: RouteRequest) -> RouteResult:
                 else "denied"
             ),
             omission_note="access denied; no records are returned",
+        )
+        _log(store, request, result)
+        return result
+
+    if not _corpus_registered(store, request.corpus_id):
+        # Audit finding N03: an undeclared scope cannot be "complete and empty".
+        result = _result(
+            outcome=RouteOutcome.UNAVAILABLE.value,
+            complete=False,
+            source_id=request.source_id,
+            detail="corpus is not registered; no scope was declared to search",
+            omission_note=(
+                f"corpus {request.corpus_id!r} is not registered; absence of results "
+                "is unknown, not empty"
+            ),
         )
         _log(store, request, result)
         return result
