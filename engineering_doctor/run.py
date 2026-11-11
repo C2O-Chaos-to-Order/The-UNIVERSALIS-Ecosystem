@@ -16,7 +16,7 @@ from .config import RuntimeConfig
 from .findings import Finding, severity_counts
 from .github_client import GitHubClient, discover_token
 from .inventory import RepoInventory, findings_from_inventory, inventory_repo
-from .records import allocate_run_dir, build_record, write_record
+from .records import allocate_run_dir, build_record, is_commit_sha, write_record
 from .report import format_chicago, render_brief
 from .suites import (
     SuiteResult,
@@ -198,10 +198,24 @@ def execute(request: RunRequest) -> dict:
     }
     if config.extra_inputs:
         inputs["extra"] = config.extra_inputs
-    repo_shas = {item.name: item.default_sha for item in inventories}
+    repo_shas: dict[str, str] = {}
+    unresolved_repo_shas: dict[str, str] = {}
+    for item in inventories:
+        if is_commit_sha(item.default_sha):
+            repo_shas[item.name] = item.default_sha  # type: ignore[assignment]
+        else:
+            unresolved_repo_shas[item.name] = (
+                f"default_sha was not resolved (query_status={item.query_status!r})"
+            )
     for item in suite_results:
         if item.resolved_sha:
-            repo_shas[f"{item.repo}@{item.adapter_id}"] = item.resolved_sha
+            key = f"{item.repo}@{item.adapter_id}"
+            if is_commit_sha(item.resolved_sha):
+                repo_shas[key] = item.resolved_sha
+            else:
+                unresolved_repo_shas[key] = (
+                    f"resolved_sha was not a commit fingerprint: {item.resolved_sha!r}"
+                )
 
     finished = datetime.now(timezone.utc)
     record = build_record(
@@ -219,6 +233,7 @@ def execute(request: RunRequest) -> dict:
             config=config,
         ),
         repo_shas=repo_shas,
+        unresolved_repo_shas=unresolved_repo_shas or None,
         notes=[
             f"{config.tool_name} invoked as {config.tool_status}/{config.classification}.",
             config.banner,

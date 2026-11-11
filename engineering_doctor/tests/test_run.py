@@ -75,5 +75,9 @@ class RunTests(unittest.TestCase):
             self.assertTrue(Path(result["paths"]["record"]).is_file())
             statuses = [item["query_status"] for item in result["record"]["inventory"]]
             self.assertEqual(statuses, ["UNKNOWN"])
+            self.assertNotIn("example-public", result["record"]["repo_shas"])
+            self.assertIn("example-public", result["record"]["unresolved_repo_shas"])
+            self.assertNotIn(None, result["record"]["repo_shas"].values())
+            self.assertNotIn("working-tree", result["record"]["repo_shas"].values())
             self.assertIn(BANNER, result["record"]["banner"])
             self.assertEqual(result["record"]["classification"], "PUBLIC_CANDIDATE")
