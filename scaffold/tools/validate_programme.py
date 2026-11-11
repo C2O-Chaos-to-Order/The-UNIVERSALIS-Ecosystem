@@ -929,9 +929,10 @@ def check_traceability(root: Path, data: dict, reasons: dict[str, list[str]]) ->
             source_id = source.get("id")
             for field in locator_fields:
                 if not nonempty_string(source.get(field)):
+                    label = {"repository": "a repository", "path": "a path"}.get(field, field)
                     bucket.append(
                         f"TRACEABILITY: source {source_id} is git-pinned "
-                        f"but does not declare {field}; "
+                        f"but does not declare {label}; "
                         "D09 requires repository, path, commit, and blob_sha together"
                     )
             for field in ("commit", "blob_sha"):
