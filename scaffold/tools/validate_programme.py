@@ -918,13 +918,44 @@ def check_traceability(root: Path, data: dict, reasons: dict[str, list[str]]) ->
                     f"TRACEABILITY: source {source.get('id')} independence_from names "
                     f"{dependency}, which is not in the source register"
                 )
+        # D09: a git-pinned source declares repository, path, commit, and
+        # blob_sha together so a commit from one repository cannot be paired
+        # with a path that exists only in another.
+        pin_fields = []
         for field in ("commit", "blob_sha"):
             value = source.get(field)
             if value in (None, ""):
                 continue
+            pin_fields.append(field)
             if not isinstance(value, str) or GIT_SHA.fullmatch(value) is None:
                 bucket.append(
                     f"TRACEABILITY: source {source.get('id')} {field} must be a 40-character git SHA or omitted"
+                )
+        if pin_fields:
+            source_id = source.get("id")
+            if not nonempty_string(source.get("repository")):
+                bucket.append(
+                    f"TRACEABILITY: source {source_id} is git-pinned "
+                    f"({', '.join(pin_fields)}) but does not declare a repository; "
+                    "D09 requires repository, path, commit, and blob_sha together"
+                )
+            if not nonempty_string(source.get("path")):
+                bucket.append(
+                    f"TRACEABILITY: source {source_id} is git-pinned "
+                    "but does not declare a path; "
+                    "D09 requires repository, path, commit, and blob_sha together"
+                )
+            for field in ("commit", "blob_sha"):
+                if field not in pin_fields:
+                    bucket.append(
+                        f"TRACEABILITY: source {source_id} is git-pinned "
+                        f"but does not declare {field}; "
+                        "D09 requires repository, path, commit, and blob_sha together"
+                    )
+            if nonempty_string(source.get("path")) and not safe_relative(source.get("path")):
+                bucket.append(
+                    f"TRACEABILITY: source {source_id} path must be a "
+                    "repository-relative path without '..' or a leading '/'"
                 )
 
     for rel, column in (

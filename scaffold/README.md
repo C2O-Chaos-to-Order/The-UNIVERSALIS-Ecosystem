@@ -9,7 +9,7 @@ Evidence-record fields follow the governing Plan. The mapping is in [PLAN_SCHEMA
 ## Workflow from clause to report
 
 1. Identify a clause by identifier only. If you index a private corpus, run `corpus_probe.py` on a directory outside this repository and do not commit clause text or uncleared titles.
-2. Register sources in `sources/source_register.json` with a `review_scope`, and with `commit` and `blob_sha` when the source is a git object.
+2. Register sources in `sources/source_register.json` with a `review_scope`. When the source is a git object, declare `repository`, a repository-relative `path`, `commit`, and `blob_sha` together.
 3. Copy `research/_TEMPLATE_research_card.md` to `research/<record_id>.md` and add one object to `research/research_records.json`. The assessment is the research activity. It is not the simulation.
 4. Author the case in `simulations/scenarios.json`, including `input`, `expected`, `protocol_version`, and `configuration`, before you run it.
 5. Run one case in its own subprocess:

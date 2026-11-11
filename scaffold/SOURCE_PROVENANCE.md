@@ -58,6 +58,20 @@ so that its apparatus can refer to that manuscript in shorthand.
 - A manuscript identified by shelfmark and repository needs no siglum to be cited. The
   shelfmark is the durable identifier.
 
+## Git locators (D09)
+
+When a source is pinned to a git object, the entry declares four fields together:
+
+- `repository`: the repository that the commit belongs to
+- `path`: a repository-relative path (no leading `/`, no `..`)
+- `commit`: the 40-character commit SHA in that repository
+- `blob_sha`: the 40-character git blob SHA of the object at that path
+
+A commit from one repository must not be paired with a path that exists only in another.
+Public or synthetic material carries its own real public provenance. Private lineage,
+when it is declared, is recorded as it is and is not rewritten. No vendor commit is
+invented. Sources that are not git objects omit these fields.
+
 ## Corpus boundary
 
 - No clause text, no transcription, and no distinctive wording from a private corpus
