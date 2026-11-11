@@ -5,6 +5,7 @@ from __future__ import annotations
 
 import hashlib
 import json
+import re
 import uuid
 from datetime import datetime, timezone
 from pathlib import Path
@@ -25,6 +26,97 @@ FORBIDDEN_SCORE_KEYS = frozenset(
         "readiness",
     }
 )
+
+# 40-hex git SHA-1 or 64-hex SHA-256, lowercase only.
+COMMIT_SHA_RE = re.compile(r"^(?:[a-f0-9]{40}|[a-f0-9]{64})$")
+WORKING_TREE_LABELS = frozenset({"working-tree", "working_tree", "workingtree"})
+
+
+def is_commit_sha(value: object) -> bool:
+    return isinstance(value, str) and COMMIT_SHA_RE.fullmatch(value) is not None
+
+
+def inventoried_repo_names(inventory: object) -> list[str]:
+    names: list[str] = []
+    if not isinstance(inventory, list):
+        return names
+    for item in inventory:
+        if not isinstance(item, dict):
+            continue
+        name = item.get("name")
+        if isinstance(name, str) and name.strip():
+            names.append(name)
+    return names
+
+
+def validate_repo_shas(record: dict[str, Any]) -> list[str]:
+    """Require complete, valid commit fingerprints for inventoried repositories.
+
+    repo_shas values must be 40- or 64-character lowercase hex SHAs. Null and
+    the string 'working-tree' are rejected. A working-tree digest, if recorded,
+    belongs in a separate field such as working_tree_digests, not in repo_shas.
+
+    An empty repo_shas map is accepted only when no named repositories appear
+    in inventory. Inventoried repositories whose SHA could not be resolved must
+    be listed in unresolved_repo_shas with a non-empty reason rather than stored
+    as null. This function does not contact remotes to prove a SHA exists.
+    """
+
+    errors: list[str] = []
+    if "repo_shas" not in record:
+        return ["missing required field 'repo_shas'"]
+    repo_shas = record.get("repo_shas")
+    if not isinstance(repo_shas, dict):
+        return ["repo_shas must be an object"]
+
+    unresolved = record.get("unresolved_repo_shas")
+    if unresolved is None:
+        unresolved = {}
+    elif not isinstance(unresolved, dict):
+        errors.append("unresolved_repo_shas must be an object")
+        unresolved = {}
+
+    names = inventoried_repo_names(record.get("inventory"))
+    if not repo_shas and names:
+        missing = [name for name in names if name not in unresolved]
+        if missing:
+            errors.append(
+                "repo_shas is empty while inventory lists repositories without "
+                "an unresolved_repo_shas reason: " + ", ".join(missing)
+            )
+
+    for key, value in repo_shas.items():
+        label = f"repo_shas[{key!r}]"
+        if value is None:
+            errors.append(f"{label} is null")
+            continue
+        if not isinstance(value, str):
+            errors.append(f"{label} must be a string")
+            continue
+        compact = value.strip().lower().replace("_", "-")
+        if compact in WORKING_TREE_LABELS or value.strip().lower() in WORKING_TREE_LABELS:
+            errors.append(
+                f"{label} is {value!r}; 'working-tree' is not a commit "
+                "fingerprint. If a working-tree digest is recorded it must use "
+                "a separate field such as working_tree_digests"
+            )
+            continue
+        if not is_commit_sha(value):
+            errors.append(
+                f"{label} is not a 40- or 64-character lowercase hexadecimal SHA"
+            )
+        if key in unresolved:
+            errors.append(f"{key!r} cannot appear in both repo_shas and unresolved_repo_shas")
+
+    for name in names:
+        if name not in repo_shas and name not in unresolved:
+            errors.append(f"repo_shas is missing inventoried repository {name!r}")
+
+    for key, value in unresolved.items():
+        if not isinstance(value, str) or not value.strip():
+            errors.append(f"unresolved_repo_shas[{key!r}] requires a non-empty reason")
+
+    return errors
 
 
 def canonical_dumps(payload: dict[str, Any]) -> str:
@@ -60,6 +152,7 @@ def validate_record(
         "python_version",
         "inputs",
         "inputs_sha256",
+        "repo_shas",
         "inventory",
         "suites",
         "findings",
@@ -106,6 +199,7 @@ def validate_record(
                 errors.append(f"finding {item.get('finding_id')!r} is missing a severity basis")
             if item.get("severity") not in {"Critical", "High", "Medium", "Low"}:
                 errors.append(f"finding {item.get('finding_id')!r} has an invalid severity")
+    errors.extend(validate_repo_shas(record))
     return errors
 
 
@@ -122,6 +216,7 @@ def build_record(
     limitations: list[str],
     repo_shas: dict[str, str | None],
     notes: list[str] | None = None,
+    unresolved_repo_shas: dict[str, str] | None = None,
     config: RuntimeConfig | None = None,
 ) -> dict[str, Any]:
     cfg = config or RuntimeConfig()
@@ -146,6 +241,8 @@ def build_record(
         "limitations": list(limitations),
         "notes": list(notes or []),
     }
+    if unresolved_repo_shas:
+        record["unresolved_repo_shas"] = dict(unresolved_repo_shas)
     problems = validate_record(record, config=cfg)
     if problems:
         raise ValueError("refusing to write an invalid run record: " + "; ".join(problems))

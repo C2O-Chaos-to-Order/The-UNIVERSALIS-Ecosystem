@@ -34,6 +34,12 @@ and/or `--allowlist-file`. There is no built-in private corpus list.
   an `EXA-001` synthetic regression fixture under
   [tests/fixtures](tests/fixtures).
 - JSON schema: [schema/run_record.v0.1.json](schema/run_record.v0.1.json).
+  `validate_record()` requires `repo_shas`. Each value must be a 40- or
+  64-character lowercase hexadecimal commit SHA. Null and the string
+  `working-tree` are rejected. Every inventoried repository must have an
+  entry, or a non-empty reason in the separate `unresolved_repo_shas`
+  field when a SHA could not be resolved. A working-tree digest, if one
+  is recorded, must use a separate field such as `working_tree_digests`.
 - Core tests that run with the standard library `unittest` runner, including
   an automated leak test.
 - Optional extra: [extras/requirements-extra.txt](extras/requirements-extra.txt)
