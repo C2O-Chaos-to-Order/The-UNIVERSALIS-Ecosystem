@@ -34,39 +34,134 @@
     "release_classification"
   ],
   "properties": {
-    "record_id": {"type": "string", "pattern": "^RES-[0-9]{3,}$"},
-    "programme_unit_id": {"type": "string", "minLength": 1},
-    "pass_type": {"const": "research"},
-    "checkpoint_id": {"type": "string", "minLength": 1},
-    "objective_question": {"type": "string", "minLength": 1},
-    "claim_class": {"type": "string", "minLength": 1},
-    "relevant_dimensions": {"type": "string"},
-    "phase": {"type": "string", "minLength": 1},
-    "level": {"type": "string", "minLength": 1},
-    "method_summary": {"type": "string", "minLength": 1},
-    "sources_or_inputs": {"type": "string", "minLength": 1},
-    "assumptions": {"type": "string", "minLength": 1},
-    "acceptance_or_falsification_criteria": {"type": "string", "minLength": 1},
-    "actual_conditions": {"type": "string", "minLength": 1},
-    "outcome_summary": {"type": "string", "minLength": 1},
-    "raw_evidence_location": {"type": "string", "minLength": 1},
-    "uncertainty_and_limitations": {"type": "string", "minLength": 1},
-    "review_note": {"type": "string", "minLength": 1},
-    "evidence_status": {
-      "enum": ["proposed", "documented", "implemented", "tested", "verified", "independently_reproduced", "validated", "authorized"]
+    "record_id": {
+      "type": "string",
+      "pattern": "^RES-[0-9]{3,}$"
     },
-    "authorization_status": {"enum": ["NOT_AUTHORIZED", "AUTHORIZED"]},
+    "programme_unit_id": {
+      "type": "string",
+      "minLength": 1
+    },
+    "pass_type": {
+      "const": "research"
+    },
+    "checkpoint_id": {
+      "type": "string",
+      "minLength": 1
+    },
+    "objective_question": {
+      "type": "string",
+      "minLength": 1
+    },
+    "claim_class": {
+      "type": "string",
+      "minLength": 1
+    },
+    "relevant_dimensions": {
+      "type": "string"
+    },
+    "phase": {
+      "type": "string",
+      "minLength": 1
+    },
+    "level": {
+      "type": "string",
+      "minLength": 1
+    },
+    "method_summary": {
+      "type": "string",
+      "minLength": 1
+    },
+    "sources_or_inputs": {
+      "type": "string",
+      "minLength": 1
+    },
+    "assumptions": {
+      "type": "string",
+      "minLength": 1
+    },
+    "acceptance_or_falsification_criteria": {
+      "type": "string",
+      "minLength": 1
+    },
+    "actual_conditions": {
+      "type": "string",
+      "minLength": 1
+    },
+    "outcome_summary": {
+      "type": "string",
+      "minLength": 1
+    },
+    "raw_evidence_location": {
+      "type": "string",
+      "minLength": 1
+    },
+    "uncertainty_and_limitations": {
+      "type": "string",
+      "minLength": 1
+    },
+    "review_note": {
+      "type": "string",
+      "minLength": 1
+    },
+    "evidence_status": {
+      "enum": [
+        "proposed",
+        "documented",
+        "implemented",
+        "tested",
+        "verified",
+        "independently_reproduced",
+        "validated",
+        "authorized"
+      ]
+    },
+    "authorization_status": {
+      "enum": [
+        "NOT_AUTHORIZED",
+        "AUTHORIZED"
+      ]
+    },
     "execution_outcome": {
-      "enum": ["not_executed", "executed", "failed", "incomplete"],
+      "enum": [
+        "not_executed",
+        "executed",
+        "failed",
+        "incomplete"
+      ],
       "default": "not_executed",
       "description": "What the run actually did. Not an evidence state and never read as one. A failed run can legitimately sit at evidence_status documented."
     },
-    "regression_links": {"type": "string"},
-    "open_obligations": {"type": "string"},
-    "simulation_link": {"type": "string", "pattern": "^SIM-[0-9]{3,}$"},
-    "programme_credit": {"enum": ["NONE", "CANDIDATE_PENDING_OWNER_REVIEW", "AWARDED"]},
-    "clause_ids": {"type": "array", "items": {"type": "string", "minLength": 1}},
-    "release_classification": {"const": "PUBLICLY_CLEARED"}
+    "regression_links": {
+      "type": "string"
+    },
+    "open_obligations": {
+      "type": "string"
+    },
+    "simulation_link": {
+      "type": "string",
+      "pattern": "^SIM-[0-9]{3,}$"
+    },
+    "programme_credit": {
+      "enum": [
+        "NONE",
+        "CANDIDATE_PENDING_OWNER_REVIEW",
+        "AWARDED"
+      ]
+    },
+    "clause_ids": {
+      "type": "array",
+      "items": {
+        "type": "string",
+        "minLength": 1
+      }
+    },
+    "release_classification": {
+      "enum": [
+        "INTERNAL_CANDIDATE",
+        "PUBLICLY_CLEARED"
+      ]
+    }
   },
   "additionalProperties": false
 }

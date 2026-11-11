@@ -30,34 +30,115 @@
     "limits"
   ],
   "properties": {
-    "programme": {"type": "string", "minLength": 1},
-    "edition": {"type": "string", "minLength": 1},
+    "programme": {
+      "type": "string",
+      "minLength": 1
+    },
+    "edition": {
+      "type": "string",
+      "minLength": 1
+    },
     "evidence_status": {
-      "enum": ["proposed", "documented", "implemented", "tested", "verified", "independently_reproduced", "validated", "authorized"]
+      "enum": [
+        "proposed",
+        "documented",
+        "implemented",
+        "tested",
+        "verified",
+        "independently_reproduced",
+        "validated",
+        "authorized"
+      ]
     },
     "execution_outcome": {
-      "enum": ["not_executed", "executed", "failed", "incomplete"],
+      "enum": [
+        "not_executed",
+        "executed",
+        "failed",
+        "incomplete"
+      ],
       "default": "not_executed"
     },
-    "authorization_status": {"enum": ["NOT_AUTHORIZED", "AUTHORIZED"]},
-    "owner_acceptance": {"enum": ["PENDING", "ACCEPTED"]},
-    "independent_reviews": {"type": "integer", "minimum": 0},
-    "independent_reproductions": {"type": "integer", "minimum": 0},
-    "owner_accepted_research_credits": {"type": "integer", "minimum": 0},
-    "owner_accepted_simulation_credits": {"type": "integer", "minimum": 0},
-    "production_validation": {"type": "string", "minLength": 1},
-    "programme_complete": {"type": "boolean"},
-    "release_authorized": {"type": "boolean"},
-    "research_records": {"type": "integer", "minimum": 0},
-    "simulation_cases": {"type": "integer", "minimum": 0},
-    "simulation_results": {"type": "integer", "minimum": 0},
-    "requirements": {"type": "integer", "minimum": 0},
-    "reports": {"type": "integer", "minimum": 0},
-    "expectations_matched": {"type": "integer", "minimum": 0},
-    "expectation_failures": {"type": "integer", "minimum": 0},
-    "execution_errors": {"type": "integer", "minimum": 0},
-    "release_classification": {"const": "PUBLICLY_CLEARED"},
-    "limits": {"type": "string", "minLength": 1}
+    "authorization_status": {
+      "enum": [
+        "NOT_AUTHORIZED",
+        "AUTHORIZED"
+      ]
+    },
+    "owner_acceptance": {
+      "enum": [
+        "PENDING",
+        "ACCEPTED"
+      ]
+    },
+    "independent_reviews": {
+      "type": "integer",
+      "minimum": 0
+    },
+    "independent_reproductions": {
+      "type": "integer",
+      "minimum": 0
+    },
+    "owner_accepted_research_credits": {
+      "type": "integer",
+      "minimum": 0
+    },
+    "owner_accepted_simulation_credits": {
+      "type": "integer",
+      "minimum": 0
+    },
+    "production_validation": {
+      "type": "string",
+      "minLength": 1
+    },
+    "programme_complete": {
+      "type": "boolean"
+    },
+    "release_authorized": {
+      "type": "boolean"
+    },
+    "research_records": {
+      "type": "integer",
+      "minimum": 0
+    },
+    "simulation_cases": {
+      "type": "integer",
+      "minimum": 0
+    },
+    "simulation_results": {
+      "type": "integer",
+      "minimum": 0
+    },
+    "requirements": {
+      "type": "integer",
+      "minimum": 0
+    },
+    "reports": {
+      "type": "integer",
+      "minimum": 0
+    },
+    "expectations_matched": {
+      "type": "integer",
+      "minimum": 0
+    },
+    "expectation_failures": {
+      "type": "integer",
+      "minimum": 0
+    },
+    "execution_errors": {
+      "type": "integer",
+      "minimum": 0
+    },
+    "release_classification": {
+      "enum": [
+        "INTERNAL_CANDIDATE",
+        "PUBLICLY_CLEARED"
+      ]
+    },
+    "limits": {
+      "type": "string",
+      "minLength": 1
+    }
   },
   "additionalProperties": false
 }

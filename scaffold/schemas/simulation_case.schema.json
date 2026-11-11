@@ -17,19 +17,57 @@
     "release_classification"
   ],
   "properties": {
-    "id": {"type": "string", "pattern": "^SIM-[0-9]{3,}$"},
-    "research_record_id": {"type": "string", "pattern": "^RES-[0-9]{3,}$"},
-    "checkpoint_id": {"type": "string", "minLength": 1},
-    "family": {"type": "string", "minLength": 1},
-    "title": {"type": "string"},
-    "protocol_version": {"type": "string", "minLength": 1},
-    "configuration": {"type": "string", "minLength": 1},
+    "id": {
+      "type": "string",
+      "pattern": "^SIM-[0-9]{3,}$"
+    },
+    "research_record_id": {
+      "type": "string",
+      "pattern": "^RES-[0-9]{3,}$"
+    },
+    "checkpoint_id": {
+      "type": "string",
+      "minLength": 1
+    },
+    "family": {
+      "type": "string",
+      "minLength": 1
+    },
+    "title": {
+      "type": "string"
+    },
+    "protocol_version": {
+      "type": "string",
+      "minLength": 1
+    },
+    "configuration": {
+      "type": "string",
+      "minLength": 1
+    },
     "input": {},
     "expected": {},
-    "source_ids": {"type": "array", "items": {"type": "string"}},
-    "clause_ids": {"type": "array", "items": {"type": "string"}},
-    "limitations": {"type": "string", "minLength": 1},
-    "release_classification": {"const": "PUBLICLY_CLEARED"}
+    "source_ids": {
+      "type": "array",
+      "items": {
+        "type": "string"
+      }
+    },
+    "clause_ids": {
+      "type": "array",
+      "items": {
+        "type": "string"
+      }
+    },
+    "limitations": {
+      "type": "string",
+      "minLength": 1
+    },
+    "release_classification": {
+      "enum": [
+        "INTERNAL_CANDIDATE",
+        "PUBLICLY_CLEARED"
+      ]
+    }
   },
   "additionalProperties": false
 }
