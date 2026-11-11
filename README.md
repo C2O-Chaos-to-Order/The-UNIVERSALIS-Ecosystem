@@ -55,6 +55,14 @@ This repository contains a bounded, local-first, read-only continuity prototype 
 
 The separate Engineering Doctor and Tool Registry sections above describe their own limited tools; they do not upgrade the prototype or scaffold to accepted status or demonstrate an end-to-end research workflow.
 
+### Trajectory premise guard (ULC-01-05)
+
+`prototype/universalis/trajectory.py` refuses to issue a trajectory guarantee after the declared domain is left or the per-step premise has failed, even if the numerical bound still appears satisfied. It validates the supplied step sequence, records how the premise was established, requires any forward-invariance waiver to be named and visible, and does not count a zero-bound equality as meaningful attainment.
+
+The step facts are caller-supplied. The module can compute `residual <= epsilon` when those quantities are provided and rejects a contradictory boolean, but it cannot independently measure the underlying system or detect dishonest inputs. It checks only the trajectory supplied; it does not prove general forward invariance, award research credit, or grant authorization.
+
+The 89 trajectory tests include behavioural/boundary cases, exact-rational reproduction from the vendored SIM-003 record and trajectory, and mutation tests. The external UNI-RP-001 artifact integration skips with an explicit reason when `UNIVERSALIS_UNI_PKG` is not configured; it does not silently fall back to the vendored fixture. The overall prototype suite is 158 tests with 3 documented skips. These are author-run engineering tests, not independent reproduction or programme acceptance.
+
 Do not interpret this README, a successful build, or an experimental prototype as implementation acceptance, production readiness, deployment permission, or release authorization.
 
 ## Development rules
