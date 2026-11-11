@@ -72,6 +72,14 @@ Public or synthetic material carries its own real public provenance. Private lin
 when it is declared, is recorded as it is and is not rewritten. No vendor commit is
 invented. Sources that are not git objects omit these fields.
 
+## Public-release source repository
+
+On `--profile public-release` only, any source that declares one or more Git locator fields (`repository`, `path`, `commit`, or `blob_sha`) must declare the complete D09 locator and must belong to this package's own public repository. The package declares that repository in `metadata/programme_status.json` as `repository`; the source declares it in the source-register entry. The two names must match.
+
+A source pinned to a different repository is refused unless an owner exception record in `decisions/` names that source and carries `authorization_status: AUTHORIZED`, `authority: owner`, a cited `decided_by` and `citation`, and the source id in `target_ids`. Missing or `NOT_AUTHORIZED` exceptions do not bypass the rule. The validator checks that such a record is cited; it cannot authenticate the owner or confirm the exception was genuinely granted.
+
+This rule is corpus-agnostic. It compares declared repository names and does not hard-code a corpus, remote, or repository. The default profile and `--profile internal-candidate` do not apply it. A package with other-repository provenance remains representable as an internal candidate, but it cannot be reported `release_ready` without replacing the locator or recording a properly authorized owner exception.
+
 ## Corpus boundary
 
 - No clause text, no transcription, and no distinctive wording from a private corpus

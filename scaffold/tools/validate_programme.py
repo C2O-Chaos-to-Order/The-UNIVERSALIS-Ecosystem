@@ -1829,6 +1829,83 @@ def check_classification(
             )
 
 
+def git_locator_fields(source: dict) -> list[str]:
+    """Return all D09 locator fields present on a source."""
+    return [
+        field
+        for field in ("repository", "path", "commit", "blob_sha")
+        if source.get(field) not in (None, "")
+    ]
+
+
+def declared_repository(value: object) -> str | None:
+    if isinstance(value, str) and value.strip():
+        return value.strip()
+    return None
+
+
+def owner_exception_names_source(decisions: list, source_id: str) -> bool:
+    """Require a source-specific, explicitly authorized owner exception."""
+    if not isinstance(source_id, str) or not source_id:
+        return False
+    for item in decisions:
+        if not isinstance(item, dict) or item.get("authority") != "owner":
+            continue
+        if not authorization_record_supports(item, source_id):
+            continue
+        return True
+    return False
+
+
+def check_public_source_repository(data: dict, reasons: dict[str, list[str]]) -> None:
+    """Refuse cross-repository or partial Git locators on public release."""
+    bucket = reasons["public_source_repository"]
+    status = data.get("status") if isinstance(data.get("status"), dict) else {}
+    package_repo = declared_repository(status.get("repository"))
+    decisions = data.get("decisions") or []
+    sources = [item for item in (data.get("sources") or []) if isinstance(item, dict)]
+    located = [item for item in sources if git_locator_fields(item)]
+    if located and package_repo is None:
+        source_ids = ", ".join(str(item.get("id")) for item in located)
+        bucket.append(
+            "PUBLIC_SOURCE_REPOSITORY: metadata/programme_status.json must declare "
+            "repository so public-release can check whether Git locators belong "
+            f"to this package's own public repository; affected sources: {source_ids}"
+        )
+    for source in located:
+        source_id = source.get("id")
+        fields = git_locator_fields(source)
+        complete = all(
+            isinstance(source.get(field), str) and source.get(field).strip()
+            for field in ("repository", "path", "commit", "blob_sha")
+        )
+        if not complete:
+            missing = [
+                field for field in ("repository", "path", "commit", "blob_sha")
+                if not isinstance(source.get(field), str) or not source.get(field).strip()
+            ]
+            labels = {"repository": "a repository", "path": "a path"}
+            for field in missing:
+                label = labels.get(field, field)
+                bucket.append(
+                    f"PUBLIC_SOURCE_REPOSITORY: source {source_id} is git-located "
+                    f"but does not declare {label}; D09 requires repository, path, "
+                    "commit, and blob_sha together"
+                )
+        if owner_exception_names_source(decisions, source_id):
+            continue
+        source_repo = declared_repository(source.get("repository"))
+        if package_repo is None:
+            continue
+        if source_repo != package_repo:
+            bucket.append(
+                f"PUBLIC_SOURCE_REPOSITORY: source {source_id} is git-located to "
+                f"repository {source_repo!r}, which does not match this package's "
+                f"repository {package_repo!r}; only a source-specific, authorized "
+                "owner exception can permit this"
+            )
+
+
 def owner_release_authorized(status: object, decisions: list, programme_id: str | None) -> bool:
     """Return whether the package cites an owner decision authorizing release.
 
@@ -1865,7 +1942,10 @@ def validate(root: Path, profile: str | None = None) -> dict:
     if profile is not None and profile not in PROFILES:
         raise ValueError(f"unknown profile {profile!r}; expected one of {', '.join(PROFILES)}")
     root = root.resolve()
-    check_names = CHECKS + (("release_authorization",) if profile == PUBLIC_RELEASE_PROFILE else ())
+    extra = ()
+    if profile == PUBLIC_RELEASE_PROFILE:
+        extra = ("release_authorization", "public_source_repository")
+    check_names = CHECKS + extra
     reasons = {name: [] for name in check_names}
     if not root.is_dir():
         reasons["manifest_integrity"].append(
@@ -1883,6 +1963,7 @@ def validate(root: Path, profile: str | None = None) -> dict:
         check_classification(root, files, data, reasons, profile)
         if profile == PUBLIC_RELEASE_PROFILE:
             check_release_authorization(data, reasons)
+            check_public_source_repository(data, reasons)
     if profile == INTERNAL_PROFILE and root.is_relative_to(PUBLIC_REPO_ROOT):
         reasons["classification_gate"].append(
             "INTERNAL_CANDIDATE_LOCATION: internal-candidate packages must be stored outside this public repository"

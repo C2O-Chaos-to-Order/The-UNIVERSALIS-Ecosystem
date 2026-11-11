@@ -138,6 +138,11 @@
     "limits": {
       "type": "string",
       "minLength": 1
+    },
+    "repository": {
+      "type": "string",
+      "minLength": 1,
+      "description": "This package's own repository. Required by the public-release profile when any source declares a Git locator field; the source repository must match unless an authorized owner exception names that source."
     }
   },
   "additionalProperties": false

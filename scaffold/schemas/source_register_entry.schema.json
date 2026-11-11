@@ -81,6 +81,10 @@
         "INTERNAL_CANDIDATE",
         "PUBLICLY_CLEARED"
       ]
+    },
+    "note": {
+      "type": "string",
+      "description": "Optional free-text note about the source's role or limitations. Not a locator field."
     }
   }
 }

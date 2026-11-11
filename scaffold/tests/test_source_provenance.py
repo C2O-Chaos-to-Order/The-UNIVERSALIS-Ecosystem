@@ -54,6 +54,21 @@ class SourceSchemaTests(unittest.TestCase):
             SCHEMA["properties"]["independence_from"]["items"]["type"], "string"
         )
 
+    def test_schema_declares_repository_and_note(self):
+        repo = SCHEMA["properties"]["repository"]
+        self.assertEqual(repo["type"], "string")
+        self.assertGreaterEqual(repo["minLength"], 1)
+        self.assertIn("repository that commit belongs to", repo["description"])
+        note = SCHEMA["properties"]["note"]
+        self.assertEqual(note["type"], "string")
+        self.assertNotIn("note", SCHEMA["required"])
+        self.assertNotIn("repository", SCHEMA["required"])
+        self.assertEqual(
+            sorted(SCHEMA["properties"]["release_classification"]["enum"]),
+            ["INTERNAL_CANDIDATE", "PUBLICLY_CLEARED"],
+        )
+        self.assertNotIn("const", SCHEMA["properties"]["release_classification"])
+
     def test_siglum_description_states_the_documentary_requirement(self):
         description = SCHEMA["properties"]["witness_siglum"]["description"].lower()
         self.assertIn("edition itself assigns", description)

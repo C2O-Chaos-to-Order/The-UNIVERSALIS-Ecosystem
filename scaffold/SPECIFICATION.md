@@ -55,7 +55,13 @@ decisions/
 
 ## Classification profiles and release authorization
 
-The default profile preserves the historical `PUBLICLY_CLEARED`-only gate and always reports `release_ready: false`. The `internal-candidate` profile admits `INTERNAL_CANDIDATE` and `PUBLICLY_CLEARED`, but refuses package paths inside this public repository and never reports release readiness. The `public-release` profile requires every file and record to be `PUBLICLY_CLEARED` plus a cited owner decision with `authority: owner`, `authorization_status: AUTHORIZED`, and the programme ID in `target_ids`. A classification label is not release authorization. The validator checks the decision citation's shape; it cannot authenticate the owner or prove the decision was genuinely made.
+The default profile preserves the historical `PUBLICLY_CLEARED`-only gate and always reports `release_ready: false`. The `internal-candidate` profile admits `INTERNAL_CANDIDATE` and `PUBLICLY_CLEARED`, but refuses package paths inside this public repository and never reports release readiness. The `public-release` profile requires every file and record to be `PUBLICLY_CLEARED`, a cited owner decision with `authority: owner`, `authorization_status: AUTHORIZED`, and the programme ID in `target_ids`, and the public-source-repository check described below. A classification label is not release authorization. The validator checks the decision citation's shape; it cannot authenticate the owner or prove the decision was genuinely made.
+
+## Public-source-repository check
+
+The `public-release` profile adds a `public_source_repository` check. A source with any Git locator field (`repository`, `path`, `commit`, or `blob_sha`) must satisfy the complete four-field D09 locator contract and identify the same repository as `metadata/programme_status.json` `repository`. A source that points to another repository is refused unless an owner exception record in `decisions/` names that source and has `authority: owner`, `authorization_status: AUTHORIZED`, a nonempty `decided_by` and `citation`, and the source id in `target_ids`. Exceptions that are missing, pending, or `NOT_AUTHORIZED` do not bypass the rule. The validator checks the record shape; it cannot authenticate the owner or prove the exception was genuinely granted.
+
+This is a provenance boundary for public-release only. The default and `internal-candidate` profiles do not apply it. Internal research can retain private cross-repository provenance without falsely rewriting its origin, but it remains an internal candidate and is not release-ready.
 
 ## Record types
 
@@ -137,7 +143,7 @@ credit (`CANDIDATE_PENDING_OWNER_REVIEW`) is not an award.
 4. **Expectation discipline.** The expected outcome stored on the result equals the expected outcome in `simulations/scenarios.json`. The result's `fixtures_sha256` matches the current bytes of that case file.
 5. **Count arithmetic.** Status totals match the records and the ledgers. Checkpoint recorded counts match the records that name that checkpoint. A simulation id appears at most once in each coverage ledger (reports, dimensions, levels, phases, relationships). Coverage across those ledgers does not multiply the status totals.
 6. **Honest status and axis separation.** The status object and the records do not claim an evidence state above `tested`, programme credit, production validation, or authorization without a matching decision record. `authorization_status` other than `NOT_AUTHORIZED` fails when no authorization record cites that target, and it fails specifically when the record carries `evidence_status: authorized`, because an evidence state is not an authorization record. An `execution_outcome` value that is an evidence state, or an `evidence_status` value that is an execution outcome, is refused.
-7. **Classification gate.** Every file and every record carries a release classification. The default and public-release profiles allow only `PUBLICLY_CLEARED`; the internal-candidate profile also allows `INTERNAL_CANDIDATE` but refuses packages located inside this public repository. A missing or malformed classification is an unclassified artefact. The public-release profile additionally requires a cited owner authorization.
+7. **Classification gate.** Every file and every record carries a release classification. The default and public-release profiles allow only `PUBLICLY_CLEARED`; the internal-candidate profile also allows `INTERNAL_CANDIDATE` but refuses packages located inside this public repository. A missing or malformed classification is an unclassified artefact. The public-release profile additionally requires a cited owner authorization and a complete, same-repository D09 source locator or a source-specific, authorized owner exception.
 
 The validator exits `0` when all seven pass and `1` when any fail. A missing package directory exits `2`.
 
@@ -150,7 +156,7 @@ The validator exits `0` when all seven pass and `1` when any fail. A missing pac
 - Declared counts match the ledgers, and cases are not listed twice inside a coverage ledger.
 - Claims of verification, reproduction, validation, programme credit, production validation and permission to proceed are backed by decision records whenever the honest value would otherwise be empty or pending.
 - Evidence state and execution outcome are carried on their own fields, and neither appears where the other belongs.
-- Every artefact meets the selected profile's classification gate. The internal-candidate profile never reports release readiness; the public-release profile also requires a cited owner authorization.
+- Every artefact meets the selected profile's classification gate. The internal-candidate profile never reports release readiness; the public-release profile also requires a cited owner authorization and refuses incomplete or cross-repository Git locators unless a source-specific, authorized owner exception is recorded.
 
 ## What a passing validation does not prove
 

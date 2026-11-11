@@ -55,7 +55,7 @@ python scaffold/tools/validate_programme.py PATH/TO/PACKAGE --profile public-rel
 
 - Default (no profile): historical `PUBLICLY_CLEARED`-only consistency gate; `release_ready` is always false.
 - `internal-candidate`: admits `INTERNAL_CANDIDATE` and `PUBLICLY_CLEARED`; `release_ready` is always false. This profile is for uncleared work in a private repository or private workspace.
-- `public-release`: requires every file and record to be `PUBLICLY_CLEARED` and a cited owner decision with `authority: owner`, `authorization_status: AUTHORIZED`, and the programme ID in `target_ids`. A reviewer decision or a classification label alone cannot authorize release.
+- `public-release`: requires every file and record to be `PUBLICLY_CLEARED`, a cited owner decision with `authority: owner`, `authorization_status: AUTHORIZED`, and the programme ID in `target_ids`, and that every source with Git locator fields has a complete D09 locator to this package's declared repository or a source-specific, authorized owner exception. A reviewer decision or a classification label alone cannot authorize release.
 
 The validator checks that an owner authorization is cited; it cannot authenticate the owner or prove that the decision was genuinely made. No profile establishes scientific validation, programme acceptance, or production readiness.
 
