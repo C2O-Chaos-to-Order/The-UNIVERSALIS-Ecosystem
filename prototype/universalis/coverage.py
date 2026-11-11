@@ -28,6 +28,10 @@ class CoverageReport:
     unavailable: int
     unresolved_other: int
     shown: int
+    # N04: members with at least one live DISPUTED account. They are a subset
+    # of unresolved_other and are never counted as resolved.
+    disputed: int = 0
+    disputed_members: tuple[str, ...] = ()
 
     def __post_init__(self) -> None:
         problems: list[str] = []
@@ -41,6 +45,10 @@ class CoverageReport:
             )
         if self.in_scope_total != self.shown + self.filtered:
             problems.append("in_scope_total != shown + filtered")
+        if self.disputed != len(self.disputed_members):
+            problems.append("disputed != len(disputed_members)")
+        if self.disputed > self.unresolved_other:
+            problems.append("disputed members must be counted as unresolved")
         if any(
             value < 0
             for value in (
@@ -54,6 +62,7 @@ class CoverageReport:
                 self.unavailable,
                 self.unresolved_other,
                 self.shown,
+                self.disputed,
             )
         ):
             problems.append("a count is negative")
@@ -68,7 +77,24 @@ class CoverageReport:
         return self.declared_population
 
 
+def _live_records_for_member(store: Store, corpus_id: str, member_id: str) -> list:
+    """Every live (not superseded) record for the member, across lineages."""
+    return [
+        record
+        for record in store.records_in_corpus(corpus_id, current_only=True)
+        if record.member_id == member_id
+    ]
+
+
 def _classify(store: Store, corpus_id: str, member_id: str, excluded: dict) -> str:
+    live = _live_records_for_member(store, corpus_id, member_id)
+    # N04 (owner policy 2026-11-08): any live DISPUTED account remains visible,
+    # including when another lineage is supported or the member is otherwise
+    # excluded. It is never counted as resolved. Only correcting the disputed
+    # lineage itself (superseding that record while retaining its history)
+    # removes the flag.
+    if any(record.evidence_state == "disputed" for record in live):
+        return "disputed"
     if member_id in excluded:
         return "excluded"
     record = store.current_record_for_member(corpus_id, member_id)
@@ -151,8 +177,12 @@ def compute_coverage(
         "unresolved_other": 0,
         "excluded": 0,
     }
+    disputed_members: list[str] = []
     for member_id in members:
         kind = _classify(store, corpus_id, member_id, excluded)
+        if kind == "disputed":
+            disputed_members.append(member_id)
+            kind = "unresolved_other"
         counts[kind] += 1
     unresolved = counts["missing"] + counts["unavailable"] + counts["unresolved_other"]
     in_scope = counts["resolved"] + unresolved
@@ -173,4 +203,6 @@ def compute_coverage(
         unavailable=counts["unavailable"],
         unresolved_other=counts["unresolved_other"],
         shown=in_scope - filtered,
+        disputed=len(disputed_members),
+        disputed_members=tuple(disputed_members),
     )
