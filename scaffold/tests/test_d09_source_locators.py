@@ -57,11 +57,14 @@ def _pinned(**overrides) -> dict:
 def _git_pinned(obj: object) -> bool:
     if not isinstance(obj, dict):
         return False
-    return any(obj.get(field) not in (None, "") for field in ("commit", "blob_sha"))
+    return any(obj.get(field) not in (None, "") for field in ("repository", "path", "commit", "blob_sha"))
 
 
 def _old_format(obj: dict) -> bool:
-    return _git_pinned(obj) and not obj.get("repository")
+    return _git_pinned(obj) and not all(
+        isinstance(obj.get(field), str) and obj.get(field).strip()
+        for field in ("repository", "path", "commit", "blob_sha")
+    )
 
 
 def _walk_dicts(value: object):
@@ -163,6 +166,33 @@ class D09ValidationTests(unittest.TestCase):
         self.assertNotIn("does not declare a repository", reasons)
         self.assertNotIn("does not declare a path", reasons)
         self.assertNotIn("does not declare blob_sha", reasons)
+
+    def test_a_git_pinned_source_without_commit_is_refused(self):
+        entry = _pinned()
+        del entry["commit"]
+        code, payload, stderr = self._run([entry])
+        self.assertNotEqual(code, 0)
+        reasons = self._traceability(payload)
+        self.assertIn("does not declare commit", reasons)
+        self.assertNotIn("does not declare repository", reasons)
+
+    def test_repository_without_a_complete_git_locator_is_refused(self):
+        entry = _source(repository="example-public-repository")
+        code, payload, stderr = self._run([entry])
+        self.assertNotEqual(code, 0)
+        reasons = self._traceability(payload)
+        self.assertIn("does not declare path", reasons)
+        self.assertIn("does not declare commit", reasons)
+        self.assertIn("does not declare blob_sha", reasons)
+
+    def test_path_without_a_complete_git_locator_is_refused(self):
+        entry = _source(path="examples/synthetic_source.txt")
+        code, payload, stderr = self._run([entry])
+        self.assertNotEqual(code, 0)
+        reasons = self._traceability(payload)
+        self.assertIn("does not declare repository", reasons)
+        self.assertIn("does not declare commit", reasons)
+        self.assertIn("does not declare blob_sha", reasons)
 
     def test_a_non_relative_path_is_refused(self):
         entry = _pinned(path="../outside/synthetic_source.txt")
