@@ -43,6 +43,22 @@ Evidence-record fields follow the governing Plan. The mapping is in [PLAN_SCHEMA
 
 Requirement ids are `ULC-<tablet>-<clause>`. One requirement belongs to one research card and must name a declared clause identifier. `ULC-00-01` in the requirement template is an example placeholder. It is not the separate collection-level register `UNI-001`…`UNI-015`.
 
+## Validation profiles
+
+The validator supports three distinct modes:
+
+```bash
+python scaffold/tools/validate_programme.py PATH/TO/PACKAGE
+python scaffold/tools/validate_programme.py PATH/TO/PACKAGE --profile internal-candidate
+python scaffold/tools/validate_programme.py PATH/TO/PACKAGE --profile public-release
+```
+
+- Default (no profile): historical `PUBLICLY_CLEARED`-only consistency gate; `release_ready` is always false.
+- `internal-candidate`: admits `INTERNAL_CANDIDATE` and `PUBLICLY_CLEARED`; `release_ready` is always false. This profile is for uncleared work in a private repository or private workspace.
+- `public-release`: requires every file and record to be `PUBLICLY_CLEARED` and a cited owner decision with `authority: owner`, `authorization_status: AUTHORIZED`, and the programme ID in `target_ids`. A reviewer decision or a classification label alone cannot authorize release.
+
+The validator checks that an owner authorization is cited; it cannot authenticate the owner or prove that the decision was genuinely made. No profile establishes scientific validation, programme acceptance, or production readiness.
+
 ## Create an empty package
 
 ```bash
@@ -72,5 +88,5 @@ The tests use the Python standard library only. Negative fixtures must fail, and
   authorization value is `NOT_AUTHORIZED`. An execution outcome is never an evidence state, and tooling
   cannot infer authorization from the evidence ladder.
 - Passing validation is not owner acceptance, independent review, scientific validation, security certification, production readiness, or release authorization.
-- This repository is public. Do not place private corpus text, credentials, or non-public material in a package. The classification gate rejects anything that is not `PUBLICLY_CLEARED`, and it does not review the words inside a file.
+- This repository is public. Do not place private corpus text, credentials, or internal-candidate packages here. The default and public-release profiles require `PUBLICLY_CLEARED`; the internal-candidate profile is only for private workspaces and is refused for packages located inside this public repository. The validator checks declared labels, not the words inside a file.
 - No third-party packages are required. Do not add a dependency for this scaffold.

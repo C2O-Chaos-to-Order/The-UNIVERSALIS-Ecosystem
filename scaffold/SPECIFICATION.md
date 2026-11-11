@@ -51,7 +51,11 @@ decisions/
 
 `metadata/sha256_manifest.json` maps every other file's relative path to a lowercase SHA-256 of its bytes. Paths are package-relative. The manifest does not list itself, and it does not list absolute paths or `..`.
 
-`metadata/classifications.json` maps every file, including the manifest, to a release classification. The only value this package may contain is `PUBLICLY_CLEARED`.
+`metadata/classifications.json` maps every file, including the manifest, to a release classification. The default and public-release profiles require `PUBLICLY_CLEARED`. The internal-candidate profile also admits `INTERNAL_CANDIDATE`, but such packages must be stored in a private repository or private workspace and are never release-ready.
+
+## Classification profiles and release authorization
+
+The default profile preserves the historical `PUBLICLY_CLEARED`-only gate and always reports `release_ready: false`. The `internal-candidate` profile admits `INTERNAL_CANDIDATE` and `PUBLICLY_CLEARED`, but refuses package paths inside this public repository and never reports release readiness. The `public-release` profile requires every file and record to be `PUBLICLY_CLEARED` plus a cited owner decision with `authority: owner`, `authorization_status: AUTHORIZED`, and the programme ID in `target_ids`. A classification label is not release authorization. The validator checks the decision citation's shape; it cannot authenticate the owner or prove the decision was genuinely made.
 
 ## Record types
 
@@ -133,7 +137,7 @@ credit (`CANDIDATE_PENDING_OWNER_REVIEW`) is not an award.
 4. **Expectation discipline.** The expected outcome stored on the result equals the expected outcome in `simulations/scenarios.json`. The result's `fixtures_sha256` matches the current bytes of that case file.
 5. **Count arithmetic.** Status totals match the records and the ledgers. Checkpoint recorded counts match the records that name that checkpoint. A simulation id appears at most once in each coverage ledger (reports, dimensions, levels, phases, relationships). Coverage across those ledgers does not multiply the status totals.
 6. **Honest status and axis separation.** The status object and the records do not claim an evidence state above `tested`, programme credit, production validation, or authorization without a matching decision record. `authorization_status` other than `NOT_AUTHORIZED` fails when no authorization record cites that target, and it fails specifically when the record carries `evidence_status: authorized`, because an evidence state is not an authorization record. An `execution_outcome` value that is an evidence state, or an `evidence_status` value that is an execution outcome, is refused.
-7. **Classification gate.** Every file and every record carries a release classification, and the only allowed value is `PUBLICLY_CLEARED`. A missing classification is an unclassified artefact.
+7. **Classification gate.** Every file and every record carries a release classification. The default and public-release profiles allow only `PUBLICLY_CLEARED`; the internal-candidate profile also allows `INTERNAL_CANDIDATE` but refuses packages located inside this public repository. A missing or malformed classification is an unclassified artefact. The public-release profile additionally requires a cited owner authorization.
 
 The validator exits `0` when all seven pass and `1` when any fail. A missing package directory exits `2`.
 
@@ -146,7 +150,7 @@ The validator exits `0` when all seven pass and `1` when any fail. A missing pac
 - Declared counts match the ledgers, and cases are not listed twice inside a coverage ledger.
 - Claims of verification, reproduction, validation, programme credit, production validation and permission to proceed are backed by decision records whenever the honest value would otherwise be empty or pending.
 - Evidence state and execution outcome are carried on their own fields, and neither appears where the other belongs.
-- Every artefact in the package is marked `PUBLICLY_CLEARED`.
+- Every artefact meets the selected profile's classification gate. The internal-candidate profile never reports release readiness; the public-release profile also requires a cited owner authorization.
 
 ## What a passing validation does not prove
 

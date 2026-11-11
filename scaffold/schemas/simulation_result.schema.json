@@ -55,38 +55,123 @@
     "release_classification"
   ],
   "properties": {
-    "record_id": {"type": "string", "pattern": "^SIM-[0-9]{3,}$"},
-    "programme_unit_id": {"type": "string", "minLength": 1},
-    "pass_type": {"const": "executed_simulation"},
-    "checkpoint_id": {"type": "string", "minLength": 1},
-    "objective_question": {"type": "string", "minLength": 1},
-    "claim_class": {"type": "string", "minLength": 1},
-    "relevant_dimensions": {"type": "string"},
-    "phase": {"type": "string", "minLength": 1},
-    "level": {"type": "string", "minLength": 1},
-    "method_summary": {"type": "string", "minLength": 1},
-    "sources_or_inputs": {"type": "string", "minLength": 1},
-    "assumptions": {"type": "string", "minLength": 1},
-    "acceptance_or_falsification_criteria": {"type": "string", "minLength": 1},
-    "actual_conditions": {"type": "string", "minLength": 1},
-    "outcome_summary": {"type": "string", "minLength": 1},
-    "raw_evidence_location": {"type": "string", "minLength": 1},
-    "uncertainty_and_limitations": {"type": "string", "minLength": 1},
-    "review_note": {"type": "string", "minLength": 1},
-    "evidence_status": {
-      "enum": ["proposed", "documented", "implemented", "tested", "verified", "independently_reproduced", "validated", "authorized"]
+    "record_id": {
+      "type": "string",
+      "pattern": "^SIM-[0-9]{3,}$"
     },
-    "authorization_status": {"enum": ["NOT_AUTHORIZED", "AUTHORIZED"]},
-    "regression_links": {"type": "string"},
-    "open_obligations": {"type": "string"},
-    "protocol_version": {"type": "string", "minLength": 1},
-    "configuration": {"type": "string", "minLength": 1},
+    "programme_unit_id": {
+      "type": "string",
+      "minLength": 1
+    },
+    "pass_type": {
+      "const": "executed_simulation"
+    },
+    "checkpoint_id": {
+      "type": "string",
+      "minLength": 1
+    },
+    "objective_question": {
+      "type": "string",
+      "minLength": 1
+    },
+    "claim_class": {
+      "type": "string",
+      "minLength": 1
+    },
+    "relevant_dimensions": {
+      "type": "string"
+    },
+    "phase": {
+      "type": "string",
+      "minLength": 1
+    },
+    "level": {
+      "type": "string",
+      "minLength": 1
+    },
+    "method_summary": {
+      "type": "string",
+      "minLength": 1
+    },
+    "sources_or_inputs": {
+      "type": "string",
+      "minLength": 1
+    },
+    "assumptions": {
+      "type": "string",
+      "minLength": 1
+    },
+    "acceptance_or_falsification_criteria": {
+      "type": "string",
+      "minLength": 1
+    },
+    "actual_conditions": {
+      "type": "string",
+      "minLength": 1
+    },
+    "outcome_summary": {
+      "type": "string",
+      "minLength": 1
+    },
+    "raw_evidence_location": {
+      "type": "string",
+      "minLength": 1
+    },
+    "uncertainty_and_limitations": {
+      "type": "string",
+      "minLength": 1
+    },
+    "review_note": {
+      "type": "string",
+      "minLength": 1
+    },
+    "evidence_status": {
+      "enum": [
+        "proposed",
+        "documented",
+        "implemented",
+        "tested",
+        "verified",
+        "independently_reproduced",
+        "validated",
+        "authorized"
+      ]
+    },
+    "authorization_status": {
+      "enum": [
+        "NOT_AUTHORIZED",
+        "AUTHORIZED"
+      ]
+    },
+    "regression_links": {
+      "type": "string"
+    },
+    "open_obligations": {
+      "type": "string"
+    },
+    "protocol_version": {
+      "type": "string",
+      "minLength": 1
+    },
+    "configuration": {
+      "type": "string",
+      "minLength": 1
+    },
     "environment": {
       "type": "object",
-      "required": ["python", "platform"],
+      "required": [
+        "python",
+        "platform"
+      ],
       "properties": {
-        "python": {"type": "string", "minLength": 1},
-        "platform": {"type": "string", "minLength": 1}
+        "python": {
+          "type": "string",
+          "minLength": 1
+        },
+        "platform": {
+          "type": "string",
+          "minLength": 1
+        }
       },
       "additionalProperties": false
     },
@@ -103,12 +188,26 @@
     },
     "known_answer_check": {
       "type": "object",
-      "required": ["included", "case_id", "detail"],
+      "required": [
+        "included",
+        "case_id",
+        "detail"
+      ],
       "description": "Whether a known-answer or negative-control case was included. When included is false, detail must state why no such case applies. When included is true, case_id must be non-empty.",
       "properties": {
-        "included": {"type": "boolean"},
-        "case_id": {"type": ["string", "null"]},
-        "detail": {"type": "string", "minLength": 1}
+        "included": {
+          "type": "boolean"
+        },
+        "case_id": {
+          "type": [
+            "string",
+            "null"
+          ]
+        },
+        "detail": {
+          "type": "string",
+          "minLength": 1
+        }
       },
       "additionalProperties": false
     },
@@ -118,29 +217,91 @@
       "description": "Monte Carlo standard error or equivalent precision note. When the model is deterministic or single-run, it must say so explicitly rather than being blank."
     },
     "execution_outcome": {
-      "enum": ["not_executed", "executed", "failed", "incomplete"],
+      "enum": [
+        "not_executed",
+        "executed",
+        "failed",
+        "incomplete"
+      ],
       "default": "not_executed",
       "description": "What the run actually did. Not an evidence state and never read as one. A failed run can legitimately sit at evidence_status documented."
     },
-    "research_record_id": {"type": "string", "pattern": "^RES-[0-9]{3,}$"},
+    "research_record_id": {
+      "type": "string",
+      "pattern": "^RES-[0-9]{3,}$"
+    },
     "input": {},
     "expected": {},
     "actual": {},
-    "expectation_matched": {"type": "boolean"},
-    "execution_status": {"enum": ["COMPLETED", "ERROR"]},
-    "outcome": {"enum": ["PASS", "FAIL", "ERROR"]},
-    "error": {"type": ["string", "null"]},
-    "started_at": {"type": "string", "minLength": 1},
-    "ended_at": {"type": "string", "minLength": 1},
-    "duration_seconds": {"type": "number", "minimum": 0},
-    "exit_code": {"type": "integer"},
-    "code_path": {"type": "string", "minLength": 1},
-    "code_sha256": {"type": "string", "pattern": "^[0-9a-f]{64}$"},
-    "fixtures_sha256": {"type": "string", "pattern": "^[0-9a-f]{64}$"},
-    "programme_credit": {"enum": ["NONE", "CANDIDATE_PENDING_OWNER_REVIEW", "AWARDED"]},
-    "independent_review": {"type": "string", "minLength": 1},
-    "randomness": {"type": "string"},
-    "release_classification": {"const": "PUBLICLY_CLEARED"}
+    "expectation_matched": {
+      "type": "boolean"
+    },
+    "execution_status": {
+      "enum": [
+        "COMPLETED",
+        "ERROR"
+      ]
+    },
+    "outcome": {
+      "enum": [
+        "PASS",
+        "FAIL",
+        "ERROR"
+      ]
+    },
+    "error": {
+      "type": [
+        "string",
+        "null"
+      ]
+    },
+    "started_at": {
+      "type": "string",
+      "minLength": 1
+    },
+    "ended_at": {
+      "type": "string",
+      "minLength": 1
+    },
+    "duration_seconds": {
+      "type": "number",
+      "minimum": 0
+    },
+    "exit_code": {
+      "type": "integer"
+    },
+    "code_path": {
+      "type": "string",
+      "minLength": 1
+    },
+    "code_sha256": {
+      "type": "string",
+      "pattern": "^[0-9a-f]{64}$"
+    },
+    "fixtures_sha256": {
+      "type": "string",
+      "pattern": "^[0-9a-f]{64}$"
+    },
+    "programme_credit": {
+      "enum": [
+        "NONE",
+        "CANDIDATE_PENDING_OWNER_REVIEW",
+        "AWARDED"
+      ]
+    },
+    "independent_review": {
+      "type": "string",
+      "minLength": 1
+    },
+    "randomness": {
+      "type": "string"
+    },
+    "release_classification": {
+      "enum": [
+        "INTERNAL_CANDIDATE",
+        "PUBLICLY_CLEARED"
+      ]
+    }
   },
   "additionalProperties": false
 }

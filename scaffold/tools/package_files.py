@@ -16,6 +16,8 @@ import sys
 from pathlib import Path
 
 PUBLIC_CLASSIFICATION = "PUBLICLY_CLEARED"
+INTERNAL_CANDIDATE_CLASSIFICATION = "INTERNAL_CANDIDATE"
+CLASSIFICATIONS = frozenset({PUBLIC_CLASSIFICATION, INTERNAL_CANDIDATE_CLASSIFICATION})
 MANIFEST_REL = "metadata/sha256_manifest.json"
 CLASSIFICATION_REL = "metadata/classifications.json"
 SKIP_DIR_NAMES = frozenset({"__pycache__", ".git"})
