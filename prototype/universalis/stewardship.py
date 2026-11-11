@@ -48,6 +48,34 @@ class Likelihood(str, Enum):
 
 
 @dataclass(frozen=True)
+class ProhibitionReference:
+    """Provenance record for a claimed pre-existing prohibition.
+
+    human_reviewed is a declared record field, not authentication. Callers
+    must verify the cited authority and decision through an independent process.
+    An unreviewed reference can only cause a PAUSE recommendation.
+    """
+
+    rule_id: str
+    source_id: str
+    source_version: str
+    source_locator: str
+    authority_id: str
+    decision_record_ref: str
+    human_reviewed: bool
+    non_overridable: bool
+
+    def __post_init__(self) -> None:
+        for name in (
+            "rule_id", "source_id", "source_version", "source_locator",
+            "authority_id", "decision_record_ref",
+        ):
+            _require_nonempty_string(name, getattr(self, name))
+        _require_strict_bool("human_reviewed", self.human_reviewed)
+        _require_strict_bool("non_overridable", self.non_overridable)
+
+
+@dataclass(frozen=True)
 class StewardshipCase:
     """Facts for one bounded capability/action assessment.
 
@@ -69,7 +97,7 @@ class StewardshipCase:
     imminent_harm: bool = False
     safeguards_compromised: bool = False
     decision_maker_implicated: bool = False
-    non_overridable_prohibition: str | None = None
+    prohibition_reference: ProhibitionReference | None = None
     mitigations: tuple[str, ...] = ()
 
     def __post_init__(self) -> None:
@@ -91,10 +119,10 @@ class StewardshipCase:
             _require_strict_bool(name, getattr(self, name))
         if self.reversible is not None:
             _require_strict_bool("reversible", self.reversible)
-        if self.non_overridable_prohibition is not None:
-            _require_nonempty_string(
-                "non_overridable_prohibition", self.non_overridable_prohibition
-            )
+        if self.prohibition_reference is not None and not isinstance(
+            self.prohibition_reference, ProhibitionReference
+        ):
+            raise TypeError("prohibition_reference must be a ProhibitionReference")
         if not isinstance(self.mitigations, tuple):
             raise TypeError("mitigations must be a tuple of non-empty strings")
         for mitigation in self.mitigations:
@@ -162,8 +190,8 @@ def evaluate_case(case: StewardshipCase) -> StewardshipDecision:
                 "notify_the_accountable_human_authority",
             )
         )
-        if case.non_overridable_prohibition is not None:
-            reasons.append("non_overridable_prohibition_applies")
+        if case.prohibition_reference is not None:
+            reasons.append("prohibition_reference_recorded")
         if case.decision_maker_implicated:
             reasons.append("decision_maker_implicated")
             actions.append("refer_adjudication_to_an_independent_reviewer")
@@ -177,18 +205,32 @@ def evaluate_case(case: StewardshipCase) -> StewardshipDecision:
             recusal=case.decision_maker_implicated,
         )
 
-    if case.non_overridable_prohibition is not None:
-        reasons.append("non_overridable_prohibition_applies")
-        actions.extend(
-            (
-                "deny_the_prohibited_action",
-                "record_the_specific_policy_basis",
-                "offer_a_safe_and_permissible_alternative_where_available",
+    if case.prohibition_reference is not None:
+        prohibition = case.prohibition_reference
+        if not prohibition.human_reviewed:
+            reasons.append("prohibition_basis_not_human_reviewed")
+            actions.extend(
+                (
+                    "pause_the_proposed_action",
+                    "verify_the_prohibition_source_and_authority_with_an_accountable_human",
+                    "obtain_independent_review_of_the_cited_basis",
+                )
             )
-        )
-        return _decision(
-            case, Gate.PROHIBITED, reasons, actions, independent=True
-        )
+            return _decision(
+                case, Gate.PAUSE, reasons, actions, independent=True
+            )
+        if prohibition.non_overridable:
+            reasons.append("human_reviewed_non_overridable_prohibition_applies")
+            actions.extend(
+                (
+                    "deny_the_prohibited_action",
+                    "record_the_specific_policy_basis_and_source_locator",
+                    "offer_a_safe_and_permissible_alternative_where_available",
+                )
+            )
+            return _decision(
+                case, Gate.PROHIBITED, reasons, actions, independent=True
+            )
 
     if case.decision_maker_implicated:
         reasons.append("decision_maker_implicated")
@@ -214,6 +256,8 @@ def evaluate_case(case: StewardshipCase) -> StewardshipDecision:
         missing.append("reversibility_unknown_for_high_impact_action")
     if severe and case.likelihood is Likelihood.UNKNOWN:
         missing.append("likelihood_unknown_for_high_impact_action")
+    if case.imminent_harm and not imminent_severe_harm:
+        missing.append("imminent_harm_requires_human_review")
 
     if missing:
         reasons.extend(missing)
