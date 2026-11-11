@@ -1,0 +1,114 @@
+[
+  {
+    "n": 0,
+    "x": [
+      "2",
+      "0"
+    ],
+    "y": "1",
+    "phi_x": "1",
+    "true_error": "0",
+    "claimed_bound": "0",
+    "residual_here": "1",
+    "inside_domain": true,
+    "bound_satisfied": true,
+    "residual_within_epsilon": true,
+    "hypothesis_intact": true
+  },
+  {
+    "n": 1,
+    "x": [
+      "4",
+      "0"
+    ],
+    "y": "1",
+    "phi_x": "2",
+    "true_error": "1",
+    "claimed_bound": "1",
+    "residual_here": "4",
+    "inside_domain": true,
+    "bound_satisfied": true,
+    "residual_within_epsilon": false,
+    "hypothesis_intact": false
+  },
+  {
+    "n": 2,
+    "x": [
+      "16",
+      "0"
+    ],
+    "y": "1",
+    "phi_x": "8",
+    "true_error": "7",
+    "claimed_bound": "5",
+    "residual_here": "64",
+    "inside_domain": false,
+    "bound_satisfied": false,
+    "residual_within_epsilon": false,
+    "hypothesis_intact": false
+  },
+  {
+    "n": 3,
+    "x": [
+      "256",
+      "0"
+    ],
+    "y": "1",
+    "phi_x": "128",
+    "true_error": "127",
+    "claimed_bound": "21",
+    "residual_here": "16384",
+    "inside_domain": false,
+    "bound_satisfied": false,
+    "residual_within_epsilon": false,
+    "hypothesis_intact": false
+  },
+  {
+    "n": 4,
+    "x": [
+      "65536",
+      "0"
+    ],
+    "y": "1",
+    "phi_x": "32768",
+    "true_error": "32767",
+    "claimed_bound": "85",
+    "residual_here": "1073741824",
+    "inside_domain": false,
+    "bound_satisfied": false,
+    "residual_within_epsilon": false,
+    "hypothesis_intact": false
+  },
+  {
+    "n": 5,
+    "x": [
+      "4294967296",
+      "0"
+    ],
+    "y": "1",
+    "phi_x": "2147483648",
+    "true_error": "2147483647",
+    "claimed_bound": "341",
+    "residual_here": "4611686018427387904",
+    "inside_domain": false,
+    "bound_satisfied": false,
+    "residual_within_epsilon": false,
+    "hypothesis_intact": false
+  },
+  {
+    "n": 6,
+    "x": [
+      "18446744073709551616",
+      "0"
+    ],
+    "y": "1",
+    "phi_x": "9223372036854775808",
+    "true_error": "9223372036854775807",
+    "claimed_bound": "1365",
+    "residual_here": "85070591730234615865843651857942052864",
+    "inside_domain": false,
+    "bound_satisfied": false,
+    "residual_within_epsilon": false,
+    "hypothesis_intact": false
+  }
+]
