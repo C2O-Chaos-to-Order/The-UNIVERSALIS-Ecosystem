@@ -350,7 +350,7 @@
     {
       "record_type": "divergence_report",
       "schema_version": "1.0.0",
-      "report_id": "fixture-behavioral-report-0001",
+      "report_id": "fixture-behavior-report-0001",
       "domain": "behavioral",
       "status": "divergent",
       "comparison": {
