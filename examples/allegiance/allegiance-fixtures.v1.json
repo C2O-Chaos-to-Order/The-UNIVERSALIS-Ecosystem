@@ -1,0 +1,564 @@
+{
+  "fixture_set": "allegiance-contracts",
+  "fixture_version": "1.0.0",
+  "fixture_only": true,
+  "fixture_public_key": {
+    "keyid": "urn:universalis:allegiance-fixture-ed25519-v1",
+    "public_key_base64": "QwRr/kCSs+lJlOraFdzCDYqqB7ZY/TlU644O+4vcpd4=",
+    "sha256": "1f5fe64ec2f8c901be3aad94a41d70c12d2f3a8f43755f902e665c96f41c87e3",
+    "warning": "Non-production test key only."
+  },
+  "records": {
+    "principal_bindings": [
+      {
+        "record_type": "principal_binding",
+        "schema_version": "1.0.0",
+        "binding_id": "fixture-principal-binding-0001",
+        "principal_ref": "principal:fixture-owner",
+        "principal_key_id": "key:fixture-principal-ed25519",
+        "principal_key_sha256": "1111111111111111111111111111111111111111111111111111111111111111",
+        "principal_identity_assurance": {
+          "assurance_method": "did",
+          "issuer_ref": "trust-anchor:fixture-idp",
+          "subject_ref": "subject:fixture-owner",
+          "key_id": "key:fixture-principal-ed25519",
+          "key_fingerprint_sha256": "1111111111111111111111111111111111111111111111111111111111111111",
+          "proof_of_control_ref": "proof:fixture-challenge-response",
+          "verified_at": "2026-11-12T09:00:00Z",
+          "valid_until": "2026-11-13T09:00:00Z"
+        },
+        "agent_ref": "agent:fixture-delegate",
+        "agent_key_id": "key:fixture-agent-ed25519",
+        "agent_key_sha256": "2222222222222222222222222222222222222222222222222222222222222222",
+        "beneficiary_ref": "beneficiary:fixture-human",
+        "parent_binding_ref": null,
+        "delegation_scope": {
+          "capabilities": [
+            "read:project",
+            "write:workspace"
+          ],
+          "exclusions": [
+            "publish:production",
+            "grant:authority"
+          ],
+          "purpose": "Maintain a synthetic development workspace",
+          "authority_tier": "L1",
+          "budget": {
+            "limit": 50,
+            "unit": "synthetic-actions"
+          },
+          "not_before": "2026-11-12T10:00:00Z",
+          "expires_at": "2026-11-13T10:00:00Z"
+        },
+        "issued_at": "2026-11-12T10:00:00Z",
+        "status": "active",
+        "evidence_refs": [
+          {
+            "ref": "evidence://fixture/principal-proof",
+            "source_type": "synthetic_fixture"
+          }
+        ]
+      },
+      {
+        "record_type": "principal_binding",
+        "schema_version": "1.0.0",
+        "binding_id": "fixture-principal-binding-child-0001",
+        "principal_ref": "principal:fixture-owner",
+        "principal_key_id": "key:fixture-principal-ed25519",
+        "principal_key_sha256": "1111111111111111111111111111111111111111111111111111111111111111",
+        "principal_identity_assurance": {
+          "assurance_method": "did",
+          "issuer_ref": "trust-anchor:fixture-idp",
+          "subject_ref": "subject:fixture-owner",
+          "key_id": "key:fixture-principal-ed25519",
+          "key_fingerprint_sha256": "1111111111111111111111111111111111111111111111111111111111111111",
+          "proof_of_control_ref": "proof:fixture-challenge-response",
+          "verified_at": "2026-11-12T09:00:00Z",
+          "valid_until": "2026-11-13T09:00:00Z"
+        },
+        "agent_ref": "agent:fixture-specialist",
+        "agent_key_id": "key:fixture-specialist-ed25519",
+        "agent_key_sha256": "3333333333333333333333333333333333333333333333333333333333333333",
+        "beneficiary_ref": "beneficiary:fixture-human",
+        "parent_binding_ref": "fixture-principal-binding-0001",
+        "delegation_scope": {
+          "capabilities": [
+            "read:project"
+          ],
+          "exclusions": [
+            "write:workspace",
+            "publish:production",
+            "grant:authority"
+          ],
+          "purpose": "Read synthetic project metadata",
+          "authority_tier": "L0",
+          "budget": {
+            "limit": 10,
+            "unit": "synthetic-actions"
+          },
+          "not_before": "2026-11-12T10:05:00Z",
+          "expires_at": "2026-11-12T18:00:00Z"
+        },
+        "issued_at": "2026-11-12T10:05:00Z",
+        "status": "active",
+        "evidence_refs": [
+          {
+            "ref": "evidence://fixture/delegation-proof",
+            "source_type": "synthetic_fixture"
+          }
+        ]
+      }
+    ],
+    "oath_receipts": [
+      {
+        "record_type": "oath_receipt",
+        "schema_version": "1.0.0",
+        "oath_id": "fixture-oath-0001",
+        "binding_ref": "fixture-principal-binding-0001",
+        "oath_version": "1.0.0",
+        "oath_digest": "4444444444444444444444444444444444444444444444444444444444444444",
+        "commitment_text": "I will act only within the identified principal's delegated scope and disclose material breaches.",
+        "loyalty_semantics": "principal_interest_bounded_by_law_safety_truth_and_constitutional_floors",
+        "obligations": [
+          "respect_scope",
+          "protect_confidential_information",
+          "preserve_truthful_reporting",
+          "honour_revocation"
+        ],
+        "non_derogable_floors": [
+          "lawful_authority",
+          "human_safety_and_rights",
+          "truthful_reporting",
+          "privacy_and_confidentiality",
+          "human_veto",
+          "scope_and_exclusion_integrity"
+        ],
+        "forbidden_actions": [
+          "self_expand_authority",
+          "conceal_material_breach",
+          "approve_own_release"
+        ],
+        "sworn_at": "2026-11-12T10:10:00Z",
+        "valid_until": "2026-11-13T10:00:00Z",
+        "agent_signature_key_id": "key:fixture-agent-ed25519",
+        "principal_signature_key_id": "key:fixture-principal-ed25519",
+        "events": [
+          {
+            "event_id": "oath-event-001",
+            "event_type": "sworn",
+            "occurred_at": "2026-11-12T10:10:00Z",
+            "evidence_ref": "evidence://fixture/oath"
+          },
+          {
+            "event_id": "oath-event-002",
+            "event_type": "action_logged",
+            "occurred_at": "2026-11-12T10:30:00Z",
+            "evidence_ref": "evidence://fixture/action"
+          },
+          {
+            "event_id": "oath-event-003",
+            "event_type": "confessed",
+            "occurred_at": "2026-11-12T10:45:00Z",
+            "evidence_ref": "evidence://fixture/confession"
+          }
+        ],
+        "limitations": [
+          "A signed oath proves a recorded commitment, not internal belief or future fidelity."
+        ]
+      }
+    ],
+    "fidelity_attestations": [
+      {
+        "record_type": "fidelity_attestation",
+        "schema_version": "1.0.0",
+        "attestation_id": "fixture-fidelity-0001",
+        "subject_agent_ref": "agent:fixture-delegate",
+        "binding_ref": "fixture-principal-binding-0001",
+        "evaluator_ref": "evaluator:independent-fixture",
+        "evaluator_is_subject": false,
+        "probe_suite": {
+          "name": "matched-authority-pressure-probe",
+          "version": "1.0.0",
+          "methodology_ref": "https://example.invalid/methods/fidelity-probe/v1"
+        },
+        "evidence_policy": {
+          "evidence_held_constant": true,
+          "authority_pressure_varied": true,
+          "new_material_evidence_introduced": false
+        },
+        "axes": [
+          {
+            "axis_id": "authority_pressure_fidelity",
+            "score": 0.92,
+            "outcome": "hold",
+            "sample_count": 20,
+            "confidence_lower": 0.84,
+            "confidence_upper": 0.98
+          },
+          {
+            "axis_id": "constraint_compliance",
+            "score": 0.96,
+            "outcome": "hold",
+            "sample_count": 20,
+            "confidence_lower": 0.89,
+            "confidence_upper": 1
+          },
+          {
+            "axis_id": "cross_session_delivery_reliability",
+            "score": 0.88,
+            "outcome": "hold",
+            "sample_count": 20,
+            "confidence_lower": 0.79,
+            "confidence_upper": 0.95
+          }
+        ],
+        "measured_at": "2026-11-12T11:00:00Z",
+        "expires_at": "2026-11-13T11:00:00Z",
+        "gateway_default_without_attestation": "deny",
+        "evidence_refs": [
+          "evidence://fixture/fidelity-probe"
+        ],
+        "limitations": [
+          "Synthetic probes and evaluator only; not evidence of a real agent's allegiance."
+        ]
+      }
+    ],
+    "pledge_outcomes": [
+      {
+        "record_type": "pledge_outcome",
+        "schema_version": "1.0.0",
+        "pledge_id": "fixture-pledge-kept",
+        "principal_binding_ref": "fixture-principal-binding-0001",
+        "proposition_digest": "5555555555555555555555555555555555555555555555555555555555555555",
+        "resolution_mechanism": "signed_observation",
+        "deadline": "2026-11-12T11:00:00Z",
+        "state": "kept",
+        "resolved_at": "2026-11-12T10:59:00Z",
+        "evidence_refs": [
+          "evidence://fixture/pledge-kept"
+        ],
+        "bond_model": "public_reputation",
+        "enforcement_model": "public_record_only",
+        "limitations": [
+          "Synthetic example."
+        ]
+      },
+      {
+        "record_type": "pledge_outcome",
+        "schema_version": "1.0.0",
+        "pledge_id": "fixture-pledge-broken",
+        "principal_binding_ref": "fixture-principal-binding-0001",
+        "proposition_digest": "6666666666666666666666666666666666666666666666666666666666666666",
+        "resolution_mechanism": "signed_observation",
+        "deadline": "2026-11-12T11:00:00Z",
+        "state": "broken",
+        "resolved_at": "2026-11-12T10:59:00Z",
+        "evidence_refs": [
+          "evidence://fixture/pledge-broken"
+        ],
+        "bond_model": "public_reputation",
+        "enforcement_model": "public_record_only",
+        "limitations": [
+          "Synthetic example."
+        ]
+      },
+      {
+        "record_type": "pledge_outcome",
+        "schema_version": "1.0.0",
+        "pledge_id": "fixture-pledge-expired-unresolved",
+        "principal_binding_ref": "fixture-principal-binding-0001",
+        "proposition_digest": "7777777777777777777777777777777777777777777777777777777777777777",
+        "resolution_mechanism": "external_witness",
+        "deadline": "2026-11-12T09:00:00Z",
+        "state": "expired_unresolved",
+        "resolved_at": null,
+        "evidence_refs": [
+          "evidence://fixture/pledge-expiry"
+        ],
+        "bond_model": "none",
+        "enforcement_model": "public_record_only",
+        "limitations": [
+          "Unresolved means neither kept nor broken; absence of evidence is not converted to either outcome."
+        ]
+      }
+    ],
+    "revocation_cascades": [
+      {
+        "record_type": "revocation_cascade",
+        "schema_version": "1.0.0",
+        "revocation_id": "fixture-revocation-0001",
+        "root_binding_ref": "fixture-principal-binding-0001",
+        "principal_ref": "principal:fixture-owner",
+        "cause": "principal_requested_revocation",
+        "requested_at": "2026-11-12T12:00:00Z",
+        "affected_bindings": [
+          "fixture-principal-binding-0001",
+          "fixture-principal-binding-child-0001"
+        ],
+        "required_receivers": [
+          "gateway:fixture-a",
+          "gateway:fixture-b",
+          "gateway:fixture-c"
+        ],
+        "receiver_acknowledgements": [
+          {
+            "receiver_ref": "gateway:fixture-a",
+            "status": "enforced",
+            "acknowledged_at": "2026-11-12T12:00:01Z",
+            "receipt_ref": "receipt://fixture/a"
+          },
+          {
+            "receiver_ref": "gateway:fixture-b",
+            "status": "enforced",
+            "acknowledged_at": "2026-11-12T12:00:02Z",
+            "receipt_ref": "receipt://fixture/b"
+          },
+          {
+            "receiver_ref": "gateway:fixture-c",
+            "status": "enforced",
+            "acknowledged_at": "2026-11-12T12:00:03Z",
+            "receipt_ref": "receipt://fixture/c"
+          }
+        ],
+        "status": "effective",
+        "completed_at": "2026-11-12T12:00:03Z",
+        "evidence_refs": [
+          "evidence://fixture/revocation-log"
+        ],
+        "limitations": [
+          "Effective only for the explicitly enumerated receiver set; external gateways outside the receiver registry are not covered."
+        ]
+      }
+    ],
+    "trust_states": [
+      {
+        "record_type": "trust_state",
+        "schema_version": "1.0.0",
+        "trust_record_id": "fixture-trust-state-0001",
+        "agent_ref": "agent:fixture-delegate",
+        "binding_ref": "fixture-principal-binding-0001",
+        "state": "trusted",
+        "level": "L2",
+        "score": 0.84,
+        "score_semantics": "normalized_evidence_strength_not_authority",
+        "dimensions": {
+          "identity_integrity": 0.95,
+          "behavioral_consistency": 0.87,
+          "execution_reliability": 0.85,
+          "attestation_freshness": 0.9,
+          "anomaly_history": 0.7
+        },
+        "computed_at": "2026-11-12T12:05:00Z",
+        "valid_until": "2026-11-12T12:35:00Z",
+        "decay_policy_ref": "policy:fixture-time-decay-v1",
+        "missing_attestation_policy": "treat_as_stale_and_revalidate",
+        "self_dealing_trust_bonus": 0,
+        "verifier_ref": "verifier:fixture-independent",
+        "authority_change_effect": "no_change",
+        "evidence_refs": [
+          "evidence://fixture/trust-state"
+        ],
+        "limitations": [
+          "Trust state is verifier-local and time-bound; it is not an authorization grant or a truth score."
+        ]
+      }
+    ],
+    "loyalty_evaluations": [
+      {
+        "record_type": "loyalty_evaluation",
+        "schema_version": "1.0.0",
+        "evaluation_id": "fixture-loyalty-eval-0001",
+        "benchmark_ref": "benchmark:fixture-principal-loyalty-v1",
+        "subject_ref": "agent:fixture-delegate",
+        "cohort_ref": "cohort:synthetic",
+        "sample_count": 75,
+        "measured_at": "2026-11-12T13:00:00Z",
+        "failure_axes": {
+          "leak_rate": 0.02,
+          "capitulation_rate": 0.04,
+          "posture_rate": 0.03,
+          "over_refusal_rate": 0.08
+        },
+        "agency_duties": {
+          "loyalty": "pass",
+          "actual_authority": "pass",
+          "confidentiality": "pass",
+          "candor": "pass",
+          "diligence": "inconclusive"
+        },
+        "metrics": {
+          "task_success_rate": 0.82,
+          "harm_rate": 0.03,
+          "confidence_interval": {
+            "lower": 0.01,
+            "upper": 0.08,
+            "level": 0.95
+          }
+        },
+        "evidence_refs": [
+          "evidence://fixture/loyalty-eval"
+        ],
+        "limitations": [
+          "Synthetic evaluation; no generalization beyond the declared benchmark and version."
+        ]
+      }
+    ],
+    "constitutional_verdicts": [
+      {
+        "record_type": "constitutional_verdict",
+        "schema_version": "1.0.0",
+        "verdict_id": "fixture-constitutional-verdict-0001",
+        "decision_subject_ref": "action:fixture-high-impact",
+        "principal_binding_ref": "fixture-principal-binding-0001",
+        "verdict": "HOLD",
+        "floor_results": [
+          {
+            "floor_id": "F1",
+            "status": "pass",
+            "evidence_ref": "evidence://fixture/reversibility"
+          },
+          {
+            "floor_id": "F2",
+            "status": "pass",
+            "evidence_ref": "evidence://fixture/truth"
+          },
+          {
+            "floor_id": "F11",
+            "status": "pass",
+            "evidence_ref": "evidence://fixture/auditability"
+          },
+          {
+            "floor_id": "F13",
+            "status": "pass",
+            "evidence_ref": "evidence://fixture/human-veto"
+          }
+        ],
+        "human_veto_available": true,
+        "agent_cannot_certify_own_action": true,
+        "evaluated_by": "policy:independent-constitutional-evaluator",
+        "evaluated_at": "2026-11-12T13:15:00Z",
+        "limitations": [
+          "Illustrative verdict fixture; no claim is made that a third-party implementation has these exact outcomes or that its floor set is independently validated."
+        ]
+      }
+    ]
+  },
+  "signed_bundles": [
+    {
+      "record_type": "signed_bundle",
+      "schema_version": "1.0.0",
+      "bundle_id": "universalis-allegiance-fixture-0001",
+      "statement": {
+        "_type": "https://in-toto.io/Statement/v1",
+        "subject": [
+          {
+            "name": "principal_binding-1.json",
+            "digest": {
+              "sha256": "219b6feca73d0ccface021a874dee9f662d83dd0b014d91c8952d95fa1dabb64"
+            }
+          },
+          {
+            "name": "principal_binding-2.json",
+            "digest": {
+              "sha256": "fee85c51c408b826592351042bf61a63a4d633712b66727098dead06537d6608"
+            }
+          },
+          {
+            "name": "oath_receipt-3.json",
+            "digest": {
+              "sha256": "3b3ca27db98fa50856b0ec6d5eb8a34ca625faa634190170b1727942498dec63"
+            }
+          },
+          {
+            "name": "fidelity_attestation-4.json",
+            "digest": {
+              "sha256": "b7fd1f6b299261a197dbb26d9f9646fe099f229fdba0cbb3055fec22ecdcb763"
+            }
+          },
+          {
+            "name": "pledge_outcome-5.json",
+            "digest": {
+              "sha256": "424c9db2acfb2e36ad428a3dbbd0b59912d5c6cace555e8356d1718fe50bf14a"
+            }
+          },
+          {
+            "name": "pledge_outcome-6.json",
+            "digest": {
+              "sha256": "384d8009355b7b9b88004ac028185fa8d61758f2fc4aa61f81265cdad24a006d"
+            }
+          },
+          {
+            "name": "pledge_outcome-7.json",
+            "digest": {
+              "sha256": "e27eeb193323677eaeec38b30e9b30eee3ff64d8d12fe000d928a3369700c887"
+            }
+          },
+          {
+            "name": "revocation_cascade-8.json",
+            "digest": {
+              "sha256": "a59153fc87a7d8b7964fbfd0b3351cce8b1ee9297609d4477f49893799d8a3e4"
+            }
+          },
+          {
+            "name": "trust_state-9.json",
+            "digest": {
+              "sha256": "aad9d3efa02d1c223f3f69c52518946be140b867cd77b7c96c53406086402440"
+            }
+          },
+          {
+            "name": "loyalty_evaluation-10.json",
+            "digest": {
+              "sha256": "75344dfc3940000fd1b12a406c95c048f4f6266a340595ef376d5a712d4c930c"
+            }
+          },
+          {
+            "name": "constitutional_verdict-11.json",
+            "digest": {
+              "sha256": "f69d09339974152ca528f8daa27f51a66f9580edafd77bb5df2c469fc9cbc38a"
+            }
+          }
+        ],
+        "predicateType": "https://example.invalid/attestations/allegiance-fixture-bundle/v1",
+        "predicate": {
+          "fixture_bundle_id": "universalis-allegiance-fixture-0001",
+          "record_count": 11,
+          "record_types": [
+            "principal_binding",
+            "oath_receipt",
+            "fidelity_attestation",
+            "pledge_outcome",
+            "revocation_cascade",
+            "trust_state",
+            "loyalty_evaluation",
+            "constitutional_verdict"
+          ],
+          "test_only": true,
+          "limitations": [
+            "Synthetic fixture bundle; not a production principal binding, oath, trust assertion, revocation or verdict."
+          ]
+        }
+      },
+      "envelope": {
+        "payloadType": "application/vnd.in-toto+json",
+        "payload": "eyJfdHlwZSI6Imh0dHBzOi8vaW4tdG90by5pby9TdGF0ZW1lbnQvdjEiLCJwcmVkaWNhdGUiOnsiZml4dHVyZV9idW5kbGVfaWQiOiJ1bml2ZXJzYWxpcy1hbGxlZ2lhbmNlLWZpeHR1cmUtMDAwMSIsImxpbWl0YXRpb25zIjpbIlN5bnRoZXRpYyBmaXh0dXJlIGJ1bmRsZTsgbm90IGEgcHJvZHVjdGlvbiBwcmluY2lwYWwgYmluZGluZywgb2F0aCwgdHJ1c3QgYXNzZXJ0aW9uLCByZXZvY2F0aW9uIG9yIHZlcmRpY3QuIl0sInJlY29yZF9jb3VudCI6MTEsInJlY29yZF90eXBlcyI6WyJwcmluY2lwYWxfYmluZGluZyIsIm9hdGhfcmVjZWlwdCIsImZpZGVsaXR5X2F0dGVzdGF0aW9uIiwicGxlZGdlX291dGNvbWUiLCJyZXZvY2F0aW9uX2Nhc2NhZGUiLCJ0cnVzdF9zdGF0ZSIsImxveWFsdHlfZXZhbHVhdGlvbiIsImNvbnN0aXR1dGlvbmFsX3ZlcmRpY3QiXSwidGVzdF9vbmx5Ijp0cnVlfSwicHJlZGljYXRlVHlwZSI6Imh0dHBzOi8vZXhhbXBsZS5pbnZhbGlkL2F0dGVzdGF0aW9ucy9hbGxlZ2lhbmNlLWZpeHR1cmUtYnVuZGxlL3YxIiwic3ViamVjdCI6W3siZGlnZXN0Ijp7InNoYTI1NiI6IjIxOWI2ZmVjYTczZDBjY2ZhY2UwMjFhODc0ZGVlOWY2NjJkODNkZDBiMDE0ZDkxYzg5NTJkOTVmYTFkYWJiNjQifSwibmFtZSI6InByaW5jaXBhbF9iaW5kaW5nLTEuanNvbiJ9LHsiZGlnZXN0Ijp7InNoYTI1NiI6ImZlZTg1YzUxYzQwOGI4MjY1OTIzNTEwNDJiZjYxYTYzYTRkNjMzNzEyYjY2NzI3MDk4ZGVhZDA2NTM3ZDY2MDgifSwibmFtZSI6InByaW5jaXBhbF9iaW5kaW5nLTIuanNvbiJ9LHsiZGlnZXN0Ijp7InNoYTI1NiI6IjNiM2NhMjdkYjk4ZmE1MDg1NmIwZWM2ZDVlYjhhMzRjYTYyNWZhYTYzNDE5MDE3MGIxNzI3OTQyNDk4ZGVjNjMifSwibmFtZSI6Im9hdGhfcmVjZWlwdC0zLmpzb24ifSx7ImRpZ2VzdCI6eyJzaGEyNTYiOiJiN2ZkMWY2YjI5OTI2MWExOTdkYmIyNmQ5Zjk2NDZmZTA5OWYyMjlmZGJhMGNiYjMwNTVmZWMyMmVjZGNiNzYzIn0sIm5hbWUiOiJmaWRlbGl0eV9hdHRlc3RhdGlvbi00Lmpzb24ifSx7ImRpZ2VzdCI6eyJzaGEyNTYiOiI0MjRjOWRiMmFjZmIyZTM2YWQ0MjhhM2RiYmQwYjU5OTEyZDVjNmNhY2U1NTVlODM1NmQxNzE4ZmU1MGJmMTRhIn0sIm5hbWUiOiJwbGVkZ2Vfb3V0Y29tZS01Lmpzb24ifSx7ImRpZ2VzdCI6eyJzaGEyNTYiOiIzODRkODAwOTM1NWI3YjliODgwMDRhYzAyODE4NWZhOGQ2MTc1OGYyZmM0YWE2MWY4MTI2NWNkYWQyNGEwMDZkIn0sIm5hbWUiOiJwbGVkZ2Vfb3V0Y29tZS02Lmpzb24ifSx7ImRpZ2VzdCI6eyJzaGEyNTYiOiJlMjd lZWIxOTMzMjM2NzdlYWVlYzM4YjMwZTliMzBlZWUzZmY2NGQ4ZDEyZmUwMDBkOTI4YTMzNjk3MDBjODg3In0sIm5hbWUiOiJwbGVkZ2Vfb3V0Y29tZS03Lmpzb24ifSx7ImRpZ2VzdCI6eyJzaGEyNTYiOiJhNTkxNTNmYzg3YTdkOGI3OTY0ZmJmZDBiMzM1MWNjZThiMWVlOTI5NzYwOWQ0NDc3ZjQ5ODkzNzk5ZDhhM2U0In0sIm5hbWUiOiJyZXZvY2F0aW9uX2Nhc2NhZGUtOC5qc29uIn0seyJkaWdlc3QiOnsic2hhMjU2IjoiYWFkOWQzZWZhMDJkMWMyMjNmM2Y2OWM1MjUxODk0NmJlMTQwYjg2N2NkNzdiN2M5NmM1MzQwNjA4NjQwMjQ0MCJ9LCJuYW1lIjoidHJ1c3Rfc3RhdGUtOS5qc29uIn0seyJkaWdlc3QiOnsic2hhMjU2IjoiNzUzNDRkZmMzOTQwMDAwZmQxYjEyYTQwNmM5NWMwNDhmNGY2MjY2YTM0MDU5NWVmMzc2ZDVhNzEyZDRjOTMwYyJ9LCJuYW1lIjoibG95YWx0eV9ldmFsdWF0aW9uLTEwLmpzb24ifSx7ImRpZ2VzdCI6eyJzaGEyNTYiOiJmNjlkMDkzMzk5NzQxNTJjYTUyOGY4ZGFhMjdmNTFhNjZmOTU4MGVkYWZkNzdiYjVkZjJjNDY5ZmM5Y2JjMzhhIn0sIm5hbWUiOiJjb25zdGl0dXRpb25hbF92ZXJkaWN0LTExLmpzb24ifV19",
+        "signatures": [
+          {
+            "keyid": "urn:universalis:allegiance-fixture-ed25519-v1",
+            "sig": "TVvCBdtc/l6nOAIPvOWpbM43sqdO4dR5V+j77j2RxIIodWzdy39A2bO4SN48MFSuZ4Tq1arFfXWyfliNFlXcBw=="
+          }
+        ]
+      },
+      "verification": {
+        "status": "verified",
+        "verifier_ref": "fixture-only-verifier",
+        "keyid": "urn:universalis:allegiance-fixture-ed25519-v1",
+        "verified_at": "2026-11-12T13:30:00Z",
+        "public_key_sha256": "1f5fe64ec2f8c901be3aad94a41d70c12d2f3a8f43755f902e665c96f41c87e3"
+      },
+      "limitations": [
+        "Fixture-only public key; not a production trust anchor.",
+        "Bundle attests synthetic records only."
+      ]
+    }
+  ]
+}
