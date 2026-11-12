@@ -118,3 +118,12 @@ See [open UNIVERSALIS divergence architecture](DIVERGENCE_ARCHITECTURE.md), [por
 This public layer covers behavioral, infrastructure, schema, policy, semantic/ontology, identity/federation, embedding/RAG, and resolution divergence. It carries sanitized report data, proposed behavioral axes and verifiable attribution receipts only. It does not contain private C2O baselines, incidents, authority decisions, credentials, permits, signer keys, policy clauses or operational data.
 
 See the [UNIVERSALIS fifteen-inventory master toolchain coverage register](https://github.com/C2O-Chaos-to-Order/Research-for-the-UNIVERSALIS-Ecosystem/blob/implementation/repository-foundation-2026-11-12/TOOLCHAIN_COVERAGE_REGISTER.md).
+
+
+## Insurgence, resistance and defensive threat modeling — sixteenth owner-supplied source — 2026-11-12
+
+See [UNIVERSALIS insurgence architecture](INSURGENCE_ARCHITECTURE.md), [portable contracts](schemas/insurgence/insurgence-contracts.v1.schema.json), [synthetic fixtures](examples/insurgence/insurgence-fixtures.v1.json), and [validation record](INSURGENCE_VALIDATION.md).
+
+The public layer carries evidence-tiered defensive threat models, resistance attestations, containment receipts, nonviolent sourced campaign-plan metadata and signed synthetic attestations only. It excludes private C2O threat data, incidents, decisions, permits, credentials, keys and control-plane details.
+
+See the [UNIVERSALIS sixteen-inventory master register](https://github.com/C2O-Chaos-to-Order/Research-for-the-UNIVERSALIS-Ecosystem/blob/implementation/repository-foundation-2026-11-12/TOOLCHAIN_COVERAGE_REGISTER.md).
