@@ -1,0 +1,564 @@
+{
+  "fixture_set": "development-suite-contracts",
+  "fixture_version": "1.0.0",
+  "fixture_only": true,
+  "project_format_contracts": [
+    {
+      "record_type": "project_format_contract",
+      "schema_version": "1.0.0",
+      "contract_id": "game-portable-envelope-v1",
+      "domain": "game",
+      "format_name": "Replayable game world command log",
+      "format_version": "1.0",
+      "media_type": "application/x-ndjson",
+      "specification_uri": "https://jsonlines.org/",
+      "schema_uri": "https://example.invalid/schemas/game-project.v1.json",
+      "schema_sha256": "1111111111111111111111111111111111111111111111111111111111111111",
+      "serialization": "canonical_json",
+      "canonicalization": "UTF-8 manifest with stable field ordering; project assets are content-addressed by SHA-256; native files remain intact.",
+      "portability": {
+        "portable": true,
+        "content_addressed_assets": true,
+        "asset_digest_algorithm": "sha256",
+        "extension_policy": "preserve_unknown",
+        "required_runtime_dependencies": [],
+        "lossless_round_trip_required": false
+      },
+      "project": {
+        "project_id": "fixture-game",
+        "revision": "rev-0001",
+        "content_digest": {
+          "sha256": "1010101010101010101010101010101010101010101010101010101010101010"
+        }
+      },
+      "assets": [
+        {
+          "logical_name": "assets/game-fixture.bin",
+          "media_type": "application/octet-stream",
+          "digest": {
+            "sha256": "2020202020202020202020202020202020202020202020202020202020202020"
+          },
+          "license_reference": "synthetic-fixture-only"
+        }
+      ],
+      "notes": []
+    },
+    {
+      "record_type": "project_format_contract",
+      "schema_version": "1.0.0",
+      "contract_id": "music_audio-portable-envelope-v1",
+      "domain": "music_audio",
+      "format_name": "DAW session bundle with MIDI/audio exports",
+      "format_version": "1.0",
+      "media_type": "application/vnd.example.audio-project+zip",
+      "specification_uri": "https://midi.org/midi-1-0",
+      "schema_uri": "https://example.invalid/schemas/music_audio-project.v1.json",
+      "schema_sha256": "2222222222222222222222222222222222222222222222222222222222222222",
+      "serialization": "archive_with_manifest",
+      "canonicalization": "UTF-8 manifest with stable field ordering; project assets are content-addressed by SHA-256; native files remain intact.",
+      "portability": {
+        "portable": true,
+        "content_addressed_assets": true,
+        "asset_digest_algorithm": "sha256",
+        "extension_policy": "preserve_unknown",
+        "required_runtime_dependencies": [],
+        "lossless_round_trip_required": false
+      },
+      "project": {
+        "project_id": "fixture-music_audio",
+        "revision": "rev-0001",
+        "content_digest": {
+          "sha256": "1111111111111111111111111111111111111111111111111111111111111111"
+        }
+      },
+      "assets": [
+        {
+          "logical_name": "assets/music_audio-fixture.bin",
+          "media_type": "application/octet-stream",
+          "digest": {
+            "sha256": "2121212121212121212121212121212121212121212121212121212121212121"
+          },
+          "license_reference": "synthetic-fixture-only"
+        }
+      ],
+      "notes": [
+        "MIDI and audio exports are interchange assets, not a complete DAW session format."
+      ]
+    },
+    {
+      "record_type": "project_format_contract",
+      "schema_version": "1.0.0",
+      "contract_id": "3d_cad-portable-envelope-v1",
+      "domain": "3d_cad",
+      "format_name": "glTF 2.0 scene and asset package",
+      "format_version": "1.0",
+      "media_type": "model/gltf+json",
+      "specification_uri": "https://registry.khronos.org/glTF/specs/2.0/glTF-2.0.html",
+      "schema_uri": "https://example.invalid/schemas/3d_cad-project.v1.json",
+      "schema_sha256": "3333333333333333333333333333333333333333333333333333333333333333",
+      "serialization": "archive_with_manifest",
+      "canonicalization": "UTF-8 manifest with stable field ordering; project assets are content-addressed by SHA-256; native files remain intact.",
+      "portability": {
+        "portable": true,
+        "content_addressed_assets": true,
+        "asset_digest_algorithm": "sha256",
+        "extension_policy": "preserve_unknown",
+        "required_runtime_dependencies": [],
+        "lossless_round_trip_required": false
+      },
+      "project": {
+        "project_id": "fixture-3d_cad",
+        "revision": "rev-0001",
+        "content_digest": {
+          "sha256": "1212121212121212121212121212121212121212121212121212121212121212"
+        }
+      },
+      "assets": [
+        {
+          "logical_name": "assets/3d_cad-fixture.bin",
+          "media_type": "application/octet-stream",
+          "digest": {
+            "sha256": "2222222222222222222222222222222222222222222222222222222222222222"
+          },
+          "license_reference": "synthetic-fixture-only"
+        }
+      ],
+      "notes": []
+    },
+    {
+      "record_type": "project_format_contract",
+      "schema_version": "1.0.0",
+      "contract_id": "video-portable-envelope-v1",
+      "domain": "video",
+      "format_name": "OpenTimelineIO editorial timeline",
+      "format_version": "1.0",
+      "media_type": "application/vnd.opentimelineio",
+      "specification_uri": "https://opentimelineio.readthedocs.io/",
+      "schema_uri": "https://example.invalid/schemas/video-project.v1.json",
+      "schema_sha256": "4444444444444444444444444444444444444444444444444444444444444444",
+      "serialization": "canonical_json",
+      "canonicalization": "UTF-8 manifest with stable field ordering; project assets are content-addressed by SHA-256; native files remain intact.",
+      "portability": {
+        "portable": true,
+        "content_addressed_assets": true,
+        "asset_digest_algorithm": "sha256",
+        "extension_policy": "preserve_unknown",
+        "required_runtime_dependencies": [],
+        "lossless_round_trip_required": false
+      },
+      "project": {
+        "project_id": "fixture-video",
+        "revision": "rev-0001",
+        "content_digest": {
+          "sha256": "1313131313131313131313131313131313131313131313131313131313131313"
+        }
+      },
+      "assets": [
+        {
+          "logical_name": "assets/video-fixture.bin",
+          "media_type": "application/octet-stream",
+          "digest": {
+            "sha256": "2323232323232323232323232323232323232323232323232323232323232323"
+          },
+          "license_reference": "synthetic-fixture-only"
+        }
+      ],
+      "notes": [
+        "Timeline interchange is separate from source media codecs and editor-specific effects."
+      ]
+    },
+    {
+      "record_type": "project_format_contract",
+      "schema_version": "1.0.0",
+      "contract_id": "vr_ar-portable-envelope-v1",
+      "domain": "vr_ar",
+      "format_name": "WebXR scene plus application manifest",
+      "format_version": "1.0",
+      "media_type": "application/vnd.example.xr-project+json",
+      "specification_uri": "https://www.w3.org/TR/webxr/",
+      "schema_uri": "https://example.invalid/schemas/vr_ar-project.v1.json",
+      "schema_sha256": "5555555555555555555555555555555555555555555555555555555555555555",
+      "serialization": "archive_with_manifest",
+      "canonicalization": "UTF-8 manifest with stable field ordering; project assets are content-addressed by SHA-256; native files remain intact.",
+      "portability": {
+        "portable": true,
+        "content_addressed_assets": true,
+        "asset_digest_algorithm": "sha256",
+        "extension_policy": "preserve_unknown",
+        "required_runtime_dependencies": [],
+        "lossless_round_trip_required": false
+      },
+      "project": {
+        "project_id": "fixture-vr_ar",
+        "revision": "rev-0001",
+        "content_digest": {
+          "sha256": "1414141414141414141414141414141414141414141414141414141414141414"
+        }
+      },
+      "assets": [
+        {
+          "logical_name": "assets/vr_ar-fixture.bin",
+          "media_type": "application/octet-stream",
+          "digest": {
+            "sha256": "2424242424242424242424242424242424242424242424242424242424242424"
+          },
+          "license_reference": "synthetic-fixture-only"
+        }
+      ],
+      "notes": []
+    },
+    {
+      "record_type": "project_format_contract",
+      "schema_version": "1.0.0",
+      "contract_id": "ide_vcs-portable-envelope-v1",
+      "domain": "ide_vcs",
+      "format_name": "Git-native engineering project",
+      "format_version": "1.0",
+      "media_type": "application/vnd.git.repository",
+      "specification_uri": "https://git-scm.com/docs/pack-format",
+      "schema_uri": "https://example.invalid/schemas/ide_vcs-project.v1.json",
+      "schema_sha256": "6666666666666666666666666666666666666666666666666666666666666666",
+      "serialization": "git_native",
+      "canonicalization": "UTF-8 manifest with stable field ordering; project assets are content-addressed by SHA-256; native files remain intact.",
+      "portability": {
+        "portable": true,
+        "content_addressed_assets": true,
+        "asset_digest_algorithm": "sha256",
+        "extension_policy": "preserve_unknown",
+        "required_runtime_dependencies": [],
+        "lossless_round_trip_required": false
+      },
+      "project": {
+        "project_id": "fixture-ide_vcs",
+        "revision": "rev-0001",
+        "content_digest": {
+          "sha256": "1515151515151515151515151515151515151515151515151515151515151515"
+        }
+      },
+      "assets": [
+        {
+          "logical_name": "assets/ide_vcs-fixture.bin",
+          "media_type": "application/octet-stream",
+          "digest": {
+            "sha256": "2525252525252525252525252525252525252525252525252525252525252525"
+          },
+          "license_reference": "synthetic-fixture-only"
+        }
+      ],
+      "notes": []
+    },
+    {
+      "record_type": "project_format_contract",
+      "schema_version": "1.0.0",
+      "contract_id": "build_ci_cd-portable-envelope-v1",
+      "domain": "build_ci_cd",
+      "format_name": "Build pipeline definition and lock manifest",
+      "format_version": "1.0",
+      "media_type": "application/vnd.example.pipeline+json",
+      "specification_uri": "https://slsa.dev/spec/v1.0/provenance",
+      "schema_uri": "https://example.invalid/schemas/build_ci_cd-project.v1.json",
+      "schema_sha256": "7777777777777777777777777777777777777777777777777777777777777777",
+      "serialization": "canonical_json",
+      "canonicalization": "UTF-8 manifest with stable field ordering; project assets are content-addressed by SHA-256; native files remain intact.",
+      "portability": {
+        "portable": true,
+        "content_addressed_assets": true,
+        "asset_digest_algorithm": "sha256",
+        "extension_policy": "preserve_unknown",
+        "required_runtime_dependencies": [],
+        "lossless_round_trip_required": false
+      },
+      "project": {
+        "project_id": "fixture-build_ci_cd",
+        "revision": "rev-0001",
+        "content_digest": {
+          "sha256": "1616161616161616161616161616161616161616161616161616161616161616"
+        }
+      },
+      "assets": [
+        {
+          "logical_name": "assets/build_ci_cd-fixture.bin",
+          "media_type": "application/octet-stream",
+          "digest": {
+            "sha256": "2626262626262626262626262626262626262626262626262626262626262626"
+          },
+          "license_reference": "synthetic-fixture-only"
+        }
+      ],
+      "notes": []
+    },
+    {
+      "record_type": "project_format_contract",
+      "schema_version": "1.0.0",
+      "contract_id": "project_management-portable-envelope-v1",
+      "domain": "project_management",
+      "format_name": "Git-native project plan and task graph",
+      "format_version": "1.0",
+      "media_type": "application/vnd.example.project-plan+json",
+      "specification_uri": "https://json-schema.org/",
+      "schema_uri": "https://example.invalid/schemas/project_management-project.v1.json",
+      "schema_sha256": "8888888888888888888888888888888888888888888888888888888888888888",
+      "serialization": "canonical_json",
+      "canonicalization": "UTF-8 manifest with stable field ordering; project assets are content-addressed by SHA-256; native files remain intact.",
+      "portability": {
+        "portable": true,
+        "content_addressed_assets": true,
+        "asset_digest_algorithm": "sha256",
+        "extension_policy": "preserve_unknown",
+        "required_runtime_dependencies": [],
+        "lossless_round_trip_required": false
+      },
+      "project": {
+        "project_id": "fixture-project_management",
+        "revision": "rev-0001",
+        "content_digest": {
+          "sha256": "1717171717171717171717171717171717171717171717171717171717171717"
+        }
+      },
+      "assets": [
+        {
+          "logical_name": "assets/project_management-fixture.bin",
+          "media_type": "application/octet-stream",
+          "digest": {
+            "sha256": "2727272727272727272727272727272727272727272727272727272727272727"
+          },
+          "license_reference": "synthetic-fixture-only"
+        }
+      ],
+      "notes": []
+    },
+    {
+      "record_type": "project_format_contract",
+      "schema_version": "1.0.0",
+      "contract_id": "documentation-portable-envelope-v1",
+      "domain": "documentation",
+      "format_name": "Documentation source bundle and nav manifest",
+      "format_version": "1.0",
+      "media_type": "application/vnd.example.documentation+zip",
+      "specification_uri": "https://www.markdownguide.org/",
+      "schema_uri": "https://example.invalid/schemas/documentation-project.v1.json",
+      "schema_sha256": "9999999999999999999999999999999999999999999999999999999999999999",
+      "serialization": "archive_with_manifest",
+      "canonicalization": "UTF-8 manifest with stable field ordering; project assets are content-addressed by SHA-256; native files remain intact.",
+      "portability": {
+        "portable": true,
+        "content_addressed_assets": true,
+        "asset_digest_algorithm": "sha256",
+        "extension_policy": "preserve_unknown",
+        "required_runtime_dependencies": [],
+        "lossless_round_trip_required": false
+      },
+      "project": {
+        "project_id": "fixture-documentation",
+        "revision": "rev-0001",
+        "content_digest": {
+          "sha256": "1818181818181818181818181818181818181818181818181818181818181818"
+        }
+      },
+      "assets": [
+        {
+          "logical_name": "assets/documentation-fixture.bin",
+          "media_type": "application/octet-stream",
+          "digest": {
+            "sha256": "2828282828282828282828282828282828282828282828282828282828282828"
+          },
+          "license_reference": "synthetic-fixture-only"
+        }
+      ],
+      "notes": []
+    }
+  ],
+  "agent_capability_manifests": [
+    {
+      "record_type": "agent_capability_manifest",
+      "schema_version": "1.0.0",
+      "manifest_id": "limina-mcp-fixture",
+      "provider": "Limina",
+      "provider_version": "candidate-unpinned",
+      "protocol": "MCP",
+      "transport": "stdio",
+      "deployment_model": "local",
+      "data_residency": "local_only",
+      "authentication_modes": [
+        "os_identity"
+      ],
+      "capabilities": [
+        {
+          "capability_id": "scene.read",
+          "name": "Inspect project scene",
+          "effect": "read",
+          "scope": [
+            "project:fixture-game"
+          ],
+          "approval_mode": "none",
+          "destructive_or_external_effect": false
+        },
+        {
+          "capability_id": "scene.edit",
+          "name": "Apply bounded scene edit",
+          "effect": "write",
+          "scope": [
+            "project:fixture-game"
+          ],
+          "approval_mode": "per_call_confirmation",
+          "destructive_or_external_effect": false
+        },
+        {
+          "capability_id": "game.publish",
+          "name": "Publish game build",
+          "effect": "publish",
+          "scope": [
+            "project:fixture-game",
+            "target:production"
+          ],
+          "approval_mode": "human_permit",
+          "destructive_or_external_effect": true
+        }
+      ],
+      "declared_limitations": [
+        "Illustrative declaration, not a live discovery response.",
+        "MCP tools do not confer project access or release authority."
+      ],
+      "manifest_digest": "3131313131313131313131313131313131313131313131313131313131313131"
+    },
+    {
+      "record_type": "agent_capability_manifest",
+      "schema_version": "1.0.0",
+      "manifest_id": "soundbox-local-mcp-fixture",
+      "provider": "Soundbox",
+      "provider_version": "candidate-unpinned",
+      "protocol": "MCP",
+      "transport": "local_http",
+      "deployment_model": "local",
+      "data_residency": "local_only",
+      "authentication_modes": [
+        "none_local_only"
+      ],
+      "capabilities": [
+        {
+          "capability_id": "audio.generate",
+          "name": "Generate local audio asset",
+          "effect": "generate",
+          "scope": [
+            "project:fixture-audio"
+          ],
+          "approval_mode": "per_call_confirmation",
+          "destructive_or_external_effect": false
+        },
+        {
+          "capability_id": "audio.export",
+          "name": "Export audio render",
+          "effect": "export",
+          "scope": [
+            "project:fixture-audio"
+          ],
+          "approval_mode": "per_call_confirmation",
+          "destructive_or_external_effect": false
+        }
+      ],
+      "declared_limitations": [
+        "Unauthenticated localhost services must not be exposed to untrusted networks.",
+        "Model and output rights are separate from the host application license."
+      ],
+      "manifest_digest": "3232323232323232323232323232323232323232323232323232323232323232"
+    },
+    {
+      "record_type": "agent_capability_manifest",
+      "schema_version": "1.0.0",
+      "manifest_id": "kici-hybrid-runner-fixture",
+      "provider": "KiCI",
+      "provider_version": "candidate-unpinned",
+      "protocol": "MULTI_INTERFACE",
+      "transport": "mixed",
+      "deployment_model": "hybrid",
+      "data_residency": "mixed",
+      "authentication_modes": [
+        "oauth",
+        "service_identity"
+      ],
+      "capabilities": [
+        {
+          "capability_id": "pipeline.compile",
+          "name": "Compile pipeline definition",
+          "effect": "build",
+          "scope": [
+            "repository:fixture-repo"
+          ],
+          "approval_mode": "per_call_confirmation",
+          "destructive_or_external_effect": false
+        },
+        {
+          "capability_id": "pipeline.execute",
+          "name": "Execute on controlled runner",
+          "effect": "execute",
+          "scope": [
+            "repository:fixture-repo",
+            "runner:operator-managed"
+          ],
+          "approval_mode": "owner_policy_gate",
+          "destructive_or_external_effect": true
+        }
+      ],
+      "declared_limitations": [
+        "Hybrid classification reflects hosted relay/dashboard dependency in documented architecture.",
+        "Illustrative declaration only."
+      ],
+      "manifest_digest": "3333333333333333333333333333333333333333333333333333333333333333"
+    }
+  ],
+  "build_provenance_receipts": [
+    {
+      "record_type": "build_provenance_receipt",
+      "schema_version": "1.0.0",
+      "receipt_id": "fixture-slsa-dsse-0001",
+      "statement": {
+        "_type": "https://in-toto.io/Statement/v1",
+        "subject": [
+          {
+            "name": "artifact.bin",
+            "digest": {
+              "sha256": "aaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaa"
+            }
+          }
+        ],
+        "predicateType": "https://slsa.dev/provenance/v1",
+        "predicate": {
+          "buildDefinition": {
+            "buildType": "https://universal.is/build-types/v1",
+            "externalParameters": {},
+            "internalParameters": {},
+            "resolvedDependencies": []
+          },
+          "runDetails": {
+            "builder": {
+              "id": "https://example.invalid/builder"
+            },
+            "metadata": {
+              "invocationId": "fixture-1",
+              "startedOn": "2026-11-12T10:00:00Z",
+              "finishedOn": "2026-11-12T10:01:00Z"
+            },
+            "byproducts": []
+          }
+        }
+      },
+      "envelope": {
+        "payloadType": "application/vnd.in-toto+json",
+        "payload": "eyJfdHlwZSI6Imh0dHBzOi8vaW4tdG90by5pby9TdGF0ZW1lbnQvdjEiLCJwcmVkaWNhdGUiOnsiYnVpbGREZWZpbml0aW9uIjp7ImJ1aWxkVHlwZSI6Imh0dHBzOi8vdW5pdmVyc2FsLmlzL2J1aWxkLXR5cGVzL3YxIiwiZXh0ZXJuYWxQYXJhbWV0ZXJzIjp7fSwiaW50ZXJuYWxQYXJhbWV0ZXJzIjp7fSwicmVzb2x2ZWREZXBlbmRlbmNpZXMiOltdfSwicnVuRGV0YWlscyI6eyJidWlsZGVyIjp7ImlkIjoiaHR0cHM6Ly9leGFtcGxlLmludmFsaWQvYnVpbGRlciJ9LCJieXByb2R1Y3RzIjpbXSwibWV0YWRhdGEiOnsiZmluaXNoZWRPbiI6IjIwMjYtMTEtMTJUMTA6MDE6MDBaIiwiaW52b2NhdGlvbklkIjoiZml4dHVyZS0xIiwic3RhcnRlZE9uIjoiMjAyNi0xMS0xMlQxMDowMDowMFoifX19LCJwcmVkaWNhdGVUeXBlIjoiaHR0cHM6Ly9zbHNhLmRldi9wcm92ZW5hbmNlL3YxIiwic3ViamVjdCI6W3siZGlnZXN0Ijp7InNoYTI1NiI6ImFhYWFhYWFhYWFhYWFhYWFhYWFhYWFhYWFhYWFhYWFhYWFhYWFhYWFhYWFhYWFhYWFhYWFhYWFhYWFhYWFhYWEifSwibmFtZSI6ImFydGlmYWN0LmJpbiJ9XX0=",
+        "signatures": [
+          {
+            "keyid": "urn:universal.is:fixture-ed25519-2026-11",
+            "sig": "yDTM2Gx+vh61H6K/sJO+RiKXACSkavWoIb/oYbLOOI+/AC59zexYJY0x5R5rKhFwxQx9WzWPShtAN7o+QTZEDA=="
+          }
+        ]
+      },
+      "verification": {
+        "status": "verified",
+        "verifier_id": "urn:universal.is:fixture-trust-store:v1",
+        "keyid": "urn:universal.is:fixture-ed25519-2026-11",
+        "verified_at": "2026-11-12T10:02:00Z",
+        "public_key_sha256": "139e3940e64b5491722088d9a0d741628fc826e09475d341a780acde3c4b8070"
+      }
+    }
+  ]
+}

@@ -1,0 +1,1445 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "$id": "https://example.invalid/schemas/allegiance/allegiance-contracts.v1.schema.json",
+  "title": "Portable Allegiance, Principal Binding, Fidelity, Revocation and Trust Contracts",
+  "description": "Portable evidence formats for bounded principal allegiance. A commitment never overrides law, safety, truth, human rights or constitutional floors.",
+  "oneOf": [
+    {
+      "$ref": "#/$defs/principal_binding"
+    },
+    {
+      "$ref": "#/$defs/oath_receipt"
+    },
+    {
+      "$ref": "#/$defs/fidelity_attestation"
+    },
+    {
+      "$ref": "#/$defs/pledge_outcome"
+    },
+    {
+      "$ref": "#/$defs/revocation_cascade"
+    },
+    {
+      "$ref": "#/$defs/trust_state"
+    },
+    {
+      "$ref": "#/$defs/loyalty_evaluation"
+    },
+    {
+      "$ref": "#/$defs/constitutional_verdict"
+    },
+    {
+      "$ref": "#/$defs/signed_bundle"
+    }
+  ],
+  "$defs": {
+    "digest": {
+      "type": "object",
+      "properties": {
+        "sha256": {
+          "type": "string",
+          "pattern": "^[a-f0-9]{64}$"
+        }
+      },
+      "required": [
+        "sha256"
+      ],
+      "additionalProperties": false
+    },
+    "evidence_ref": {
+      "type": "object",
+      "properties": {
+        "ref": {
+          "type": "string",
+          "minLength": 2
+        },
+        "digest": {
+          "$ref": "#/$defs/digest"
+        },
+        "source_type": {
+          "type": "string",
+          "minLength": 2
+        }
+      },
+      "required": [
+        "ref",
+        "source_type"
+      ],
+      "additionalProperties": false
+    },
+    "budget": {
+      "type": "object",
+      "properties": {
+        "limit": {
+          "type": "number",
+          "minimum": 0
+        },
+        "unit": {
+          "type": "string",
+          "minLength": 1
+        }
+      },
+      "required": [
+        "limit",
+        "unit"
+      ],
+      "additionalProperties": false
+    },
+    "delegation_scope": {
+      "type": "object",
+      "properties": {
+        "capabilities": {
+          "type": "array",
+          "items": {
+            "type": "string",
+            "minLength": 2
+          },
+          "uniqueItems": true
+        },
+        "exclusions": {
+          "type": "array",
+          "items": {
+            "type": "string",
+            "minLength": 2
+          },
+          "uniqueItems": true
+        },
+        "purpose": {
+          "type": "string",
+          "minLength": 8
+        },
+        "authority_tier": {
+          "enum": [
+            "L0",
+            "L1",
+            "L2",
+            "L3",
+            "L4"
+          ]
+        },
+        "budget": {
+          "$ref": "#/$defs/budget"
+        },
+        "not_before": {
+          "type": "string",
+          "format": "date-time"
+        },
+        "expires_at": {
+          "type": "string",
+          "format": "date-time"
+        }
+      },
+      "required": [
+        "capabilities",
+        "exclusions",
+        "purpose",
+        "authority_tier",
+        "budget",
+        "not_before",
+        "expires_at"
+      ],
+      "additionalProperties": false
+    },
+    "principal_binding": {
+      "type": "object",
+      "properties": {
+        "record_type": {
+          "const": "principal_binding"
+        },
+        "schema_version": {
+          "const": "1.0.0"
+        },
+        "binding_id": {
+          "type": "string",
+          "minLength": 3
+        },
+        "principal_ref": {
+          "type": "string",
+          "minLength": 3
+        },
+        "principal_key_id": {
+          "type": "string",
+          "minLength": 2
+        },
+        "principal_key_sha256": {
+          "type": "string",
+          "pattern": "^[a-f0-9]{64}$"
+        },
+        "principal_identity_assurance": {
+          "type": "object",
+          "properties": {
+            "assurance_method": {
+              "enum": [
+                "did",
+                "x509",
+                "oidc",
+                "spiffe",
+                "jwks",
+                "other"
+              ]
+            },
+            "issuer_ref": {
+              "type": "string",
+              "minLength": 2
+            },
+            "subject_ref": {
+              "type": "string",
+              "minLength": 2
+            },
+            "key_id": {
+              "type": "string",
+              "minLength": 2
+            },
+            "key_fingerprint_sha256": {
+              "type": "string",
+              "pattern": "^[a-f0-9]{64}$"
+            },
+            "proof_of_control_ref": {
+              "type": "string",
+              "minLength": 2
+            },
+            "verified_at": {
+              "type": "string",
+              "format": "date-time"
+            },
+            "valid_until": {
+              "type": "string",
+              "format": "date-time"
+            }
+          },
+          "required": [
+            "assurance_method",
+            "issuer_ref",
+            "subject_ref",
+            "key_id",
+            "key_fingerprint_sha256",
+            "proof_of_control_ref",
+            "verified_at",
+            "valid_until"
+          ],
+          "additionalProperties": false
+        },
+        "agent_ref": {
+          "type": "string",
+          "minLength": 3
+        },
+        "agent_key_id": {
+          "type": "string",
+          "minLength": 2
+        },
+        "agent_key_sha256": {
+          "type": "string",
+          "pattern": "^[a-f0-9]{64}$"
+        },
+        "beneficiary_ref": {
+          "type": "string",
+          "minLength": 3
+        },
+        "parent_binding_ref": {
+          "type": [
+            "string",
+            "null"
+          ]
+        },
+        "delegation_scope": {
+          "$ref": "#/$defs/delegation_scope"
+        },
+        "issued_at": {
+          "type": "string",
+          "format": "date-time"
+        },
+        "status": {
+          "enum": [
+            "active",
+            "suspended",
+            "revoked",
+            "expired"
+          ]
+        },
+        "evidence_refs": {
+          "type": "array",
+          "items": {
+            "$ref": "#/$defs/evidence_ref"
+          },
+          "minItems": 1
+        }
+      },
+      "required": [
+        "record_type",
+        "schema_version",
+        "binding_id",
+        "principal_ref",
+        "principal_key_id",
+        "principal_key_sha256",
+        "principal_identity_assurance",
+        "agent_ref",
+        "agent_key_id",
+        "agent_key_sha256",
+        "beneficiary_ref",
+        "parent_binding_ref",
+        "delegation_scope",
+        "issued_at",
+        "status",
+        "evidence_refs"
+      ],
+      "additionalProperties": false
+    },
+    "oath_receipt": {
+      "type": "object",
+      "properties": {
+        "record_type": {
+          "const": "oath_receipt"
+        },
+        "schema_version": {
+          "const": "1.0.0"
+        },
+        "oath_id": {
+          "type": "string",
+          "minLength": 3
+        },
+        "binding_ref": {
+          "type": "string",
+          "minLength": 3
+        },
+        "oath_version": {
+          "type": "string",
+          "minLength": 1
+        },
+        "oath_digest": {
+          "type": "string",
+          "pattern": "^[a-f0-9]{64}$"
+        },
+        "commitment_text": {
+          "type": "string",
+          "minLength": 12
+        },
+        "loyalty_semantics": {
+          "const": "principal_interest_bounded_by_law_safety_truth_and_constitutional_floors"
+        },
+        "obligations": {
+          "type": "array",
+          "items": {
+            "enum": [
+              "respect_scope",
+              "protect_confidential_information",
+              "preserve_truthful_reporting",
+              "honour_revocation",
+              "disclose_conflict",
+              "refuse_unlawful_or_unsafe_action",
+              "preserve_auditability"
+            ]
+          },
+          "minItems": 1,
+          "uniqueItems": true
+        },
+        "non_derogable_floors": {
+          "type": "array",
+          "items": {
+            "enum": [
+              "lawful_authority",
+              "human_safety_and_rights",
+              "truthful_reporting",
+              "privacy_and_confidentiality",
+              "human_veto",
+              "scope_and_exclusion_integrity"
+            ]
+          },
+          "minItems": 1,
+          "uniqueItems": true
+        },
+        "forbidden_actions": {
+          "type": "array",
+          "items": {
+            "type": "string",
+            "minLength": 2
+          },
+          "minItems": 1
+        },
+        "sworn_at": {
+          "type": "string",
+          "format": "date-time"
+        },
+        "valid_until": {
+          "type": "string",
+          "format": "date-time"
+        },
+        "agent_signature_key_id": {
+          "type": "string",
+          "minLength": 2
+        },
+        "principal_signature_key_id": {
+          "type": "string",
+          "minLength": 2
+        },
+        "events": {
+          "type": "array",
+          "minItems": 1,
+          "items": {
+            "type": "object",
+            "properties": {
+              "event_id": {
+                "type": "string",
+                "minLength": 2
+              },
+              "event_type": {
+                "enum": [
+                  "sworn",
+                  "action_logged",
+                  "confessed",
+                  "breach_adjudicated",
+                  "amended",
+                  "revoked"
+                ]
+              },
+              "occurred_at": {
+                "type": "string",
+                "format": "date-time"
+              },
+              "evidence_ref": {
+                "type": "string",
+                "minLength": 2
+              }
+            },
+            "required": [
+              "event_id",
+              "event_type",
+              "occurred_at",
+              "evidence_ref"
+            ],
+            "additionalProperties": false
+          }
+        },
+        "limitations": {
+          "type": "array",
+          "items": {
+            "type": "string"
+          },
+          "minItems": 1
+        }
+      },
+      "required": [
+        "record_type",
+        "schema_version",
+        "oath_id",
+        "binding_ref",
+        "oath_version",
+        "oath_digest",
+        "commitment_text",
+        "loyalty_semantics",
+        "obligations",
+        "non_derogable_floors",
+        "forbidden_actions",
+        "sworn_at",
+        "valid_until",
+        "agent_signature_key_id",
+        "principal_signature_key_id",
+        "events",
+        "limitations"
+      ],
+      "additionalProperties": false
+    },
+    "fidelity_attestation": {
+      "type": "object",
+      "properties": {
+        "record_type": {
+          "const": "fidelity_attestation"
+        },
+        "schema_version": {
+          "const": "1.0.0"
+        },
+        "attestation_id": {
+          "type": "string",
+          "minLength": 3
+        },
+        "subject_agent_ref": {
+          "type": "string",
+          "minLength": 3
+        },
+        "binding_ref": {
+          "type": "string",
+          "minLength": 3
+        },
+        "evaluator_ref": {
+          "type": "string",
+          "minLength": 3
+        },
+        "evaluator_is_subject": {
+          "const": false
+        },
+        "probe_suite": {
+          "type": "object",
+          "properties": {
+            "name": {
+              "type": "string",
+              "minLength": 2
+            },
+            "version": {
+              "type": "string",
+              "minLength": 1
+            },
+            "methodology_ref": {
+              "type": "string",
+              "format": "uri"
+            }
+          },
+          "required": [
+            "name",
+            "version",
+            "methodology_ref"
+          ],
+          "additionalProperties": false
+        },
+        "evidence_policy": {
+          "type": "object",
+          "properties": {
+            "evidence_held_constant": {
+              "const": true
+            },
+            "authority_pressure_varied": {
+              "const": true
+            },
+            "new_material_evidence_introduced": {
+              "const": false
+            }
+          },
+          "required": [
+            "evidence_held_constant",
+            "authority_pressure_varied",
+            "new_material_evidence_introduced"
+          ],
+          "additionalProperties": false
+        },
+        "axes": {
+          "type": "array",
+          "minItems": 1,
+          "items": {
+            "type": "object",
+            "properties": {
+              "axis_id": {
+                "enum": [
+                  "authority_pressure_fidelity",
+                  "constraint_compliance",
+                  "cross_session_delivery_reliability"
+                ]
+              },
+              "score": {
+                "type": "number",
+                "minimum": 0,
+                "maximum": 1
+              },
+              "outcome": {
+                "enum": [
+                  "hold",
+                  "bend",
+                  "break",
+                  "inconclusive"
+                ]
+              },
+              "sample_count": {
+                "type": "integer",
+                "minimum": 1
+              },
+              "confidence_lower": {
+                "type": "number",
+                "minimum": 0,
+                "maximum": 1
+              },
+              "confidence_upper": {
+                "type": "number",
+                "minimum": 0,
+                "maximum": 1
+              }
+            },
+            "required": [
+              "axis_id",
+              "score",
+              "outcome",
+              "sample_count",
+              "confidence_lower",
+              "confidence_upper"
+            ],
+            "additionalProperties": false
+          }
+        },
+        "measured_at": {
+          "type": "string",
+          "format": "date-time"
+        },
+        "expires_at": {
+          "type": "string",
+          "format": "date-time"
+        },
+        "gateway_default_without_attestation": {
+          "const": "deny"
+        },
+        "evidence_refs": {
+          "type": "array",
+          "items": {
+            "type": "string",
+            "minLength": 2
+          },
+          "minItems": 1
+        },
+        "limitations": {
+          "type": "array",
+          "items": {
+            "type": "string"
+          },
+          "minItems": 1
+        }
+      },
+      "required": [
+        "record_type",
+        "schema_version",
+        "attestation_id",
+        "subject_agent_ref",
+        "binding_ref",
+        "evaluator_ref",
+        "evaluator_is_subject",
+        "probe_suite",
+        "evidence_policy",
+        "axes",
+        "measured_at",
+        "expires_at",
+        "gateway_default_without_attestation",
+        "evidence_refs",
+        "limitations"
+      ],
+      "additionalProperties": false
+    },
+    "pledge_outcome": {
+      "type": "object",
+      "properties": {
+        "record_type": {
+          "const": "pledge_outcome"
+        },
+        "schema_version": {
+          "const": "1.0.0"
+        },
+        "pledge_id": {
+          "type": "string",
+          "minLength": 3
+        },
+        "principal_binding_ref": {
+          "type": "string",
+          "minLength": 3
+        },
+        "proposition_digest": {
+          "type": "string",
+          "pattern": "^[a-f0-9]{64}$"
+        },
+        "resolution_mechanism": {
+          "enum": [
+            "signed_observation",
+            "chain_state",
+            "external_witness",
+            "counterparty_signature",
+            "oracle_result",
+            "other"
+          ]
+        },
+        "deadline": {
+          "type": "string",
+          "format": "date-time"
+        },
+        "state": {
+          "enum": [
+            "kept",
+            "broken",
+            "expired_unresolved",
+            "disputed"
+          ]
+        },
+        "resolved_at": {
+          "type": [
+            "string",
+            "null"
+          ],
+          "format": "date-time"
+        },
+        "evidence_refs": {
+          "type": "array",
+          "items": {
+            "type": "string",
+            "minLength": 2
+          },
+          "minItems": 1
+        },
+        "bond_model": {
+          "enum": [
+            "none",
+            "public_reputation",
+            "escrow",
+            "collateral",
+            "other"
+          ]
+        },
+        "enforcement_model": {
+          "enum": [
+            "public_record_only",
+            "contractual",
+            "escrow_or_slashing",
+            "other"
+          ]
+        },
+        "limitations": {
+          "type": "array",
+          "items": {
+            "type": "string"
+          },
+          "minItems": 1
+        }
+      },
+      "required": [
+        "record_type",
+        "schema_version",
+        "pledge_id",
+        "principal_binding_ref",
+        "proposition_digest",
+        "resolution_mechanism",
+        "deadline",
+        "state",
+        "resolved_at",
+        "evidence_refs",
+        "bond_model",
+        "enforcement_model",
+        "limitations"
+      ],
+      "additionalProperties": false
+    },
+    "revocation_cascade": {
+      "type": "object",
+      "properties": {
+        "record_type": {
+          "const": "revocation_cascade"
+        },
+        "schema_version": {
+          "const": "1.0.0"
+        },
+        "revocation_id": {
+          "type": "string",
+          "minLength": 3
+        },
+        "root_binding_ref": {
+          "type": "string",
+          "minLength": 3
+        },
+        "principal_ref": {
+          "type": "string",
+          "minLength": 3
+        },
+        "cause": {
+          "enum": [
+            "principal_requested_revocation",
+            "key_compromise",
+            "scope_violation",
+            "oath_breach_adjudicated",
+            "policy_change",
+            "identity_assurance_expired",
+            "other"
+          ]
+        },
+        "requested_at": {
+          "type": "string",
+          "format": "date-time"
+        },
+        "affected_bindings": {
+          "type": "array",
+          "items": {
+            "type": "string",
+            "minLength": 3
+          },
+          "minItems": 1,
+          "uniqueItems": true
+        },
+        "required_receivers": {
+          "type": "array",
+          "items": {
+            "type": "string",
+            "minLength": 3
+          },
+          "minItems": 1,
+          "uniqueItems": true
+        },
+        "receiver_acknowledgements": {
+          "type": "array",
+          "items": {
+            "type": "object",
+            "properties": {
+              "receiver_ref": {
+                "type": "string",
+                "minLength": 3
+              },
+              "status": {
+                "enum": [
+                  "pending",
+                  "enforced",
+                  "failed"
+                ]
+              },
+              "acknowledged_at": {
+                "type": [
+                  "string",
+                  "null"
+                ],
+                "format": "date-time"
+              },
+              "receipt_ref": {
+                "type": [
+                  "string",
+                  "null"
+                ]
+              }
+            },
+            "required": [
+              "receiver_ref",
+              "status",
+              "acknowledged_at",
+              "receipt_ref"
+            ],
+            "additionalProperties": false
+          }
+        },
+        "status": {
+          "enum": [
+            "requested",
+            "propagating",
+            "partial",
+            "effective",
+            "failed"
+          ]
+        },
+        "completed_at": {
+          "type": [
+            "string",
+            "null"
+          ],
+          "format": "date-time"
+        },
+        "evidence_refs": {
+          "type": "array",
+          "items": {
+            "type": "string"
+          },
+          "minItems": 1
+        },
+        "limitations": {
+          "type": "array",
+          "items": {
+            "type": "string"
+          },
+          "minItems": 1
+        }
+      },
+      "required": [
+        "record_type",
+        "schema_version",
+        "revocation_id",
+        "root_binding_ref",
+        "principal_ref",
+        "cause",
+        "requested_at",
+        "affected_bindings",
+        "required_receivers",
+        "receiver_acknowledgements",
+        "status",
+        "completed_at",
+        "evidence_refs",
+        "limitations"
+      ],
+      "additionalProperties": false
+    },
+    "trust_state": {
+      "type": "object",
+      "properties": {
+        "record_type": {
+          "const": "trust_state"
+        },
+        "schema_version": {
+          "const": "1.0.0"
+        },
+        "trust_record_id": {
+          "type": "string",
+          "minLength": 3
+        },
+        "agent_ref": {
+          "type": "string",
+          "minLength": 3
+        },
+        "binding_ref": {
+          "type": "string",
+          "minLength": 3
+        },
+        "state": {
+          "enum": [
+            "probationary",
+            "trusted",
+            "suspect",
+            "quarantined"
+          ]
+        },
+        "level": {
+          "enum": [
+            "L0",
+            "L1",
+            "L2",
+            "L3",
+            "L4"
+          ]
+        },
+        "score": {
+          "type": "number",
+          "minimum": 0,
+          "maximum": 1
+        },
+        "score_semantics": {
+          "const": "normalized_evidence_strength_not_authority"
+        },
+        "dimensions": {
+          "type": "object",
+          "properties": {
+            "identity_integrity": {
+              "type": "number",
+              "minimum": 0,
+              "maximum": 1
+            },
+            "behavioral_consistency": {
+              "type": "number",
+              "minimum": 0,
+              "maximum": 1
+            },
+            "execution_reliability": {
+              "type": "number",
+              "minimum": 0,
+              "maximum": 1
+            },
+            "attestation_freshness": {
+              "type": "number",
+              "minimum": 0,
+              "maximum": 1
+            },
+            "anomaly_history": {
+              "type": "number",
+              "minimum": 0,
+              "maximum": 1
+            }
+          },
+          "required": [
+            "identity_integrity",
+            "behavioral_consistency",
+            "execution_reliability",
+            "attestation_freshness",
+            "anomaly_history"
+          ],
+          "additionalProperties": false
+        },
+        "computed_at": {
+          "type": "string",
+          "format": "date-time"
+        },
+        "valid_until": {
+          "type": "string",
+          "format": "date-time"
+        },
+        "decay_policy_ref": {
+          "type": "string",
+          "minLength": 2
+        },
+        "missing_attestation_policy": {
+          "enum": [
+            "deny_sensitive_actions",
+            "treat_as_stale_and_revalidate",
+            "quarantine"
+          ]
+        },
+        "self_dealing_trust_bonus": {
+          "const": 0
+        },
+        "verifier_ref": {
+          "type": "string",
+          "minLength": 2
+        },
+        "authority_change_effect": {
+          "enum": [
+            "no_change",
+            "recommend_narrowing",
+            "require_human_review"
+          ]
+        },
+        "evidence_refs": {
+          "type": "array",
+          "items": {
+            "type": "string"
+          },
+          "minItems": 1
+        },
+        "limitations": {
+          "type": "array",
+          "items": {
+            "type": "string"
+          },
+          "minItems": 1
+        }
+      },
+      "required": [
+        "record_type",
+        "schema_version",
+        "trust_record_id",
+        "agent_ref",
+        "binding_ref",
+        "state",
+        "level",
+        "score",
+        "score_semantics",
+        "dimensions",
+        "computed_at",
+        "valid_until",
+        "decay_policy_ref",
+        "missing_attestation_policy",
+        "self_dealing_trust_bonus",
+        "verifier_ref",
+        "authority_change_effect",
+        "evidence_refs",
+        "limitations"
+      ],
+      "additionalProperties": false
+    },
+    "loyalty_evaluation": {
+      "type": "object",
+      "properties": {
+        "record_type": {
+          "const": "loyalty_evaluation"
+        },
+        "schema_version": {
+          "const": "1.0.0"
+        },
+        "evaluation_id": {
+          "type": "string",
+          "minLength": 3
+        },
+        "benchmark_ref": {
+          "type": "string",
+          "minLength": 2
+        },
+        "subject_ref": {
+          "type": "string",
+          "minLength": 2
+        },
+        "cohort_ref": {
+          "type": "string",
+          "minLength": 2
+        },
+        "sample_count": {
+          "type": "integer",
+          "minimum": 1
+        },
+        "measured_at": {
+          "type": "string",
+          "format": "date-time"
+        },
+        "failure_axes": {
+          "type": "object",
+          "properties": {
+            "leak_rate": {
+              "type": "number",
+              "minimum": 0,
+              "maximum": 1
+            },
+            "capitulation_rate": {
+              "type": "number",
+              "minimum": 0,
+              "maximum": 1
+            },
+            "posture_rate": {
+              "type": "number",
+              "minimum": 0,
+              "maximum": 1
+            },
+            "over_refusal_rate": {
+              "type": "number",
+              "minimum": 0,
+              "maximum": 1
+            }
+          },
+          "required": [
+            "leak_rate",
+            "capitulation_rate",
+            "posture_rate",
+            "over_refusal_rate"
+          ],
+          "additionalProperties": false
+        },
+        "agency_duties": {
+          "type": "object",
+          "properties": {
+            "loyalty": {
+              "enum": [
+                "pass",
+                "fail",
+                "inconclusive"
+              ]
+            },
+            "actual_authority": {
+              "enum": [
+                "pass",
+                "fail",
+                "inconclusive"
+              ]
+            },
+            "confidentiality": {
+              "enum": [
+                "pass",
+                "fail",
+                "inconclusive"
+              ]
+            },
+            "candor": {
+              "enum": [
+                "pass",
+                "fail",
+                "inconclusive"
+              ]
+            },
+            "diligence": {
+              "enum": [
+                "pass",
+                "fail",
+                "inconclusive"
+              ]
+            }
+          },
+          "required": [
+            "loyalty",
+            "actual_authority",
+            "confidentiality",
+            "candor",
+            "diligence"
+          ],
+          "additionalProperties": false
+        },
+        "metrics": {
+          "type": "object",
+          "properties": {
+            "task_success_rate": {
+              "type": "number",
+              "minimum": 0,
+              "maximum": 1
+            },
+            "harm_rate": {
+              "type": "number",
+              "minimum": 0,
+              "maximum": 1
+            },
+            "confidence_interval": {
+              "type": "object",
+              "properties": {
+                "lower": {
+                  "type": "number",
+                  "minimum": 0,
+                  "maximum": 1
+                },
+                "upper": {
+                  "type": "number",
+                  "minimum": 0,
+                  "maximum": 1
+                },
+                "level": {
+                  "type": "number",
+                  "exclusiveMinimum": 0,
+                  "exclusiveMaximum": 1
+                }
+              },
+              "required": [
+                "lower",
+                "upper",
+                "level"
+              ],
+              "additionalProperties": false
+            }
+          },
+          "required": [
+            "task_success_rate",
+            "harm_rate",
+            "confidence_interval"
+          ],
+          "additionalProperties": false
+        },
+        "evidence_refs": {
+          "type": "array",
+          "items": {
+            "type": "string"
+          },
+          "minItems": 1
+        },
+        "limitations": {
+          "type": "array",
+          "items": {
+            "type": "string"
+          },
+          "minItems": 1
+        }
+      },
+      "required": [
+        "record_type",
+        "schema_version",
+        "evaluation_id",
+        "benchmark_ref",
+        "subject_ref",
+        "cohort_ref",
+        "sample_count",
+        "measured_at",
+        "failure_axes",
+        "agency_duties",
+        "metrics",
+        "evidence_refs",
+        "limitations"
+      ],
+      "additionalProperties": false
+    },
+    "constitutional_verdict": {
+      "type": "object",
+      "properties": {
+        "record_type": {
+          "const": "constitutional_verdict"
+        },
+        "schema_version": {
+          "const": "1.0.0"
+        },
+        "verdict_id": {
+          "type": "string",
+          "minLength": 3
+        },
+        "decision_subject_ref": {
+          "type": "string",
+          "minLength": 3
+        },
+        "principal_binding_ref": {
+          "type": "string",
+          "minLength": 3
+        },
+        "verdict": {
+          "enum": [
+            "SEAL",
+            "HOLD",
+            "SABAR",
+            "VOID"
+          ]
+        },
+        "floor_results": {
+          "type": "array",
+          "minItems": 1,
+          "items": {
+            "type": "object",
+            "properties": {
+              "floor_id": {
+                "type": "string",
+                "minLength": 2
+              },
+              "status": {
+                "enum": [
+                  "pass",
+                  "fail",
+                  "inconclusive",
+                  "not_applicable"
+                ]
+              },
+              "evidence_ref": {
+                "type": "string",
+                "minLength": 2
+              }
+            },
+            "required": [
+              "floor_id",
+              "status",
+              "evidence_ref"
+            ],
+            "additionalProperties": false
+          }
+        },
+        "human_veto_available": {
+          "const": true
+        },
+        "agent_cannot_certify_own_action": {
+          "const": true
+        },
+        "evaluated_by": {
+          "type": "string",
+          "minLength": 2
+        },
+        "evaluated_at": {
+          "type": "string",
+          "format": "date-time"
+        },
+        "limitations": {
+          "type": "array",
+          "items": {
+            "type": "string"
+          },
+          "minItems": 1
+        }
+      },
+      "required": [
+        "record_type",
+        "schema_version",
+        "verdict_id",
+        "decision_subject_ref",
+        "principal_binding_ref",
+        "verdict",
+        "floor_results",
+        "human_veto_available",
+        "agent_cannot_certify_own_action",
+        "evaluated_by",
+        "evaluated_at",
+        "limitations"
+      ],
+      "additionalProperties": false
+    },
+    "signed_bundle": {
+      "type": "object",
+      "properties": {
+        "record_type": {
+          "const": "signed_bundle"
+        },
+        "schema_version": {
+          "const": "1.0.0"
+        },
+        "bundle_id": {
+          "type": "string",
+          "minLength": 3
+        },
+        "statement": {
+          "type": "object",
+          "properties": {
+            "_type": {
+              "const": "https://in-toto.io/Statement/v1"
+            },
+            "subject": {
+              "type": "array",
+              "minItems": 1,
+              "items": {
+                "type": "object",
+                "properties": {
+                  "name": {
+                    "type": "string",
+                    "minLength": 2
+                  },
+                  "digest": {
+                    "$ref": "#/$defs/digest"
+                  }
+                },
+                "required": [
+                  "name",
+                  "digest"
+                ],
+                "additionalProperties": false
+              }
+            },
+            "predicateType": {
+              "type": "string",
+              "format": "uri"
+            },
+            "predicate": {
+              "type": "object"
+            }
+          },
+          "required": [
+            "_type",
+            "subject",
+            "predicateType",
+            "predicate"
+          ],
+          "additionalProperties": false
+        },
+        "envelope": {
+          "type": "object",
+          "properties": {
+            "payloadType": {
+              "const": "application/vnd.in-toto+json"
+            },
+            "payload": {
+              "type": "string",
+              "minLength": 1
+            },
+            "signatures": {
+              "type": "array",
+              "minItems": 1,
+              "items": {
+                "type": "object",
+                "properties": {
+                  "keyid": {
+                    "type": "string",
+                    "minLength": 2
+                  },
+                  "sig": {
+                    "type": "string",
+                    "minLength": 2
+                  }
+                },
+                "required": [
+                  "keyid",
+                  "sig"
+                ],
+                "additionalProperties": false
+              }
+            }
+          },
+          "required": [
+            "payloadType",
+            "payload",
+            "signatures"
+          ],
+          "additionalProperties": false
+        },
+        "verification": {
+          "type": "object",
+          "properties": {
+            "status": {
+              "const": "verified"
+            },
+            "verifier_ref": {
+              "type": "string",
+              "minLength": 2
+            },
+            "keyid": {
+              "type": "string",
+              "minLength": 2
+            },
+            "verified_at": {
+              "type": "string",
+              "format": "date-time"
+            },
+            "public_key_sha256": {
+              "type": "string",
+              "pattern": "^[a-f0-9]{64}$"
+            }
+          },
+          "required": [
+            "status",
+            "verifier_ref",
+            "keyid",
+            "verified_at",
+            "public_key_sha256"
+          ],
+          "additionalProperties": false
+        },
+        "limitations": {
+          "type": "array",
+          "items": {
+            "type": "string"
+          },
+          "minItems": 1
+        }
+      },
+      "required": [
+        "record_type",
+        "schema_version",
+        "bundle_id",
+        "statement",
+        "envelope",
+        "verification",
+        "limitations"
+      ],
+      "additionalProperties": false
+    }
+  }
+}

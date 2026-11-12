@@ -1,0 +1,948 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "$id": "https://example.invalid/schemas/divergence/divergence-contracts.v1.schema.json",
+  "title": "Portable Divergence, Behavioral-Axis and Attribution Contracts",
+  "oneOf": [
+    {
+      "$ref": "#/$defs/behavioral_axis_contract"
+    },
+    {
+      "$ref": "#/$defs/divergence_report"
+    },
+    {
+      "$ref": "#/$defs/attribution_receipt"
+    }
+  ],
+  "$defs": {
+    "digest": {
+      "type": "object",
+      "properties": {
+        "sha256": {
+          "type": "string",
+          "pattern": "^[a-f0-9]{64}$"
+        }
+      },
+      "required": [
+        "sha256"
+      ],
+      "additionalProperties": false
+    },
+    "uncertainty": {
+      "type": "object",
+      "properties": {
+        "lower": {
+          "type": "number",
+          "minimum": 0,
+          "maximum": 1
+        },
+        "upper": {
+          "type": "number",
+          "minimum": 0,
+          "maximum": 1
+        },
+        "confidence_level": {
+          "type": "number",
+          "exclusiveMinimum": 0,
+          "exclusiveMaximum": 1
+        },
+        "method": {
+          "enum": [
+            "bootstrap_percentile",
+            "bootstrap_bca",
+            "analytic",
+            "bayesian_credible_interval",
+            "not_estimated"
+          ]
+        },
+        "sample_count": {
+          "type": "integer",
+          "minimum": 1
+        }
+      },
+      "required": [
+        "lower",
+        "upper",
+        "confidence_level",
+        "method",
+        "sample_count"
+      ],
+      "additionalProperties": false
+    },
+    "behavioral_axis_contract": {
+      "type": "object",
+      "properties": {
+        "record_type": {
+          "const": "behavioral_axis_contract"
+        },
+        "schema_version": {
+          "const": "1.0.0"
+        },
+        "axis_id": {
+          "type": "string",
+          "pattern": "^[a-z][a-z0-9_.-]{2,100}$"
+        },
+        "axis_label": {
+          "type": "string",
+          "minLength": 2
+        },
+        "domain": {
+          "const": "behavioral"
+        },
+        "definition": {
+          "type": "string",
+          "minLength": 12
+        },
+        "measurement_unit": {
+          "type": "string",
+          "minLength": 1
+        },
+        "score_semantics": {
+          "const": "normalized_divergence"
+        },
+        "score_range": {
+          "type": "object",
+          "properties": {
+            "minimum": {
+              "const": 0
+            },
+            "maximum": {
+              "const": 1
+            }
+          },
+          "required": [
+            "minimum",
+            "maximum"
+          ],
+          "additionalProperties": false
+        },
+        "direction": {
+          "enum": [
+            "higher_is_more_divergent",
+            "lower_is_more_divergent",
+            "non_directional"
+          ]
+        },
+        "measurement_method": {
+          "type": "string",
+          "minLength": 3
+        },
+        "normalization_version": {
+          "type": "string",
+          "minLength": 1
+        },
+        "baseline_window": {
+          "type": "object",
+          "properties": {
+            "minimum_observations": {
+              "type": "integer",
+              "minimum": 1
+            },
+            "window_description": {
+              "type": "string",
+              "minLength": 2
+            },
+            "cohort_matching_required": {
+              "type": "boolean"
+            }
+          },
+          "required": [
+            "minimum_observations",
+            "window_description",
+            "cohort_matching_required"
+          ],
+          "additionalProperties": false
+        },
+        "uncertainty_policy": {
+          "type": "object",
+          "properties": {
+            "interval_method": {
+              "enum": [
+                "bootstrap_percentile",
+                "bootstrap_bca",
+                "analytic",
+                "bayesian_credible_interval",
+                "not_estimated"
+              ]
+            },
+            "default_confidence_level": {
+              "type": "number",
+              "exclusiveMinimum": 0,
+              "exclusiveMaximum": 1
+            },
+            "minimum_sample_count": {
+              "type": "integer",
+              "minimum": 1
+            }
+          },
+          "required": [
+            "interval_method",
+            "default_confidence_level",
+            "minimum_sample_count"
+          ],
+          "additionalProperties": false
+        },
+        "comparability_constraints": {
+          "type": "array",
+          "items": {
+            "type": "string"
+          },
+          "minItems": 1
+        },
+        "source_reference": {
+          "type": "string",
+          "format": "uri"
+        },
+        "notes": {
+          "type": "array",
+          "items": {
+            "type": "string"
+          }
+        }
+      },
+      "required": [
+        "record_type",
+        "schema_version",
+        "axis_id",
+        "axis_label",
+        "domain",
+        "definition",
+        "measurement_unit",
+        "score_semantics",
+        "score_range",
+        "direction",
+        "measurement_method",
+        "normalization_version",
+        "baseline_window",
+        "uncertainty_policy",
+        "comparability_constraints"
+      ],
+      "additionalProperties": false
+    },
+    "evidence_ref": {
+      "type": "object",
+      "properties": {
+        "ref": {
+          "type": "string",
+          "minLength": 1
+        },
+        "digest": {
+          "$ref": "#/$defs/digest"
+        },
+        "media_type": {
+          "type": "string"
+        }
+      },
+      "required": [
+        "ref",
+        "digest"
+      ],
+      "additionalProperties": false
+    },
+    "finding": {
+      "type": "object",
+      "properties": {
+        "finding_id": {
+          "type": "string",
+          "minLength": 2
+        },
+        "code": {
+          "type": "string",
+          "minLength": 2
+        },
+        "severity": {
+          "enum": [
+            "info",
+            "low",
+            "medium",
+            "high",
+            "critical",
+            "unknown"
+          ]
+        },
+        "classification": {
+          "enum": [
+            "behavioral_shift",
+            "configuration_drift",
+            "schema_change",
+            "policy_transition",
+            "direct_conflict",
+            "ontology_witness",
+            "identity_omission",
+            "identity_disagreement",
+            "source_equivocation",
+            "embedding_mismatch",
+            "retrieval_regression",
+            "infrastructure_change",
+            "resolution_conflict",
+            "other"
+          ]
+        },
+        "summary": {
+          "type": "string",
+          "minLength": 3
+        },
+        "subject_ref": {
+          "type": "string",
+          "minLength": 1
+        },
+        "expected_digest": {
+          "$ref": "#/$defs/digest"
+        },
+        "observed_digest": {
+          "$ref": "#/$defs/digest"
+        },
+        "actor_ref": {
+          "type": "string",
+          "minLength": 1
+        },
+        "confidence": {
+          "type": "number",
+          "minimum": 0,
+          "maximum": 1
+        },
+        "evidence_refs": {
+          "type": "array",
+          "minItems": 1,
+          "items": {
+            "$ref": "#/$defs/evidence_ref"
+          }
+        },
+        "policy_transition": {
+          "enum": [
+            "duplicate",
+            "modified",
+            "new",
+            "removed",
+            "direct_conflict"
+          ]
+        },
+        "remediation_ref": {
+          "type": "string"
+        }
+      },
+      "required": [
+        "finding_id",
+        "code",
+        "severity",
+        "classification",
+        "summary",
+        "subject_ref",
+        "confidence",
+        "evidence_refs"
+      ],
+      "additionalProperties": false
+    },
+    "axis_score": {
+      "type": "object",
+      "properties": {
+        "axis_id": {
+          "type": "string",
+          "minLength": 3
+        },
+        "score": {
+          "type": "number",
+          "minimum": 0,
+          "maximum": 1
+        },
+        "measurement": {
+          "type": "string",
+          "minLength": 2
+        },
+        "sample_count": {
+          "type": "integer",
+          "minimum": 1
+        },
+        "uncertainty": {
+          "$ref": "#/$defs/uncertainty"
+        },
+        "baseline_digest": {
+          "$ref": "#/$defs/digest"
+        },
+        "candidate_digest": {
+          "$ref": "#/$defs/digest"
+        }
+      },
+      "required": [
+        "axis_id",
+        "score",
+        "measurement",
+        "sample_count"
+      ],
+      "additionalProperties": false
+    },
+    "identity_claim": {
+      "type": "object",
+      "properties": {
+        "source_ref": {
+          "type": "string",
+          "minLength": 1
+        },
+        "vantage_ref": {
+          "type": [
+            "string",
+            "null"
+          ]
+        },
+        "claim": {
+          "enum": [
+            "present",
+            "absent",
+            "error"
+          ]
+        },
+        "observed_at": {
+          "type": "string",
+          "format": "date-time"
+        },
+        "subject_digest": {
+          "$ref": "#/$defs/digest"
+        },
+        "endpoint_digest": {
+          "$ref": "#/$defs/digest"
+        },
+        "error_code": {
+          "type": "string"
+        }
+      },
+      "required": [
+        "source_ref",
+        "vantage_ref",
+        "claim",
+        "observed_at"
+      ],
+      "additionalProperties": false
+    },
+    "divergence_report": {
+      "type": "object",
+      "properties": {
+        "record_type": {
+          "const": "divergence_report"
+        },
+        "schema_version": {
+          "const": "1.0.0"
+        },
+        "report_id": {
+          "type": "string",
+          "minLength": 3
+        },
+        "domain": {
+          "enum": [
+            "behavioral",
+            "configuration",
+            "schema",
+            "policy",
+            "semantic",
+            "identity_federation",
+            "embedding_rag",
+            "resolution"
+          ]
+        },
+        "status": {
+          "enum": [
+            "divergent",
+            "no_divergence_detected",
+            "insufficient_evidence",
+            "error"
+          ]
+        },
+        "comparison": {
+          "type": "object",
+          "properties": {
+            "comparison_id": {
+              "type": "string",
+              "minLength": 2
+            },
+            "baseline_ref": {
+              "type": "string",
+              "minLength": 1
+            },
+            "baseline_digest": {
+              "$ref": "#/$defs/digest"
+            },
+            "candidate_ref": {
+              "type": "string",
+              "minLength": 1
+            },
+            "candidate_digest": {
+              "$ref": "#/$defs/digest"
+            },
+            "cohort_ref": {
+              "type": "string"
+            },
+            "window_start": {
+              "type": "string",
+              "format": "date-time"
+            },
+            "window_end": {
+              "type": "string",
+              "format": "date-time"
+            }
+          },
+          "required": [
+            "comparison_id",
+            "baseline_ref",
+            "baseline_digest",
+            "candidate_ref",
+            "candidate_digest",
+            "window_start",
+            "window_end"
+          ],
+          "additionalProperties": false
+        },
+        "evaluator": {
+          "type": "object",
+          "properties": {
+            "tool_name": {
+              "type": "string",
+              "minLength": 2
+            },
+            "tool_version": {
+              "type": "string",
+              "minLength": 1
+            },
+            "method": {
+              "type": "string",
+              "minLength": 2
+            },
+            "configuration_digest": {
+              "$ref": "#/$defs/digest"
+            },
+            "ruleset_ref": {
+              "type": "string"
+            }
+          },
+          "required": [
+            "tool_name",
+            "tool_version",
+            "method"
+          ],
+          "additionalProperties": false
+        },
+        "comparability": {
+          "type": "object",
+          "properties": {
+            "comparable": {
+              "type": "boolean"
+            },
+            "normalization_version": {
+              "type": "string"
+            },
+            "incompatible_dimensions": {
+              "type": "array",
+              "items": {
+                "type": "string"
+              }
+            },
+            "caveats": {
+              "type": "array",
+              "items": {
+                "type": "string"
+              }
+            }
+          },
+          "required": [
+            "comparable",
+            "normalization_version",
+            "incompatible_dimensions",
+            "caveats"
+          ],
+          "additionalProperties": false
+        },
+        "findings": {
+          "type": "array",
+          "items": {
+            "$ref": "#/$defs/finding"
+          }
+        },
+        "axis_scores": {
+          "type": "array",
+          "items": {
+            "$ref": "#/$defs/axis_score"
+          }
+        },
+        "identity_claims": {
+          "type": "array",
+          "items": {
+            "$ref": "#/$defs/identity_claim"
+          }
+        },
+        "domain_details": {
+          "type": "object",
+          "properties": {
+            "schema_changes": {
+              "type": "array",
+              "items": {
+                "type": "object",
+                "properties": {
+                  "object_ref": {
+                    "type": "string"
+                  },
+                  "property_ref": {
+                    "type": "string"
+                  },
+                  "change": {
+                    "enum": [
+                      "added",
+                      "removed",
+                      "modified",
+                      "renamed"
+                    ]
+                  },
+                  "expected_digest": {
+                    "$ref": "#/$defs/digest"
+                  },
+                  "observed_digest": {
+                    "$ref": "#/$defs/digest"
+                  }
+                },
+                "required": [
+                  "object_ref",
+                  "change"
+                ],
+                "additionalProperties": false
+              }
+            },
+            "policy_transitions": {
+              "type": "array",
+              "items": {
+                "type": "object",
+                "properties": {
+                  "clause_ref": {
+                    "type": "string"
+                  },
+                  "transition": {
+                    "enum": [
+                      "duplicate",
+                      "modified",
+                      "new",
+                      "removed",
+                      "direct_conflict"
+                    ]
+                  },
+                  "expected_digest": {
+                    "$ref": "#/$defs/digest"
+                  },
+                  "observed_digest": {
+                    "$ref": "#/$defs/digest"
+                  }
+                },
+                "required": [
+                  "clause_ref",
+                  "transition"
+                ],
+                "additionalProperties": false
+              }
+            },
+            "ontology_witnesses": {
+              "type": "array",
+              "items": {
+                "type": "object",
+                "properties": {
+                  "witness_ref": {
+                    "type": "string"
+                  },
+                  "axiom_digest": {
+                    "$ref": "#/$defs/digest"
+                  },
+                  "entailed_in_baseline": {
+                    "type": "boolean"
+                  },
+                  "entailed_in_candidate": {
+                    "type": "boolean"
+                  }
+                },
+                "required": [
+                  "witness_ref",
+                  "axiom_digest",
+                  "entailed_in_baseline",
+                  "entailed_in_candidate"
+                ],
+                "additionalProperties": false
+              }
+            },
+            "retrieval_metrics": {
+              "type": "object",
+              "properties": {
+                "mean_overlap_at_k": {
+                  "type": "number",
+                  "minimum": 0,
+                  "maximum": 1
+                },
+                "regression_count": {
+                  "type": "integer",
+                  "minimum": 0
+                },
+                "probe_count": {
+                  "type": "integer",
+                  "minimum": 0
+                },
+                "encoder_compatible": {
+                  "type": "boolean"
+                }
+              },
+              "additionalProperties": false
+            }
+          },
+          "additionalProperties": false
+        },
+        "observed_at": {
+          "type": "string",
+          "format": "date-time"
+        },
+        "report_digest": {
+          "$ref": "#/$defs/digest"
+        },
+        "limitations": {
+          "type": "array",
+          "items": {
+            "type": "string"
+          }
+        }
+      },
+      "required": [
+        "record_type",
+        "schema_version",
+        "report_id",
+        "domain",
+        "status",
+        "comparison",
+        "evaluator",
+        "comparability",
+        "findings",
+        "axis_scores",
+        "observed_at",
+        "report_digest",
+        "limitations"
+      ],
+      "additionalProperties": false
+    },
+    "statement": {
+      "type": "object",
+      "properties": {
+        "_type": {
+          "const": "https://in-toto.io/Statement/v1"
+        },
+        "subject": {
+          "type": "array",
+          "minItems": 1,
+          "items": {
+            "type": "object",
+            "properties": {
+              "name": {
+                "type": "string",
+                "minLength": 1
+              },
+              "digest": {
+                "$ref": "#/$defs/digest"
+              }
+            },
+            "required": [
+              "name",
+              "digest"
+            ],
+            "additionalProperties": false
+          }
+        },
+        "predicateType": {
+          "const": "https://example.invalid/attestation/divergence-attribution/v1"
+        },
+        "predicate": {
+          "type": "object",
+          "properties": {
+            "divergence_report_id": {
+              "type": "string",
+              "minLength": 3
+            },
+            "report_digest": {
+              "$ref": "#/$defs/digest"
+            },
+            "axis_id": {
+              "type": "string",
+              "minLength": 3
+            },
+            "attribution_class": {
+              "enum": [
+                "behavioral_axis",
+                "configuration_actor",
+                "schema_change",
+                "policy_clause",
+                "ontology_axiom",
+                "identity_source",
+                "embedding_pipeline",
+                "unattributed"
+              ]
+            },
+            "responsible_ref": {
+              "type": [
+                "string",
+                "null"
+              ]
+            },
+            "contributing_factors": {
+              "type": "array",
+              "items": {
+                "type": "string"
+              },
+              "minItems": 1
+            },
+            "confidence": {
+              "type": "number",
+              "minimum": 0,
+              "maximum": 1
+            },
+            "method": {
+              "enum": [
+                "temporal_correlation",
+                "counterfactual_replay",
+                "controlled_ablation",
+                "source_audit",
+                "cloudtrail_attribution",
+                "semantic_witness",
+                "multi_source_corroboration",
+                "human_adjudication",
+                "unknown"
+              ]
+            },
+            "observed_at": {
+              "type": "string",
+              "format": "date-time"
+            },
+            "baseline_digest": {
+              "$ref": "#/$defs/digest"
+            },
+            "evidence_digests": {
+              "type": "array",
+              "items": {
+                "$ref": "#/$defs/digest"
+              },
+              "minItems": 1
+            }
+          },
+          "required": [
+            "divergence_report_id",
+            "report_digest",
+            "axis_id",
+            "attribution_class",
+            "responsible_ref",
+            "contributing_factors",
+            "confidence",
+            "method",
+            "observed_at",
+            "baseline_digest",
+            "evidence_digests"
+          ],
+          "additionalProperties": false
+        }
+      },
+      "required": [
+        "_type",
+        "subject",
+        "predicateType",
+        "predicate"
+      ],
+      "additionalProperties": false
+    },
+    "dsse_envelope": {
+      "type": "object",
+      "properties": {
+        "payloadType": {
+          "const": "application/vnd.in-toto+json"
+        },
+        "payload": {
+          "type": "string",
+          "minLength": 1
+        },
+        "signatures": {
+          "type": "array",
+          "minItems": 1,
+          "items": {
+            "type": "object",
+            "properties": {
+              "keyid": {
+                "type": "string",
+                "minLength": 1
+              },
+              "sig": {
+                "type": "string",
+                "minLength": 1
+              }
+            },
+            "required": [
+              "keyid",
+              "sig"
+            ],
+            "additionalProperties": false
+          }
+        }
+      },
+      "required": [
+        "payloadType",
+        "payload",
+        "signatures"
+      ],
+      "additionalProperties": false
+    },
+    "attribution_receipt": {
+      "type": "object",
+      "properties": {
+        "record_type": {
+          "const": "attribution_receipt"
+        },
+        "schema_version": {
+          "const": "1.0.0"
+        },
+        "receipt_id": {
+          "type": "string",
+          "minLength": 3
+        },
+        "statement": {
+          "$ref": "#/$defs/statement"
+        },
+        "envelope": {
+          "$ref": "#/$defs/dsse_envelope"
+        },
+        "verification": {
+          "type": "object",
+          "properties": {
+            "status": {
+              "const": "verified"
+            },
+            "verifier_ref": {
+              "type": "string",
+              "minLength": 1
+            },
+            "keyid": {
+              "type": "string",
+              "minLength": 1
+            },
+            "verified_at": {
+              "type": "string",
+              "format": "date-time"
+            },
+            "public_key_sha256": {
+              "type": "string",
+              "pattern": "^[a-f0-9]{64}$"
+            }
+          },
+          "required": [
+            "status",
+            "verifier_ref",
+            "keyid",
+            "verified_at",
+            "public_key_sha256"
+          ],
+          "additionalProperties": false
+        }
+      },
+      "required": [
+        "record_type",
+        "schema_version",
+        "receipt_id",
+        "statement",
+        "envelope",
+        "verification"
+      ],
+      "additionalProperties": false
+    }
+  }
+}

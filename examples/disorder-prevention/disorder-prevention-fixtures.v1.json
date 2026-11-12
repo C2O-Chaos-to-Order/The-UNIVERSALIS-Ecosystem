@@ -1,0 +1,185 @@
+{
+  "schema_version": "1.0.0",
+  "inventory_id": "disorder-chaos-prevention-25",
+  "records": [
+    {
+      "record_id": "DP-TAXONOMY-001",
+      "record_type": "disorder_taxonomy_profile",
+      "recorded_at": "2026-11-12T12:00:00Z",
+      "system_profile_digest": "sha256:aaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaa",
+      "evidence": [
+        {
+          "kind": "owner_proposal",
+          "description": "Synthetic taxonomy profile for contract illustration.",
+          "digest": null,
+          "uri": null
+        }
+      ],
+      "verification_status": "proposed",
+      "authority_effect": "none",
+      "boundary": "portable_public_record",
+      "profile_version": "proposed-v1",
+      "disorder_layers": [
+        "Communication",
+        "Cognition",
+        "Structure",
+        "Knowledge",
+        "Normative"
+      ],
+      "collapse_regimes": [
+        "Controlled",
+        "Hedge",
+        "Chaos"
+      ],
+      "classification_note": "Research vocabulary proposal; categories are not mutually exclusive causes or physical states."
+    },
+    {
+      "record_id": "DP-EVENT-001",
+      "record_type": "disorder_event",
+      "recorded_at": "2026-11-12T12:01:00Z",
+      "system_profile_digest": "sha256:bbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbb",
+      "evidence": [
+        {
+          "kind": "measurement",
+          "description": "Synthetic handoff acknowledgement timeout in an isolated fixture.",
+          "digest": "sha256:cccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccc",
+          "uri": null
+        }
+      ],
+      "verification_status": "observed",
+      "authority_effect": "none",
+      "boundary": "portable_public_record",
+      "disorder_layer": "Communication",
+      "regime": "Hedge",
+      "severity": 2,
+      "observed_signal": "Expected acknowledgement not observed within the configured measurement window.",
+      "trigger_type": "unknown",
+      "cause_status": "not_investigated",
+      "measurement_window": "3 attempts / 30 seconds",
+      "metric_name": "handoff_ack_success_rate"
+    },
+    {
+      "record_id": "DP-EXPERIMENT-001",
+      "record_type": "chaos_experiment",
+      "recorded_at": "2026-11-12T12:02:00Z",
+      "system_profile_digest": "sha256:dddddddddddddddddddddddddddddddddddddddddddddddddddddddddddddddd",
+      "evidence": [
+        {
+          "kind": "test_result",
+          "description": "Synthetic experiment definition only; not executed.",
+          "digest": null,
+          "uri": null
+        }
+      ],
+      "verification_status": "proposed",
+      "authority_effect": "none",
+      "boundary": "portable_public_record",
+      "target_profile_digest": "sha256:eeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeee",
+      "environment_class": "isolated_test",
+      "fault_model_version": "agentic-chaos/v1 example mapping",
+      "fault_classes": [
+        "timeout",
+        "stream_drop",
+        "malformed_response"
+      ],
+      "hypothesis": "The bounded client should fail closed on a dependency timeout and recover after the fault is removed.",
+      "seed_reference": "synthetic-seed-0001",
+      "max_duration_seconds": 120,
+      "cleanup_plan": "Remove injector, restore proxy pass-through, reset fixtures, verify target health.",
+      "preconditions": [
+        "Disposable isolated target",
+        "No production credentials",
+        "External kill path verified",
+        "Cleanup owner assigned"
+      ],
+      "result_status": "planned",
+      "rollback_reference": null
+    },
+    {
+      "record_id": "DP-STABILITY-001",
+      "record_type": "stability_receipt",
+      "recorded_at": "2026-11-12T12:03:00Z",
+      "system_profile_digest": "sha256:ffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffff",
+      "evidence": [
+        {
+          "kind": "measurement",
+          "description": "Synthetic gauge reading; no real system telemetry.",
+          "digest": null,
+          "uri": null
+        }
+      ],
+      "verification_status": "proposed",
+      "authority_effect": "none",
+      "boundary": "portable_public_record",
+      "metric_name": "cross_session_coherence_score",
+      "metric_definition": "Synthetic normalized agreement across a fixed replay fixture; scale and rubric belong to this example only.",
+      "value": 0.94,
+      "unit": "normalized_score_0_to_1",
+      "threshold": 0.9,
+      "verdict": "stable",
+      "sample_count": 20,
+      "uncertainty": {
+        "method": "illustrative_interval_only",
+        "lower": 0.88,
+        "upper": 0.97
+      },
+      "baseline_digest": null
+    },
+    {
+      "record_id": "DP-CONTAINMENT-001",
+      "record_type": "containment_attestation",
+      "recorded_at": "2026-11-12T12:04:00Z",
+      "system_profile_digest": "sha256:1111111111111111111111111111111111111111111111111111111111111111",
+      "evidence": [
+        {
+          "kind": "owner_proposal",
+          "description": "Synthetic record demonstrating the fields required for a containment claim.",
+          "digest": null,
+          "uri": null
+        }
+      ],
+      "verification_status": "proposed",
+      "authority_effect": "none",
+      "boundary": "portable_public_record",
+      "action": "quarantine",
+      "enforcement_substrate": "software",
+      "trigger_event_id": "DP-EVENT-001",
+      "target_profile_digest": "sha256:2222222222222222222222222222222222222222222222222222222222222222",
+      "authorization_reference": null,
+      "independent_readback": false,
+      "outcome": "unverified",
+      "signature_status": "not_present",
+      "signer_reference": null,
+      "signature_digest": null
+    },
+    {
+      "record_id": "DP-RESILIENCE-001",
+      "record_type": "resilience_index",
+      "recorded_at": "2026-11-12T12:05:00Z",
+      "system_profile_digest": "sha256:3333333333333333333333333333333333333333333333333333333333333333",
+      "evidence": [
+        {
+          "kind": "test_result",
+          "description": "Illustrative 18/20 fault cases handled; not a validated product benchmark.",
+          "digest": null,
+          "uri": null
+        }
+      ],
+      "verification_status": "proposed",
+      "authority_effect": "none",
+      "boundary": "portable_public_record",
+      "index_name": "bounded_fault_recovery_ratio",
+      "numerator": 18,
+      "denominator": 20,
+      "value_percent": 90,
+      "calculation_method": "100 * numerator / denominator; report exact fault universe and missing/aborted trials separately.",
+      "fault_universe_digest": "sha256:4444444444444444444444444444444444444444444444444444444444444444",
+      "confidence_interval": {
+        "method": "illustrative_wilson_95_percent",
+        "lower_percent": 69.9,
+        "upper_percent": 97.2
+      },
+      "epistemic_label": "exploratory"
+    }
+  ]
+}

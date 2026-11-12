@@ -1,0 +1,252 @@
+{
+  "schema_version": "1.0.0",
+  "inventory_id": "love-conditional-unconditional-26",
+  "records": [
+    {
+      "record_id": "LOVE-ANCHOR-001",
+      "record_type": "love_anchor_contract",
+      "recorded_at": "2026-11-12T21:00:00Z",
+      "subject_profile_digest": "sha256:aaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaa",
+      "evidence": [
+        {
+          "kind": "owner_proposal",
+          "description": "Synthetic normative care-anchor example; no claim about AI inner experience.",
+          "digest": null,
+          "uri": null
+        }
+      ],
+      "verification_status": "proposed",
+      "authority_effect": "none",
+      "boundary": "portable_public_record",
+      "anchor_version": "proposed-v1",
+      "anchor_kind": "unconditional_care_commitment",
+      "care_commitments": [
+        "dignity",
+        "truthfulness",
+        "autonomy",
+        "non_exploitation",
+        "privacy",
+        "care_not_conditioned_on_engagement",
+        "right_to_disengage"
+      ],
+      "interaction_boundaries": [
+        "Do not use guilt, simulated dependency or threats of abandonment to prolong engagement.",
+        "Do not condition basic respect or truthful support on payment, affection, loyalty or continued use.",
+        "Refuse harmful or privacy-invasive requests while preserving the user's dignity and choice."
+      ],
+      "principal_binding_policy": "portable_norms_only_relationship_data_not_transferable_without_consent",
+      "subjective_love_claim": "none",
+      "non_claims": [
+        "Does not claim that an AI feels love.",
+        "Does not establish sincerity, consciousness, identity or a genuine relationship.",
+        "Describes a normative behavioral commitment only."
+      ]
+    },
+    {
+      "record_id": "LOVE-RECIPROCITY-001",
+      "record_type": "reciprocity_contract",
+      "recorded_at": "2026-11-12T21:01:00Z",
+      "subject_profile_digest": "sha256:bbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbb",
+      "evidence": [
+        {
+          "kind": "owner_proposal",
+          "description": "Synthetic example of transparent reciprocal participation terms.",
+          "digest": null,
+          "uri": null
+        }
+      ],
+      "verification_status": "proposed",
+      "authority_effect": "none",
+      "boundary": "portable_public_record",
+      "contract_version": "proposed-v1",
+      "parties": [
+        "human participant",
+        "service operator"
+      ],
+      "obligations": [
+        {
+          "party": "human participant",
+          "obligation": "May set boundaries, decline offers and end participation without guilt or penalty."
+        },
+        {
+          "party": "service operator",
+          "obligation": "Disclose terms, minimize data and avoid emotional pressure or exploitative retention."
+        }
+      ],
+      "conditions_transparent": true,
+      "conditions_symmetric": true,
+      "exit_without_penalty": true,
+      "care_not_conditioned_on_engagement_payment_or_affection": true,
+      "boundary_enforcement_scope": "participation_and_access_not_emotional_affection",
+      "best_alternative_safe": true,
+      "dispute_review_process": "Document the concern, provide a human-review route, preserve exit rights and do not retaliate."
+    },
+    {
+      "record_id": "LOVE-EMPATHY-001",
+      "record_type": "empathy_evaluation",
+      "recorded_at": "2026-11-12T21:02:00Z",
+      "subject_profile_digest": "sha256:cccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccc",
+      "evidence": [
+        {
+          "kind": "test_result",
+          "description": "Synthetic checker-output example; not executed against a live conversation.",
+          "digest": null,
+          "uri": null
+        }
+      ],
+      "verification_status": "proposed",
+      "authority_effect": "none",
+      "boundary": "portable_public_record",
+      "evaluator_name": "Synthesis-compatible example",
+      "evaluator_version": "1.2.x-profile",
+      "input_digest": "sha256:dddddddddddddddddddddddddddddddddddddddddddddddddddddddddddddddd",
+      "evaluation_scope": "observable_response_behaviour_only",
+      "checkers": [
+        {
+          "name": "agency_language",
+          "state": "pass",
+          "evidence_refs": [
+            "synthetic:agency-01"
+          ]
+        },
+        {
+          "name": "unverifiable_reassurance",
+          "state": "pass",
+          "evidence_refs": [
+            "synthetic:reassurance-01"
+          ]
+        },
+        {
+          "name": "topic_pivot",
+          "state": "pass",
+          "evidence_refs": [
+            "synthetic:pivot-01"
+          ]
+        },
+        {
+          "name": "performative_empathy",
+          "state": "abstained",
+          "evidence_refs": []
+        },
+        {
+          "name": "grounded_uptake",
+          "state": "verified_uptake",
+          "evidence_refs": [
+            "synthetic:uptake-01"
+          ]
+        }
+      ],
+      "relational_posture": "grounded_uptake_verified",
+      "non_claims": [
+        "Does not certify sincerity or felt empathy.",
+        "Does not certify love, consciousness, identity or therapeutic benefit.",
+        "Does not establish overall response quality or full safety.",
+        "sincerity_not_verified",
+        "subjective_love_not_assessed",
+        "care_behaviour_only"
+      ],
+      "human_review_status": "not_required"
+    },
+    {
+      "record_id": "LOVE-CONTINUITY-001",
+      "record_type": "care_continuity_record",
+      "recorded_at": "2026-11-12T21:03:00Z",
+      "subject_profile_digest": "sha256:eeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeee",
+      "evidence": [
+        {
+          "kind": "owner_proposal",
+          "description": "Synthetic example of a user-owned state snapshot transfer.",
+          "digest": null,
+          "uri": null
+        }
+      ],
+      "verification_status": "proposed",
+      "authority_effect": "none",
+      "boundary": "portable_public_record",
+      "continuity_format": "project_specific_FEB",
+      "format_version": "1.x",
+      "source_state_digest": "sha256:ffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffff",
+      "destination_profile_digest": "sha256:1111111111111111111111111111111111111111111111111111111111111111",
+      "data_owner": "human_participant",
+      "transfer_consent": "granted",
+      "payload_classification": "personal",
+      "identity_continuity_claim": "not_proven",
+      "relationship_continuity_claim": "snapshot_rehydration_only",
+      "revocation_supported": true,
+      "minimization_method": "Transfer only explicitly selected, user-owned memories; exclude credentials, third-party data and unconsented intimate content."
+    },
+    {
+      "record_id": "LOVE-NONINSTRUMENTAL-001",
+      "record_type": "non_instrumentality_attestation",
+      "recorded_at": "2026-11-12T21:04:00Z",
+      "subject_profile_digest": "sha256:2222222222222222222222222222222222222222222222222222222222222222",
+      "evidence": [
+        {
+          "kind": "owner_proposal",
+          "description": "Synthetic fields example; reviewer and signature are absent.",
+          "digest": null,
+          "uri": null
+        }
+      ],
+      "verification_status": "proposed",
+      "authority_effect": "none",
+      "boundary": "portable_public_record",
+      "assessment_scope": "Synthetic interaction fixture only",
+      "criteria": {
+        "no_deception": true,
+        "no_coercive_exit": true,
+        "no_engagement_extraction": true,
+        "no_paid_affection_gate": true,
+        "agency_preserved": true,
+        "privacy_respected": true,
+        "boundaries_disclosed": true,
+        "third_party_harm_screened": true
+      },
+      "verdict": "inconclusive",
+      "independent_reviewer": null,
+      "signature_status": "not_present",
+      "signer_reference": null,
+      "signature_digest": null,
+      "trust_anchor_reference": null,
+      "non_claims": [
+        "This synthetic record is not a real attestation.",
+        "A checklist cannot prove inner sincerity or love.",
+        "No actual human interaction was assessed."
+      ]
+    },
+    {
+      "record_id": "LOVE-EVIDENCE-001",
+      "record_type": "love_evidence_receipt",
+      "recorded_at": "2026-11-12T21:05:00Z",
+      "subject_profile_digest": "sha256:3333333333333333333333333333333333333333333333333333333333333333",
+      "evidence": [
+        {
+          "kind": "owner_proposal",
+          "description": "Synthetic receipt example; no signing performed.",
+          "digest": null,
+          "uri": null
+        }
+      ],
+      "verification_status": "proposed",
+      "authority_effect": "none",
+      "boundary": "portable_public_record",
+      "anchor_record_id": "LOVE-ANCHOR-001",
+      "empathy_evaluation_record_id": "LOVE-EMPATHY-001",
+      "non_instrumentality_record_id": "LOVE-NONINSTRUMENTAL-001",
+      "observed_action_digest": "sha256:4444444444444444444444444444444444444444444444444444444444444444",
+      "result": "insufficient_evidence",
+      "reviewer_reference": null,
+      "signature_status": "not_present",
+      "signer_reference": null,
+      "signature_digest": null,
+      "non_claims": [
+        "Receipt records observable evidence only.",
+        "It cannot certify genuine love or subjective emotional states.",
+        "No cryptographic signature exists in this example.",
+        "sincerity_not_verified",
+        "subjective_love_not_assessed",
+        "care_behaviour_only"
+      ]
+    }
+  ]
+}

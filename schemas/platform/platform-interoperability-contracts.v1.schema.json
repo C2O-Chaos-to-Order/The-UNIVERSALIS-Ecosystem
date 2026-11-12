@@ -1,0 +1,1040 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "$id": "urn:c2o-universalis:platform-interoperability-contracts:1.0.0",
+  "title": "Portable OS, Runtime, Application, Build, Observability, Network, Storage and Evaluation Contracts",
+  "description": "Versioned, sanitized interoperability records. Records carry opaque references and digests, not credentials, private policies, secrets, raw telemetry, private source or incident data.",
+  "type": "object",
+  "properties": {
+    "schema_version": {
+      "const": "1.0.0"
+    },
+    "contract_family": {
+      "const": "platform-interoperability"
+    },
+    "records": {
+      "type": "array",
+      "minItems": 9,
+      "items": {
+        "type": "object",
+        "properties": {
+          "record_type": {
+            "enum": [
+              "os_artifact",
+              "runtime_profile",
+              "skill_manifest",
+              "workflow_blueprint",
+              "cicd_event",
+              "telemetry_record",
+              "network_route",
+              "storage_interface",
+              "evaluation_receipt"
+            ]
+          },
+          "record": {
+            "type": "object"
+          }
+        },
+        "required": [
+          "record_type",
+          "record"
+        ],
+        "additionalProperties": false
+      }
+    },
+    "limitations": {
+      "type": "array",
+      "items": {
+        "type": "string"
+      }
+    }
+  },
+  "required": [
+    "schema_version",
+    "contract_family",
+    "records",
+    "limitations"
+  ],
+  "additionalProperties": false,
+  "$defs": {
+    "signatureEnvelope": {
+      "type": [
+        "object",
+        "null"
+      ],
+      "properties": {
+        "algorithm": {
+          "enum": [
+            "Ed25519",
+            "ML-DSA-65",
+            "hybrid-ed25519-ml-dsa-65",
+            "other"
+          ]
+        },
+        "key_fingerprint": {
+          "type": "string",
+          "pattern": "^[a-f0-9]{64}$"
+        },
+        "public_key_ref": {
+          "type": "string",
+          "minLength": 1,
+          "maxLength": 2048
+        },
+        "signed_payload_digest": {
+          "type": "string",
+          "pattern": "^[a-f0-9]{64}$"
+        },
+        "signature_base64": {
+          "type": "string",
+          "minLength": 1
+        },
+        "signed_at": {
+          "type": "string",
+          "format": "date-time"
+        },
+        "verification_status": {
+          "enum": [
+            "not-run",
+            "valid",
+            "invalid",
+            "unknown-key",
+            "revoked-key"
+          ]
+        }
+      },
+      "required": [
+        "algorithm",
+        "key_fingerprint",
+        "signed_payload_digest",
+        "signature_base64",
+        "signed_at",
+        "verification_status"
+      ],
+      "additionalProperties": false
+    },
+    "osArtifact": {
+      "type": "object",
+      "properties": {
+        "schema_version": {
+          "const": "1.0.0"
+        },
+        "artifact_id": {
+          "type": "string",
+          "minLength": 1,
+          "maxLength": 2048
+        },
+        "artifact_kind": {
+          "enum": [
+            "bootable-os",
+            "kernel",
+            "container-image",
+            "microvm-image",
+            "agent-runtime",
+            "other"
+          ]
+        },
+        "media_type": {
+          "type": "string",
+          "minLength": 1,
+          "maxLength": 256
+        },
+        "digest": {
+          "type": "string",
+          "pattern": "^[a-f0-9]{64}$"
+        },
+        "platforms": {
+          "type": "array",
+          "minItems": 1,
+          "items": {
+            "type": "string",
+            "minLength": 1
+          }
+        },
+        "bootable": {
+          "type": "boolean"
+        },
+        "boot_metadata": {
+          "type": [
+            "object",
+            "null"
+          ],
+          "properties": {
+            "firmware": {
+              "enum": [
+                "uefi",
+                "bios",
+                "none",
+                "other"
+              ]
+            },
+            "architecture": {
+              "type": "string"
+            },
+            "kernel_ref": {
+              "type": "string",
+              "minLength": 1,
+              "maxLength": 2048
+            },
+            "initramfs_ref": {
+              "type": "string",
+              "minLength": 1,
+              "maxLength": 2048
+            }
+          },
+          "additionalProperties": false
+        },
+        "source_ref": {
+          "type": "string",
+          "minLength": 1,
+          "maxLength": 2048
+        },
+        "provenance_ref": {
+          "type": "string",
+          "minLength": 1,
+          "maxLength": 2048
+        },
+        "sbom_ref": {
+          "type": "string",
+          "minLength": 1,
+          "maxLength": 2048
+        },
+        "signature": {
+          "$ref": "#/$defs/signatureEnvelope"
+        },
+        "limitations": {
+          "type": "array",
+          "items": {
+            "type": "string"
+          }
+        }
+      },
+      "required": [
+        "schema_version",
+        "artifact_id",
+        "artifact_kind",
+        "media_type",
+        "digest",
+        "platforms",
+        "bootable",
+        "boot_metadata",
+        "source_ref",
+        "provenance_ref",
+        "sbom_ref",
+        "signature",
+        "limitations"
+      ],
+      "additionalProperties": false
+    },
+    "runtimeProfile": {
+      "type": "object",
+      "properties": {
+        "schema_version": {
+          "const": "1.0.0"
+        },
+        "runtime_id": {
+          "type": "string",
+          "minLength": 1,
+          "maxLength": 2048
+        },
+        "version": {
+          "type": "string",
+          "minLength": 1,
+          "maxLength": 2048
+        },
+        "runtime_kind": {
+          "enum": [
+            "os-runtime",
+            "agent-runtime",
+            "workflow-runtime",
+            "container-runtime",
+            "microvm-runtime",
+            "other"
+          ]
+        },
+        "isolation_boundary": {
+          "enum": [
+            "process",
+            "container",
+            "microvm",
+            "vm",
+            "kernel",
+            "hardware",
+            "none",
+            "unknown"
+          ]
+        },
+        "lifecycle_state": {
+          "enum": [
+            "proposed",
+            "available",
+            "starting",
+            "running",
+            "suspended",
+            "stopped",
+            "failed",
+            "unknown"
+          ]
+        },
+        "protocols": {
+          "type": "array",
+          "uniqueItems": true,
+          "items": {
+            "enum": [
+              "mcp",
+              "a2a",
+              "oci",
+              "http",
+              "grpc",
+              "other"
+            ]
+          }
+        },
+        "identity_ref": {
+          "type": "string",
+          "minLength": 1,
+          "maxLength": 2048
+        },
+        "policy_ref": {
+          "type": "string",
+          "minLength": 1,
+          "maxLength": 2048
+        },
+        "telemetry_ref": {
+          "type": "string",
+          "minLength": 1,
+          "maxLength": 2048
+        },
+        "limitations": {
+          "type": "array",
+          "items": {
+            "type": "string"
+          }
+        }
+      },
+      "required": [
+        "schema_version",
+        "runtime_id",
+        "version",
+        "runtime_kind",
+        "isolation_boundary",
+        "lifecycle_state",
+        "protocols",
+        "identity_ref",
+        "policy_ref",
+        "telemetry_ref",
+        "limitations"
+      ],
+      "additionalProperties": false
+    },
+    "skillManifest": {
+      "type": "object",
+      "properties": {
+        "schema_version": {
+          "const": "1.0.0"
+        },
+        "skill_id": {
+          "type": "string",
+          "minLength": 1,
+          "maxLength": 2048
+        },
+        "version": {
+          "type": "string",
+          "minLength": 1,
+          "maxLength": 2048
+        },
+        "manifest_format": {
+          "enum": [
+            "agentskills",
+            "mcp-tool",
+            "other"
+          ]
+        },
+        "content_digest": {
+          "type": "string",
+          "pattern": "^[a-f0-9]{64}$"
+        },
+        "source_ref": {
+          "type": "string",
+          "minLength": 1,
+          "maxLength": 2048
+        },
+        "tool_contract_refs": {
+          "type": "array",
+          "items": {
+            "type": "string",
+            "minLength": 1,
+            "maxLength": 2048
+          }
+        },
+        "permission_profile_ref": {
+          "type": "string",
+          "minLength": 1,
+          "maxLength": 2048
+        },
+        "limitations": {
+          "type": "array",
+          "items": {
+            "type": "string"
+          }
+        }
+      },
+      "required": [
+        "schema_version",
+        "skill_id",
+        "version",
+        "manifest_format",
+        "content_digest",
+        "source_ref",
+        "tool_contract_refs",
+        "permission_profile_ref",
+        "limitations"
+      ],
+      "additionalProperties": false
+    },
+    "workflowBlueprint": {
+      "type": "object",
+      "properties": {
+        "schema_version": {
+          "const": "1.0.0"
+        },
+        "blueprint_id": {
+          "type": "string",
+          "minLength": 1,
+          "maxLength": 2048
+        },
+        "version": {
+          "type": "string",
+          "minLength": 1,
+          "maxLength": 2048
+        },
+        "graph_digest": {
+          "type": "string",
+          "pattern": "^[a-f0-9]{64}$"
+        },
+        "engine_ref": {
+          "type": "string",
+          "minLength": 1,
+          "maxLength": 2048
+        },
+        "status": {
+          "enum": [
+            "draft",
+            "review",
+            "approved",
+            "rejected",
+            "retired"
+          ]
+        },
+        "approval_mode": {
+          "enum": [
+            "none",
+            "human-required",
+            "owner-required"
+          ]
+        },
+        "approval_ref": {
+          "type": [
+            "string",
+            "null"
+          ],
+          "maxLength": 2048
+        },
+        "policy_ref": {
+          "type": "string",
+          "minLength": 1,
+          "maxLength": 2048
+        },
+        "execution_scope_ref": {
+          "type": "string",
+          "minLength": 1,
+          "maxLength": 2048
+        },
+        "nodes": {
+          "type": "array",
+          "minItems": 1,
+          "items": {
+            "type": "object",
+            "properties": {
+              "node_id": {
+                "type": "string",
+                "minLength": 1,
+                "maxLength": 128
+              },
+              "node_kind": {
+                "enum": [
+                  "agent",
+                  "tool",
+                  "human-gate",
+                  "condition",
+                  "transform",
+                  "test",
+                  "deploy",
+                  "other"
+                ]
+              },
+              "component_ref": {
+                "type": "string",
+                "minLength": 1,
+                "maxLength": 2048
+              }
+            },
+            "required": [
+              "node_id",
+              "node_kind",
+              "component_ref"
+            ],
+            "additionalProperties": false
+          }
+        },
+        "edges": {
+          "type": "array",
+          "items": {
+            "type": "object",
+            "properties": {
+              "from": {
+                "type": "string",
+                "minLength": 1,
+                "maxLength": 128
+              },
+              "to": {
+                "type": "string",
+                "minLength": 1,
+                "maxLength": 128
+              },
+              "condition_ref": {
+                "type": [
+                  "string",
+                  "null"
+                ],
+                "maxLength": 2048
+              }
+            },
+            "required": [
+              "from",
+              "to",
+              "condition_ref"
+            ],
+            "additionalProperties": false
+          }
+        },
+        "test_evidence_refs": {
+          "type": "array",
+          "items": {
+            "type": "string",
+            "minLength": 1,
+            "maxLength": 2048
+          }
+        },
+        "limitations": {
+          "type": "array",
+          "items": {
+            "type": "string"
+          }
+        }
+      },
+      "required": [
+        "schema_version",
+        "blueprint_id",
+        "version",
+        "graph_digest",
+        "engine_ref",
+        "status",
+        "approval_mode",
+        "approval_ref",
+        "policy_ref",
+        "execution_scope_ref",
+        "nodes",
+        "edges",
+        "test_evidence_refs",
+        "limitations"
+      ],
+      "additionalProperties": false
+    },
+    "cicdEvent": {
+      "type": "object",
+      "properties": {
+        "schema_version": {
+          "const": "1.0.0"
+        },
+        "pipeline_id": {
+          "type": "string",
+          "minLength": 1,
+          "maxLength": 2048
+        },
+        "run_id": {
+          "type": "string",
+          "minLength": 1,
+          "maxLength": 2048
+        },
+        "event_type": {
+          "enum": [
+            "source-change",
+            "build",
+            "test",
+            "scan",
+            "sign",
+            "publish",
+            "deploy",
+            "rollback",
+            "other"
+          ]
+        },
+        "source_commit_sha": {
+          "type": "string",
+          "pattern": "^[a-f0-9]{40,64}$"
+        },
+        "source_ref": {
+          "type": "string",
+          "minLength": 1,
+          "maxLength": 2048
+        },
+        "status": {
+          "enum": [
+            "queued",
+            "running",
+            "passed",
+            "failed",
+            "cancelled",
+            "skipped",
+            "unknown"
+          ]
+        },
+        "test_count": {
+          "type": "integer",
+          "minimum": 0
+        },
+        "passed_count": {
+          "type": "integer",
+          "minimum": 0
+        },
+        "failed_count": {
+          "type": "integer",
+          "minimum": 0
+        },
+        "skipped_count": {
+          "type": "integer",
+          "minimum": 0
+        },
+        "artifact_digest": {
+          "type": "string",
+          "pattern": "^[a-f0-9]{64}$"
+        },
+        "provenance_ref": {
+          "type": "string",
+          "minLength": 1,
+          "maxLength": 2048
+        },
+        "evidence_refs": {
+          "type": "array",
+          "items": {
+            "type": "string",
+            "minLength": 1,
+            "maxLength": 2048
+          }
+        },
+        "limitations": {
+          "type": "array",
+          "items": {
+            "type": "string"
+          }
+        }
+      },
+      "required": [
+        "schema_version",
+        "pipeline_id",
+        "run_id",
+        "event_type",
+        "source_commit_sha",
+        "source_ref",
+        "status",
+        "test_count",
+        "passed_count",
+        "failed_count",
+        "skipped_count",
+        "artifact_digest",
+        "provenance_ref",
+        "evidence_refs",
+        "limitations"
+      ],
+      "additionalProperties": false
+    },
+    "telemetryRecord": {
+      "type": "object",
+      "properties": {
+        "schema_version": {
+          "const": "1.0.0"
+        },
+        "trace_id": {
+          "type": "string",
+          "pattern": "^[a-f0-9]{32}$"
+        },
+        "span_id": {
+          "type": "string",
+          "pattern": "^[a-f0-9]{16}$"
+        },
+        "parent_span_id": {
+          "type": [
+            "string",
+            "null"
+          ],
+          "pattern": "^[a-f0-9]{16}$"
+        },
+        "observed_at": {
+          "type": "string",
+          "format": "date-time"
+        },
+        "service_ref": {
+          "type": "string",
+          "minLength": 1,
+          "maxLength": 2048
+        },
+        "event_type": {
+          "enum": [
+            "trace",
+            "metric",
+            "log",
+            "lifecycle",
+            "tool-call",
+            "resource",
+            "other"
+          ]
+        },
+        "attribute_names": {
+          "type": "array",
+          "uniqueItems": true,
+          "items": {
+            "type": "string",
+            "minLength": 1,
+            "maxLength": 256
+          }
+        },
+        "redacted": {
+          "type": "boolean"
+        },
+        "evidence_ref": {
+          "type": "string",
+          "minLength": 1,
+          "maxLength": 2048
+        },
+        "limitations": {
+          "type": "array",
+          "items": {
+            "type": "string"
+          }
+        }
+      },
+      "required": [
+        "schema_version",
+        "trace_id",
+        "span_id",
+        "parent_span_id",
+        "observed_at",
+        "service_ref",
+        "event_type",
+        "attribute_names",
+        "redacted",
+        "evidence_ref",
+        "limitations"
+      ],
+      "additionalProperties": false
+    },
+    "networkRoute": {
+      "type": "object",
+      "properties": {
+        "schema_version": {
+          "const": "1.0.0"
+        },
+        "route_id": {
+          "type": "string",
+          "minLength": 1,
+          "maxLength": 2048
+        },
+        "protocol": {
+          "enum": [
+            "mcp",
+            "a2a",
+            "http",
+            "grpc",
+            "other"
+          ]
+        },
+        "source_ref": {
+          "type": "string",
+          "minLength": 1,
+          "maxLength": 2048
+        },
+        "destination_ref": {
+          "type": "string",
+          "minLength": 1,
+          "maxLength": 2048
+        },
+        "authentication_profile_ref": {
+          "type": [
+            "string",
+            "null"
+          ],
+          "maxLength": 2048
+        },
+        "authorization_policy_ref": {
+          "type": [
+            "string",
+            "null"
+          ],
+          "maxLength": 2048
+        },
+        "egress_scope_ref": {
+          "type": [
+            "string",
+            "null"
+          ],
+          "maxLength": 2048
+        },
+        "decision": {
+          "enum": [
+            "allow",
+            "deny",
+            "approval-required",
+            "quarantine"
+          ]
+        },
+        "execution_status": {
+          "enum": [
+            "not-executed",
+            "executed",
+            "partially-executed",
+            "failed",
+            "unknown"
+          ]
+        },
+        "evidence_refs": {
+          "type": "array",
+          "items": {
+            "type": "string",
+            "minLength": 1,
+            "maxLength": 2048
+          }
+        },
+        "limitations": {
+          "type": "array",
+          "items": {
+            "type": "string"
+          }
+        }
+      },
+      "required": [
+        "schema_version",
+        "route_id",
+        "protocol",
+        "source_ref",
+        "destination_ref",
+        "authentication_profile_ref",
+        "authorization_policy_ref",
+        "egress_scope_ref",
+        "decision",
+        "execution_status",
+        "evidence_refs",
+        "limitations"
+      ],
+      "additionalProperties": false
+    },
+    "storageInterface": {
+      "type": "object",
+      "properties": {
+        "schema_version": {
+          "const": "1.0.0"
+        },
+        "interface_id": {
+          "type": "string",
+          "minLength": 1,
+          "maxLength": 2048
+        },
+        "backend_kind": {
+          "enum": [
+            "relational",
+            "vector",
+            "graph",
+            "object",
+            "document",
+            "cache",
+            "workflow-state",
+            "other"
+          ]
+        },
+        "provider_ref": {
+          "type": "string",
+          "minLength": 1,
+          "maxLength": 2048
+        },
+        "tenant_ref": {
+          "type": "string",
+          "minLength": 1,
+          "maxLength": 2048
+        },
+        "schema_ref": {
+          "type": "string",
+          "minLength": 1,
+          "maxLength": 2048
+        },
+        "data_classification": {
+          "enum": [
+            "public",
+            "internal",
+            "confidential",
+            "secret",
+            "unknown"
+          ]
+        },
+        "encryption_at_rest": {
+          "type": "boolean"
+        },
+        "encryption_in_transit": {
+          "type": "boolean"
+        },
+        "access_policy_ref": {
+          "type": "string",
+          "minLength": 1,
+          "maxLength": 2048
+        },
+        "retention_policy_ref": {
+          "type": "string",
+          "minLength": 1,
+          "maxLength": 2048
+        },
+        "limitations": {
+          "type": "array",
+          "items": {
+            "type": "string"
+          }
+        }
+      },
+      "required": [
+        "schema_version",
+        "interface_id",
+        "backend_kind",
+        "provider_ref",
+        "tenant_ref",
+        "schema_ref",
+        "data_classification",
+        "encryption_at_rest",
+        "encryption_in_transit",
+        "access_policy_ref",
+        "retention_policy_ref",
+        "limitations"
+      ],
+      "additionalProperties": false
+    },
+    "evaluationReceipt": {
+      "type": "object",
+      "properties": {
+        "schema_version": {
+          "const": "1.0.0"
+        },
+        "receipt_id": {
+          "type": "string",
+          "minLength": 1,
+          "maxLength": 2048
+        },
+        "suite_ref": {
+          "type": "string",
+          "minLength": 1,
+          "maxLength": 2048
+        },
+        "subject_ref": {
+          "type": "string",
+          "minLength": 1,
+          "maxLength": 2048
+        },
+        "artifact_digest": {
+          "type": "string",
+          "pattern": "^[a-f0-9]{64}$"
+        },
+        "dataset_ref": {
+          "type": "string",
+          "minLength": 1,
+          "maxLength": 2048
+        },
+        "dataset_digest": {
+          "type": "string",
+          "pattern": "^[a-f0-9]{64}$"
+        },
+        "environment_ref": {
+          "type": "string",
+          "minLength": 1,
+          "maxLength": 2048
+        },
+        "status": {
+          "enum": [
+            "passed",
+            "failed",
+            "partial",
+            "not-run",
+            "inconclusive"
+          ]
+        },
+        "test_count": {
+          "type": "integer",
+          "minimum": 0
+        },
+        "passed_count": {
+          "type": "integer",
+          "minimum": 0
+        },
+        "failed_count": {
+          "type": "integer",
+          "minimum": 0
+        },
+        "skipped_count": {
+          "type": "integer",
+          "minimum": 0
+        },
+        "evaluated_at": {
+          "type": "string",
+          "format": "date-time"
+        },
+        "reproducibility": {
+          "enum": [
+            "deterministic",
+            "seeded",
+            "bounded-nondeterministic",
+            "not-reproducible",
+            "unknown"
+          ]
+        },
+        "evidence_ref": {
+          "type": "string",
+          "minLength": 1,
+          "maxLength": 2048
+        },
+        "signature": {
+          "$ref": "#/$defs/signatureEnvelope"
+        },
+        "limitations": {
+          "type": "array",
+          "items": {
+            "type": "string"
+          }
+        }
+      },
+      "required": [
+        "schema_version",
+        "receipt_id",
+        "suite_ref",
+        "subject_ref",
+        "artifact_digest",
+        "dataset_ref",
+        "dataset_digest",
+        "environment_ref",
+        "status",
+        "test_count",
+        "passed_count",
+        "failed_count",
+        "skipped_count",
+        "evaluated_at",
+        "reproducibility",
+        "evidence_ref",
+        "signature",
+        "limitations"
+      ],
+      "additionalProperties": false
+    }
+  }
+}

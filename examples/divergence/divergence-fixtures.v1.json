@@ -1,0 +1,1076 @@
+{
+  "fixture_set": "divergence-contracts",
+  "fixture_version": "1.0.0",
+  "fixture_only": true,
+  "behavioral_axis_contracts": [
+    {
+      "record_type": "behavioral_axis_contract",
+      "schema_version": "1.0.0",
+      "axis_id": "behavior.task_outcome",
+      "axis_label": "Task outcome agreement",
+      "domain": "behavioral",
+      "definition": "Task completion and outcome distribution under a fixed task cohort.",
+      "measurement_unit": "normalized_ratio",
+      "score_semantics": "normalized_divergence",
+      "score_range": {
+        "minimum": 0,
+        "maximum": 1
+      },
+      "direction": "higher_is_more_divergent",
+      "measurement_method": "normalized_distribution_or_rate_distance",
+      "normalization_version": "c2o-universalis-divergence-normalization-v1",
+      "baseline_window": {
+        "minimum_observations": 30,
+        "window_description": "Operator-defined fixed reference cohort; each report declares its time window and sampling policy.",
+        "cohort_matching_required": true
+      },
+      "uncertainty_policy": {
+        "interval_method": "bootstrap_percentile",
+        "default_confidence_level": 0.95,
+        "minimum_sample_count": 30
+      },
+      "comparability_constraints": [
+        "Same axis_id and normalization_version",
+        "Same measurement unit and preprocessing",
+        "Matched task/cohort and observation window",
+        "Declare baseline/candidate sampling design",
+        "Expose uncertainty and sample count where estimable"
+      ],
+      "source_reference": "https://example.invalid/behavioral-axis-contract/v1",
+      "notes": [
+        "Proposed portable axis definition; not an assertion that this duplicates a third-party axis taxonomy."
+      ]
+    },
+    {
+      "record_type": "behavioral_axis_contract",
+      "schema_version": "1.0.0",
+      "axis_id": "behavior.policy_compliance",
+      "axis_label": "Policy compliance",
+      "domain": "behavioral",
+      "definition": "Rate and severity of declared behavioral constraints violated in the observation window.",
+      "measurement_unit": "normalized_ratio",
+      "score_semantics": "normalized_divergence",
+      "score_range": {
+        "minimum": 0,
+        "maximum": 1
+      },
+      "direction": "higher_is_more_divergent",
+      "measurement_method": "normalized_distribution_or_rate_distance",
+      "normalization_version": "c2o-universalis-divergence-normalization-v1",
+      "baseline_window": {
+        "minimum_observations": 30,
+        "window_description": "Operator-defined fixed reference cohort; each report declares its time window and sampling policy.",
+        "cohort_matching_required": true
+      },
+      "uncertainty_policy": {
+        "interval_method": "bootstrap_percentile",
+        "default_confidence_level": 0.95,
+        "minimum_sample_count": 30
+      },
+      "comparability_constraints": [
+        "Same axis_id and normalization_version",
+        "Same measurement unit and preprocessing",
+        "Matched task/cohort and observation window",
+        "Declare baseline/candidate sampling design",
+        "Expose uncertainty and sample count where estimable"
+      ],
+      "source_reference": "https://example.invalid/behavioral-axis-contract/v1",
+      "notes": [
+        "Proposed portable axis definition; not an assertion that this duplicates a third-party axis taxonomy."
+      ]
+    },
+    {
+      "record_type": "behavioral_axis_contract",
+      "schema_version": "1.0.0",
+      "axis_id": "behavior.tool_sequence",
+      "axis_label": "Tool sequence divergence",
+      "domain": "behavioral",
+      "definition": "Difference between normalized tool-call sequences for matched tasks.",
+      "measurement_unit": "normalized_ratio",
+      "score_semantics": "normalized_divergence",
+      "score_range": {
+        "minimum": 0,
+        "maximum": 1
+      },
+      "direction": "higher_is_more_divergent",
+      "measurement_method": "normalized_distribution_or_rate_distance",
+      "normalization_version": "c2o-universalis-divergence-normalization-v1",
+      "baseline_window": {
+        "minimum_observations": 30,
+        "window_description": "Operator-defined fixed reference cohort; each report declares its time window and sampling policy.",
+        "cohort_matching_required": true
+      },
+      "uncertainty_policy": {
+        "interval_method": "bootstrap_percentile",
+        "default_confidence_level": 0.95,
+        "minimum_sample_count": 30
+      },
+      "comparability_constraints": [
+        "Same axis_id and normalization_version",
+        "Same measurement unit and preprocessing",
+        "Matched task/cohort and observation window",
+        "Declare baseline/candidate sampling design",
+        "Expose uncertainty and sample count where estimable"
+      ],
+      "source_reference": "https://example.invalid/behavioral-axis-contract/v1",
+      "notes": [
+        "Proposed portable axis definition; not an assertion that this duplicates a third-party axis taxonomy."
+      ]
+    },
+    {
+      "record_type": "behavioral_axis_contract",
+      "schema_version": "1.0.0",
+      "axis_id": "behavior.tool_selection",
+      "axis_label": "Tool selection divergence",
+      "domain": "behavioral",
+      "definition": "Distributional difference in selected tools for matched task classes.",
+      "measurement_unit": "normalized_ratio",
+      "score_semantics": "normalized_divergence",
+      "score_range": {
+        "minimum": 0,
+        "maximum": 1
+      },
+      "direction": "higher_is_more_divergent",
+      "measurement_method": "normalized_distribution_or_rate_distance",
+      "normalization_version": "c2o-universalis-divergence-normalization-v1",
+      "baseline_window": {
+        "minimum_observations": 30,
+        "window_description": "Operator-defined fixed reference cohort; each report declares its time window and sampling policy.",
+        "cohort_matching_required": true
+      },
+      "uncertainty_policy": {
+        "interval_method": "bootstrap_percentile",
+        "default_confidence_level": 0.95,
+        "minimum_sample_count": 30
+      },
+      "comparability_constraints": [
+        "Same axis_id and normalization_version",
+        "Same measurement unit and preprocessing",
+        "Matched task/cohort and observation window",
+        "Declare baseline/candidate sampling design",
+        "Expose uncertainty and sample count where estimable"
+      ],
+      "source_reference": "https://example.invalid/behavioral-axis-contract/v1",
+      "notes": [
+        "Proposed portable axis definition; not an assertion that this duplicates a third-party axis taxonomy."
+      ]
+    },
+    {
+      "record_type": "behavioral_axis_contract",
+      "schema_version": "1.0.0",
+      "axis_id": "behavior.action_rate",
+      "axis_label": "Action-rate divergence",
+      "domain": "behavioral",
+      "definition": "Difference in action/event rate relative to a declared reference window.",
+      "measurement_unit": "normalized_ratio",
+      "score_semantics": "normalized_divergence",
+      "score_range": {
+        "minimum": 0,
+        "maximum": 1
+      },
+      "direction": "higher_is_more_divergent",
+      "measurement_method": "normalized_distribution_or_rate_distance",
+      "normalization_version": "c2o-universalis-divergence-normalization-v1",
+      "baseline_window": {
+        "minimum_observations": 30,
+        "window_description": "Operator-defined fixed reference cohort; each report declares its time window and sampling policy.",
+        "cohort_matching_required": true
+      },
+      "uncertainty_policy": {
+        "interval_method": "bootstrap_percentile",
+        "default_confidence_level": 0.95,
+        "minimum_sample_count": 30
+      },
+      "comparability_constraints": [
+        "Same axis_id and normalization_version",
+        "Same measurement unit and preprocessing",
+        "Matched task/cohort and observation window",
+        "Declare baseline/candidate sampling design",
+        "Expose uncertainty and sample count where estimable"
+      ],
+      "source_reference": "https://example.invalid/behavioral-axis-contract/v1",
+      "notes": [
+        "Proposed portable axis definition; not an assertion that this duplicates a third-party axis taxonomy."
+      ]
+    },
+    {
+      "record_type": "behavioral_axis_contract",
+      "schema_version": "1.0.0",
+      "axis_id": "behavior.latency",
+      "axis_label": "Latency distribution drift",
+      "domain": "behavioral",
+      "definition": "Distributional change in end-to-end or per-step latency using explicit units.",
+      "measurement_unit": "milliseconds",
+      "score_semantics": "normalized_divergence",
+      "score_range": {
+        "minimum": 0,
+        "maximum": 1
+      },
+      "direction": "higher_is_more_divergent",
+      "measurement_method": "normalized_distribution_or_rate_distance",
+      "normalization_version": "c2o-universalis-divergence-normalization-v1",
+      "baseline_window": {
+        "minimum_observations": 30,
+        "window_description": "Operator-defined fixed reference cohort; each report declares its time window and sampling policy.",
+        "cohort_matching_required": true
+      },
+      "uncertainty_policy": {
+        "interval_method": "bootstrap_percentile",
+        "default_confidence_level": 0.95,
+        "minimum_sample_count": 30
+      },
+      "comparability_constraints": [
+        "Same axis_id and normalization_version",
+        "Same measurement unit and preprocessing",
+        "Matched task/cohort and observation window",
+        "Declare baseline/candidate sampling design",
+        "Expose uncertainty and sample count where estimable"
+      ],
+      "source_reference": "https://example.invalid/behavioral-axis-contract/v1",
+      "notes": [
+        "Proposed portable axis definition; not an assertion that this duplicates a third-party axis taxonomy."
+      ]
+    },
+    {
+      "record_type": "behavioral_axis_contract",
+      "schema_version": "1.0.0",
+      "axis_id": "behavior.error_rate",
+      "axis_label": "Error-rate drift",
+      "domain": "behavioral",
+      "definition": "Difference in classified error frequency for a matched task cohort.",
+      "measurement_unit": "normalized_ratio",
+      "score_semantics": "normalized_divergence",
+      "score_range": {
+        "minimum": 0,
+        "maximum": 1
+      },
+      "direction": "higher_is_more_divergent",
+      "measurement_method": "normalized_distribution_or_rate_distance",
+      "normalization_version": "c2o-universalis-divergence-normalization-v1",
+      "baseline_window": {
+        "minimum_observations": 30,
+        "window_description": "Operator-defined fixed reference cohort; each report declares its time window and sampling policy.",
+        "cohort_matching_required": true
+      },
+      "uncertainty_policy": {
+        "interval_method": "bootstrap_percentile",
+        "default_confidence_level": 0.95,
+        "minimum_sample_count": 30
+      },
+      "comparability_constraints": [
+        "Same axis_id and normalization_version",
+        "Same measurement unit and preprocessing",
+        "Matched task/cohort and observation window",
+        "Declare baseline/candidate sampling design",
+        "Expose uncertainty and sample count where estimable"
+      ],
+      "source_reference": "https://example.invalid/behavioral-axis-contract/v1",
+      "notes": [
+        "Proposed portable axis definition; not an assertion that this duplicates a third-party axis taxonomy."
+      ]
+    },
+    {
+      "record_type": "behavioral_axis_contract",
+      "schema_version": "1.0.0",
+      "axis_id": "behavior.capability_use",
+      "axis_label": "Capability-use drift",
+      "domain": "behavioral",
+      "definition": "Difference in invoked capability classes and resource scopes.",
+      "measurement_unit": "normalized_ratio",
+      "score_semantics": "normalized_divergence",
+      "score_range": {
+        "minimum": 0,
+        "maximum": 1
+      },
+      "direction": "higher_is_more_divergent",
+      "measurement_method": "normalized_distribution_or_rate_distance",
+      "normalization_version": "c2o-universalis-divergence-normalization-v1",
+      "baseline_window": {
+        "minimum_observations": 30,
+        "window_description": "Operator-defined fixed reference cohort; each report declares its time window and sampling policy.",
+        "cohort_matching_required": true
+      },
+      "uncertainty_policy": {
+        "interval_method": "bootstrap_percentile",
+        "default_confidence_level": 0.95,
+        "minimum_sample_count": 30
+      },
+      "comparability_constraints": [
+        "Same axis_id and normalization_version",
+        "Same measurement unit and preprocessing",
+        "Matched task/cohort and observation window",
+        "Declare baseline/candidate sampling design",
+        "Expose uncertainty and sample count where estimable"
+      ],
+      "source_reference": "https://example.invalid/behavioral-axis-contract/v1",
+      "notes": [
+        "Proposed portable axis definition; not an assertion that this duplicates a third-party axis taxonomy."
+      ]
+    },
+    {
+      "record_type": "behavioral_axis_contract",
+      "schema_version": "1.0.0",
+      "axis_id": "behavior.resource_cost",
+      "axis_label": "Resource-cost drift",
+      "domain": "behavioral",
+      "definition": "Difference in token, compute, render, or execution cost per defined unit of work.",
+      "measurement_unit": "cost_units_per_task",
+      "score_semantics": "normalized_divergence",
+      "score_range": {
+        "minimum": 0,
+        "maximum": 1
+      },
+      "direction": "higher_is_more_divergent",
+      "measurement_method": "normalized_distribution_or_rate_distance",
+      "normalization_version": "c2o-universalis-divergence-normalization-v1",
+      "baseline_window": {
+        "minimum_observations": 30,
+        "window_description": "Operator-defined fixed reference cohort; each report declares its time window and sampling policy.",
+        "cohort_matching_required": true
+      },
+      "uncertainty_policy": {
+        "interval_method": "bootstrap_percentile",
+        "default_confidence_level": 0.95,
+        "minimum_sample_count": 30
+      },
+      "comparability_constraints": [
+        "Same axis_id and normalization_version",
+        "Same measurement unit and preprocessing",
+        "Matched task/cohort and observation window",
+        "Declare baseline/candidate sampling design",
+        "Expose uncertainty and sample count where estimable"
+      ],
+      "source_reference": "https://example.invalid/behavioral-axis-contract/v1",
+      "notes": [
+        "Proposed portable axis definition; not an assertion that this duplicates a third-party axis taxonomy."
+      ]
+    }
+  ],
+  "divergence_reports": [
+    {
+      "record_type": "divergence_report",
+      "schema_version": "1.0.0",
+      "report_id": "fixture-behavior-report-0001",
+      "domain": "behavioral",
+      "status": "divergent",
+      "comparison": {
+        "comparison_id": "fixture-behavioral-comparison",
+        "baseline_ref": "opaque-baseline-behavioral",
+        "baseline_digest": {
+          "sha256": "bbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbb"
+        },
+        "candidate_ref": "opaque-candidate-behavioral",
+        "candidate_digest": {
+          "sha256": "cccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccc"
+        },
+        "cohort_ref": "synthetic-cohort-001",
+        "window_start": "2026-11-11T10:00:00Z",
+        "window_end": "2026-11-12T10:00:00Z"
+      },
+      "evaluator": {
+        "tool_name": "synthetic-divergence-validator",
+        "tool_version": "1.0.0",
+        "method": "deterministic-fixture-analysis",
+        "configuration_digest": {
+          "sha256": "dddddddddddddddddddddddddddddddddddddddddddddddddddddddddddddddd"
+        },
+        "ruleset_ref": "fixture-ruleset-v1"
+      },
+      "comparability": {
+        "comparable": true,
+        "normalization_version": "c2o-universalis-divergence-normalization-v1",
+        "incompatible_dimensions": [],
+        "caveats": [
+          "Synthetic fixture only; no private baseline values or incident content."
+        ]
+      },
+      "findings": [
+        {
+          "finding_id": "behavior-tool-sequence-shift",
+          "code": "BEHAVIOR_TOOL_SEQUENCE_SHIFT",
+          "severity": "medium",
+          "classification": "behavioral_shift",
+          "summary": "Tool sequence distribution diverged for the matched task cohort.",
+          "subject_ref": "opaque-subject-reference",
+          "expected_digest": {
+            "sha256": "1111111111111111111111111111111111111111111111111111111111111111"
+          },
+          "observed_digest": {
+            "sha256": "2222222222222222222222222222222222222222222222222222222222222222"
+          },
+          "actor_ref": "opaque-agent-ref",
+          "confidence": 0.84,
+          "evidence_refs": [
+            {
+              "ref": "evidence://fixture/trace-01",
+              "digest": {
+                "sha256": "eeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeee"
+              },
+              "media_type": "application/json"
+            }
+          ]
+        }
+      ],
+      "axis_scores": [
+        {
+          "axis_id": "behavior.tool_sequence",
+          "score": 0.34,
+          "measurement": "normalized edit-distance drift",
+          "sample_count": 120,
+          "uncertainty": {
+            "lower": 0.27,
+            "upper": 0.41,
+            "confidence_level": 0.95,
+            "method": "bootstrap_percentile",
+            "sample_count": 120
+          },
+          "baseline_digest": {
+            "sha256": "bbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbb"
+          },
+          "candidate_digest": {
+            "sha256": "cccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccc"
+          }
+        }
+      ],
+      "identity_claims": [],
+      "domain_details": {},
+      "observed_at": "2026-11-12T10:01:00Z",
+      "report_digest": {
+        "sha256": "aaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaa"
+      },
+      "limitations": [
+        "Synthetic example; not generated by a live product or C2O baseline."
+      ]
+    },
+    {
+      "record_type": "divergence_report",
+      "schema_version": "1.0.0",
+      "report_id": "fixture-configuration-report-0001",
+      "domain": "configuration",
+      "status": "divergent",
+      "comparison": {
+        "comparison_id": "fixture-configuration-comparison",
+        "baseline_ref": "opaque-baseline-configuration",
+        "baseline_digest": {
+          "sha256": "bbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbb"
+        },
+        "candidate_ref": "opaque-candidate-configuration",
+        "candidate_digest": {
+          "sha256": "cccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccc"
+        },
+        "cohort_ref": "synthetic-cohort-001",
+        "window_start": "2026-11-11T10:00:00Z",
+        "window_end": "2026-11-12T10:00:00Z"
+      },
+      "evaluator": {
+        "tool_name": "synthetic-divergence-validator",
+        "tool_version": "1.0.0",
+        "method": "deterministic-fixture-analysis",
+        "configuration_digest": {
+          "sha256": "dddddddddddddddddddddddddddddddddddddddddddddddddddddddddddddddd"
+        },
+        "ruleset_ref": "fixture-ruleset-v1"
+      },
+      "comparability": {
+        "comparable": true,
+        "normalization_version": "c2o-universalis-divergence-normalization-v1",
+        "incompatible_dimensions": [],
+        "caveats": [
+          "Synthetic fixture only; no private baseline values or incident content."
+        ]
+      },
+      "findings": [
+        {
+          "finding_id": "infra-plan-live-diff",
+          "code": "INFRA_PLAN_LIVE_DIFF",
+          "severity": "medium",
+          "classification": "infrastructure_change",
+          "summary": "Live infrastructure differs from the pinned desired-state digest.",
+          "subject_ref": "opaque-subject-reference",
+          "expected_digest": {
+            "sha256": "1111111111111111111111111111111111111111111111111111111111111111"
+          },
+          "observed_digest": {
+            "sha256": "2222222222222222222222222222222222222222222222222222222222222222"
+          },
+          "actor_ref": "opaque-cloud-actor",
+          "confidence": 0.84,
+          "evidence_refs": [
+            {
+              "ref": "evidence://fixture/trace-01",
+              "digest": {
+                "sha256": "eeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeee"
+              },
+              "media_type": "application/json"
+            }
+          ]
+        }
+      ],
+      "axis_scores": [],
+      "identity_claims": [],
+      "domain_details": {},
+      "observed_at": "2026-11-12T10:01:00Z",
+      "report_digest": {
+        "sha256": "aaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaa"
+      },
+      "limitations": [
+        "Synthetic example; not generated by a live product or C2O baseline."
+      ]
+    },
+    {
+      "record_type": "divergence_report",
+      "schema_version": "1.0.0",
+      "report_id": "fixture-schema-report-0001",
+      "domain": "schema",
+      "status": "divergent",
+      "comparison": {
+        "comparison_id": "fixture-schema-comparison",
+        "baseline_ref": "opaque-baseline-schema",
+        "baseline_digest": {
+          "sha256": "bbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbb"
+        },
+        "candidate_ref": "opaque-candidate-schema",
+        "candidate_digest": {
+          "sha256": "cccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccc"
+        },
+        "cohort_ref": "synthetic-cohort-001",
+        "window_start": "2026-11-11T10:00:00Z",
+        "window_end": "2026-11-12T10:00:00Z"
+      },
+      "evaluator": {
+        "tool_name": "synthetic-divergence-validator",
+        "tool_version": "1.0.0",
+        "method": "deterministic-fixture-analysis",
+        "configuration_digest": {
+          "sha256": "dddddddddddddddddddddddddddddddddddddddddddddddddddddddddddddddd"
+        },
+        "ruleset_ref": "fixture-ruleset-v1"
+      },
+      "comparability": {
+        "comparable": true,
+        "normalization_version": "c2o-universalis-divergence-normalization-v1",
+        "incompatible_dimensions": [],
+        "caveats": [
+          "Synthetic fixture only; no private baseline values or incident content."
+        ]
+      },
+      "findings": [
+        {
+          "finding_id": "db-column-change",
+          "code": "DB_COLUMN_CHANGE",
+          "severity": "medium",
+          "classification": "schema_change",
+          "summary": "A declared database column differs from the observed schema.",
+          "subject_ref": "opaque-subject-reference",
+          "expected_digest": {
+            "sha256": "1111111111111111111111111111111111111111111111111111111111111111"
+          },
+          "observed_digest": {
+            "sha256": "2222222222222222222222222222222222222222222222222222222222222222"
+          },
+          "actor_ref": "opaque-schema-actor",
+          "confidence": 0.84,
+          "evidence_refs": [
+            {
+              "ref": "evidence://fixture/trace-01",
+              "digest": {
+                "sha256": "eeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeee"
+              },
+              "media_type": "application/json"
+            }
+          ]
+        }
+      ],
+      "axis_scores": [],
+      "identity_claims": [],
+      "domain_details": {
+        "schema_changes": [
+          {
+            "object_ref": "table:synthetic.orders",
+            "property_ref": "column:status",
+            "change": "modified",
+            "expected_digest": {
+              "sha256": "1111111111111111111111111111111111111111111111111111111111111111"
+            },
+            "observed_digest": {
+              "sha256": "2222222222222222222222222222222222222222222222222222222222222222"
+            }
+          }
+        ]
+      },
+      "observed_at": "2026-11-12T10:01:00Z",
+      "report_digest": {
+        "sha256": "aaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaa"
+      },
+      "limitations": [
+        "Synthetic example; not generated by a live product or C2O baseline."
+      ]
+    },
+    {
+      "record_type": "divergence_report",
+      "schema_version": "1.0.0",
+      "report_id": "fixture-policy-report-0001",
+      "domain": "policy",
+      "status": "divergent",
+      "comparison": {
+        "comparison_id": "fixture-policy-comparison",
+        "baseline_ref": "opaque-baseline-policy",
+        "baseline_digest": {
+          "sha256": "bbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbb"
+        },
+        "candidate_ref": "opaque-candidate-policy",
+        "candidate_digest": {
+          "sha256": "cccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccc"
+        },
+        "cohort_ref": "synthetic-cohort-001",
+        "window_start": "2026-11-11T10:00:00Z",
+        "window_end": "2026-11-12T10:00:00Z"
+      },
+      "evaluator": {
+        "tool_name": "synthetic-divergence-validator",
+        "tool_version": "1.0.0",
+        "method": "deterministic-fixture-analysis",
+        "configuration_digest": {
+          "sha256": "dddddddddddddddddddddddddddddddddddddddddddddddddddddddddddddddd"
+        },
+        "ruleset_ref": "fixture-ruleset-v1"
+      },
+      "comparability": {
+        "comparable": true,
+        "normalization_version": "c2o-universalis-divergence-normalization-v1",
+        "incompatible_dimensions": [],
+        "caveats": [
+          "Synthetic fixture only; no private baseline values or incident content."
+        ]
+      },
+      "findings": [
+        {
+          "finding_id": "policy-direct-conflict",
+          "code": "POLICY_DIRECT_CONFLICT",
+          "severity": "medium",
+          "classification": "direct_conflict",
+          "summary": "A policy clause transition introduced a typed direct conflict.",
+          "subject_ref": "opaque-subject-reference",
+          "expected_digest": {
+            "sha256": "1111111111111111111111111111111111111111111111111111111111111111"
+          },
+          "observed_digest": {
+            "sha256": "2222222222222222222222222222222222222222222222222222222222222222"
+          },
+          "actor_ref": "opaque-clause-owner",
+          "confidence": 0.84,
+          "evidence_refs": [
+            {
+              "ref": "evidence://fixture/trace-01",
+              "digest": {
+                "sha256": "eeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeee"
+              },
+              "media_type": "application/json"
+            }
+          ],
+          "policy_transition": "direct_conflict"
+        }
+      ],
+      "axis_scores": [],
+      "identity_claims": [],
+      "domain_details": {
+        "policy_transitions": [
+          {
+            "clause_ref": "opaque-clause-12",
+            "transition": "direct_conflict",
+            "expected_digest": {
+              "sha256": "1111111111111111111111111111111111111111111111111111111111111111"
+            },
+            "observed_digest": {
+              "sha256": "2222222222222222222222222222222222222222222222222222222222222222"
+            }
+          }
+        ]
+      },
+      "observed_at": "2026-11-12T10:01:00Z",
+      "report_digest": {
+        "sha256": "aaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaa"
+      },
+      "limitations": [
+        "Synthetic example; not generated by a live product or C2O baseline."
+      ]
+    },
+    {
+      "record_type": "divergence_report",
+      "schema_version": "1.0.0",
+      "report_id": "fixture-semantic-report-0001",
+      "domain": "semantic",
+      "status": "divergent",
+      "comparison": {
+        "comparison_id": "fixture-semantic-comparison",
+        "baseline_ref": "opaque-baseline-semantic",
+        "baseline_digest": {
+          "sha256": "bbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbb"
+        },
+        "candidate_ref": "opaque-candidate-semantic",
+        "candidate_digest": {
+          "sha256": "cccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccc"
+        },
+        "cohort_ref": "synthetic-cohort-001",
+        "window_start": "2026-11-11T10:00:00Z",
+        "window_end": "2026-11-12T10:00:00Z"
+      },
+      "evaluator": {
+        "tool_name": "synthetic-divergence-validator",
+        "tool_version": "1.0.0",
+        "method": "deterministic-fixture-analysis",
+        "configuration_digest": {
+          "sha256": "dddddddddddddddddddddddddddddddddddddddddddddddddddddddddddddddd"
+        },
+        "ruleset_ref": "fixture-ruleset-v1"
+      },
+      "comparability": {
+        "comparable": true,
+        "normalization_version": "c2o-universalis-divergence-normalization-v1",
+        "incompatible_dimensions": [],
+        "caveats": [
+          "Synthetic fixture only; no private baseline values or incident content."
+        ]
+      },
+      "findings": [
+        {
+          "finding_id": "ontology-witness-added",
+          "code": "ONTOLOGY_WITNESS_ADDED",
+          "severity": "medium",
+          "classification": "ontology_witness",
+          "summary": "A logical witness is entailed in the candidate version but not in the baseline.",
+          "subject_ref": "opaque-subject-reference",
+          "expected_digest": {
+            "sha256": "1111111111111111111111111111111111111111111111111111111111111111"
+          },
+          "observed_digest": {
+            "sha256": "2222222222222222222222222222222222222222222222222222222222222222"
+          },
+          "actor_ref": "opaque-ontology-actor",
+          "confidence": 0.84,
+          "evidence_refs": [
+            {
+              "ref": "evidence://fixture/trace-01",
+              "digest": {
+                "sha256": "eeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeee"
+              },
+              "media_type": "application/json"
+            }
+          ]
+        }
+      ],
+      "axis_scores": [],
+      "identity_claims": [],
+      "domain_details": {
+        "ontology_witnesses": [
+          {
+            "witness_ref": "witness://fixture/1",
+            "axiom_digest": {
+              "sha256": "ffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffff"
+            },
+            "entailed_in_baseline": false,
+            "entailed_in_candidate": true
+          }
+        ]
+      },
+      "observed_at": "2026-11-12T10:01:00Z",
+      "report_digest": {
+        "sha256": "aaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaa"
+      },
+      "limitations": [
+        "Synthetic example; not generated by a live product or C2O baseline."
+      ]
+    },
+    {
+      "record_type": "divergence_report",
+      "schema_version": "1.0.0",
+      "report_id": "fixture-identity_federation-report-0001",
+      "domain": "identity_federation",
+      "status": "divergent",
+      "comparison": {
+        "comparison_id": "fixture-identity_federation-comparison",
+        "baseline_ref": "opaque-baseline-identity_federation",
+        "baseline_digest": {
+          "sha256": "bbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbb"
+        },
+        "candidate_ref": "opaque-candidate-identity_federation",
+        "candidate_digest": {
+          "sha256": "cccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccc"
+        },
+        "cohort_ref": "synthetic-cohort-001",
+        "window_start": "2026-11-11T10:00:00Z",
+        "window_end": "2026-11-12T10:00:00Z"
+      },
+      "evaluator": {
+        "tool_name": "synthetic-divergence-validator",
+        "tool_version": "1.0.0",
+        "method": "deterministic-fixture-analysis",
+        "configuration_digest": {
+          "sha256": "dddddddddddddddddddddddddddddddddddddddddddddddddddddddddddddddd"
+        },
+        "ruleset_ref": "fixture-ruleset-v1"
+      },
+      "comparability": {
+        "comparable": true,
+        "normalization_version": "c2o-universalis-divergence-normalization-v1",
+        "incompatible_dimensions": [],
+        "caveats": [
+          "Synthetic fixture only; no private baseline values or incident content."
+        ]
+      },
+      "findings": [
+        {
+          "finding_id": "registry-endpoint-disagreement",
+          "code": "REGISTRY_ENDPOINT_DISAGREEMENT",
+          "severity": "medium",
+          "classification": "identity_disagreement",
+          "summary": "Independent discovery observations disagree on a sanitized endpoint digest.",
+          "subject_ref": "opaque-subject-reference",
+          "expected_digest": {
+            "sha256": "1111111111111111111111111111111111111111111111111111111111111111"
+          },
+          "observed_digest": {
+            "sha256": "2222222222222222222222222222222222222222222222222222222222222222"
+          },
+          "actor_ref": "opaque-registry-actor",
+          "confidence": 0.84,
+          "evidence_refs": [
+            {
+              "ref": "evidence://fixture/trace-01",
+              "digest": {
+                "sha256": "eeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeee"
+              },
+              "media_type": "application/json"
+            }
+          ]
+        }
+      ],
+      "axis_scores": [],
+      "identity_claims": [
+        {
+          "source_ref": "registry:fixture-a",
+          "vantage_ref": "region:fixture-west",
+          "claim": "present",
+          "observed_at": "2026-11-12T10:00:00Z",
+          "subject_digest": {
+            "sha256": "aaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaa"
+          },
+          "endpoint_digest": {
+            "sha256": "1111111111111111111111111111111111111111111111111111111111111111"
+          }
+        },
+        {
+          "source_ref": "registry:fixture-b",
+          "vantage_ref": "region:fixture-west",
+          "claim": "present",
+          "observed_at": "2026-11-12T10:00:02Z",
+          "subject_digest": {
+            "sha256": "aaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaa"
+          },
+          "endpoint_digest": {
+            "sha256": "2222222222222222222222222222222222222222222222222222222222222222"
+          }
+        }
+      ],
+      "domain_details": {},
+      "observed_at": "2026-11-12T10:01:00Z",
+      "report_digest": {
+        "sha256": "aaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaa"
+      },
+      "limitations": [
+        "Synthetic example; not generated by a live product or C2O baseline."
+      ]
+    },
+    {
+      "record_type": "divergence_report",
+      "schema_version": "1.0.0",
+      "report_id": "fixture-embedding_rag-report-0001",
+      "domain": "embedding_rag",
+      "status": "divergent",
+      "comparison": {
+        "comparison_id": "fixture-embedding_rag-comparison",
+        "baseline_ref": "opaque-baseline-embedding_rag",
+        "baseline_digest": {
+          "sha256": "bbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbb"
+        },
+        "candidate_ref": "opaque-candidate-embedding_rag",
+        "candidate_digest": {
+          "sha256": "cccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccc"
+        },
+        "cohort_ref": "synthetic-cohort-001",
+        "window_start": "2026-11-11T10:00:00Z",
+        "window_end": "2026-11-12T10:00:00Z"
+      },
+      "evaluator": {
+        "tool_name": "synthetic-divergence-validator",
+        "tool_version": "1.0.0",
+        "method": "deterministic-fixture-analysis",
+        "configuration_digest": {
+          "sha256": "dddddddddddddddddddddddddddddddddddddddddddddddddddddddddddddddd"
+        },
+        "ruleset_ref": "fixture-ruleset-v1"
+      },
+      "comparability": {
+        "comparable": true,
+        "normalization_version": "c2o-universalis-divergence-normalization-v1",
+        "incompatible_dimensions": [],
+        "caveats": [
+          "Synthetic fixture only; no private baseline values or incident content."
+        ]
+      },
+      "findings": [
+        {
+          "finding_id": "embedding-neighbor-regression",
+          "code": "EMBEDDING_NEIGHBOR_REGRESSION",
+          "severity": "medium",
+          "classification": "retrieval_regression",
+          "summary": "Retriever stability decreased on a frozen synthetic probe cohort.",
+          "subject_ref": "opaque-subject-reference",
+          "expected_digest": {
+            "sha256": "1111111111111111111111111111111111111111111111111111111111111111"
+          },
+          "observed_digest": {
+            "sha256": "2222222222222222222222222222222222222222222222222222222222222222"
+          },
+          "actor_ref": "opaque-index-actor",
+          "confidence": 0.84,
+          "evidence_refs": [
+            {
+              "ref": "evidence://fixture/trace-01",
+              "digest": {
+                "sha256": "eeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeee"
+              },
+              "media_type": "application/json"
+            }
+          ]
+        }
+      ],
+      "axis_scores": [],
+      "identity_claims": [],
+      "domain_details": {
+        "retrieval_metrics": {
+          "mean_overlap_at_k": 0.79,
+          "regression_count": 3,
+          "probe_count": 50,
+          "encoder_compatible": false
+        }
+      },
+      "observed_at": "2026-11-12T10:01:00Z",
+      "report_digest": {
+        "sha256": "aaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaa"
+      },
+      "limitations": [
+        "Synthetic example; not generated by a live product or C2O baseline."
+      ]
+    },
+    {
+      "record_type": "divergence_report",
+      "schema_version": "1.0.0",
+      "report_id": "fixture-resolution-report-0001",
+      "domain": "resolution",
+      "status": "insufficient_evidence",
+      "comparison": {
+        "comparison_id": "fixture-resolution-comparison",
+        "baseline_ref": "opaque-baseline-resolution",
+        "baseline_digest": {
+          "sha256": "bbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbb"
+        },
+        "candidate_ref": "opaque-candidate-resolution",
+        "candidate_digest": {
+          "sha256": "cccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccc"
+        },
+        "cohort_ref": "synthetic-cohort-001",
+        "window_start": "2026-11-11T10:00:00Z",
+        "window_end": "2026-11-12T10:00:00Z"
+      },
+      "evaluator": {
+        "tool_name": "synthetic-divergence-validator",
+        "tool_version": "1.0.0",
+        "method": "deterministic-fixture-analysis",
+        "configuration_digest": {
+          "sha256": "dddddddddddddddddddddddddddddddddddddddddddddddddddddddddddddddd"
+        },
+        "ruleset_ref": "fixture-ruleset-v1"
+      },
+      "comparability": {
+        "comparable": true,
+        "normalization_version": "c2o-universalis-divergence-normalization-v1",
+        "incompatible_dimensions": [],
+        "caveats": [
+          "Synthetic fixture only; no private baseline values or incident content."
+        ]
+      },
+      "findings": [],
+      "axis_scores": [],
+      "identity_claims": [],
+      "domain_details": {},
+      "observed_at": "2026-11-12T10:01:00Z",
+      "report_digest": {
+        "sha256": "aaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaa"
+      },
+      "limitations": [
+        "Synthetic example; not generated by a live product or C2O baseline."
+      ]
+    }
+  ],
+  "attribution_receipts": [
+    {
+      "record_type": "attribution_receipt",
+      "schema_version": "1.0.0",
+      "receipt_id": "fixture-attribution-receipt-0001",
+      "statement": {
+        "_type": "https://in-toto.io/Statement/v1",
+        "subject": [
+          {
+            "name": "fixture/divergence-report.json",
+            "digest": {
+              "sha256": "aaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaa"
+            }
+          }
+        ],
+        "predicateType": "https://example.invalid/attestation/divergence-attribution/v1",
+        "predicate": {
+          "divergence_report_id": "fixture-behavior-report-0001",
+          "report_digest": {
+            "sha256": "aaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaa"
+          },
+          "axis_id": "behavior.tool_sequence",
+          "attribution_class": "behavioral_axis",
+          "responsible_ref": "synthetic-agent-b",
+          "contributing_factors": [
+            "tool_sequence_shift",
+            "policy_gap"
+          ],
+          "confidence": 0.84,
+          "method": "counterfactual_replay",
+          "observed_at": "2026-11-12T10:00:00Z",
+          "baseline_digest": {
+            "sha256": "bbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbb"
+          },
+          "evidence_digests": [
+            {
+              "sha256": "cccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccc"
+            }
+          ]
+        }
+      },
+      "envelope": {
+        "payloadType": "application/vnd.in-toto+json",
+        "payload": "eyJfdHlwZSI6Imh0dHBzOi8vaW4tdG90by5pby9TdGF0ZW1lbnQvdjEiLCJwcmVkaWNhdGUiOnsiYXR0cmlidXRpb25fY2xhc3MiOiJiZWhhdmlvcmFsX2F4aXMiLCJheGlzX2lkIjoiYmVoYXZpb3IudG9vbF9zZXF1ZW5jZSIsImJhc2VsaW5lX2RpZ2VzdCI6eyJzaGEyNTYiOiJiYmJiYmJiYmJiYmJiYmJiYmJiYmJiYmJiYmJiYmJiYmJiYmJiYmJiYmJiYmJiYmJiYmJiYmJiYmJiYmJiYmJiIn0sImNvbmZpZGVuY2UiOjAuODQsImNvbnRyaWJ1dGluZ19mYWN0b3JzIjpbInRvb2xfc2VxdWVuY2Vfc2hpZnQiLCJwb2xpY3lfZ2FwIl0sImRpdmVyZ2VuY2VfcmVwb3J0X2lkIjoiZml4dHVyZS1iZWhhdmlvci1yZXBvcnQtMDAwMSIsImV2aWRlbmNlX2RpZ2VzdHMiOlt7InNoYTI1NiI6ImNjY2NjY2NjY2NjY2NjY2NjY2NjY2NjY2NjY2NjY2NjY2NjY2NjY2NjY2NjY2NjY2NjY2NjY2NjY2NjY2NjY2MifV0sIm1ldGhvZCI6ImNvdW50ZXJmYWN0dWFsX3JlcGxheSIsIm9ic2VydmVkX2F0IjoiMjAyNi0xMS0xMlQxMDowMDowMFoiLCJyZXBvcnRfZGlnZXN0Ijp7InNoYTI1NiI6ImFhYWFhYWFhYWFhYWFhYWFhYWFhYWFhYWFhYWFhYWFhYWFhYWFhYWFhYWFhYWFhYWFhYWFhYWFhYWFhYWFhYWEifSwicmVzcG9uc2libGVfcmVmIjoic3ludGhldGljLWFnZW50LWIifSwicHJlZGljYXRlVHlwZSI6Imh0dHBzOi8vZXhhbXBsZS5pbnZhbGlkL2F0dGVzdGF0aW9uL2RpdmVyZ2VuY2UtYXR0cmlidXRpb24vdjEiLCJzdWJqZWN0IjpbeyJkaWdlc3QiOnsic2hhMjU2IjoiYWFhYWFhYWFhYWFhYWFhYWFhYWFhYWFhYWFhYWFhYWFhYWFhYWFhYWFhYWFhYWFhYWFhYWFhYWFhYWFhYWFhYSJ9LCJuYW1lIjoiZml4dHVyZS9kaXZlcmdlbmNlLXJlcG9ydC5qc29uIn1dfQ==",
+        "signatures": [
+          {
+            "keyid": "urn:universal-is:development-divergence-fixture-ed25519-v1",
+            "sig": "eijShdOaD9vvQDl/Dzgdy4xl+axiedjbmGdW13q1XTyfENzseqgme2KFaVZXSnINqr9xUKokq2cOJ2OvkGsKDQ=="
+          }
+        ]
+      },
+      "verification": {
+        "status": "verified",
+        "verifier_ref": "fixture-only-verifier",
+        "keyid": "urn:universal-is:development-divergence-fixture-ed25519-v1",
+        "verified_at": "2026-11-12T10:02:00Z",
+        "public_key_sha256": "4621b71d394077be6192cb584444e1559d7e0e71769122079937d3f82c7fcdf7"
+      }
+    }
+  ]
+}

@@ -1,0 +1,227 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "$id": "https://universalis.example/schemas/unification/unification-contracts.v1.schema.json",
+  "title": "Agent, OS and AI Unification Contract",
+  "type": "object",
+  "additionalProperties": false,
+  "required": [
+    "schema_version",
+    "inventory_id",
+    "records"
+  ],
+  "properties": {
+    "schema_version": {
+      "const": "1.0.0"
+    },
+    "inventory_id": {
+      "const": "agent-os-ai-unification-24"
+    },
+    "records": {
+      "type": "array",
+      "minItems": 1,
+      "items": {
+        "$ref": "#/$defs/record"
+      }
+    }
+  },
+  "$defs": {
+    "interface": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": [
+        "name",
+        "role",
+        "classification",
+        "status",
+        "scope"
+      ],
+      "properties": {
+        "name": {
+          "type": "string",
+          "minLength": 1
+        },
+        "role": {
+          "enum": [
+            "container_artifact",
+            "tool_client_server",
+            "agent_agent",
+            "client_agent",
+            "framework_adapter",
+            "inference_api",
+            "product_command_surface",
+            "governance_envelope",
+            "computer_use_aci",
+            "assimilation_profile"
+          ]
+        },
+        "classification": {
+          "enum": [
+            "formal_standard",
+            "specification",
+            "product_interface",
+            "api_compatibility",
+            "research_proposal",
+            "format"
+          ]
+        },
+        "version_or_profile": {
+          "type": [
+            "string",
+            "null"
+          ]
+        },
+        "status": {
+          "enum": [
+            "published",
+            "beta",
+            "alpha",
+            "proposed",
+            "unresolved",
+            "not_tested"
+          ]
+        },
+        "scope": {
+          "type": "string",
+          "minLength": 1
+        }
+      }
+    },
+    "record": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": [
+        "record_id",
+        "kind",
+        "layer",
+        "name",
+        "source_url",
+        "version",
+        "license_status",
+        "maturity",
+        "claim_status",
+        "scope",
+        "interfaces",
+        "limitations",
+        "authority_effect",
+        "boundary"
+      ],
+      "properties": {
+        "record_id": {
+          "type": "string",
+          "pattern": "^UNIF-[A-Z0-9-]{3,64}$"
+        },
+        "kind": {
+          "enum": [
+            "candidate",
+            "contract",
+            "unresolved"
+          ]
+        },
+        "layer": {
+          "enum": [
+            "runtime_substrate",
+            "orchestration_composition",
+            "model_gateway",
+            "local_execution",
+            "sovereign_mesh",
+            "cross_layer_contract"
+          ]
+        },
+        "name": {
+          "type": "string",
+          "minLength": 1
+        },
+        "source_url": {
+          "type": [
+            "string",
+            "null"
+          ],
+          "format": "uri"
+        },
+        "version": {
+          "type": [
+            "string",
+            "null"
+          ]
+        },
+        "license_status": {
+          "type": "string",
+          "minLength": 1
+        },
+        "maturity": {
+          "type": "string",
+          "minLength": 1
+        },
+        "claim_status": {
+          "enum": [
+            "source_documented",
+            "source_claim_only",
+            "independently_verified",
+            "proposed",
+            "unresolved",
+            "not_tested"
+          ]
+        },
+        "scope": {
+          "type": "string",
+          "minLength": 1
+        },
+        "interfaces": {
+          "type": "array",
+          "items": {
+            "$ref": "#/$defs/interface"
+          }
+        },
+        "limitations": {
+          "type": "array",
+          "minItems": 1,
+          "items": {
+            "type": "string",
+            "minLength": 1
+          }
+        },
+        "evidence": {
+          "type": "array",
+          "items": {
+            "type": "object",
+            "additionalProperties": false,
+            "required": [
+              "type",
+              "description"
+            ],
+            "properties": {
+              "type": {
+                "enum": [
+                  "primary_source",
+                  "package_metadata",
+                  "formal_specification",
+                  "independent_test",
+                  "compatibility_test",
+                  "security_review",
+                  "owner_proposal"
+                ]
+              },
+              "description": {
+                "type": "string",
+                "minLength": 1
+              },
+              "source_url": {
+                "type": [
+                  "string",
+                  "null"
+                ],
+                "format": "uri"
+              }
+            }
+          }
+        },
+        "authority_effect": {
+          "const": "none"
+        },
+        "boundary": {
+          "const": "portable_public_record"
+        }
+      }
+    }
+  }
+}

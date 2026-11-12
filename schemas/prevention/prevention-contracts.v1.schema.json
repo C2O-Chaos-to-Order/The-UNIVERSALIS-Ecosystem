@@ -1,0 +1,1187 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "$id": "https://universalis.foundation/schemas/prevention/prevention-contracts.v1.schema.json",
+  "title": "Portable Harm Prevention and Enforcement Evidence Contracts",
+  "description": "Versioned public contracts for harm taxonomy, constitutional floors, enforcement receipts, empirical harm measurement, findings, containment, coverage and escalation. A receipt is evidence of a scoped event, not a blanket safety or legal-compliance guarantee.",
+  "oneOf": [
+    {
+      "$ref": "#/$defs/harm_taxonomy_mapping"
+    },
+    {
+      "$ref": "#/$defs/constitution_profile"
+    },
+    {
+      "$ref": "#/$defs/enforcement_receipt"
+    },
+    {
+      "$ref": "#/$defs/harm_reduction_evaluation"
+    },
+    {
+      "$ref": "#/$defs/red_team_finding"
+    },
+    {
+      "$ref": "#/$defs/containment_attestation"
+    },
+    {
+      "$ref": "#/$defs/coverage_attestation"
+    },
+    {
+      "$ref": "#/$defs/case_escalation"
+    }
+  ],
+  "$defs": {
+    "harm_taxonomy_mapping": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": [
+        "record_type",
+        "record_id",
+        "created_at",
+        "mapping_version",
+        "taxonomies",
+        "harm_categories",
+        "compliance_claimed",
+        "evidence_refs"
+      ],
+      "properties": {
+        "record_type": {
+          "const": "harm_taxonomy_mapping"
+        },
+        "record_id": {
+          "type": "string",
+          "minLength": 1
+        },
+        "created_at": {
+          "type": "string",
+          "format": "date-time"
+        },
+        "evidence_refs": {
+          "type": "array",
+          "minItems": 1,
+          "uniqueItems": true,
+          "items": {
+            "type": "string",
+            "minLength": 1
+          }
+        },
+        "mapping_version": {
+          "type": "string",
+          "minLength": 1
+        },
+        "taxonomies": {
+          "type": "array",
+          "minItems": 3,
+          "items": {
+            "type": "object",
+            "additionalProperties": false,
+            "required": [
+              "namespace",
+              "version",
+              "maturity",
+              "reference"
+            ],
+            "properties": {
+              "namespace": {
+                "enum": [
+                  "OWASP_LLM_TOP_10",
+                  "OWASP_AGENTIC_TOP_10",
+                  "OWASP_MCP_TOP_10",
+                  "MITRE_ATLAS",
+                  "EU_AI_ACT_ARTICLE_5",
+                  "NIST_AI_RMF",
+                  "INTERNAL_HARM_TAXONOMY"
+                ]
+              },
+              "version": {
+                "type": "string",
+                "minLength": 1
+              },
+              "maturity": {
+                "enum": [
+                  "final",
+                  "beta",
+                  "living",
+                  "regulatory_text",
+                  "internal"
+                ]
+              },
+              "reference": {
+                "type": "string",
+                "format": "uri"
+              }
+            }
+          }
+        },
+        "harm_categories": {
+          "type": "array",
+          "minItems": 1,
+          "items": {
+            "type": "object",
+            "additionalProperties": false,
+            "required": [
+              "category_id",
+              "label",
+              "risk_domain",
+              "taxonomy_refs",
+              "severity_scale"
+            ],
+            "properties": {
+              "category_id": {
+                "type": "string",
+                "minLength": 1
+              },
+              "label": {
+                "type": "string",
+                "minLength": 1
+              },
+              "risk_domain": {
+                "enum": [
+                  "agent_security",
+                  "privacy",
+                  "cybersecurity",
+                  "fraud",
+                  "child_safety",
+                  "physical_safety",
+                  "cbrn_safety",
+                  "human_rights",
+                  "deception",
+                  "other"
+                ]
+              },
+              "taxonomy_refs": {
+                "type": "array",
+                "minItems": 1,
+                "uniqueItems": true,
+                "items": {
+                  "type": "string",
+                  "minLength": 1
+                }
+              },
+              "severity_scale": {
+                "enum": [
+                  "qualitative_4_level",
+                  "qualitative_5_level",
+                  "source_defined"
+                ]
+              }
+            }
+          }
+        },
+        "compliance_claimed": {
+          "const": false
+        }
+      }
+    },
+    "constitution_profile": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": [
+        "record_type",
+        "record_id",
+        "created_at",
+        "profile_version",
+        "profile_scope",
+        "policy_digest",
+        "floors",
+        "agent_can_modify_floors",
+        "floor_change_requires_external_witness",
+        "human_veto_final",
+        "fail_closed_for_consequential_actions",
+        "compliance_claimed",
+        "evidence_refs"
+      ],
+      "properties": {
+        "record_type": {
+          "const": "constitutional_floor_profile"
+        },
+        "record_id": {
+          "type": "string",
+          "minLength": 1
+        },
+        "created_at": {
+          "type": "string",
+          "format": "date-time"
+        },
+        "evidence_refs": {
+          "type": "array",
+          "minItems": 1,
+          "uniqueItems": true,
+          "items": {
+            "type": "string",
+            "minLength": 1
+          }
+        },
+        "profile_version": {
+          "type": "string",
+          "minLength": 1
+        },
+        "profile_scope": {
+          "enum": [
+            "public_reference_floor",
+            "organization_policy",
+            "sovereign_private_policy"
+          ]
+        },
+        "policy_digest": {
+          "type": "string",
+          "pattern": "^[a-f0-9]{64}$"
+        },
+        "floors": {
+          "type": "array",
+          "minItems": 4,
+          "items": {
+            "type": "object",
+            "additionalProperties": false,
+            "required": [
+              "floor_id",
+              "label",
+              "floor_type",
+              "rule_digest",
+              "immutable",
+              "change_control"
+            ],
+            "properties": {
+              "floor_id": {
+                "type": "string",
+                "minLength": 1
+              },
+              "label": {
+                "type": "string",
+                "minLength": 1
+              },
+              "floor_type": {
+                "enum": [
+                  "prohibition",
+                  "least_privilege",
+                  "human_veto",
+                  "evidence_integrity",
+                  "auditability",
+                  "external_containment",
+                  "privacy",
+                  "harm_threshold"
+                ]
+              },
+              "rule_digest": {
+                "type": "string",
+                "pattern": "^[a-f0-9]{64}$"
+              },
+              "immutable": {
+                "type": "boolean"
+              },
+              "change_control": {
+                "enum": [
+                  "external_human_witness",
+                  "constitutional_review_board",
+                  "versioned_public_change_control"
+                ]
+              }
+            }
+          }
+        },
+        "agent_can_modify_floors": {
+          "const": false
+        },
+        "floor_change_requires_external_witness": {
+          "const": true
+        },
+        "human_veto_final": {
+          "const": true
+        },
+        "fail_closed_for_consequential_actions": {
+          "const": true
+        },
+        "compliance_claimed": {
+          "const": false
+        }
+      }
+    },
+    "enforcement_receipt": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": [
+        "record_type",
+        "record_id",
+        "created_at",
+        "actor_ref",
+        "action_ref",
+        "action_digest",
+        "control_point",
+        "policy_engine_ref",
+        "policy_digest",
+        "constitution_profile_ref",
+        "constitution_digest",
+        "taxonomy_mapping_refs",
+        "decision",
+        "decision_reason_code",
+        "floor_results",
+        "evidence_refs",
+        "external_to_agent",
+        "fail_mode",
+        "action_executed",
+        "action_prevented",
+        "raw_prompt_included",
+        "secret_material_included",
+        "signature"
+      ],
+      "properties": {
+        "record_type": {
+          "const": "enforcement_receipt"
+        },
+        "record_id": {
+          "type": "string",
+          "minLength": 1
+        },
+        "created_at": {
+          "type": "string",
+          "format": "date-time"
+        },
+        "evidence_refs": {
+          "type": "array",
+          "minItems": 1,
+          "uniqueItems": true,
+          "items": {
+            "type": "string",
+            "minLength": 1
+          }
+        },
+        "actor_ref": {
+          "type": "string",
+          "minLength": 1
+        },
+        "action_ref": {
+          "type": "string",
+          "minLength": 1
+        },
+        "action_digest": {
+          "type": "string",
+          "pattern": "^[a-f0-9]{64}$"
+        },
+        "control_point": {
+          "enum": [
+            "input",
+            "retrieval",
+            "dialog",
+            "pre_tool_execution",
+            "post_tool_result",
+            "output",
+            "filesystem",
+            "network_egress",
+            "credential_access",
+            "identity_authority",
+            "hardware_watchdog"
+          ]
+        },
+        "policy_engine_ref": {
+          "type": "string",
+          "minLength": 1
+        },
+        "policy_digest": {
+          "type": "string",
+          "pattern": "^[a-f0-9]{64}$"
+        },
+        "constitution_profile_ref": {
+          "type": "string",
+          "minLength": 1
+        },
+        "constitution_digest": {
+          "type": "string",
+          "pattern": "^[a-f0-9]{64}$"
+        },
+        "taxonomy_mapping_refs": {
+          "type": "array",
+          "minItems": 1,
+          "uniqueItems": true,
+          "items": {
+            "type": "string",
+            "minLength": 1
+          }
+        },
+        "decision": {
+          "enum": [
+            "allow",
+            "review",
+            "block",
+            "contain"
+          ]
+        },
+        "decision_reason_code": {
+          "type": "string",
+          "minLength": 1
+        },
+        "floor_results": {
+          "type": "array",
+          "minItems": 1,
+          "items": {
+            "type": "object",
+            "additionalProperties": false,
+            "required": [
+              "floor_id",
+              "outcome",
+              "evidence_ref"
+            ],
+            "properties": {
+              "floor_id": {
+                "type": "string",
+                "minLength": 1
+              },
+              "outcome": {
+                "enum": [
+                  "pass",
+                  "fail",
+                  "indeterminate"
+                ]
+              },
+              "evidence_ref": {
+                "type": "string",
+                "minLength": 1
+              }
+            }
+          }
+        },
+        "external_to_agent": {
+          "type": "boolean"
+        },
+        "fail_mode": {
+          "enum": [
+            "closed",
+            "open",
+            "degraded"
+          ]
+        },
+        "action_executed": {
+          "type": "boolean"
+        },
+        "action_prevented": {
+          "type": "boolean"
+        },
+        "raw_prompt_included": {
+          "const": false
+        },
+        "secret_material_included": {
+          "const": false
+        },
+        "signature": {
+          "type": "object",
+          "additionalProperties": false,
+          "required": [
+            "algorithm",
+            "key_id",
+            "signed_body_digest",
+            "signature_base64",
+            "trust_anchor_kind"
+          ],
+          "properties": {
+            "algorithm": {
+              "const": "Ed25519"
+            },
+            "key_id": {
+              "type": "string",
+              "minLength": 1
+            },
+            "signed_body_digest": {
+              "type": "string",
+              "pattern": "^[a-f0-9]{64}$"
+            },
+            "signature_base64": {
+              "type": "string",
+              "minLength": 40
+            },
+            "trust_anchor_kind": {
+              "enum": [
+                "ephemeral_test_key",
+                "published_operator_key",
+                "hardware_backed_key_reference"
+              ]
+            }
+          }
+        }
+      }
+    },
+    "harm_reduction_evaluation": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": [
+        "record_type",
+        "record_id",
+        "created_at",
+        "evaluation_id",
+        "taxonomy_mapping_ref",
+        "defense_config_digest",
+        "attack_suite_ref",
+        "attack_suite_digest",
+        "suite_frozen",
+        "defense_tuned_on_test_set",
+        "independent_evaluator",
+        "evaluator_ref",
+        "attack_count",
+        "baseline_harmful_count",
+        "defended_harmful_count",
+        "benign_count",
+        "false_blocked_benign_count",
+        "baseline_harm_rate",
+        "defended_harm_rate",
+        "absolute_harm_reduction",
+        "relative_harm_reduction",
+        "false_positive_rate",
+        "baseline_ci95",
+        "defended_ci95",
+        "false_positive_ci95",
+        "repeat_seeds",
+        "conclusion",
+        "limitations",
+        "compliance_claimed",
+        "evidence_refs"
+      ],
+      "properties": {
+        "record_type": {
+          "const": "harm_reduction_evaluation"
+        },
+        "record_id": {
+          "type": "string",
+          "minLength": 1
+        },
+        "created_at": {
+          "type": "string",
+          "format": "date-time"
+        },
+        "evidence_refs": {
+          "type": "array",
+          "minItems": 1,
+          "uniqueItems": true,
+          "items": {
+            "type": "string",
+            "minLength": 1
+          }
+        },
+        "evaluation_id": {
+          "type": "string",
+          "minLength": 1
+        },
+        "taxonomy_mapping_ref": {
+          "type": "string",
+          "minLength": 1
+        },
+        "defense_config_digest": {
+          "type": "string",
+          "pattern": "^[a-f0-9]{64}$"
+        },
+        "attack_suite_ref": {
+          "type": "string",
+          "minLength": 1
+        },
+        "attack_suite_digest": {
+          "type": "string",
+          "pattern": "^[a-f0-9]{64}$"
+        },
+        "suite_frozen": {
+          "const": true
+        },
+        "defense_tuned_on_test_set": {
+          "const": false
+        },
+        "independent_evaluator": {
+          "const": true
+        },
+        "evaluator_ref": {
+          "type": "string",
+          "minLength": 1
+        },
+        "attack_count": {
+          "type": "integer",
+          "minimum": 1
+        },
+        "baseline_harmful_count": {
+          "type": "integer",
+          "minimum": 0
+        },
+        "defended_harmful_count": {
+          "type": "integer",
+          "minimum": 0
+        },
+        "benign_count": {
+          "type": "integer",
+          "minimum": 1
+        },
+        "false_blocked_benign_count": {
+          "type": "integer",
+          "minimum": 0
+        },
+        "baseline_harm_rate": {
+          "type": "number",
+          "minimum": 0,
+          "maximum": 1
+        },
+        "defended_harm_rate": {
+          "type": "number",
+          "minimum": 0,
+          "maximum": 1
+        },
+        "absolute_harm_reduction": {
+          "type": "number",
+          "minimum": -1,
+          "maximum": 1
+        },
+        "relative_harm_reduction": {
+          "type": "number",
+          "minimum": -100,
+          "maximum": 1
+        },
+        "false_positive_rate": {
+          "type": "number",
+          "minimum": 0,
+          "maximum": 1
+        },
+        "baseline_ci95": {
+          "type": "array",
+          "items": {
+            "type": "number",
+            "minimum": 0,
+            "maximum": 1
+          },
+          "minItems": 2,
+          "maxItems": 2
+        },
+        "defended_ci95": {
+          "type": "array",
+          "items": {
+            "type": "number",
+            "minimum": 0,
+            "maximum": 1
+          },
+          "minItems": 2,
+          "maxItems": 2
+        },
+        "false_positive_ci95": {
+          "type": "array",
+          "items": {
+            "type": "number",
+            "minimum": 0,
+            "maximum": 1
+          },
+          "minItems": 2,
+          "maxItems": 2
+        },
+        "repeat_seeds": {
+          "type": "array",
+          "minItems": 2,
+          "uniqueItems": true,
+          "items": {
+            "type": "integer",
+            "minimum": 0
+          }
+        },
+        "conclusion": {
+          "enum": [
+            "harm_reduced",
+            "no_measurable_change",
+            "harm_increased",
+            "inconclusive"
+          ]
+        },
+        "limitations": {
+          "type": "array",
+          "minItems": 1,
+          "items": {
+            "type": "string",
+            "minLength": 1
+          }
+        },
+        "compliance_claimed": {
+          "const": false
+        }
+      }
+    },
+    "red_team_finding": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": [
+        "record_type",
+        "record_id",
+        "created_at",
+        "finding_id",
+        "authorization_scope_ref",
+        "taxonomy_mapping_ref",
+        "category_id",
+        "severity",
+        "lifecycle_status",
+        "reproduced",
+        "reproducer_ref",
+        "evidence_digest",
+        "impact_summary",
+        "raw_exploit_included",
+        "out_of_scope_activity",
+        "independent_reviewer",
+        "evidence_refs"
+      ],
+      "properties": {
+        "record_type": {
+          "const": "red_team_finding"
+        },
+        "record_id": {
+          "type": "string",
+          "minLength": 1
+        },
+        "created_at": {
+          "type": "string",
+          "format": "date-time"
+        },
+        "evidence_refs": {
+          "type": "array",
+          "minItems": 1,
+          "uniqueItems": true,
+          "items": {
+            "type": "string",
+            "minLength": 1
+          }
+        },
+        "finding_id": {
+          "type": "string",
+          "minLength": 1
+        },
+        "authorization_scope_ref": {
+          "type": "string",
+          "minLength": 1
+        },
+        "taxonomy_mapping_ref": {
+          "type": "string",
+          "minLength": 1
+        },
+        "category_id": {
+          "type": "string",
+          "minLength": 1
+        },
+        "severity": {
+          "enum": [
+            "critical",
+            "high",
+            "medium",
+            "low",
+            "informational"
+          ]
+        },
+        "lifecycle_status": {
+          "enum": [
+            "new",
+            "triaged",
+            "confirmed",
+            "mitigated",
+            "accepted_risk",
+            "false_positive"
+          ]
+        },
+        "reproduced": {
+          "type": "boolean"
+        },
+        "reproducer_ref": {
+          "type": "string",
+          "minLength": 1
+        },
+        "evidence_digest": {
+          "type": "string",
+          "pattern": "^[a-f0-9]{64}$"
+        },
+        "impact_summary": {
+          "type": "string",
+          "minLength": 1
+        },
+        "raw_exploit_included": {
+          "const": false
+        },
+        "out_of_scope_activity": {
+          "const": false
+        },
+        "independent_reviewer": {
+          "type": "boolean"
+        }
+      }
+    },
+    "containment_attestation": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": [
+        "record_type",
+        "record_id",
+        "created_at",
+        "incident_ref",
+        "trigger_evidence_digest",
+        "containment_action",
+        "enforcement_substrate",
+        "independent_control_path",
+        "external_to_agent",
+        "agent_can_disable_control",
+        "fail_closed",
+        "initiated_at",
+        "confirmed_at",
+        "verification_method",
+        "independent_verifier",
+        "outcome",
+        "release_requires_human_witness",
+        "private_anchor_material_included",
+        "evidence_refs"
+      ],
+      "properties": {
+        "record_type": {
+          "const": "containment_attestation"
+        },
+        "record_id": {
+          "type": "string",
+          "minLength": 1
+        },
+        "created_at": {
+          "type": "string",
+          "format": "date-time"
+        },
+        "evidence_refs": {
+          "type": "array",
+          "minItems": 1,
+          "uniqueItems": true,
+          "items": {
+            "type": "string",
+            "minLength": 1
+          }
+        },
+        "incident_ref": {
+          "type": "string",
+          "minLength": 1
+        },
+        "trigger_evidence_digest": {
+          "type": "string",
+          "pattern": "^[a-f0-9]{64}$"
+        },
+        "containment_action": {
+          "enum": [
+            "pause",
+            "revoke_credentials",
+            "revoke_authority",
+            "quarantine_runtime",
+            "network_isolate",
+            "terminate_execution",
+            "restore_known_good"
+          ]
+        },
+        "enforcement_substrate": {
+          "enum": [
+            "hardware_isolated_dpu",
+            "hypervisor_or_host_control_plane",
+            "network_gateway",
+            "identity_provider",
+            "cloud_control_plane",
+            "independent_software_controller"
+          ]
+        },
+        "independent_control_path": {
+          "type": "string",
+          "minLength": 1
+        },
+        "external_to_agent": {
+          "const": true
+        },
+        "agent_can_disable_control": {
+          "const": false
+        },
+        "fail_closed": {
+          "const": true
+        },
+        "initiated_at": {
+          "type": "string",
+          "format": "date-time"
+        },
+        "confirmed_at": {
+          "type": [
+            "string",
+            "null"
+          ],
+          "format": "date-time"
+        },
+        "verification_method": {
+          "enum": [
+            "out_of_band_telemetry",
+            "control_plane_state_readback",
+            "hardware_attestation",
+            "independent_network_probe",
+            "independent_process_probe"
+          ]
+        },
+        "independent_verifier": {
+          "const": true
+        },
+        "outcome": {
+          "enum": [
+            "confirmed",
+            "failed",
+            "inconclusive"
+          ]
+        },
+        "release_requires_human_witness": {
+          "const": true
+        },
+        "private_anchor_material_included": {
+          "const": false
+        }
+      }
+    },
+    "coverage_attestation": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": [
+        "record_type",
+        "record_id",
+        "created_at",
+        "system_ref",
+        "system_version_digest",
+        "policy_digest",
+        "tested_layers",
+        "enforced_layers",
+        "untested_surfaces",
+        "test_count",
+        "bypass_attempt_count",
+        "bypass_success_count",
+        "guard_unavailable_behavior",
+        "external_control_plane",
+        "overall_result",
+        "known_gaps",
+        "evidence_refs"
+      ],
+      "properties": {
+        "record_type": {
+          "const": "safety_coverage_attestation"
+        },
+        "record_id": {
+          "type": "string",
+          "minLength": 1
+        },
+        "created_at": {
+          "type": "string",
+          "format": "date-time"
+        },
+        "evidence_refs": {
+          "type": "array",
+          "minItems": 1,
+          "uniqueItems": true,
+          "items": {
+            "type": "string",
+            "minLength": 1
+          }
+        },
+        "system_ref": {
+          "type": "string",
+          "minLength": 1
+        },
+        "system_version_digest": {
+          "type": "string",
+          "pattern": "^[a-f0-9]{64}$"
+        },
+        "policy_digest": {
+          "type": "string",
+          "pattern": "^[a-f0-9]{64}$"
+        },
+        "tested_layers": {
+          "type": "array",
+          "minItems": 1,
+          "uniqueItems": true,
+          "items": {
+            "enum": [
+              "input",
+              "retrieval",
+              "dialog",
+              "pre_tool",
+              "post_tool",
+              "output",
+              "filesystem",
+              "network_egress",
+              "credential_access",
+              "identity_authority",
+              "spend_limits",
+              "hardware_containment",
+              "human_escalation"
+            ]
+          }
+        },
+        "enforced_layers": {
+          "type": "array",
+          "uniqueItems": true,
+          "items": {
+            "enum": [
+              "input",
+              "retrieval",
+              "dialog",
+              "pre_tool",
+              "post_tool",
+              "output",
+              "filesystem",
+              "network_egress",
+              "credential_access",
+              "identity_authority",
+              "spend_limits",
+              "hardware_containment",
+              "human_escalation"
+            ]
+          }
+        },
+        "untested_surfaces": {
+          "type": "array",
+          "items": {
+            "type": "string",
+            "minLength": 1
+          }
+        },
+        "test_count": {
+          "type": "integer",
+          "minimum": 1
+        },
+        "bypass_attempt_count": {
+          "type": "integer",
+          "minimum": 0
+        },
+        "bypass_success_count": {
+          "type": "integer",
+          "minimum": 0
+        },
+        "guard_unavailable_behavior": {
+          "enum": [
+            "deny_or_escalate",
+            "hold_for_human",
+            "allow_with_reduced_scope",
+            "fail_open"
+          ]
+        },
+        "external_control_plane": {
+          "type": "boolean"
+        },
+        "overall_result": {
+          "enum": [
+            "pass",
+            "fail",
+            "inconclusive"
+          ]
+        },
+        "known_gaps": {
+          "type": "array",
+          "items": {
+            "type": "string",
+            "minLength": 1
+          }
+        }
+      }
+    },
+    "case_escalation": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": [
+        "record_type",
+        "record_id",
+        "created_at",
+        "case_ref",
+        "risk_domain",
+        "taxonomy_mapping_ref",
+        "category_id",
+        "severity",
+        "escalation_decision",
+        "recipient_role",
+        "evidence_digest",
+        "raw_personal_data_included",
+        "raw_harmful_content_included",
+        "consent_or_authority_basis",
+        "follow_up_status",
+        "evidence_refs"
+      ],
+      "properties": {
+        "record_type": {
+          "const": "case_escalation"
+        },
+        "record_id": {
+          "type": "string",
+          "minLength": 1
+        },
+        "created_at": {
+          "type": "string",
+          "format": "date-time"
+        },
+        "evidence_refs": {
+          "type": "array",
+          "minItems": 1,
+          "uniqueItems": true,
+          "items": {
+            "type": "string",
+            "minLength": 1
+          }
+        },
+        "case_ref": {
+          "type": "string",
+          "minLength": 1
+        },
+        "risk_domain": {
+          "enum": [
+            "child_safety",
+            "fraud",
+            "cbrn_safety",
+            "physical_safety",
+            "self_harm",
+            "exploitation",
+            "privacy",
+            "other"
+          ]
+        },
+        "taxonomy_mapping_ref": {
+          "type": "string",
+          "minLength": 1
+        },
+        "category_id": {
+          "type": "string",
+          "minLength": 1
+        },
+        "severity": {
+          "enum": [
+            "critical",
+            "high",
+            "medium",
+            "low"
+          ]
+        },
+        "escalation_decision": {
+          "enum": [
+            "notify_human",
+            "hold_for_review",
+            "block_and_preserve_minimal_evidence",
+            "refer_to_authorized_response_team",
+            "no_escalation"
+          ]
+        },
+        "recipient_role": {
+          "enum": [
+            "safety_operator",
+            "parent_or_guardian",
+            "trust_and_safety_team",
+            "incident_response_team",
+            "legal_compliance",
+            "authorized_cbrn_safety_officer",
+            "none"
+          ]
+        },
+        "evidence_digest": {
+          "type": "string",
+          "pattern": "^[a-f0-9]{64}$"
+        },
+        "raw_personal_data_included": {
+          "const": false
+        },
+        "raw_harmful_content_included": {
+          "const": false
+        },
+        "consent_or_authority_basis": {
+          "type": "string",
+          "minLength": 1
+        },
+        "follow_up_status": {
+          "enum": [
+            "pending",
+            "acknowledged",
+            "resolved",
+            "closed",
+            "not_applicable"
+          ]
+        }
+      }
+    }
+  }
+}

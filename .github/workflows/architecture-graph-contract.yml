@@ -1,0 +1,19 @@
+name: Architecture Graph Contract
+on:
+  workflow_dispatch:
+permissions:
+  contents: read
+jobs:
+  validate-architecture-graph:
+    runs-on: ubuntu-latest
+    steps:
+      - name: Checkout
+        uses: actions/checkout@11bd71901bbe5b1630ceea73d27597364c9af683
+      - name: Runtime
+        run: python --version
+      - name: Positive and negative contract tests
+        run: python .github/scripts/architecture_graph_contract.py --self-test
+      - name: Validate repository graph profile
+        run: python .github/scripts/architecture_graph_contract.py --check --profile universalis
+      - name: Repository quality baseline
+        run: python .github/scripts/repository_quality_baseline.py --self-test --check
