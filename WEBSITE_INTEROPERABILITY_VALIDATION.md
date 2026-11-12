@@ -40,9 +40,9 @@ The shared schema, synthetic fixture, validator and CI workflow are public porta
 Workflow: `.github/workflows/website-interoperability-contract.yml`. It installs the JSON Schema validator and runs the six-record/eleven-negative-case public contract test.
 
 **Executed CI receipts (2026-11-12):**
-- Website Interoperability Contract Validation: [passed — run 43275984926](https://github.com/C2O-Chaos-to-Order/The-UNIVERSALIS-Ecosystem/actions/runs/43275984926).
-- Repository quality baseline: [passed — run 43275984975](https://github.com/C2O-Chaos-to-Order/The-UNIVERSALIS-Ecosystem/actions/runs/43275984975).
-- Repository Verification: [passed — run 43275984927](https://github.com/C2O-Chaos-to-Order/The-UNIVERSALIS-Ecosystem/actions/runs/43275984927), including changed Markdown/local-link, JSON, YAML and Python syntax checks and the existing scaffold/prototype regression.
+- Website Interoperability Contract Validation: [passed — run 43276106806](https://github.com/C2O-Chaos-to-Order/The-UNIVERSALIS-Ecosystem/actions/runs/43276106806).
+- Repository quality baseline: [passed — run 43276106790](https://github.com/C2O-Chaos-to-Order/The-UNIVERSALIS-Ecosystem/actions/runs/43276106790).
+- Repository Verification: [passed — run 43276107032](https://github.com/C2O-Chaos-to-Order/The-UNIVERSALIS-Ecosystem/actions/runs/43276107032), including changed Markdown/local-link, JSON, YAML and Python syntax checks and the existing scaffold/prototype regression.
 
 These receipts prove schema/semantic behavior on synthetic fixtures and repository-level validation only.
 
