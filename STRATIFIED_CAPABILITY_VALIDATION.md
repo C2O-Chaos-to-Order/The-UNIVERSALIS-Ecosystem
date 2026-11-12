@@ -1,27 +1,33 @@
-# UNIVERSALIS Eight-Stratum Capability — local validation
+# UNIVERSALIS Eight-Stratum Capability — repository validation record
 
-**Runtime:** Python 3.13.5; jsonschema 4.26.0; cryptography 46.0.4.  
-**Mode:** local execution only; no GitHub Actions workflow added or dispatched.
+**Branch:** `implementation/repository-foundation-2026-11-12`  
+**Runtime target:** Python 3.13.5; jsonschema 4.26.0.  
+**Execution status:** schemas, fixtures and validator are committed. The validator script was **not executed during this repository-integration operation**; no test pass is claimed for the committed revision until the command below is run against this branch.
 
-Run from the repository root:
+## Files
 
-    python -m pip install 'jsonschema>=4.23,<5' 'cryptography>=44,<47'
+- `schemas/strata/stratified-capability-contracts.v1.schema.json`
+- `examples/strata/stratified-capability-fixtures.v1.json`
+- `.github/scripts/stratified_capability_contract.py`
+
+## Local command
+
+    python -m pip install 'jsonschema>=4.23,<5'
     python .github/scripts/stratified_capability_contract.py
 
-## Results
+## Committed test coverage
 
-- PASS — Draft 2020-12 schema validation.
-- PASS — 21 synthetic records across 14 record collections.
-- PASS — canonical eight-stratum order and all eight principle entries.
-- PASS — MCP / A2A / ACP semantic distinction.
-- PASS — Ed25519 composition receipt, key identity and signed-body digest.
-- PASS — external model route requires explicit egress approval.
-- PASS — public application publication requires human approval reference.
-- PASS — remote QPU submission requires human approval, emulation evidence, shot/cost quote and job reference.
-- PASS — simulation-only robot evaluation cannot authorize actuation or overclaim real-world safety.
-- PASS — air-gap/compliance assertions require independent evidence and do not self-certify.
-- PASS — 20 negative tests rejected protocol confusion, digest/signature tampering, license omission, unchecked external egress, publication/QPU/robotics overreach, invalid sovereignty claims and evidence inflation.
+- Shared schema defines the 14 record-family envelopes; fixture contains 21 synthetic records.
+- Validator defines 20 negative scenarios covering the canonical eight-stratum order, MCP/A2A/ACP semantics, license/source fields, lifecycle, authority implication, proactive actions, composition receipts, external model routing and shadow-lane egress, generated-application publication, QPU submission, robotics actuation and sovereign-deployment claims.
+
+## Signature status
+
+The shared synthetic composition receipt is intentionally **unsigned** (`signature: null`, `signature_verification: not_present`). The schema describes an Ed25519 receipt envelope, but this fixture does not contain or verify a signature. Production signing, trust-anchor management, revocation and hardware-backed key custody are not implemented.
+
+## Public/private boundary
+
+The shared schema, fixture and validator are designed to be byte-identical to the C2O portable counterparts. The public repository must not contain C2O-private authorization files, policies, keys, permit records, identities, telemetry, private models or authority state.
 
 ## Limits
 
-The fixture and validator are synthetic. No third-party tools were installed or executed, no live ACP/A2A/MCP interop test was performed, no frontier model was downloaded, no QPU was submitted, no application was published, no robot was actuated and no sovereign deployment was independently audited. These checks validate only the contract semantics and synthetic evidence. They do not establish external product behavior, quality, safety or legal compliance.
+No third-party component was installed or integrated; no live ACP/A2A/MCP interoperability test, frontier model download, QPU submission, application publication, robot actuation or sovereign deployment audit was performed. These files validate contract semantics only when the local command is executed; they do not certify product behavior, quality, security, safety, scientific correctness or legal compliance.
