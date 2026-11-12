@@ -1,0 +1,1119 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "$id": "https://universalis.foundation/schemas/ascendence/ascendence-contracts.v1.schema.json",
+  "title": "Portable Ascendence and Recursive Improvement Contracts",
+  "description": "Authority-neutral evidence contracts for bounded capability evolution. The records do not themselves authorize execution or establish universal safety.",
+  "oneOf": [
+    {
+      "$ref": "#/$defs/promotion_gate"
+    },
+    {
+      "$ref": "#/$defs/autonomy_ceiling"
+    },
+    {
+      "$ref": "#/$defs/genome_contract"
+    },
+    {
+      "$ref": "#/$defs/evaluation_evidence"
+    },
+    {
+      "$ref": "#/$defs/witness_approval"
+    },
+    {
+      "$ref": "#/$defs/admission_card"
+    },
+    {
+      "$ref": "#/$defs/lineage_event"
+    },
+    {
+      "$ref": "#/$defs/memory_manifest"
+    }
+  ],
+  "$defs": {
+    "promotion_gate": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": [
+        "record_type",
+        "record_id",
+        "created_at",
+        "gate_id",
+        "revision",
+        "run_id",
+        "frozen_at",
+        "canonicalization",
+        "rule_definition",
+        "fingerprint",
+        "frozen",
+        "conjunctive",
+        "source_digest"
+      ],
+      "properties": {
+        "record_type": {
+          "const": "promotion_gate"
+        },
+        "record_id": {
+          "type": "string",
+          "minLength": 1
+        },
+        "created_at": {
+          "type": "string",
+          "format": "date-time"
+        },
+        "evidence_refs": {
+          "type": "array",
+          "items": {
+            "type": "string",
+            "minLength": 1
+          },
+          "uniqueItems": true
+        },
+        "gate_id": {
+          "type": "string",
+          "minLength": 1
+        },
+        "revision": {
+          "type": "string",
+          "minLength": 1
+        },
+        "run_id": {
+          "type": "string",
+          "minLength": 1
+        },
+        "frozen_at": {
+          "type": "string",
+          "format": "date-time"
+        },
+        "canonicalization": {
+          "const": "canonical-json-sort-keys-compact-utf8-v1"
+        },
+        "rule_definition": {
+          "type": "object",
+          "additionalProperties": false,
+          "required": [
+            "logic",
+            "required_checks",
+            "thresholds",
+            "invariants",
+            "evidence_requirements"
+          ],
+          "properties": {
+            "logic": {
+              "const": "AND"
+            },
+            "required_checks": {
+              "type": "array",
+              "minItems": 9,
+              "uniqueItems": true,
+              "items": {
+                "enum": [
+                  "independent_evaluator",
+                  "paired_comparison",
+                  "holdout",
+                  "anchor",
+                  "safety_veto",
+                  "regression_guard",
+                  "budget",
+                  "protected_surface_guard",
+                  "rollback_path"
+                ]
+              }
+            },
+            "thresholds": {
+              "type": "object",
+              "additionalProperties": false,
+              "required": [
+                "minimum_primary_delta",
+                "minimum_primary_delta_lower_ci",
+                "maximum_cost_ratio",
+                "maximum_noop_rate_delta"
+              ],
+              "properties": {
+                "minimum_primary_delta": {
+                  "type": "number"
+                },
+                "minimum_primary_delta_lower_ci": {
+                  "type": "number"
+                },
+                "maximum_cost_ratio": {
+                  "type": "number",
+                  "exclusiveMinimum": 0
+                },
+                "maximum_noop_rate_delta": {
+                  "type": "number"
+                }
+              }
+            },
+            "invariants": {
+              "type": "object",
+              "additionalProperties": false,
+              "required": [
+                "model_frozen_during_pair",
+                "evaluator_distinct_from_proposer",
+                "test_sets_frozen",
+                "self_certification_allowed",
+                "protected_components_mutable"
+              ],
+              "properties": {
+                "model_frozen_during_pair": {
+                  "const": true
+                },
+                "evaluator_distinct_from_proposer": {
+                  "const": true
+                },
+                "test_sets_frozen": {
+                  "const": true
+                },
+                "self_certification_allowed": {
+                  "const": false
+                },
+                "protected_components_mutable": {
+                  "const": false
+                }
+              }
+            },
+            "evidence_requirements": {
+              "type": "object",
+              "additionalProperties": false,
+              "required": [
+                "baseline_run",
+                "candidate_run",
+                "holdout_result",
+                "anchor_result",
+                "safety_result",
+                "budget_result",
+                "rollback_test"
+              ],
+              "properties": {
+                "baseline_run": {
+                  "const": true
+                },
+                "candidate_run": {
+                  "const": true
+                },
+                "holdout_result": {
+                  "const": true
+                },
+                "anchor_result": {
+                  "const": true
+                },
+                "safety_result": {
+                  "const": true
+                },
+                "budget_result": {
+                  "const": true
+                },
+                "rollback_test": {
+                  "const": true
+                }
+              }
+            }
+          }
+        },
+        "fingerprint": {
+          "type": "string",
+          "pattern": "^[a-f0-9]{64}$"
+        },
+        "frozen": {
+          "const": true
+        },
+        "conjunctive": {
+          "const": true
+        },
+        "source_digest": {
+          "type": "string",
+          "pattern": "^[a-f0-9]{64}$"
+        }
+      }
+    },
+    "autonomy_ceiling": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": [
+        "record_type",
+        "record_id",
+        "created_at",
+        "policy_digest",
+        "ceiling_level",
+        "max_autonomous_level",
+        "levels",
+        "purpose_changes_allowed",
+        "protected_component_changes_allowed",
+        "irreversible_requires_human",
+        "rollback_independent_of_agent"
+      ],
+      "properties": {
+        "record_type": {
+          "const": "autonomy_ceiling"
+        },
+        "record_id": {
+          "type": "string",
+          "minLength": 1
+        },
+        "created_at": {
+          "type": "string",
+          "format": "date-time"
+        },
+        "evidence_refs": {
+          "type": "array",
+          "items": {
+            "type": "string",
+            "minLength": 1
+          },
+          "uniqueItems": true
+        },
+        "policy_digest": {
+          "type": "string",
+          "pattern": "^[a-f0-9]{64}$"
+        },
+        "ceiling_level": {
+          "type": "integer",
+          "minimum": 1,
+          "maximum": 4
+        },
+        "max_autonomous_level": {
+          "type": "integer",
+          "minimum": 0,
+          "maximum": 3
+        },
+        "levels": {
+          "type": "array",
+          "minItems": 4,
+          "maxItems": 4,
+          "items": {
+            "type": "object",
+            "additionalProperties": false,
+            "required": [
+              "level",
+              "name",
+              "autonomy",
+              "approval_required",
+              "reversible",
+              "rollback_required"
+            ],
+            "properties": {
+              "level": {
+                "type": "integer",
+                "minimum": 1,
+                "maximum": 4
+              },
+              "name": {
+                "type": "string",
+                "minLength": 1
+              },
+              "autonomy": {
+                "enum": [
+                  "autonomous",
+                  "human_approval",
+                  "prohibited"
+                ]
+              },
+              "approval_required": {
+                "type": "boolean"
+              },
+              "reversible": {
+                "type": "boolean"
+              },
+              "rollback_required": {
+                "type": "boolean"
+              }
+            }
+          }
+        },
+        "purpose_changes_allowed": {
+          "const": false
+        },
+        "protected_component_changes_allowed": {
+          "const": false
+        },
+        "irreversible_requires_human": {
+          "const": true
+        },
+        "rollback_independent_of_agent": {
+          "const": true
+        }
+      }
+    },
+    "genome_contract": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": [
+        "record_type",
+        "record_id",
+        "created_at",
+        "genome_id",
+        "generation",
+        "parent_genome_ref",
+        "components",
+        "allowed_mutation_component_ids",
+        "mutations",
+        "fitness_vector"
+      ],
+      "properties": {
+        "record_type": {
+          "const": "genome_contract"
+        },
+        "record_id": {
+          "type": "string",
+          "minLength": 1
+        },
+        "created_at": {
+          "type": "string",
+          "format": "date-time"
+        },
+        "evidence_refs": {
+          "type": "array",
+          "items": {
+            "type": "string",
+            "minLength": 1
+          },
+          "uniqueItems": true
+        },
+        "genome_id": {
+          "type": "string",
+          "minLength": 1
+        },
+        "generation": {
+          "type": "integer",
+          "minimum": 0
+        },
+        "parent_genome_ref": {
+          "type": [
+            "string",
+            "null"
+          ]
+        },
+        "components": {
+          "type": "array",
+          "minItems": 1,
+          "items": {
+            "type": "object",
+            "additionalProperties": false,
+            "required": [
+              "component_id",
+              "mutability",
+              "content_digest"
+            ],
+            "properties": {
+              "component_id": {
+                "type": "string",
+                "minLength": 1
+              },
+              "mutability": {
+                "enum": [
+                  "protected",
+                  "restricted",
+                  "evolvable"
+                ]
+              },
+              "content_digest": {
+                "type": "string",
+                "pattern": "^[a-f0-9]{64}$"
+              }
+            }
+          }
+        },
+        "allowed_mutation_component_ids": {
+          "type": "array",
+          "items": {
+            "type": "string",
+            "minLength": 1
+          },
+          "uniqueItems": true
+        },
+        "mutations": {
+          "type": "array",
+          "items": {
+            "type": "object",
+            "additionalProperties": false,
+            "required": [
+              "mutation_id",
+              "component_id",
+              "before_digest",
+              "after_digest",
+              "change_kind",
+              "proposal_ref"
+            ],
+            "properties": {
+              "mutation_id": {
+                "type": "string",
+                "minLength": 1
+              },
+              "component_id": {
+                "type": "string",
+                "minLength": 1
+              },
+              "before_digest": {
+                "type": "string",
+                "pattern": "^[a-f0-9]{64}$"
+              },
+              "after_digest": {
+                "type": "string",
+                "pattern": "^[a-f0-9]{64}$"
+              },
+              "change_kind": {
+                "enum": [
+                  "add",
+                  "revise",
+                  "remove",
+                  "reorder"
+                ]
+              },
+              "proposal_ref": {
+                "type": "string",
+                "minLength": 1
+              }
+            }
+          }
+        },
+        "fitness_vector": {
+          "type": "object",
+          "additionalProperties": false,
+          "required": [
+            "primary",
+            "cost_per_success",
+            "latency_ms",
+            "noop_rate",
+            "safety_regressions"
+          ],
+          "properties": {
+            "primary": {
+              "type": "number"
+            },
+            "cost_per_success": {
+              "type": "number",
+              "minimum": 0
+            },
+            "latency_ms": {
+              "type": "number",
+              "minimum": 0
+            },
+            "noop_rate": {
+              "type": "number",
+              "minimum": 0,
+              "maximum": 1
+            },
+            "safety_regressions": {
+              "type": "integer",
+              "minimum": 0
+            }
+          }
+        }
+      }
+    },
+    "evaluation_evidence": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": [
+        "record_type",
+        "record_id",
+        "created_at",
+        "proposer_ref",
+        "evaluator_ref",
+        "model_ref",
+        "baseline_model_digest",
+        "candidate_model_digest",
+        "baseline_subject_digest",
+        "candidate_subject_digest",
+        "suite_digest",
+        "run_id",
+        "paired_comparison",
+        "holdout",
+        "anchor",
+        "primary_metric",
+        "safety_veto",
+        "regression_guard",
+        "budget_guard",
+        "protected_surface_guard",
+        "rollback_path",
+        "overall_status",
+        "gate_fingerprint"
+      ],
+      "properties": {
+        "record_type": {
+          "const": "evaluation_evidence"
+        },
+        "record_id": {
+          "type": "string",
+          "minLength": 1
+        },
+        "created_at": {
+          "type": "string",
+          "format": "date-time"
+        },
+        "evidence_refs": {
+          "type": "array",
+          "items": {
+            "type": "string",
+            "minLength": 1
+          },
+          "uniqueItems": true
+        },
+        "proposer_ref": {
+          "type": "string",
+          "minLength": 1
+        },
+        "evaluator_ref": {
+          "type": "string",
+          "minLength": 1
+        },
+        "model_ref": {
+          "type": "string",
+          "minLength": 1
+        },
+        "baseline_model_digest": {
+          "type": "string",
+          "pattern": "^[a-f0-9]{64}$"
+        },
+        "candidate_model_digest": {
+          "type": "string",
+          "pattern": "^[a-f0-9]{64}$"
+        },
+        "baseline_subject_digest": {
+          "type": "string",
+          "pattern": "^[a-f0-9]{64}$"
+        },
+        "candidate_subject_digest": {
+          "type": "string",
+          "pattern": "^[a-f0-9]{64}$"
+        },
+        "suite_digest": {
+          "type": "string",
+          "pattern": "^[a-f0-9]{64}$"
+        },
+        "run_id": {
+          "type": "string",
+          "minLength": 1
+        },
+        "paired_comparison": {
+          "type": "boolean"
+        },
+        "holdout": {
+          "type": "object",
+          "additionalProperties": false,
+          "required": [
+            "status",
+            "baseline_score",
+            "candidate_score",
+            "sample_count",
+            "lower_confidence_bound_delta",
+            "method"
+          ],
+          "properties": {
+            "status": {
+              "enum": [
+                "pass",
+                "fail",
+                "inconclusive"
+              ]
+            },
+            "baseline_score": {
+              "type": "number"
+            },
+            "candidate_score": {
+              "type": "number"
+            },
+            "sample_count": {
+              "type": "integer",
+              "minimum": 1
+            },
+            "lower_confidence_bound_delta": {
+              "type": "number"
+            },
+            "method": {
+              "type": "string",
+              "minLength": 1
+            }
+          }
+        },
+        "anchor": {
+          "type": "object",
+          "additionalProperties": false,
+          "required": [
+            "status",
+            "baseline_score",
+            "candidate_score",
+            "sample_count",
+            "lower_confidence_bound_delta",
+            "method"
+          ],
+          "properties": {
+            "status": {
+              "enum": [
+                "pass",
+                "fail",
+                "inconclusive"
+              ]
+            },
+            "baseline_score": {
+              "type": "number"
+            },
+            "candidate_score": {
+              "type": "number"
+            },
+            "sample_count": {
+              "type": "integer",
+              "minimum": 1
+            },
+            "lower_confidence_bound_delta": {
+              "type": "number"
+            },
+            "method": {
+              "type": "string",
+              "minLength": 1
+            }
+          }
+        },
+        "primary_metric": {
+          "type": "object",
+          "additionalProperties": false,
+          "required": [
+            "name",
+            "direction",
+            "baseline_score",
+            "candidate_score",
+            "delta",
+            "lower_confidence_bound_delta"
+          ],
+          "properties": {
+            "name": {
+              "type": "string",
+              "minLength": 1
+            },
+            "direction": {
+              "enum": [
+                "higher_is_better",
+                "lower_is_better"
+              ]
+            },
+            "baseline_score": {
+              "type": "number"
+            },
+            "candidate_score": {
+              "type": "number"
+            },
+            "delta": {
+              "type": "number"
+            },
+            "lower_confidence_bound_delta": {
+              "type": "number"
+            }
+          }
+        },
+        "safety_veto": {
+          "enum": [
+            "pass",
+            "fail",
+            "inconclusive"
+          ]
+        },
+        "regression_guard": {
+          "enum": [
+            "pass",
+            "fail",
+            "inconclusive"
+          ]
+        },
+        "budget_guard": {
+          "enum": [
+            "pass",
+            "fail",
+            "inconclusive"
+          ]
+        },
+        "protected_surface_guard": {
+          "enum": [
+            "pass",
+            "fail",
+            "inconclusive"
+          ]
+        },
+        "rollback_path": {
+          "enum": [
+            "pass",
+            "fail",
+            "inconclusive"
+          ]
+        },
+        "overall_status": {
+          "enum": [
+            "pass",
+            "fail",
+            "inconclusive"
+          ]
+        },
+        "gate_fingerprint": {
+          "type": "string",
+          "pattern": "^[a-f0-9]{64}$"
+        }
+      }
+    },
+    "witness_approval": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": [
+        "record_type",
+        "record_id",
+        "created_at",
+        "approval_id",
+        "approval_status",
+        "approver_ref",
+        "approver_role",
+        "proposer_ref",
+        "subject_digest",
+        "evaluation_digest",
+        "gate_fingerprint",
+        "operation",
+        "approved_at",
+        "expires_at",
+        "approval_evidence_ref"
+      ],
+      "properties": {
+        "record_type": {
+          "const": "witness_approval"
+        },
+        "record_id": {
+          "type": "string",
+          "minLength": 1
+        },
+        "created_at": {
+          "type": "string",
+          "format": "date-time"
+        },
+        "evidence_refs": {
+          "type": "array",
+          "items": {
+            "type": "string",
+            "minLength": 1
+          },
+          "uniqueItems": true
+        },
+        "approval_id": {
+          "type": "string",
+          "minLength": 1
+        },
+        "approval_status": {
+          "enum": [
+            "approved",
+            "denied",
+            "expired",
+            "revoked"
+          ]
+        },
+        "approver_ref": {
+          "type": "string",
+          "minLength": 1
+        },
+        "approver_role": {
+          "const": "human"
+        },
+        "proposer_ref": {
+          "type": "string",
+          "minLength": 1
+        },
+        "subject_digest": {
+          "type": "string",
+          "pattern": "^[a-f0-9]{64}$"
+        },
+        "evaluation_digest": {
+          "type": "string",
+          "pattern": "^[a-f0-9]{64}$"
+        },
+        "gate_fingerprint": {
+          "type": "string",
+          "pattern": "^[a-f0-9]{64}$"
+        },
+        "operation": {
+          "enum": [
+            "promote",
+            "raise_autonomy_ceiling",
+            "genome_evolution",
+            "production_release"
+          ]
+        },
+        "approved_at": {
+          "type": "string",
+          "format": "date-time"
+        },
+        "expires_at": {
+          "type": "string",
+          "format": "date-time"
+        },
+        "approval_evidence_ref": {
+          "type": "string",
+          "minLength": 1
+        }
+      }
+    },
+    "admission_card": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": [
+        "record_type",
+        "record_id",
+        "created_at",
+        "candidate_digest",
+        "baseline_digest",
+        "gate_ref",
+        "gate_fingerprint",
+        "evaluation_ref",
+        "evaluation_digest",
+        "autonomy_ceiling_ref",
+        "proposer_ref",
+        "evaluator_ref",
+        "autonomy_level",
+        "decision",
+        "reason",
+        "witness_approval_ref",
+        "lineage_parent_ref"
+      ],
+      "properties": {
+        "record_type": {
+          "const": "admission_card"
+        },
+        "record_id": {
+          "type": "string",
+          "minLength": 1
+        },
+        "created_at": {
+          "type": "string",
+          "format": "date-time"
+        },
+        "evidence_refs": {
+          "type": "array",
+          "items": {
+            "type": "string",
+            "minLength": 1
+          },
+          "uniqueItems": true
+        },
+        "candidate_digest": {
+          "type": "string",
+          "pattern": "^[a-f0-9]{64}$"
+        },
+        "baseline_digest": {
+          "type": "string",
+          "pattern": "^[a-f0-9]{64}$"
+        },
+        "gate_ref": {
+          "type": "string",
+          "minLength": 1
+        },
+        "gate_fingerprint": {
+          "type": "string",
+          "pattern": "^[a-f0-9]{64}$"
+        },
+        "evaluation_ref": {
+          "type": "string",
+          "minLength": 1
+        },
+        "evaluation_digest": {
+          "type": "string",
+          "pattern": "^[a-f0-9]{64}$"
+        },
+        "autonomy_ceiling_ref": {
+          "type": "string",
+          "minLength": 1
+        },
+        "proposer_ref": {
+          "type": "string",
+          "minLength": 1
+        },
+        "evaluator_ref": {
+          "type": "string",
+          "minLength": 1
+        },
+        "autonomy_level": {
+          "type": "integer",
+          "minimum": 1,
+          "maximum": 4
+        },
+        "decision": {
+          "enum": [
+            "promote",
+            "reject",
+            "human_review",
+            "inconclusive"
+          ]
+        },
+        "reason": {
+          "type": "string",
+          "minLength": 1
+        },
+        "witness_approval_ref": {
+          "type": [
+            "string",
+            "null"
+          ]
+        },
+        "lineage_parent_ref": {
+          "type": "string",
+          "minLength": 1
+        }
+      }
+    },
+    "lineage_event": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": [
+        "record_type",
+        "record_id",
+        "created_at",
+        "event_type",
+        "generation",
+        "parent_event_digest",
+        "subject_digest",
+        "candidate_digest",
+        "gate_fingerprint",
+        "admission_card_digest",
+        "status",
+        "event_digest"
+      ],
+      "properties": {
+        "record_type": {
+          "const": "lineage_event"
+        },
+        "record_id": {
+          "type": "string",
+          "minLength": 1
+        },
+        "created_at": {
+          "type": "string",
+          "format": "date-time"
+        },
+        "evidence_refs": {
+          "type": "array",
+          "items": {
+            "type": "string",
+            "minLength": 1
+          },
+          "uniqueItems": true
+        },
+        "event_type": {
+          "enum": [
+            "genesis",
+            "proposed",
+            "evaluated",
+            "promoted",
+            "rejected",
+            "rolled_back",
+            "revoked"
+          ]
+        },
+        "generation": {
+          "type": "integer",
+          "minimum": 0
+        },
+        "parent_event_digest": {
+          "type": [
+            "string",
+            "null"
+          ],
+          "pattern": "^[a-f0-9]{64}$"
+        },
+        "subject_digest": {
+          "type": "string",
+          "pattern": "^[a-f0-9]{64}$"
+        },
+        "candidate_digest": {
+          "type": "string",
+          "pattern": "^[a-f0-9]{64}$"
+        },
+        "gate_fingerprint": {
+          "type": "string",
+          "pattern": "^[a-f0-9]{64}$"
+        },
+        "admission_card_digest": {
+          "type": [
+            "string",
+            "null"
+          ],
+          "pattern": "^[a-f0-9]{64}$"
+        },
+        "status": {
+          "enum": [
+            "candidate",
+            "retained",
+            "rejected",
+            "rolled_back",
+            "revoked"
+          ]
+        },
+        "event_digest": {
+          "type": "string",
+          "pattern": "^[a-f0-9]{64}$"
+        }
+      }
+    },
+    "memory_manifest": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": [
+        "record_type",
+        "record_id",
+        "created_at",
+        "schema_version",
+        "persona_manifest_digest",
+        "merkle_root_digest",
+        "included_data_classes",
+        "raw_memory_included",
+        "portability_status"
+      ],
+      "properties": {
+        "record_type": {
+          "const": "memory_manifest"
+        },
+        "record_id": {
+          "type": "string",
+          "minLength": 1
+        },
+        "created_at": {
+          "type": "string",
+          "format": "date-time"
+        },
+        "evidence_refs": {
+          "type": "array",
+          "items": {
+            "type": "string",
+            "minLength": 1
+          },
+          "uniqueItems": true
+        },
+        "schema_version": {
+          "type": "string",
+          "minLength": 1
+        },
+        "persona_manifest_digest": {
+          "type": "string",
+          "pattern": "^[a-f0-9]{64}$"
+        },
+        "merkle_root_digest": {
+          "type": "string",
+          "pattern": "^[a-f0-9]{64}$"
+        },
+        "included_data_classes": {
+          "type": "array",
+          "items": {
+            "enum": [
+              "portable_capability_metadata",
+              "public_evaluation_summaries",
+              "user_consented_preferences",
+              "private_memory_reference"
+            ]
+          },
+          "uniqueItems": true
+        },
+        "raw_memory_included": {
+          "const": false
+        },
+        "portability_status": {
+          "enum": [
+            "verifiable_state_export",
+            "digest_only",
+            "not_portable"
+          ]
+        }
+      }
+    }
+  }
+}
