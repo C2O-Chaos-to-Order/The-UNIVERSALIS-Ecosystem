@@ -188,3 +188,8 @@ The eight strata are Base → Meta → Super → Hyper → Ultra → Magic → Q
 ## Agent, OS and AI unification — 24th owner-supplied source
 
 See UNIFICATION_ARCHITECTURE.md, UNIFICATION_VALIDATION.md, the public portable schemas and synthetic fixtures under schemas/unification/ and examples/unification/. These records describe candidate and interface boundaries only; they contain no private sovereign authorization data. External tools remain candidates pending exact-version, license, security and compatibility testing.
+
+ 
+## Disorder and chaos prevention — 25th owner-supplied source
+
+See DISORDER_PREVENTION_ARCHITECTURE.md and DISORDER_PREVENTION_VALIDATION.md, and the authority-neutral schema/fixture/validator under schemas/disorder-prevention/, examples/disorder-prevention/ and .github/scripts/. Public experiment contracts permit synthetic, isolated-test and staging targets only. No C2O-only authorization data is present.
