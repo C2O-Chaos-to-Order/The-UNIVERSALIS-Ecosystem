@@ -1,0 +1,58 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "$id": "https://universalis.example/schemas/shared_artifact_contract_public.schema.json",
+  "title": "Shared Artifact Contract (Public)",
+  "description": "Public-safe minimum fields for artifacts intended for cross-repository use in UNIVERSALIS. Derivative of the authoritative C2O contract. Contains no private identifiers or unpublished data.",
+  "type": "object",
+  "additionalProperties": false,
+  "required": [
+    "artifact_id",
+    "schema_version",
+    "canonical_repository",
+    "canonical_path",
+    "source_role",
+    "owner",
+    "version",
+    "provenance",
+    "license_rights",
+    "release_classification",
+    "limitations",
+    "evidence_status",
+    "authorization_status"
+  ],
+  "properties": {
+    "artifact_id": { "type": "string", "pattern": "^[A-Z0-9][A-Z0-9_-]*$" },
+    "schema_version": { "type": "string", "pattern": "^[0-9]+\\.[0-9]+\\.[0-9]+$" },
+    "canonical_repository": { "type": "string" },
+    "canonical_path": { "type": "string" },
+    "commit_sha": { "type": "string", "pattern": "^[0-9a-f]{40}$" },
+    "blob_sha": { "type": "string", "pattern": "^[0-9a-f]{40}$" },
+    "source_role": { "type": "string" },
+    "owner": { "type": "string" },
+    "version": { "type": "string" },
+    "creation_date": { "type": "string", "format": "date" },
+    "provenance": { "type": "string" },
+    "license_rights": { "type": "string" },
+    "release_classification": {
+      "type": "string",
+      "enum": ["PROPOSED", "PUBLIC_CANDIDATE", "PUBLIC_CLEARED"]
+    },
+    "limitations": { "type": "string" },
+    "dependency_identifiers": {
+      "type": "array",
+      "items": { "type": "string" }
+    },
+    "compatible_version_ranges": {
+      "type": "array",
+      "items": { "type": "string" }
+    },
+    "evidence_status": {
+      "type": "string",
+      "enum": ["NONE", "PARTIAL", "REPRODUCIBLE", "INDEPENDENTLY_VERIFIED", "UNKNOWN"]
+    },
+    "authorization_status": {
+      "type": "string",
+      "enum": ["NOT_AUTHORIZED", "PROPOSED", "AUTHORIZED"]
+    }
+  }
+}
