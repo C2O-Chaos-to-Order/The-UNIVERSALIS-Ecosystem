@@ -1,7 +1,7 @@
 #!/usr/bin/env python3
 """Validate shared project-format, capability and signed provenance contracts."""
 from __future__ import annotations
-import base64, copy, hashlib, json
+import base64, copy, hashlib, json, re
 from datetime import datetime
 from pathlib import Path
 from cryptography.exceptions import InvalidSignature
@@ -23,9 +23,14 @@ def dsse_pae(payload_type: bytes, payload: bytes) -> bytes:
     return b"DSSEv1 " + str(len(payload_type)).encode() + b" " + payload_type + b" " + str(len(payload)).encode() + b" " + payload
 
 def verify_receipt(record: dict) -> None:
+    statement = record["statement"]
+    for subject in statement["subject"]:
+        digest = subject["digest"].get("sha256", "")
+        if not re.fullmatch(r"[a-f0-9]{64}", digest):
+            raise ValueError("subject SHA-256 must be exactly 64 lowercase hexadecimal characters")
     envelope = record["envelope"]
     payload = base64.b64decode(envelope["payload"], validate=True)
-    if payload != canonical_json(record["statement"]):
+    if payload != canonical_json(statement):
         raise ValueError("DSSE payload is not the canonical statement")
     if hashlib.sha256(PUBLIC_KEY).hexdigest() != PUBLIC_KEY_SHA256:
         raise ValueError("fixture key fingerprint mismatch")
@@ -46,7 +51,7 @@ def verify_receipt(record: dict) -> None:
         raise ValueError("DSSE signature verification failed")
     if record["verification"]["keyid"] != KEY_ID:
         raise ValueError("verification record keyid mismatch")
-    metadata = record["statement"]["predicate"]["runDetails"]["metadata"]
+    metadata = statement["predicate"]["runDetails"]["metadata"]
     start = datetime.fromisoformat(metadata["startedOn"].replace("Z", "+00:00"))
     end = datetime.fromisoformat(metadata["finishedOn"].replace("Z", "+00:00"))
     if end < start:
@@ -99,8 +104,8 @@ def run() -> None:
     tests.append(("statement mutated after signing", record))
     record = copy.deepcopy(fixtures["build_provenance_receipts"][0]); record["statement"]["predicate"]["runDetails"].pop("builder")
     tests.append(("missing builder identity", record))
-    record = copy.deepcopy(fixtures["build_provenance_receipts"][0]); record["statement"]["subject"][0]["digest"].pop("sha256")
-    tests.append(("missing artifact SHA-256", record))
+    record = copy.deepcopy(fixtures["build_provenance_receipts"][0]); record["statement"]["subject"][0]["digest"]["sha256"] = "abc"
+    tests.append(("invalid artifact SHA-256 length", record))
     for name, record in tests:
         expect_reject(name, record, validator)
     print(f"PASS: {len(records)} shared fixture records; {len(tests)} negative tests; DSSE Ed25519 signature verified.")
