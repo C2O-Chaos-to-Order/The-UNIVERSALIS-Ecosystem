@@ -72,7 +72,7 @@ Treat every third-party name in that register as a proposed candidate/reference 
 
 ## Master toolchain coverage register — 2026-11-12
 
-The current public inventory of twelve owner-supplied toolchain inventories is maintained in the UNIVERSALIS research register: https://github.com/C2O-Chaos-to-Order/Research-for-the-UNIVERSALIS-Ecosystem/blob/implementation/repository-foundation-2026-11-12/TOOLCHAIN_COVERAGE_REGISTER.md. It distinguishes documentation, basic contracts, passing CI, and actual integrations. This public register contains no links to C2O-private owner repositories or policy values.
+The current public inventory of thirteen owner-supplied toolchain inventories is maintained in the UNIVERSALIS research register: https://github.com/C2O-Chaos-to-Order/Research-for-the-UNIVERSALIS-Ecosystem/blob/implementation/repository-foundation-2026-11-12/TOOLCHAIN_COVERAGE_REGISTER.md. It distinguishes documentation, basic contracts, passing CI, and actual integrations. This public register contains no links to C2O-private owner repositories or policy values.
 
 
 ## Security and cybersecurity — eleventh owner-supplied source — 2026-11-12
@@ -91,3 +91,12 @@ See [open UNIVERSALIS platform and construction architecture](PLATFORM_AND_CONST
 The seven domains cover OS/kernel/runtime substrate; application SDKs; build/DevOps (workflow blueprints and CI/CD); observability; networking/gateways; storage/memory; and evaluation/testing. Candidate tools are not claimed installed or adopted. The portable contracts contain sanitized metadata and synthetic references only. This public layer contains no C2O-private specifications, policies, credentials, identities, signing material or operational data.
 
 See the [UNIVERSALIS twelve-inventory master toolchain coverage register](https://github.com/C2O-Chaos-to-Order/Research-for-the-UNIVERSALIS-Ecosystem/blob/implementation/repository-foundation-2026-11-12/TOOLCHAIN_COVERAGE_REGISTER.md).
+
+
+## Websites and agent-ready publishing — thirteenth owner-supplied source — 2026-11-12
+
+See [open UNIVERSALIS website construction architecture](WEBSITE_CONSTRUCTION_AND_AGENT_PUBLISHING_ARCHITECTURE.md), [portable website contracts](schemas/websites/website-interoperability-contracts.v1.schema.json), [synthetic fixtures](examples/websites/website-interoperability-fixtures.v1.json), and [validation record](WEBSITE_INTEROPERABILITY_VALIDATION.md).
+
+The inventory covers site construction, CMS/content, static generation, agent-facing frameworks, accessibility/security auditing and publish evidence. Third-party products remain candidates pending exact source, license, version, data-flow, security and deployment review. Public manifests and discovery signals do not grant execution or publication authority. This public repository contains no C2O-private website implementation, content, credentials, policies, keys, authority tokens or deployment secrets.
+
+See the [UNIVERSALIS thirteen-inventory master toolchain coverage register](https://github.com/C2O-Chaos-to-Order/Research-for-the-UNIVERSALIS-Ecosystem/blob/implementation/repository-foundation-2026-11-12/TOOLCHAIN_COVERAGE_REGISTER.md).
