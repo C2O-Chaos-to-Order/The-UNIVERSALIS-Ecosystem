@@ -61,3 +61,5 @@ The open implementation is local-first and independently operable. Measurement, 
 ## Architecture mapping and organization implementation
 
 See ARCHITECTURE_MAPPING_AND_ORGANIZATION.md for the full owner-supplied mapping, matrix, organization, repository-structure, and ecosystem-mapping inventory. The portable graph contract and synthetic fixture are in schemas/architecture/architecture-graph.v1.schema.json and examples/architecture/architecture-graph.json. Profile-specific policy remains C2O-private; UNIVERSALIS public graphs reject private/Controlled content. External tools remain candidates pending verification.
+
+Architecture mapping graph contract validation passed; exact run evidence and limitations are recorded in ARCHITECTURE_MAPPING_VALIDATION.md.
