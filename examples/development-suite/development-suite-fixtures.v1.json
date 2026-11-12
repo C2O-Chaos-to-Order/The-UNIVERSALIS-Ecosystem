@@ -515,19 +515,17 @@
         "_type": "https://in-toto.io/Statement/v1",
         "subject": [
           {
-            "name": "fixture-output.zip",
+            "name": "artifact.bin",
             "digest": {
-              "sha256": "0123456789abcdef0123456789abcdef0123456789abcdef0123456789abcdef"
+              "sha256": "aaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaa"
             }
           }
         ],
         "predicateType": "https://slsa.dev/provenance/v1",
         "predicate": {
           "buildDefinition": {
-            "buildType": "https://universal.is/build-types/dev-suite/v1",
-            "externalParameters": {
-              "project": "fixture"
-            },
+            "buildType": "https://universal.is/build-types/v1",
+            "externalParameters": {},
             "internalParameters": {},
             "resolvedDependencies": []
           },
@@ -536,7 +534,7 @@
               "id": "https://example.invalid/builder"
             },
             "metadata": {
-              "invocationId": "urn:uuid:00000000-0000-4000-8000-000000000001",
+              "invocationId": "fixture-1",
               "startedOn": "2026-11-12T10:00:00Z",
               "finishedOn": "2026-11-12T10:01:00Z"
             },
@@ -546,11 +544,11 @@
       },
       "envelope": {
         "payloadType": "application/vnd.in-toto+json",
-        "payload": "eyJfdHlwZSI6Imh0dHBzOi8vaW4tdG90by5pby9TdGF0ZW1lbnQvdjEiLCJwcmVkaWNhdGUiOnsiYnVpbGREZWZpbml0aW9uIjp7ImJ1aWxkVHlwZSI6Imh0dHBzOi8vdW5pdmVyc2FsLmlzL2J1aWxkLXR5cGVzL2Rldi1zdWl0ZS92MSIsImV4dGVybmFsUGFyYW1ldGVycyI6eyJwcm9qZWN0IjoiZml4dHVyZSJ9LCJpbnRlcm5hbFBhcmFtZXRlcnMiOnt9LCJyZXNvbHZlZERlcGVuZGVuY2llcyI6W119LCJydW5EZXRhaWxzIjp7ImJ1aWxkZXIiOnsiaWQiOiJodHRwczovL2V4YW1wbGUuaW52YWxpZC9idWlsZGVyIn0sImJ5cHJvZHVjdHMiOltdLCJtZXRhZGF0YSI6eyJmaW5pc2hlZE9uIjoiMjAyNi0xMS0xMlQxMDowMTowMFoiLCJpbnZvY2F0aW9uSWQiOiJ1cm46dXVpZDowMDAwMDAwMC0wMDAwLTQwMDAtODAwMC0wMDAwMDAwMDAwMDEiLCJzdGFydGVkT24iOiIyMDI2LTExLTEyVDEwOjAwOjAwWiJ9fX0sInByZWRpY2F0ZVR5cGUiOiJodHRwczovL3Nsc2EuZGV2L3Byb3ZlbmFuY2UvdjEiLCJzdWJqZWN0IjpbeyJkaWdlc3QiOnsic2hhMjU2IjoiMDEyMzQ1Njc4OWFiY2RlZjAxMjM0NTY3ODlhYmNkZWYwMTIzNDU2Nzg5YWJjZGVmIn0sIm5hbWUiOiJmaXh0dXJlLW91dHB1dC56aXAifV19",
+        "payload": "eyJfdHlwZSI6Imh0dHBzOi8vaW4tdG90by5pby9TdGF0ZW1lbnQvdjEiLCJwcmVkaWNhdGUiOnsiYnVpbGREZWZpbml0aW9uIjp7ImJ1aWxkVHlwZSI6Imh0dHBzOi8vdW5pdmVyc2FsLmlzL2J1aWxkLXR5cGVzL3YxIiwiZXh0ZXJuYWxQYXJhbWV0ZXJzIjp7fSwiaW50ZXJuYWxQYXJhbWV0ZXJzIjp7fSwicmVzb2x2ZWREZXBlbmRlbmNpZXMiOltdfSwicnVuRGV0YWlscyI6eyJidWlsZGVyIjp7ImlkIjoiaHR0cHM6Ly9leGFtcGxlLmludmFsaWQvYnVpbGRlciJ9LCJieXByb2R1Y3RzIjpbXSwibWV0YWRhdGEiOnsiZmluaXNoZWRPbiI6IjIwMjYtMTEtMTJUMTA6MDE6MDBaIiwiaW52b2NhdGlvbklkIjoiZml4dHVyZS0xIiwic3RhcnRlZE9uIjoiMjAyNi0xMS0xMlQxMDowMDowMFoifX19LCJwcmVkaWNhdGVUeXBlIjoiaHR0cHM6Ly9zbHNhLmRldi9wcm92ZW5hbmNlL3YxIiwic3ViamVjdCI6W3siZGlnZXN0Ijp7InNoYTI1NiI6ImFhYWFhYWFhYWFhYWFhYWFhYWFhYWFhYWFhYWFhYWFhYWFhYWFhYWFhYWFhYWFhYWFhYWFhYWFhYWFhYWFhYWEifSwibmFtZSI6ImFydGlmYWN0LmJpbiJ9XX0=",
         "signatures": [
           {
             "keyid": "urn:universal.is:fixture-ed25519-2026-11",
-            "sig": "l+dpigKs4gsZIP1uQ2Nv5L/MPaj+JCXg+IfDTryFxaIVC2+ct1n9/tyZQAiQGHFGGgjhKkKdi+Al/Qn8ameUCQ=="
+            "sig": "yDTM2Gx+vh61H6K/sJO+RiKXACSkavWoIb/oYbLOOI+/AC59zexYJY0x5R5rKhFwxQx9WzWPShtAN7o+QTZEDA=="
           }
         ]
       },
@@ -559,7 +557,7 @@
         "verifier_id": "urn:universal.is:fixture-trust-store:v1",
         "keyid": "urn:universal.is:fixture-ed25519-2026-11",
         "verified_at": "2026-11-12T10:02:00Z",
-        "public_key_sha256": "e5a5aa300817386c9539ebc46b215745f6409845f8d4d8fa14b64bb878580295"
+        "public_key_sha256": "139e3940e64b5491722088d9a0d741628fc826e09475d341a780acde3c4b8070"
       }
     }
   ]
