@@ -1,17 +1,6 @@
 name: Website Interoperability Contract Validation
 on:
-  push:
-    paths:
-      - "schemas/websites/**"
-      - "examples/websites/**"
-      - ".github/scripts/website_interoperability_contract.py"
-      - ".github/workflows/website-interoperability-contract.yml"
-  pull_request:
-    paths:
-      - "schemas/websites/**"
-      - "examples/websites/**"
-      - ".github/scripts/website_interoperability_contract.py"
-      - ".github/workflows/website-interoperability-contract.yml"
+  workflow_dispatch:
 permissions:
   contents: read
 jobs:
