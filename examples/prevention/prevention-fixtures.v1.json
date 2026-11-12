@@ -37,6 +37,12 @@
             "version": "02024R1689-20260727",
             "maturity": "regulatory_text",
             "reference": "https://eur-lex.europa.eu/eli/reg/2024/1689"
+          },
+          {
+            "namespace": "INTERNAL_HARM_TAXONOMY",
+            "version": "public-prevention-v1",
+            "maturity": "internal",
+            "reference": "https://github.com/C2O-Chaos-to-Order/Research-for-the-UNIVERSALIS-Ecosystem/blob/implementation/repository-foundation-2026-11-12/TOOLCHAIN_COVERAGE_REGISTER.md"
           }
         ],
         "harm_categories": [
