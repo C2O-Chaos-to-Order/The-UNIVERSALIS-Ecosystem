@@ -63,3 +63,9 @@ The open implementation is local-first and independently operable. Measurement, 
 See ARCHITECTURE_MAPPING_AND_ORGANIZATION.md for the full owner-supplied mapping, matrix, organization, repository-structure, and ecosystem-mapping inventory. The portable graph contract and synthetic fixture are in schemas/architecture/architecture-graph.v1.schema.json and examples/architecture/architecture-graph.json. Profile-specific policy remains C2O-private; UNIVERSALIS public graphs reject private/Controlled content. External tools remain candidates pending verification.
 
 Architecture mapping graph contract validation passed; exact run evidence and limitations are recorded in ARCHITECTURE_MAPPING_VALIDATION.md.
+
+## Four-document source coverage — 2026-11-12
+
+The complete owner-supplied tool inventory and status matrix for Human Knowledge, Powers, Human Capabilities, and Mapping/Matrix/Organization/Ecosystem Mapping is maintained in the UNIVERSALIS research register: https://github.com/C2O-Chaos-to-Order/Research-for-the-UNIVERSALIS-Ecosystem/blob/implementation/repository-foundation-2026-11-12/FOUR_DOCUMENT_TOOLCHAIN_COVERAGE.md.
+
+Treat every third-party name in that register as a proposed candidate/reference pattern until canonical source, license, maintenance, security, compatibility, and behavior are reviewed. The register distinguishes documented tools, basic contracts, passing CI, and actual integrations. This repository owns only the parts assigned to its domain. No C2O-private repository links or policy values are part of this public register.
