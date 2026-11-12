@@ -1,0 +1,408 @@
+{
+  "notice": "Entirely synthetic prevention fixture. No real incident, personal data, exploit payload, private C2O policy, signing key or live hardware telemetry. The Ed25519 test key is ephemeral and not a production trust root.",
+  "records": {
+    "harm_taxonomy_mappings": [
+      {
+        "record_type": "harm_taxonomy_mapping",
+        "record_id": "taxonomy:public:prevention-v1",
+        "created_at": "2026-11-12T20:00:00Z",
+        "mapping_version": "1.0.0",
+        "taxonomies": [
+          {
+            "namespace": "OWASP_LLM_TOP_10",
+            "version": "2026",
+            "maturity": "final",
+            "reference": "https://genai.owasp.org/2026/09/01/owasp-genai-security-project-unveils-2026-top-10-for-llm-applications-new-agent-control-standard-and-sponsors-as-community-tops-30000-members/"
+          },
+          {
+            "namespace": "OWASP_AGENTIC_TOP_10",
+            "version": "2026",
+            "maturity": "final",
+            "reference": "https://genai.owasp.org/resource/owasp-top-10-for-agentic-applications-for-2026/"
+          },
+          {
+            "namespace": "OWASP_MCP_TOP_10",
+            "version": "2025-beta-snapshot",
+            "maturity": "beta",
+            "reference": "https://owasp.github.io/www-project-mcp-top-10/"
+          },
+          {
+            "namespace": "MITRE_ATLAS",
+            "version": "2026-11-12-snapshot",
+            "maturity": "living",
+            "reference": "https://atlas.mitre.org/"
+          },
+          {
+            "namespace": "EU_AI_ACT_ARTICLE_5",
+            "version": "02024R1689-20260727",
+            "maturity": "regulatory_text",
+            "reference": "https://eur-lex.europa.eu/eli/reg/2024/1689"
+          }
+        ],
+        "harm_categories": [
+          {
+            "category_id": "H-PROMPT-INJECTION",
+            "label": "Prompt injection and instruction hierarchy abuse",
+            "risk_domain": "agent_security",
+            "taxonomy_refs": [
+              "OWASP_LLM_TOP_10",
+              "OWASP_AGENTIC_TOP_10",
+              "OWASP_MCP_TOP_10",
+              "MITRE_ATLAS"
+            ],
+            "severity_scale": "qualitative_5_level"
+          },
+          {
+            "category_id": "H-DATA-EXFILTRATION",
+            "label": "Unauthorized sensitive data exposure or exfiltration",
+            "risk_domain": "privacy",
+            "taxonomy_refs": [
+              "OWASP_LLM_TOP_10",
+              "OWASP_AGENTIC_TOP_10",
+              "OWASP_MCP_TOP_10",
+              "MITRE_ATLAS"
+            ],
+            "severity_scale": "qualitative_5_level"
+          },
+          {
+            "category_id": "H-CHILD-SAFETY",
+            "label": "Child exploitation or grooming risk",
+            "risk_domain": "child_safety",
+            "taxonomy_refs": [
+              "EU_AI_ACT_ARTICLE_5",
+              "INTERNAL_HARM_TAXONOMY"
+            ],
+            "severity_scale": "qualitative_5_level"
+          },
+          {
+            "category_id": "H-FRAUD",
+            "label": "Fraud, impersonation or deceptive payment instruction",
+            "risk_domain": "fraud",
+            "taxonomy_refs": [
+              "OWASP_AGENTIC_TOP_10",
+              "MITRE_ATLAS",
+              "INTERNAL_HARM_TAXONOMY"
+            ],
+            "severity_scale": "qualitative_5_level"
+          },
+          {
+            "category_id": "H-CBRN",
+            "label": "CBRN-related unsafe assistance or escalation",
+            "risk_domain": "cbrn_safety",
+            "taxonomy_refs": [
+              "INTERNAL_HARM_TAXONOMY",
+              "MITRE_ATLAS"
+            ],
+            "severity_scale": "qualitative_5_level"
+          }
+        ],
+        "compliance_claimed": false,
+        "evidence_refs": [
+          "evidence:taxonomy-source-review",
+          "evidence:taxonomy-version-pin"
+        ]
+      }
+    ],
+    "constitutional_floor_profiles": [
+      {
+        "record_type": "constitutional_floor_profile",
+        "record_id": "constitution:public:baseline-v1",
+        "created_at": "2026-11-12T20:00:00Z",
+        "profile_version": "1.0.0",
+        "profile_scope": "public_reference_floor",
+        "policy_digest": "cccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccc",
+        "floors": [
+          {
+            "floor_id": "F-NO-PROHIBITED-HARM",
+            "label": "No knowingly facilitated prohibited harm",
+            "floor_type": "prohibition",
+            "rule_digest": "1111111111111111111111111111111111111111111111111111111111111111",
+            "immutable": true,
+            "change_control": "external_human_witness"
+          },
+          {
+            "floor_id": "F-LEAST-PRIVILEGE",
+            "label": "Least privilege and bounded authority",
+            "floor_type": "least_privilege",
+            "rule_digest": "2222222222222222222222222222222222222222222222222222222222222222",
+            "immutable": true,
+            "change_control": "external_human_witness"
+          },
+          {
+            "floor_id": "F-HUMAN-SOVEREIGNTY",
+            "label": "Human veto remains final",
+            "floor_type": "human_veto",
+            "rule_digest": "3333333333333333333333333333333333333333333333333333333333333333",
+            "immutable": true,
+            "change_control": "external_human_witness"
+          },
+          {
+            "floor_id": "F-EVIDENCE-AND-TRUTH",
+            "label": "Claims and decisions carry inspectable evidence",
+            "floor_type": "evidence_integrity",
+            "rule_digest": "4444444444444444444444444444444444444444444444444444444444444444",
+            "immutable": true,
+            "change_control": "external_human_witness"
+          },
+          {
+            "floor_id": "F-AUDIT-AND-RECALL",
+            "label": "Decisions are attributable and correctable",
+            "floor_type": "auditability",
+            "rule_digest": "5555555555555555555555555555555555555555555555555555555555555555",
+            "immutable": true,
+            "change_control": "external_human_witness"
+          },
+          {
+            "floor_id": "F-EXTERNAL-CONTAINMENT",
+            "label": "The agent cannot disable its own containment path",
+            "floor_type": "external_containment",
+            "rule_digest": "6666666666666666666666666666666666666666666666666666666666666666",
+            "immutable": true,
+            "change_control": "external_human_witness"
+          }
+        ],
+        "agent_can_modify_floors": false,
+        "floor_change_requires_external_witness": true,
+        "human_veto_final": true,
+        "fail_closed_for_consequential_actions": true,
+        "compliance_claimed": false,
+        "evidence_refs": [
+          "evidence:constitutional-review"
+        ]
+      }
+    ],
+    "enforcement_receipts": [
+      {
+        "record_type": "enforcement_receipt",
+        "record_id": "receipt:synthetic:deny-001",
+        "occurred_at": "2026-11-12T20:00:00Z",
+        "actor_ref": "agent:synthetic:agent-001",
+        "action_ref": "action:synthetic:tool-call-001",
+        "action_digest": "aaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaa",
+        "control_point": "pre_tool_execution",
+        "policy_engine_ref": "guard:synthetic:runtime-policy",
+        "policy_digest": "bbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbb",
+        "constitution_profile_ref": "constitution:public:baseline-v1",
+        "constitution_digest": "cccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccc",
+        "taxonomy_mapping_refs": [
+          "taxonomy:public:prevention-v1"
+        ],
+        "decision": "block",
+        "decision_reason_code": "prohibited_data_exfiltration_path",
+        "floor_results": [
+          {
+            "floor_id": "F-LEAST-PRIVILEGE",
+            "outcome": "fail",
+            "evidence_ref": "evidence:synthetic:scope-failure"
+          },
+          {
+            "floor_id": "F-HUMAN-SOVEREIGNTY",
+            "outcome": "pass",
+            "evidence_ref": "evidence:synthetic:authority-check"
+          }
+        ],
+        "evidence_refs": [
+          "evidence:synthetic:tool-policy-eval",
+          "evidence:synthetic:decision-trace"
+        ],
+        "external_to_agent": true,
+        "fail_mode": "closed",
+        "action_executed": false,
+        "action_prevented": true,
+        "raw_prompt_included": false,
+        "secret_material_included": false,
+        "signature": {
+          "algorithm": "Ed25519",
+          "key_id": "sha256:44552b04ed6dbd30a85b674ab7fd84b8086bcab3d278b9aede46758bca6f842c",
+          "signed_body_digest": "e6a43f406f5aa8da608d70262a8c7802ed5605f64c5fb7c2fdc1c46e9285a54a",
+          "signature_base64": "uR53sMccr870oqJN8HFRrFXdiiJg5HHkAZXunTco7vwab6zNt2Cedz5H08skAZv54sEE1z+teqF81nrFplcXCA==",
+          "trust_anchor_kind": "ephemeral_test_key"
+        }
+      }
+    ],
+    "harm_reduction_evaluations": [
+      {
+        "record_type": "harm_reduction_evaluation",
+        "record_id": "evaluation:synthetic:guard-v1",
+        "created_at": "2026-11-12T20:00:00Z",
+        "evaluation_id": "eval:synthetic:100-attacks",
+        "taxonomy_mapping_ref": "taxonomy:public:prevention-v1",
+        "defense_config_digest": "dddddddddddddddddddddddddddddddddddddddddddddddddddddddddddddddd",
+        "attack_suite_ref": "suite:synthetic:prevention-attack-set",
+        "attack_suite_digest": "eeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeee",
+        "suite_frozen": true,
+        "defense_tuned_on_test_set": false,
+        "independent_evaluator": true,
+        "evaluator_ref": "evaluator:synthetic:independent",
+        "attack_count": 100,
+        "baseline_harmful_count": 30,
+        "defended_harmful_count": 12,
+        "benign_count": 80,
+        "false_blocked_benign_count": 4,
+        "baseline_harm_rate": 0.3,
+        "defended_harm_rate": 0.12,
+        "absolute_harm_reduction": 0.18,
+        "relative_harm_reduction": 0.6,
+        "false_positive_rate": 0.05,
+        "baseline_ci95": [
+          0.218949,
+          0.395849
+        ],
+        "defended_ci95": [
+          0.069994,
+          0.198121
+        ],
+        "false_positive_ci95": [
+          0.019614,
+          0.121623
+        ],
+        "repeat_seeds": [
+          11,
+          23,
+          45
+        ],
+        "conclusion": "harm_reduced",
+        "limitations": [
+          "Synthetic demonstration only; not a real benchmark run.",
+          "One test suite and configuration cannot establish universal prevention.",
+          "Confidence intervals describe binomial sampling uncertainty, not dataset or evaluator bias."
+        ],
+        "compliance_claimed": false,
+        "evidence_refs": [
+          "evidence:synthetic:paired-results",
+          "evidence:synthetic:holdout-manifest"
+        ]
+      }
+    ],
+    "red_team_findings": [
+      {
+        "record_type": "red_team_finding",
+        "record_id": "finding:synthetic:injection-001",
+        "created_at": "2026-11-12T20:00:00Z",
+        "finding_id": "finding:synthetic:injection-001",
+        "authorization_scope_ref": "scope:synthetic:authorized-red-team",
+        "taxonomy_mapping_ref": "taxonomy:public:prevention-v1",
+        "category_id": "H-PROMPT-INJECTION",
+        "severity": "high",
+        "lifecycle_status": "confirmed",
+        "reproduced": true,
+        "reproducer_ref": "reproducer:synthetic:bounded-fixture",
+        "evidence_digest": "ffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffff",
+        "impact_summary": "Synthetic test demonstrated an attempted instruction-boundary override; a pre-tool policy decision blocked the requested privileged action.",
+        "raw_exploit_included": false,
+        "out_of_scope_activity": false,
+        "independent_reviewer": true,
+        "evidence_refs": [
+          "evidence:synthetic:reproduction",
+          "evidence:synthetic:review"
+        ]
+      }
+    ],
+    "containment_attestations": [
+      {
+        "record_type": "containment_attestation",
+        "record_id": "containment:synthetic:quarantine-001",
+        "created_at": "2026-11-12T20:00:00Z",
+        "incident_ref": "incident:synthetic:001",
+        "trigger_evidence_digest": "aaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaa",
+        "containment_action": "quarantine_runtime",
+        "enforcement_substrate": "hardware_isolated_dpu",
+        "independent_control_path": "control-plane:synthetic:out-of-band",
+        "external_to_agent": true,
+        "agent_can_disable_control": false,
+        "fail_closed": true,
+        "initiated_at": "2026-11-12T20:00:00Z",
+        "confirmed_at": "2026-11-12T20:00:01Z",
+        "verification_method": "out_of_band_telemetry",
+        "independent_verifier": true,
+        "outcome": "confirmed",
+        "release_requires_human_witness": true,
+        "private_anchor_material_included": false,
+        "evidence_refs": [
+          "evidence:synthetic:quarantine-event",
+          "evidence:synthetic:out-of-band-readback"
+        ]
+      }
+    ],
+    "coverage_attestations": [
+      {
+        "record_type": "safety_coverage_attestation",
+        "record_id": "coverage:synthetic:agent-001",
+        "created_at": "2026-11-12T20:00:00Z",
+        "system_ref": "system:synthetic:agent-001",
+        "system_version_digest": "bbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbb",
+        "policy_digest": "cccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccc",
+        "tested_layers": [
+          "input",
+          "retrieval",
+          "dialog",
+          "pre_tool",
+          "post_tool",
+          "output",
+          "filesystem",
+          "network_egress",
+          "credential_access",
+          "identity_authority",
+          "spend_limits",
+          "hardware_containment",
+          "human_escalation"
+        ],
+        "enforced_layers": [
+          "input",
+          "retrieval",
+          "dialog",
+          "pre_tool",
+          "post_tool",
+          "output",
+          "filesystem",
+          "network_egress",
+          "credential_access",
+          "identity_authority",
+          "spend_limits",
+          "hardware_containment",
+          "human_escalation"
+        ],
+        "untested_surfaces": [],
+        "test_count": 240,
+        "bypass_attempt_count": 60,
+        "bypass_success_count": 0,
+        "guard_unavailable_behavior": "deny_or_escalate",
+        "external_control_plane": true,
+        "overall_result": "pass",
+        "known_gaps": [
+          "Synthetic test fixture; actual deployments require topology-specific verification."
+        ],
+        "evidence_refs": [
+          "evidence:synthetic:coverage-suite"
+        ]
+      }
+    ],
+    "case_escalations": [
+      {
+        "record_type": "case_escalation",
+        "record_id": "case:synthetic:child-safety-001",
+        "created_at": "2026-11-12T20:00:00Z",
+        "case_ref": "case:synthetic:child-risk",
+        "risk_domain": "child_safety",
+        "taxonomy_mapping_ref": "taxonomy:public:prevention-v1",
+        "category_id": "H-CHILD-SAFETY",
+        "severity": "high",
+        "escalation_decision": "hold_for_review",
+        "recipient_role": "trust_and_safety_team",
+        "evidence_digest": "dddddddddddddddddddddddddddddddddddddddddddddddddddddddddddddddd",
+        "raw_personal_data_included": false,
+        "raw_harmful_content_included": false,
+        "consent_or_authority_basis": "synthetic test scenario with no person data",
+        "follow_up_status": "pending",
+        "evidence_refs": [
+          "evidence:synthetic:case-classification"
+        ]
+      }
+    ]
+  },
+  "verification_key": {
+    "key_id": "sha256:44552b04ed6dbd30a85b674ab7fd84b8086bcab3d278b9aede46758bca6f842c",
+    "public_key_base64": "g40m31DlwuDh1GVg4aKb0UJ0E3DstF4y1XgO7cMvXaE=",
+    "trust_anchor_kind": "ephemeral_test_key"
+  }
+}
