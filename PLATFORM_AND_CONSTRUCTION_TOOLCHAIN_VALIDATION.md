@@ -2,7 +2,7 @@
 
 Branch: `implementation/repository-foundation-2026-11-12`  
 Contract version: 1.0.0  
-Status: **Implemented; awaiting the new pull-request-head CI run.**
+Status: **Passed on the current UNIVERSALIS ecosystem PR head.**
 
 ## Positive contract fixture
 
@@ -41,7 +41,14 @@ The shared schema, synthetic fixture, validator and validation record are public
 
 The workflow is `.github/workflows/platform-interoperability-contract.yml`. It installs the JSON Schema validator dependency and runs the shared nine-record/ten-negative-case validator.
 
-**CI receipts:** To be added after GitHub completes the run for the current PR head. A successful run is evidence of schema and synthetic-fixture validation only.
+**Executed CI receipts (2026-11-12):**
+- Platform Interoperability Contract Validation: [passed — run 43274259485](https://github.com/C2O-Chaos-to-Order/The-UNIVERSALIS-Ecosystem/actions/runs/43274259485).
+- Repository quality baseline: [passed — run 43274259563](https://github.com/C2O-Chaos-to-Order/The-UNIVERSALIS-Ecosystem/actions/runs/43274259563).
+- Architecture Graph Contract: [passed — run 43274259574](https://github.com/C2O-Chaos-to-Order/The-UNIVERSALIS-Ecosystem/actions/runs/43274259574).
+- Engineering Doctor: [passed — run 43274259568](https://github.com/C2O-Chaos-to-Order/The-UNIVERSALIS-Ecosystem/actions/runs/43274259568).
+- Repository Verification: [passed — run 43274259581](https://github.com/C2O-Chaos-to-Order/The-UNIVERSALIS-Ecosystem/actions/runs/43274259581).
+
+These receipts are evidence of schema and synthetic-fixture validation only.
 
 ## Limits
 
