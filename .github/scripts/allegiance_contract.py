@@ -30,7 +30,7 @@ def verify_bundle(bundle:dict,records:list[dict])->None:
         item=by_name.get(subject["name"])
         if item is None: raise ValueError("signed bundle references unknown record")
         expected=hashlib.sha256(canonical(item)).hexdigest()
-        if subject["digest"]["sha256"]!=expected: raise ValueError("signed subject digest does not bind record bytes")
+        if subject["digest"]["sha256"]!=expected: raise ValueError(f"signed subject digest mismatch for {subject['name']}: declared={subject['digest']['sha256']} computed={expected}")
     payload=base64.b64decode(bundle["envelope"]["payload"],validate=True)
     if payload!=canonical(statement): raise ValueError("DSSE payload mismatch")
     if hashlib.sha256(PUBLIC_KEY).hexdigest()!=PUBLIC_KEY_SHA256: raise ValueError("fixture key fingerprint mismatch")
