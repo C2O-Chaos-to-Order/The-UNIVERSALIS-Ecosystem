@@ -192,11 +192,14 @@ def negative_tests() -> list[str]:
     add("composition_receipt_grants_authority", lambda b: mutate_record(b, "composition_execution_receipt", 0, "authority_granted", True))
     add("unsigned_receipt_claims_verified", lambda b: mutate_record(b, "composition_execution_receipt", 0, "signature_verification", "verified"))
     add("unapproved_external_route_allowed", lambda b: mutate_record(b, "model_route_decision_receipt", 0, "sovereignty_class", "unapproved_external"))
-    add("restricted_shadow_egress_allowed", lambda b: mutate_record(b, "model_route_decision_receipt", 0, "shadow_data_classification", "restricted"))
+    add("restricted_shadow_egress_allowed", lambda b: (mutate_record(b, "model_route_decision_receipt", 0, "shadow_lane_enabled", True), mutate_record(b, "model_route_decision_receipt", 0, "shadow_data_classification", "restricted")))
     add("publication_without_human_approval", lambda b: mutate_record(b, "application_provenance_receipt", 0, "publication_status", "published"))
     add("application_secrets_exported", lambda b: mutate_record(b, "application_provenance_receipt", 0, "secrets_included", True))
-    add("qpu_billable_without_emulation", lambda b: mutate_record(b, "quantum_execution_receipt", 0, "billable_submission", True))
-    add("qpu_billable_without_human_approval", lambda b: mutate_record(b, "quantum_execution_receipt", 0, "human_approval_ref", None))
+    def qpu_valid(b):
+        p=next(r for r in b["records"] if r["record_type"] == "quantum_execution_receipt")["payload"]
+        p.update({"execution_mode":"remote_qpu","emulation_evidence_ref":"evidence:emulation","shot_count":100,"price_quote_digest":"sha256:"+"a"*64,"human_approval_ref":"approval:human","job_ref":"job:synthetic","billable_submission":True})
+    add("qpu_billable_without_emulation",lambda b:(qpu_valid(b),mutate_record(b,"quantum_execution_receipt",0,"emulation_evidence_ref",None)))
+    add("qpu_billable_without_human_approval",lambda b:(qpu_valid(b),mutate_record(b,"quantum_execution_receipt",0,"human_approval_ref",None)))
     add("simulation_result_authorizes_robot", lambda b: mutate_record(b, "robot_policy_evaluation", 0, "actuation_authorized", True))
     add("sovereign_claim_self_certifies", lambda b: mutate_record(b, "sovereign_deployment_attestation", 0, "compliance_certification_claimed", True))
 
