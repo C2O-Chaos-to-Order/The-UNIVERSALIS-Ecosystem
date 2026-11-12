@@ -1,0 +1,89 @@
+{
+  "schema_version": "1.0.0",
+  "graph_id": "architecture-fixture-001",
+  "snapshot_ref": "git:fixture-commit",
+  "captured_at": "2026-11-12T10:00:00Z",
+  "scope": {
+    "ecosystem": "shared",
+    "scope_id": "synthetic-fixture-only",
+    "visibility": "sanitized"
+  },
+  "nodes": [
+    {
+      "node_id": "repo-a",
+      "node_type": "repository",
+      "label": "Synthetic public repo A",
+      "visibility": "public",
+      "authority_class": "Evidence",
+      "evidence_state": "documented",
+      "owner_ref": null,
+      "repo_path": "/repo-a",
+      "content_sha256": null,
+      "source_refs": [
+        "source:fixture-a"
+      ],
+      "policy_ref": null
+    },
+    {
+      "node_id": "service-b",
+      "node_type": "service",
+      "label": "Synthetic service B",
+      "visibility": "public",
+      "authority_class": "Evidence",
+      "evidence_state": "implemented",
+      "owner_ref": "owner-fixture",
+      "repo_path": null,
+      "content_sha256": null,
+      "source_refs": [
+        "source:fixture-b"
+      ],
+      "policy_ref": null
+    }
+  ],
+  "edges": [
+    {
+      "edge_id": "edge-1",
+      "from_node": "repo-a",
+      "to_node": "service-b",
+      "relation": "depends_on",
+      "evidence_state": "documented",
+      "source_refs": [
+        "source:fixture-edge"
+      ],
+      "valid_from": null,
+      "valid_to": null
+    }
+  ],
+  "matrices": [
+    {
+      "matrix_id": "matrix-1",
+      "metric": "dependency_count",
+      "unit": "count",
+      "source_refs": [
+        "source:fixture-matrix"
+      ],
+      "entries": [
+        {
+          "subject_node": "repo-a",
+          "value": 1,
+          "observed_at": "2026-11-12T10:00:00Z",
+          "uncertainty": 0,
+          "evidence_ref": "evidence:fixture"
+        }
+      ]
+    }
+  ],
+  "proposals": [
+    {
+      "proposal_id": "proposal-1",
+      "status": "accepted",
+      "proposed_by": "author-fixture",
+      "change_refs": [
+        "change:fixture"
+      ],
+      "reviewed_by": "reviewer-fixture",
+      "decision_ref": "decision:fixture",
+      "decided_at": "2026-11-12T10:00:00Z"
+    }
+  ]
+}
