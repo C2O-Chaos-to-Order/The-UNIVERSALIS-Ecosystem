@@ -183,3 +183,8 @@ See [open Simulation architecture](SIMULATION_ARCHITECTURE.md), [local validatio
 See [open UNIVERSALIS Eight-Stratum Capability Architecture](STRATIFIED_CAPABILITY_ARCHITECTURE.md), [local validation record](STRATIFIED_CAPABILITY_VALIDATION.md), and [portable capability contracts](schemas/strata/stratified-capability-contracts.v1.schema.json).
 
 The eight strata are Base → Meta → Super → Hyper → Ultra → Magic → Quantum → Transformative. Fourteen portable record families classify components, protocol semantics, orchestration/lifecycle, proactive actions, code composition and signed receipts, model routes, generated-app provenance, quantum execution, robot-policy evaluation and sovereign-deployment evidence. The public fixture contains synthetic data only; the composition receipt is intentionally unsigned. No C2O-private model, policy, permit, key, identity, telemetry or authority state is included. It contains no C2O-private policy, model, authority, permit, identity, key, telemetry or execution data. Third-party products remain candidates until their exact source/license/release, behavior and conformance are independently tested.
+
+ 
+## Agent, OS and AI unification — 24th owner-supplied source
+
+See UNIFICATION_ARCHITECTURE.md, UNIFICATION_VALIDATION.md, the public portable schemas and synthetic fixtures under schemas/unification/ and examples/unification/. These records describe candidate and interface boundaries only; they contain no private sovereign authorization data. External tools remain candidates pending exact-version, license, security and compatibility testing.
