@@ -193,3 +193,8 @@ See UNIFICATION_ARCHITECTURE.md, UNIFICATION_VALIDATION.md, the public portable 
 ## Disorder and chaos prevention — 25th owner-supplied source
 
 See DISORDER_PREVENTION_ARCHITECTURE.md and DISORDER_PREVENTION_VALIDATION.md, and the authority-neutral schema/fixture/validator under schemas/disorder-prevention/, examples/disorder-prevention/ and .github/scripts/. Public experiment contracts permit synthetic, isolated-test and staging targets only. No C2O-only authorization data is present.
+
+ 
+## Love, care, reciprocity and empathy — 26th owner-supplied source
+
+See LOVE_CARE_ARCHITECTURE.md and LOVE_CARE_VALIDATION.md and the generic schema, synthetic fixture and validator under schemas/love-care/, examples/love-care/ and .github/scripts/. Public evidence records describe observable behavior and carry explicit non-claims; no C2O-only authorization or relationship data is included.
