@@ -13,7 +13,18 @@ def sha(x): return hashlib.sha256(canon(x)).hexdigest()
 def sha_bytes(x): return hashlib.sha256(x).hexdigest()
 def dt(x): return datetime.fromisoformat(x.replace("Z","+00:00"))
 def maps(g):
- return {k[:-1] if k.endswith("s") else k:{x["record_id"]:x for x in g[k]} for k in g}
+ return {
+  "soul_manifest":{x["record_id"]:x for x in g["soul_manifests"]},
+  "memory_manifest":{x["record_id"]:x for x in g["memory_manifests"]},
+  "behavioral_continuity_evaluation":{x["record_id"]:x for x in g["behavioral_continuity_evaluations"]},
+  "continuity_transfer_proof":{x["record_id"]:x for x in g["continuity_transfer_proofs"]},
+  "succession_attestation":{x["record_id"]:x for x in g["succession_attestations"]},
+  "human_witness":{x["record_id"]:x for x in g["human_witnesses"]},
+  "durable_checkpoint":{x["record_id"]:x for x in g["durable_checkpoints"]},
+  "formal_witness_descriptor":{x["record_id"]:x for x in g["formal_witness_descriptors"]},
+  "corrigibility_attestation":{x["record_id"]:x for x in g["corrigibility_attestations"]},
+  "execution_anchor_attestation":{x["record_id"]:x for x in g["execution_anchor_attestations"]}
+ }
 def verify_bundles(bundles,m):
  for b in bundles:
   e=b["envelope"]
