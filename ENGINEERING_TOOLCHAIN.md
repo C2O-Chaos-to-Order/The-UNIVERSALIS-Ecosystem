@@ -72,7 +72,7 @@ Treat every third-party name in that register as a proposed candidate/reference 
 
 ## Master toolchain coverage register — 2026-11-12
 
-The current public inventory for the original four toolchain documents plus the Intelligence Capabilities source is maintained in the UNIVERSALIS research register: https://github.com/C2O-Chaos-to-Order/Research-for-the-UNIVERSALIS-Ecosystem/blob/implementation/repository-foundation-2026-11-12/TOOLCHAIN_COVERAGE_REGISTER.md. It distinguishes documentation, basic contracts, passing CI, and actual integrations. This public register contains no links to C2O-private owner repositories or policy values.
+The current public inventory of twelve owner-supplied toolchain inventories is maintained in the UNIVERSALIS research register: https://github.com/C2O-Chaos-to-Order/Research-for-the-UNIVERSALIS-Ecosystem/blob/implementation/repository-foundation-2026-11-12/TOOLCHAIN_COVERAGE_REGISTER.md. It distinguishes documentation, basic contracts, passing CI, and actual integrations. This public register contains no links to C2O-private owner repositories or policy values.
 
 
 ## Security and cybersecurity — eleventh owner-supplied source — 2026-11-12
@@ -81,4 +81,13 @@ See [open UNIVERSALIS Security and Cybersecurity architecture](SECURITY_CYBERSEC
 
 This public layer covers threat crosswalks, enforcement and containment receipts, sanitized findings, scoped assessment records, SBOM/provenance, sandbox evidence and tamper-evident audit records. It excludes C2O private policies, credentials, incidents, authority records and target data. No third-party tool or offensive assessment system is claimed integrated.
 
-See the [UNIVERSALIS eleven-source master toolchain coverage register](https://github.com/C2O-Chaos-to-Order/Research-for-the-UNIVERSALIS-Ecosystem/blob/implementation/repository-foundation-2026-11-12/TOOLCHAIN_COVERAGE_REGISTER.md).
+See the [UNIVERSALIS twelve-inventory master toolchain coverage register](https://github.com/C2O-Chaos-to-Order/Research-for-the-UNIVERSALIS-Ecosystem/blob/implementation/repository-foundation-2026-11-12/TOOLCHAIN_COVERAGE_REGISTER.md).
+
+
+## Platform and construction toolchain — twelfth owner-supplied source — 2026-11-12
+
+See [open UNIVERSALIS platform and construction architecture](PLATFORM_AND_CONSTRUCTION_TOOLCHAIN_ARCHITECTURE.md), [portable platform contracts](schemas/platform/platform-interoperability-contracts.v1.schema.json), [synthetic fixtures](examples/platform/platform-interoperability-fixtures.v1.json), and [validation record](PLATFORM_AND_CONSTRUCTION_TOOLCHAIN_VALIDATION.md).
+
+The seven domains cover OS/kernel/runtime substrate; application SDKs; workflow construction; DevOps/CI-CD; observability; networking/gateways; and storage/evaluation. Candidate tools are not claimed installed or adopted. The portable contracts contain sanitized metadata and synthetic references only. This public layer contains no C2O-private specifications, policies, credentials, identities, signing material or operational data.
+
+See the [UNIVERSALIS twelve-inventory master toolchain coverage register](https://github.com/C2O-Chaos-to-Order/Research-for-the-UNIVERSALIS-Ecosystem/blob/implementation/repository-foundation-2026-11-12/TOOLCHAIN_COVERAGE_REGISTER.md).
