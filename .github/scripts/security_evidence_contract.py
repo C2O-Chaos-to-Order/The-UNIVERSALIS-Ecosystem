@@ -91,6 +91,7 @@ def verify_audit_chain(record: dict) -> bool:
     return sha256(domain + previous + raw).hex() == record["record_digest"]
 
 def semantic_checks(data: dict) -> None:
+    assert verify_merkle(data["security_proof"]), "RFC 9162 taxonomy evidence proof failed"
     taxonomy = data["taxonomy_mapping"]
     known = {item["framework_id"] for item in taxonomy["frameworks"]}
     for mapping in taxonomy["mappings"]:
@@ -134,7 +135,6 @@ def semantic_checks(data: dict) -> None:
 def main() -> None:
     for key, value in FIX.items():
         validate_record(key, value)
-    assert verify_merkle(FIX["security_proof"]), "RFC 9162 proof verification failed"
     semantic_checks(FIX)
 
     negatives = []
