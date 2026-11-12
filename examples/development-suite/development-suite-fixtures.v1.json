@@ -515,7 +515,7 @@
         "_type": "https://in-toto.io/Statement/v1",
         "subject": [
           {
-            "name": "artifacts/synthetic-game.zip",
+            "name": "fixture-output.zip",
             "digest": {
               "sha256": "0123456789abcdef0123456789abcdef0123456789abcdef0123456789abcdef"
             }
@@ -524,54 +524,33 @@
         "predicateType": "https://slsa.dev/provenance/v1",
         "predicate": {
           "buildDefinition": {
-            "buildType": "https://universal.is/build-types/development-suite/v1",
+            "buildType": "https://universal.is/build-types/dev-suite/v1",
             "externalParameters": {
-              "project_id": "synthetic-game",
-              "source_revision": "1111111111111111111111111111111111111111",
-              "operation": "build"
+              "project": "fixture"
             },
-            "internalParameters": {
-              "engine": {
-                "name": "synthetic-engine",
-                "version": "1.0.0"
-              }
-            },
-            "resolvedDependencies": [
-              {
-                "uri": "git+https://example.invalid/synthetic-game@1111111111111111111111111111111111111111",
-                "digest": {
-                  "sha1": "1111111111111111111111111111111111111111"
-                }
-              }
-            ]
+            "internalParameters": {},
+            "resolvedDependencies": []
           },
           "runDetails": {
             "builder": {
-              "id": "https://example.invalid/universalis-fixture-builder"
+              "id": "https://example.invalid/builder"
             },
             "metadata": {
-              "invocationId": "urn:uuid:11111111-1111-4111-8111-111111111111",
+              "invocationId": "urn:uuid:00000000-0000-4000-8000-000000000001",
               "startedOn": "2026-11-12T10:00:00Z",
-              "finishedOn": "2026-11-12T10:02:00Z"
+              "finishedOn": "2026-11-12T10:01:00Z"
             },
-            "byproducts": [
-              {
-                "name": "test-report.json",
-                "digest": {
-                  "sha256": "abcdefabcdefabcdefabcdefabcdefabcdefabcdefabcdefabcdefabcdefabcd"
-                }
-              }
-            ]
+            "byproducts": []
           }
         }
       },
       "envelope": {
         "payloadType": "application/vnd.in-toto+json",
-        "payload": "eyJfdHlwZSI6Imh0dHBzOi8vaW4tdG90by5pby9TdGF0ZW1lbnQvdjEiLCJwcmVkaWNhdGUiOnsiYnVpbGREZWZpbml0aW9uIjp7ImJ1aWxkVHlwZSI6Imh0dHBzOi8vdW5pdmVyc2FsLmlzL2J1aWxkLXR5cGVzL2RldmVsb3BtZW50LXN1aXRlL3YxIiwiZXh0ZXJuYWxQYXJhbWV0ZXJzIjp7Im9wZXJhdGlvbiI6ImJ1aWxkIiwicHJvamVjdF9pZCI6InN5bnRoZXRpYy1nYW1lIiwic291cmNlX3JldmlzaW9uIjoiMTExMTExMTExMTExMTExMTExMTExMTExMTExMTExMTExMTExMTExMSJ9LCJpbnRlcm5hbFBhcmFtZXRlcnMiOnsiZW5naW5lIjp7Im5hbWUiOiJzeW50aGV0aWMtZW5naW5lIiwidmVyc2lvbiI6IjEuMC4wIn19LCJyZXNvbHZlZERlcGVuZGVuY2llcyI6W3siZGlnZXN0Ijp7InNoYTEiOiIxMTExMTExMTExMTExMTExMTExMTExMTExMTExMTExMTExMTExMTExIn0sInVyaSI6ImdpdCtodHRwczovL2V4YW1wbGUuaW52YWxpZC9zeW50aGV0aWMtZ2FtZUAxMTExMTExMTExMTExMTExMTExMTExMTExMTExMTExMTExMTExIn1dfSwicnVuRGV0YWlscyI6eyJidWlsZGVyIjp7ImlkIjoiaHR0cHM6Ly9leGFtcGxlLmludmFsaWQvdW5pdmVyc2FsaXMtZml4dHVyZS1idWlsZGVyIn0sImJ5cHJvZHVjdHMiOlt7ImRpZ2VzdCI6eyJzaGEyNTYiOiJhYmNkZWZhYmNkZWZhYmNkZWZhYmNkZWZhYmNkZWZhYmNkZWZhYmNkZWZhYmNkZWZhYmNkZWZhYmNkIn0sIm5hbWUiOiJ0ZXN0LXJlcG9ydC5qc29uIn1dLCJtZXRhZGF0YSI6eyJmaW5pc2hlZE9uIjoiMjAyNi0xMS0xMlQxMDowMjowMFoiLCJpbnZvY2F0aW9uSWQiOiJ1cm46dXVpZDoxMTExMTExMS0xMTExLTQxMTEtODExMS0xMTExMTExMTExMTEiLCJzdGFydGVkT24iOiIyMDI2LTExLTEyVDEwOjAwOjAwWiJ9fX0sInByZWRpY2F0ZVR5cGUiOiJodHRwczovL3Nsc2EuZGV2L3Byb3ZlbmFuY2UvdjEiLCJzdWJqZWN0IjpbeyJkaWdlc3QiOnsic2hhMjU2IjoiMDEyMzQ1Njc4OWFiY2RlZjAxMjM0NTY3ODlhYmNkZWYwMTIzNDU2Nzg5YWJjZGVmMDEyMzQ1Njc4OWFiY2RlZjAxMjM0NTY3ODlhYmNkZWYifSwibmFtZSI6ImFydGlmYWN0cy9zeW50aGV0aWMtZ2FtZS56aXAifV19",
+        "payload": "eyJfdHlwZSI6Imh0dHBzOi8vaW4tdG90by5pby9TdGF0ZW1lbnQvdjEiLCJwcmVkaWNhdGUiOnsiYnVpbGREZWZpbml0aW9uIjp7ImJ1aWxkVHlwZSI6Imh0dHBzOi8vdW5pdmVyc2FsLmlzL2J1aWxkLXR5cGVzL2Rldi1zdWl0ZS92MSIsImV4dGVybmFsUGFyYW1ldGVycyI6eyJwcm9qZWN0IjoiZml4dHVyZSJ9LCJpbnRlcm5hbFBhcmFtZXRlcnMiOnt9LCJyZXNvbHZlZERlcGVuZGVuY2llcyI6W119LCJydW5EZXRhaWxzIjp7ImJ1aWxkZXIiOnsiaWQiOiJodHRwczovL2V4YW1wbGUuaW52YWxpZC9idWlsZGVyIn0sImJ5cHJvZHVjdHMiOltdLCJtZXRhZGF0YSI6eyJmaW5pc2hlZE9uIjoiMjAyNi0xMS0xMlQxMDowMTowMFoiLCJpbnZvY2F0aW9uSWQiOiJ1cm46dXVpZDowMDAwMDAwMC0wMDAwLTQwMDAtODAwMC0wMDAwMDAwMDAwMDEiLCJzdGFydGVkT24iOiIyMDI2LTExLTEyVDEwOjAwOjAwWiJ9fX0sInByZWRpY2F0ZVR5cGUiOiJodHRwczovL3Nsc2EuZGV2L3Byb3ZlbmFuY2UvdjEiLCJzdWJqZWN0IjpbeyJkaWdlc3QiOnsic2hhMjU2IjoiMDEyMzQ1Njc4OWFiY2RlZjAxMjM0NTY3ODlhYmNkZWYwMTIzNDU2Nzg5YWJjZGVmIn0sIm5hbWUiOiJmaXh0dXJlLW91dHB1dC56aXAifV19",
         "signatures": [
           {
             "keyid": "urn:universal.is:fixture-ed25519-2026-11",
-            "sig": "b/M2k8NAE5cBtiFThEJ+/xFzDarL0yoXJtnbnD1KVTqQFBDGMph6cykG1psTf6mEdZAji4FEIMtAfyqtjaIDBA=="
+            "sig": "l+dpigKs4gsZIP1uQ2Nv5L/MPaj+JCXg+IfDTryFxaIVC2+ct1n9/tyZQAiQGHFGGgjhKkKdi+Al/Qn8ameUCQ=="
           }
         ]
       },
@@ -579,8 +558,8 @@
         "status": "verified",
         "verifier_id": "urn:universal.is:fixture-trust-store:v1",
         "keyid": "urn:universal.is:fixture-ed25519-2026-11",
-        "verified_at": "2026-11-12T10:03:00Z",
-        "public_key_sha256": "63c2fb862ede349e36131561b1993cc12581ed2a4ea07cb784055fbab6a53970"
+        "verified_at": "2026-11-12T10:02:00Z",
+        "public_key_sha256": "e5a5aa300817386c9539ebc46b215745f6409845f8d4d8fa14b64bb878580295"
       }
     }
   ]
