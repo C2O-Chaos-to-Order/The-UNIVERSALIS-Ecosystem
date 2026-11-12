@@ -109,3 +109,12 @@ See [open UNIVERSALIS development suite architecture](DEVELOPMENT_SUITE_ARCHITEC
 The public suite covers game, audio, 3D/CAD, video, XR, IDE/VCS, build/CI/CD, project management and documentation. It carries only portable public contracts, candidate descriptions, public specifications and synthetic fixtures. It does not contain C2O private authorization schemas, policies, credentials, identity state, permits, keys, operational evidence or project data. Third-party tools remain candidates pending source, license, security, data-flow, version and interoperability review.
 
 See the [UNIVERSALIS fourteen-inventory master toolchain coverage register](https://github.com/C2O-Chaos-to-Order/Research-for-the-UNIVERSALIS-Ecosystem/blob/implementation/repository-foundation-2026-11-12/TOOLCHAIN_COVERAGE_REGISTER.md).
+
+
+## Divergence detection and reconciliation — fifteenth owner-supplied source — 2026-11-12
+
+See [open UNIVERSALIS divergence architecture](DIVERGENCE_ARCHITECTURE.md), [portable divergence contracts](schemas/divergence/divergence-contracts.v1.schema.json), [synthetic fixtures](examples/divergence/divergence-fixtures.v1.json), and [validation record](DIVERGENCE_VALIDATION.md).
+
+This public layer covers behavioral, infrastructure, schema, policy, semantic/ontology, identity/federation, embedding/RAG, and resolution divergence. It carries sanitized report data, proposed behavioral axes and verifiable attribution receipts only. It does not contain private C2O baselines, incidents, authority decisions, credentials, permits, signer keys, policy clauses or operational data.
+
+See the [UNIVERSALIS fifteen-inventory master toolchain coverage register](https://github.com/C2O-Chaos-to-Order/Research-for-the-UNIVERSALIS-Ecosystem/blob/implementation/repository-foundation-2026-11-12/TOOLCHAIN_COVERAGE_REGISTER.md).
