@@ -72,7 +72,7 @@ Treat every third-party name in that register as a proposed candidate/reference 
 
 ## Master toolchain coverage register — 2026-11-12
 
-The current public inventory of twenty owner-supplied toolchain inventories is maintained in the UNIVERSALIS research register: https://github.com/C2O-Chaos-to-Order/Research-for-the-UNIVERSALIS-Ecosystem/blob/implementation/repository-foundation-2026-11-12/TOOLCHAIN_COVERAGE_REGISTER.md. It distinguishes documentation, basic contracts, passing CI, and actual integrations. This public register contains no links to C2O-private owner repositories or policy values.
+The current public inventory of twenty-three owner-supplied toolchain inventories is maintained in the UNIVERSALIS research register: https://github.com/C2O-Chaos-to-Order/Research-for-the-UNIVERSALIS-Ecosystem/blob/implementation/repository-foundation-2026-11-12/TOOLCHAIN_COVERAGE_REGISTER.md. It distinguishes documentation, basic contracts, passing CI, and actual integrations. This public register contains no links to C2O-private owner repositories or policy values.
 
 
 ## Security and cybersecurity — eleventh owner-supplied source — 2026-11-12
@@ -177,3 +177,9 @@ See the [UNIVERSALIS twenty-one-inventory master register](https://github.com/C2
 ## Simulation toolchain — twenty-second owner-supplied source — 2026-11-12
 
 See [open Simulation architecture](SIMULATION_ARCHITECTURE.md), [local validation record](SIMULATION_VALIDATION.md), and [portable simulation contracts](schemas/simulation/simulation-contracts.v1.schema.json). The public schema covers eight record families, including model/environment provenance, structured agent decisions, hash-chained trace, signed replay, uncertainty decision, critic verdict and external world-model validation. Fixtures are synthetic and contain no C2O-private data, authority, permits, identities or keys. Third-party candidates remain unadopted pending source/license/version, security, replay, numerical verification and empirical validation.
+
+## Eight-stratum capability ladder — twenty-third owner-supplied source — 2026-11-12
+
+See [open UNIVERSALIS Eight-Stratum Capability Architecture](STRATIFIED_CAPABILITY_ARCHITECTURE.md), [local validation record](STRATIFIED_CAPABILITY_VALIDATION.md), and [portable capability contracts](schemas/strata/stratified-capability-contracts.v1.schema.json).
+
+The eight strata are Base → Meta → Super → Hyper → Ultra → Magic → Quantum → Transformative. Fourteen portable record families classify components, protocol semantics, orchestration/lifecycle, proactive actions, code composition and signed receipts, model routes, generated-app provenance, quantum execution, robot-policy evaluation and sovereign-deployment evidence. The public fixture contains synthetic data and an ephemeral test verification key only. It contains no C2O-private policy, model, authority, permit, identity, key, telemetry or execution data. Third-party products remain candidates until their exact source/license/release, behavior and conformance are independently tested.
