@@ -57,3 +57,7 @@ Powers treat energy efficiency as a measurable, enforceable, auditable capacityâ
 - **Executed checks and limitations:** [Powers validation record](https://github.com/C2O-Chaos-to-Order/The-UNIVERSALIS-Intelligence-Powers/blob/implementation/repository-foundation-2026-11-12/POWERS_ENERGY_VALIDATION.md).
 
 The open implementation is local-first and independently operable. Measurement, forecasting, receipts, and synergy calculation do not require a central database or truth authority. It keeps actual workload telemetry and local policy in the operator's chosen environment. The shared contract excludes private credentials and policy values. PDU/RAPL/Kepler/GPU layers require overlap reconciliation; synergy comparisons require matched workload cohorts and SLO profiles. External tools and their advertised savings remain candidates until independently verified.
+
+## Architecture mapping and organization implementation
+
+See ARCHITECTURE_MAPPING_AND_ORGANIZATION.md for the full owner-supplied mapping, matrix, organization, repository-structure, and ecosystem-mapping inventory. The portable graph contract and synthetic fixture are in schemas/architecture/architecture-graph.v1.schema.json and examples/architecture/architecture-graph.json. Profile-specific policy remains C2O-private; UNIVERSALIS public graphs reject private/Controlled content. External tools remain candidates pending verification.
