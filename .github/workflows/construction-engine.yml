@@ -1,0 +1,23 @@
+name: Construction Engine
+on:
+  push:
+    paths:
+      - "construction_engine/**"
+      - ".github/workflows/construction-engine.yml"
+  pull_request:
+    paths:
+      - "construction_engine/**"
+      - ".github/workflows/construction-engine.yml"
+jobs:
+  test:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-python@v5
+        with:
+          python-version: "3.11"
+      - run: python -m unittest discover -s construction_engine/tests -v
+      - name: Build and verify example
+        run: |
+          python -m construction_engine build construction_engine/examples/hello-tool.json --output "$RUNNER_TEMP/c2o-build-example"
+          python -m construction_engine verify "$RUNNER_TEMP/c2o-build-example"
