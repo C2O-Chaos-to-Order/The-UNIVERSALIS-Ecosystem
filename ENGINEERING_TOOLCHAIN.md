@@ -144,7 +144,7 @@ See [open UNIVERSALIS convergence architecture](CONVERGENCE_ARCHITECTURE.md), [p
 
 The open convergence surface includes shared-intent contracts, satisfaction-bar certificates, typed negotiation transcripts, revision-fenced graph-merge plans, evidence-backed ontology alignment receipts, argumentation records and dispute outcomes. Unresolved, partial, dissenting and unmapped states remain first-class; no portable certificate itself authorizes execution or settlement. The public contract contains synthetic data only and no private resolution authority, preferences, keys, permits or operational records.
 
-See the [UNIVERSALIS twenty-inventory master register](https://github.com/C2O-Chaos-to-Order/Research-for-the-UNIVERSALIS-Ecosystem/blob/implementation/repository-foundation-2026-11-12/TOOLCHAIN_COVERAGE_REGISTER.md).
+See the [UNIVERSALIS twenty-one-inventory master register](https://github.com/C2O-Chaos-to-Order/Research-for-the-UNIVERSALIS-Ecosystem/blob/implementation/repository-foundation-2026-11-12/TOOLCHAIN_COVERAGE_REGISTER.md).
 
 
 ## Ascendence — nineteenth owner-supplied source — 2026-11-12
@@ -153,7 +153,7 @@ See [open UNIVERSALIS Ascendence architecture](ASCENDENCE_ARCHITECTURE.md), [por
 
 The open Ascendence surface defines a frozen promotion gate, autonomy ceiling, genome/mutation contract, paired evaluation evidence, subject-bound witness approval, admission card, parent-linked lineage event and Merkle memory/persona manifest. The model proposes; the substrate validates; the model does not self-certify. Protected purpose, identity, constitution, safety, evaluator, gate, authorization and rollback mechanisms are not candidate-mutable. Public contracts carry synthetic digests only, not C2O private policies, baselines, models, permits or memories.
 
-See the [UNIVERSALIS nineteen-inventory master register](https://github.com/C2O-Chaos-to-Order/Research-for-the-UNIVERSALIS-Ecosystem/blob/implementation/repository-foundation-2026-11-12/TOOLCHAIN_COVERAGE_REGISTER.md).
+See the [UNIVERSALIS twenty-one-inventory master register](https://github.com/C2O-Chaos-to-Order/Research-for-the-UNIVERSALIS-Ecosystem/blob/implementation/repository-foundation-2026-11-12/TOOLCHAIN_COVERAGE_REGISTER.md).
 
 
 ## Transcendence — twentieth owner-supplied source — 2026-11-12
@@ -162,4 +162,13 @@ See [open UNIVERSALIS Transcendence architecture](TRANSCENDENCE_ARCHITECTURE.md)
 
 The public layer defines operational identity capsules, memory manifests, independent behavioral-continuity evaluations, transfer proofs, distinct-identity succession attestations, subject-bound human witnesses, durable checkpoints, formal proof descriptors, corrigibility evidence and redacted execution-anchor attestations. A migration keeps the identity identifier; a successor generation receives a new one. Neither record transfers authority. Public records contain only synthetic digests and portable metadata, never C2O private identity anchors, policies, memory, keys or permits.
 
-See the [UNIVERSALIS twenty-inventory master register](https://github.com/C2O-Chaos-to-Order/Research-for-the-UNIVERSALIS-Ecosystem/blob/implementation/repository-foundation-2026-11-12/TOOLCHAIN_COVERAGE_REGISTER.md).
+See the [UNIVERSALIS twenty-one-inventory master register](https://github.com/C2O-Chaos-to-Order/Research-for-the-UNIVERSALIS-Ecosystem/blob/implementation/repository-foundation-2026-11-12/TOOLCHAIN_COVERAGE_REGISTER.md).
+
+
+## Prevention — twenty-first owner-supplied source — 2026-11-12
+
+See [open UNIVERSALIS Prevention architecture](PREVENTION_ARCHITECTURE.md), [portable Prevention contracts](schemas/prevention/prevention-contracts.v1.schema.json), [synthetic fixtures](examples/prevention/prevention-fixtures.v1.json), and [validation record](PREVENTION_VALIDATION.md).
+
+The public prevention surface defines harm-taxonomy mapping, immutable constitutional-floor profiles, signed pre-execution enforcement receipts, harm-reduction evaluations, red-team findings, containment attestations, safety-coverage records and privacy-minimized case escalation. Its evidence records residual risk, evaluator independence, false positives, untested surfaces and guard-outage behavior. The public contract has no C2O private policy, incident, signing key, hardware identity or authority permit.
+
+See the [UNIVERSALIS twenty-one-inventory master register](https://github.com/C2O-Chaos-to-Order/Research-for-the-UNIVERSALIS-Ecosystem/blob/implementation/repository-foundation-2026-11-12/TOOLCHAIN_COVERAGE_REGISTER.md).
