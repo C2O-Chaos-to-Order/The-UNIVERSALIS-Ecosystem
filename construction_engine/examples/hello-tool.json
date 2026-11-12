@@ -1,0 +1,17 @@
+{
+  "spec_version": "c2o-build-spec/v0.1",
+  "tool_id": "hello-tool",
+  "name": "Hello Tool",
+  "version": "0.1.0",
+  "target_ecosystem": "universalis",
+  "files": [
+    {
+      "path": "hello_tool/README.md",
+      "content": "# Hello Tool\n\nA generated example owned by the UNIVERSALIS ecosystem.\n"
+    },
+    {
+      "path": "hello_tool/__init__.py",
+      "content": "def hello(name: str = 'world') -> str:\n    return f'Hello, {name}!'\n"
+    }
+  ]
+}
