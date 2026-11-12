@@ -1,13 +1,7 @@
 name: Repository Verification
 
 on:
-  pull_request:
-    types: [opened, synchronize, reopened, ready_for_review]
-  push:
-    branches:
-      - verification/**
   workflow_dispatch:
-
 permissions:
   contents: read
 
