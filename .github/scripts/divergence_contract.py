@@ -12,8 +12,8 @@ ROOT = Path(__file__).resolve().parents[2]
 SCHEMA_PATH = ROOT / "schemas/divergence/divergence-contracts.v1.schema.json"
 FIXTURE_PATH = ROOT / "examples/divergence/divergence-fixtures.v1.json"
 KEY_ID = "urn:universal-is:development-divergence-fixture-ed25519-v1"
-PUBLIC_KEY = base64.b64decode("GDg9xodG/+f5kttZylZAw+tcHmRQa5CGSx9cUlgoIt4=")
-PUBLIC_KEY_SHA256 = "8e811e90a2db78a863f1dc4a75473ed4190b46313f7ca3aa711376e791d8b37c"
+PUBLIC_KEY = base64.b64decode("cVXC8a0oelLSgFPJ0ho8xZ4ETp0TnUSRKc3GqTK7DYE=")
+PUBLIC_KEY_SHA256 = "4621b71d394077be6192cb584444e1559d7e0e71769122079937d3f82c7fcdf7"
 
 def canonical_json(value: object) -> bytes:
     return json.dumps(value, sort_keys=True, separators=(",", ":"), ensure_ascii=False).encode("utf-8")
