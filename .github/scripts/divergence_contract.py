@@ -6,7 +6,7 @@ from datetime import datetime
 from pathlib import Path
 from cryptography.exceptions import InvalidSignature
 from cryptography.hazmat.primitives.asymmetric.ed25519 import Ed25519PublicKey
-from jsonschema import Draft202012Validator, FormatChecker
+from jsonschema import Draft202012Validator, FormatChecker, ValidationError
 
 ROOT = Path(__file__).resolve().parents[2]
 SCHEMA_PATH = ROOT / "schemas/divergence/divergence-contracts.v1.schema.json"
@@ -145,7 +145,7 @@ def main() -> None:
     tests.append(("verification predates observation",lambda: verify_receipt(item,reports)))
     for name,fn in tests:
         try: fn()
-        except (ValueError,KeyError,TypeError): continue
+        except (ValueError,KeyError,TypeError,ValidationError): continue
         raise AssertionError("negative test unexpectedly passed: "+name)
     print(f"PASS: {len(axes)} behavioral axes; {len(reports)} domain reports; {len(data['attribution_receipts'])} signed attribution receipt; {len(tests)} negative tests.")
 
