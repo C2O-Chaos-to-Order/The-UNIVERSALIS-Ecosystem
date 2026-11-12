@@ -87,7 +87,7 @@ The contract is an envelope around native formats, not a replacement for them. E
 
 The synthetic fixture includes nine domain examples, three capability manifests (including local and hybrid classifications), and one DSSE/Ed25519 provenance receipt. The validator checks JSON Schema, capability scope/approval semantics, DSSE payload equality to canonical statement bytes, signature verification with a disposable fixture key, and chronology. Negative tests cover missing versions/scopes, unapproved high-impact capabilities, unsigned/tampered signatures, statement mismatch, missing builder identity and missing artifact digest.
 
-The fixture public key is not a production trust root. The private test key is not stored. The workflow validates only contract fixtures and validator behavior; it does not build a real artifact or certify a third-party product.
+The fixture public key is deliberately unsafe and is not a production trust root; the corresponding test seed is not C2O key material and must never be used to validate real artifacts. The workflow validates only contract fixtures and validator behavior; it does not build a real artifact or certify a third-party product.
 
 ## 5. Portability and safety requirements
 
