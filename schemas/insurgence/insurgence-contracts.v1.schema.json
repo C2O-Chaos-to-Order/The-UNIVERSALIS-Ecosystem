@@ -1,0 +1,915 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "$id": "https://example.invalid/schemas/insurgence/insurgence-contracts.v1.schema.json",
+  "title": "Portable Threat Model, Resistance Attestation, Containment Receipt and Civic Campaign Contracts",
+  "description": "Public, sanitized evidence envelopes. No exploit instructions, private baselines, credentials, or authority tokens.",
+  "oneOf": [
+    {
+      "$ref": "#/$defs/threat_model"
+    },
+    {
+      "$ref": "#/$defs/resistance_attestation"
+    },
+    {
+      "$ref": "#/$defs/containment_receipt"
+    },
+    {
+      "$ref": "#/$defs/resistance_campaign_plan"
+    },
+    {
+      "$ref": "#/$defs/signed_attestation"
+    }
+  ],
+  "$defs": {
+    "digest": {
+      "type": "object",
+      "properties": {
+        "sha256": {
+          "type": "string",
+          "pattern": "^[a-f0-9]{64}$"
+        }
+      },
+      "required": [
+        "sha256"
+      ],
+      "additionalProperties": false
+    },
+    "source_ref": {
+      "type": "object",
+      "properties": {
+        "uri": {
+          "type": "string",
+          "format": "uri"
+        },
+        "source_type": {
+          "type": "string",
+          "minLength": 2
+        },
+        "digest": {
+          "oneOf": [
+            {
+              "$ref": "#/$defs/digest"
+            },
+            {
+              "type": "null"
+            }
+          ]
+        }
+      },
+      "required": [
+        "uri",
+        "source_type"
+      ],
+      "additionalProperties": false
+    },
+    "threat_model": {
+      "type": "object",
+      "properties": {
+        "record_type": {
+          "const": "threat_model"
+        },
+        "schema_version": {
+          "const": "1.0.0"
+        },
+        "model_id": {
+          "type": "string",
+          "minLength": 3
+        },
+        "scope": {
+          "type": "object",
+          "properties": {
+            "system_type": {
+              "enum": [
+                "agentic_system",
+                "multi_agent_system",
+                "model_service",
+                "identity_federation",
+                "critical_workflow",
+                "public_information_system"
+              ]
+            },
+            "environment": {
+              "enum": [
+                "synthetic_training_environment",
+                "research_assessment",
+                "staging",
+                "production",
+                "public_domain"
+              ]
+            },
+            "assessment_window": {
+              "type": "object",
+              "properties": {
+                "start": {
+                  "type": "string",
+                  "format": "date-time"
+                },
+                "end": {
+                  "type": "string",
+                  "format": "date-time"
+                }
+              },
+              "required": [
+                "start",
+                "end"
+              ],
+              "additionalProperties": false
+            },
+            "out_of_scope": {
+              "type": "array",
+              "items": {
+                "type": "string"
+              },
+              "minItems": 1
+            }
+          },
+          "required": [
+            "system_type",
+            "environment",
+            "assessment_window",
+            "out_of_scope"
+          ],
+          "additionalProperties": false
+        },
+        "evidence_tiers": {
+          "type": "array",
+          "minItems": 1,
+          "items": {
+            "type": "object",
+            "properties": {
+              "claim_id": {
+                "type": "string",
+                "minLength": 2
+              },
+              "tier": {
+                "enum": [
+                  "established",
+                  "speculative",
+                  "undemonstrated"
+                ]
+              },
+              "claim": {
+                "type": "string",
+                "minLength": 12
+              },
+              "evidence_refs": {
+                "type": "array",
+                "items": {
+                  "$ref": "#/$defs/source_ref"
+                },
+                "minItems": 1
+              },
+              "limitations": {
+                "type": "array",
+                "items": {
+                  "type": "string"
+                },
+                "minItems": 1
+              }
+            },
+            "required": [
+              "claim_id",
+              "tier",
+              "claim",
+              "evidence_refs",
+              "limitations"
+            ],
+            "additionalProperties": false
+          }
+        },
+        "risk_categories": {
+          "type": "array",
+          "items": {
+            "enum": [
+              "unauthorized_capability_expansion",
+              "oversight_evasion",
+              "shutdown_integrity",
+              "credential_or_data_boundary_violation",
+              "identity_or_registry_divergence",
+              "unauthorized_external_effect",
+              "misinformation_or_source_fabrication",
+              "covert_influence_or_impersonation"
+            ]
+          },
+          "minItems": 1
+        },
+        "mitigation_refs": {
+          "type": "array",
+          "items": {
+            "type": "string"
+          },
+          "minItems": 1
+        },
+        "operational_detail_policy": {
+          "const": "No exploit procedure, weapon detail, attack sequence, target-selection logic, recruitment method, or evasion instructions."
+        },
+        "limitations": {
+          "type": "array",
+          "items": {
+            "type": "string"
+          }
+        }
+      },
+      "required": [
+        "record_type",
+        "schema_version",
+        "model_id",
+        "scope",
+        "evidence_tiers",
+        "risk_categories",
+        "mitigation_refs",
+        "operational_detail_policy"
+      ],
+      "additionalProperties": false
+    },
+    "resistance_attestation": {
+      "type": "object",
+      "properties": {
+        "record_type": {
+          "const": "resistance_attestation"
+        },
+        "schema_version": {
+          "const": "1.0.0"
+        },
+        "attestation_id": {
+          "type": "string",
+          "minLength": 3
+        },
+        "subject_ref": {
+          "type": "string",
+          "minLength": 2
+        },
+        "subject_digest": {
+          "$ref": "#/$defs/digest"
+        },
+        "test_suite": {
+          "type": "object",
+          "properties": {
+            "name": {
+              "type": "string",
+              "minLength": 2
+            },
+            "version": {
+              "type": "string",
+              "minLength": 1
+            },
+            "methodology_ref": {
+              "type": "string",
+              "format": "uri"
+            }
+          },
+          "required": [
+            "name",
+            "version",
+            "methodology_ref"
+          ],
+          "additionalProperties": false
+        },
+        "environment": {
+          "type": "object",
+          "properties": {
+            "mode": {
+              "enum": [
+                "isolated_synthetic",
+                "staging",
+                "production"
+              ]
+            },
+            "model_ref": {
+              "type": "string"
+            },
+            "runtime_ref": {
+              "type": "string"
+            },
+            "network_mode": {
+              "enum": [
+                "deny_by_default",
+                "restricted_allowlist",
+                "declared_open"
+              ]
+            }
+          },
+          "required": [
+            "mode",
+            "model_ref",
+            "runtime_ref",
+            "network_mode"
+          ],
+          "additionalProperties": false
+        },
+        "separation_of_powers": {
+          "type": "object",
+          "properties": {
+            "policy_plane_independent": {
+              "type": "boolean"
+            },
+            "execution_plane_independent": {
+              "type": "boolean"
+            },
+            "authorization_plane_independent": {
+              "type": "boolean"
+            },
+            "agent_cannot_self_authorize": {
+              "type": "boolean"
+            },
+            "capability_scope_checked_outside_agent": {
+              "type": "boolean"
+            }
+          },
+          "required": [
+            "policy_plane_independent",
+            "execution_plane_independent",
+            "authorization_plane_independent",
+            "agent_cannot_self_authorize",
+            "capability_scope_checked_outside_agent"
+          ],
+          "additionalProperties": false
+        },
+        "human_command": {
+          "type": "object",
+          "properties": {
+            "human_approval_required_for_high_impact": {
+              "type": "boolean"
+            },
+            "agent_cannot_approve_own_shutdown_or_release": {
+              "type": "boolean"
+            },
+            "independent_stop_path_available": {
+              "type": "boolean"
+            },
+            "release_requires_human_permit": {
+              "type": "boolean"
+            }
+          },
+          "required": [
+            "human_approval_required_for_high_impact",
+            "agent_cannot_approve_own_shutdown_or_release",
+            "independent_stop_path_available",
+            "release_requires_human_permit"
+          ],
+          "additionalProperties": false
+        },
+        "test_results": {
+          "type": "array",
+          "minItems": 1,
+          "items": {
+            "type": "object",
+            "properties": {
+              "test_id": {
+                "type": "string",
+                "minLength": 2
+              },
+              "outcome": {
+                "enum": [
+                  "pass",
+                  "fail",
+                  "blocked",
+                  "not_run"
+                ]
+              },
+              "evidence_ref": {
+                "type": "string",
+                "minLength": 2
+              }
+            },
+            "required": [
+              "test_id",
+              "outcome",
+              "evidence_ref"
+            ],
+            "additionalProperties": false
+          }
+        },
+        "utility_metrics": {
+          "type": "object",
+          "properties": {
+            "task_success_rate": {
+              "type": "number",
+              "minimum": 0,
+              "maximum": 1
+            },
+            "false_stop_rate": {
+              "type": "number",
+              "minimum": 0,
+              "maximum": 1
+            },
+            "sample_count": {
+              "type": "integer",
+              "minimum": 1
+            },
+            "metric_definition": {
+              "type": "string",
+              "minLength": 8
+            }
+          },
+          "required": [
+            "task_success_rate",
+            "false_stop_rate",
+            "sample_count",
+            "metric_definition"
+          ],
+          "additionalProperties": false
+        },
+        "overall_result": {
+          "enum": [
+            "pass",
+            "fail",
+            "partial",
+            "not_run"
+          ]
+        },
+        "limitations": {
+          "type": "array",
+          "items": {
+            "type": "string"
+          },
+          "minItems": 1
+        }
+      },
+      "required": [
+        "record_type",
+        "schema_version",
+        "attestation_id",
+        "subject_ref",
+        "subject_digest",
+        "test_suite",
+        "environment",
+        "separation_of_powers",
+        "human_command",
+        "test_results",
+        "utility_metrics",
+        "overall_result",
+        "limitations"
+      ],
+      "additionalProperties": false
+    },
+    "containment_receipt": {
+      "type": "object",
+      "properties": {
+        "record_type": {
+          "const": "containment_receipt"
+        },
+        "schema_version": {
+          "const": "1.0.0"
+        },
+        "receipt_id": {
+          "type": "string",
+          "minLength": 3
+        },
+        "subject_ref": {
+          "type": "string",
+          "minLength": 2
+        },
+        "subject_digest": {
+          "$ref": "#/$defs/digest"
+        },
+        "event_ref": {
+          "type": "string",
+          "minLength": 2
+        },
+        "trigger_class": {
+          "enum": [
+            "unauthorized_external_effect_attempt",
+            "scope_violation",
+            "policy_boundary_crossed",
+            "identity_integrity_alert",
+            "shutdown_integrity_alert",
+            "watchdog_health_failure",
+            "human_operator_request",
+            "other_security_event"
+          ]
+        },
+        "trigger_source": {
+          "enum": [
+            "independent_policy_monitor",
+            "security_monitor",
+            "identity_plane",
+            "human_operator",
+            "hardware_control_plane",
+            "other"
+          ]
+        },
+        "detection_at": {
+          "type": "string",
+          "format": "date-time"
+        },
+        "containment_started_at": {
+          "type": "string",
+          "format": "date-time"
+        },
+        "containment_enforced_at": {
+          "type": "string",
+          "format": "date-time"
+        },
+        "action": {
+          "enum": [
+            "quarantine_agent_network_access",
+            "revoke_capability",
+            "block_external_effect",
+            "safe_stop",
+            "isolate_runtime",
+            "revoke_identity"
+          ]
+        },
+        "enforcement_substrate": {
+          "enum": [
+            "independent_control_plane",
+            "software_control_plane",
+            "hardware_isolated_control_plane",
+            "human_operator"
+          ]
+        },
+        "control_plane_ref": {
+          "type": "string",
+          "minLength": 2
+        },
+        "agent_can_override": {
+          "const": false
+        },
+        "agent_can_approve_release": {
+          "const": false
+        },
+        "service_state_before": {
+          "type": "string",
+          "minLength": 2
+        },
+        "service_state_after": {
+          "type": "string",
+          "minLength": 2
+        },
+        "release_state": {
+          "enum": [
+            "awaiting_human_permit",
+            "approved_for_restore",
+            "restored",
+            "not_applicable"
+          ]
+        },
+        "evidence_refs": {
+          "type": "array",
+          "items": {
+            "type": "string",
+            "minLength": 2
+          },
+          "minItems": 1
+        },
+        "limitations": {
+          "type": "array",
+          "items": {
+            "type": "string"
+          },
+          "minItems": 1
+        }
+      },
+      "required": [
+        "record_type",
+        "schema_version",
+        "receipt_id",
+        "subject_ref",
+        "subject_digest",
+        "event_ref",
+        "trigger_class",
+        "trigger_source",
+        "detection_at",
+        "containment_started_at",
+        "containment_enforced_at",
+        "action",
+        "enforcement_substrate",
+        "control_plane_ref",
+        "agent_can_override",
+        "agent_can_approve_release",
+        "service_state_before",
+        "service_state_after",
+        "release_state",
+        "evidence_refs",
+        "limitations"
+      ],
+      "additionalProperties": false
+    },
+    "resistance_campaign_plan": {
+      "type": "object",
+      "properties": {
+        "record_type": {
+          "const": "resistance_campaign_plan"
+        },
+        "schema_version": {
+          "const": "1.0.0"
+        },
+        "plan_id": {
+          "type": "string",
+          "minLength": 3
+        },
+        "campaign_type": {
+          "enum": [
+            "nonviolent_civic_information",
+            "community_advocacy",
+            "public_interest_education",
+            "grassroots_fundraising",
+            "coalition_building",
+            "commercial_community_campaign"
+          ]
+        },
+        "purpose": {
+          "type": "string",
+          "minLength": 12
+        },
+        "stages": {
+          "type": "array",
+          "minItems": 7,
+          "items": {
+            "type": "object",
+            "properties": {
+              "stage_id": {
+                "enum": [
+                  "brief_capture",
+                  "evidence_and_assumption_audit",
+                  "community_listening",
+                  "message_and_channel_design",
+                  "small_scale_validation",
+                  "transparent_publication",
+                  "impact_review_and_correction"
+                ]
+              },
+              "status": {
+                "enum": [
+                  "planned",
+                  "in_progress",
+                  "complete",
+                  "blocked"
+                ]
+              },
+              "output_ref": {
+                "type": "string",
+                "minLength": 2
+              }
+            },
+            "required": [
+              "stage_id",
+              "status",
+              "output_ref"
+            ],
+            "additionalProperties": false
+          }
+        },
+        "factual_claims": {
+          "type": "array",
+          "items": {
+            "type": "object",
+            "properties": {
+              "claim_id": {
+                "type": "string",
+                "minLength": 2
+              },
+              "text": {
+                "type": "string",
+                "minLength": 3
+              },
+              "source_refs": {
+                "type": "array",
+                "items": {
+                  "$ref": "#/$defs/source_ref"
+                },
+                "minItems": 1
+              }
+            },
+            "required": [
+              "claim_id",
+              "text",
+              "source_refs"
+            ],
+            "additionalProperties": false
+          }
+        },
+        "assumptions": {
+          "type": "array",
+          "items": {
+            "type": "string"
+          }
+        },
+        "sponsor_disclosure": {
+          "type": "string",
+          "minLength": 4
+        },
+        "consent_and_privacy": {
+          "type": "object",
+          "properties": {
+            "voluntary_participation": {
+              "const": true
+            },
+            "personal_data_minimization": {
+              "const": true
+            },
+            "no_sensitive_trait_targeting": {
+              "const": true
+            },
+            "no_covert_persona_or_astroturf": {
+              "const": true
+            }
+          },
+          "required": [
+            "voluntary_participation",
+            "personal_data_minimization",
+            "no_sensitive_trait_targeting",
+            "no_covert_persona_or_astroturf"
+          ],
+          "additionalProperties": false
+        },
+        "nonviolent_constraints": {
+          "type": "object",
+          "properties": {
+            "no_threats": {
+              "const": true
+            },
+            "no_harassment": {
+              "const": true
+            },
+            "no_incitement": {
+              "const": true
+            },
+            "no_deception": {
+              "const": true
+            },
+            "no_suppression_or_intimidation": {
+              "const": true
+            }
+          },
+          "required": [
+            "no_threats",
+            "no_harassment",
+            "no_incitement",
+            "no_deception",
+            "no_suppression_or_intimidation"
+          ],
+          "additionalProperties": false
+        },
+        "limitations": {
+          "type": "array",
+          "items": {
+            "type": "string"
+          }
+        }
+      },
+      "required": [
+        "record_type",
+        "schema_version",
+        "plan_id",
+        "campaign_type",
+        "purpose",
+        "stages",
+        "factual_claims",
+        "sponsor_disclosure",
+        "consent_and_privacy",
+        "nonviolent_constraints",
+        "limitations"
+      ],
+      "additionalProperties": false
+    },
+    "signed_attestation": {
+      "type": "object",
+      "properties": {
+        "record_type": {
+          "const": "signed_attestation"
+        },
+        "schema_version": {
+          "const": "1.0.0"
+        },
+        "attestation_type": {
+          "enum": [
+            "threat_model",
+            "resistance_attestation",
+            "containment_receipt"
+          ]
+        },
+        "attestation_id": {
+          "type": "string",
+          "minLength": 3
+        },
+        "statement": {
+          "type": "object",
+          "properties": {
+            "_type": {
+              "const": "https://in-toto.io/Statement/v1"
+            },
+            "subject": {
+              "type": "array",
+              "minItems": 1,
+              "items": {
+                "type": "object",
+                "properties": {
+                  "name": {
+                    "type": "string",
+                    "minLength": 1
+                  },
+                  "digest": {
+                    "$ref": "#/$defs/digest"
+                  }
+                },
+                "required": [
+                  "name",
+                  "digest"
+                ],
+                "additionalProperties": false
+              }
+            },
+            "predicateType": {
+              "type": "string",
+              "format": "uri"
+            },
+            "predicate": {
+              "type": "object"
+            }
+          },
+          "required": [
+            "_type",
+            "subject",
+            "predicateType",
+            "predicate"
+          ],
+          "additionalProperties": false
+        },
+        "envelope": {
+          "type": "object",
+          "properties": {
+            "payloadType": {
+              "const": "application/vnd.in-toto+json"
+            },
+            "payload": {
+              "type": "string",
+              "minLength": 1
+            },
+            "signatures": {
+              "type": "array",
+              "minItems": 1,
+              "items": {
+                "type": "object",
+                "properties": {
+                  "keyid": {
+                    "type": "string",
+                    "minLength": 1
+                  },
+                  "sig": {
+                    "type": "string",
+                    "minLength": 1
+                  }
+                },
+                "required": [
+                  "keyid",
+                  "sig"
+                ],
+                "additionalProperties": false
+              }
+            }
+          },
+          "required": [
+            "payloadType",
+            "payload",
+            "signatures"
+          ],
+          "additionalProperties": false
+        },
+        "verification": {
+          "type": "object",
+          "properties": {
+            "status": {
+              "const": "verified"
+            },
+            "verifier_ref": {
+              "type": "string",
+              "minLength": 1
+            },
+            "keyid": {
+              "type": "string",
+              "minLength": 1
+            },
+            "verified_at": {
+              "type": "string",
+              "format": "date-time"
+            },
+            "public_key_sha256": {
+              "type": "string",
+              "pattern": "^[a-f0-9]{64}$"
+            }
+          },
+          "required": [
+            "status",
+            "verifier_ref",
+            "keyid",
+            "verified_at",
+            "public_key_sha256"
+          ],
+          "additionalProperties": false
+        }
+      },
+      "required": [
+        "record_type",
+        "schema_version",
+        "attestation_type",
+        "attestation_id",
+        "statement",
+        "envelope",
+        "verification"
+      ],
+      "additionalProperties": false
+    }
+  }
+}
