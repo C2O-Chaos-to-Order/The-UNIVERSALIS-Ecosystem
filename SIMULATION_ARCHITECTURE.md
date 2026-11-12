@@ -51,3 +51,7 @@ Only generic schemas, local validators, synthetic fixtures and public candidate 
 ## 5. Non-claims
 
 No third-party package was installed, no candidate simulator invoked and no live MCP server connected. No physical, industrial, social-policy, safety-critical or engineering-design simulation was performed. The portable schema is a proposal, not an industry standard or certification.
+
+
+### Source-identity and compatibility caveat
+The owner-supplied CAEL `SimulationContract.ts` / `CAELTrace.ts` geometry-hash and replay primitives were not pinned to an authoritative canonical upstream repository and release in this review. The implemented v1 JSON Schema is therefore a newly authored, language-neutral portable contract with analogous digest/provenance/replay semantics; it is not asserted to be wire-compatible with CAEL or to contain CAEL code. Likewise, the portable `agent_decision` record is a proposed generic interchange record, not a verified drop-in AgoraSim decision-object schema. Exact AgoraSim source/API compatibility remains unverified.
