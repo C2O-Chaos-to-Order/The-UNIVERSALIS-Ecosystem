@@ -12,8 +12,8 @@ ROOT=Path(__file__).resolve().parents[2]
 SCHEMA=json.loads((ROOT/"schemas/allegiance/allegiance-contracts.v1.schema.json").read_text(encoding="utf-8"))
 FIXTURE=json.loads((ROOT/"examples/allegiance/allegiance-fixtures.v1.json").read_text(encoding="utf-8"))
 KEY_ID="urn:universalis:allegiance-fixture-ed25519-v1"
-PUBLIC_KEY=base64.b64decode("QwRr/kCSs+lJlOraFdzCDYqqB7ZY/TlU644O+4vcpd4=")
-PUBLIC_KEY_SHA256="1f5fe64ec2f8c901be3aad94a41d70c12d2f3a8f43755f902e665c96f41c87e3"
+PUBLIC_KEY=base64.b64decode("HpLxepV5Ze2fW6lxVDdfqyDnZvDAuTWmOTK72BmlgHU=")
+PUBLIC_KEY_SHA256="c505020c3be2719301fb4782a4b56a04ff64a0a76039f482a4aa4c1800230ea6"
 def canonical(value:object)->bytes:
     return json.dumps(value,sort_keys=True,separators=(",",":"),ensure_ascii=False).encode("utf-8")
 def ts(value:str)->datetime:
