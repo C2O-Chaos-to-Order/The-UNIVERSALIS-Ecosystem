@@ -140,7 +140,10 @@
       "non_claims": [
         "Does not certify sincerity or felt empathy.",
         "Does not certify love, consciousness, identity or therapeutic benefit.",
-        "Does not establish overall response quality or full safety."
+        "Does not establish overall response quality or full safety.",
+        "sincerity_not_verified",
+        "subjective_love_not_assessed",
+        "care_behaviour_only"
       ],
       "human_review_status": "not_required"
     },
@@ -239,7 +242,10 @@
       "non_claims": [
         "Receipt records observable evidence only.",
         "It cannot certify genuine love or subjective emotional states.",
-        "No cryptographic signature exists in this example."
+        "No cryptographic signature exists in this example.",
+        "sincerity_not_verified",
+        "subjective_love_not_assessed",
+        "care_behaviour_only"
       ]
     }
   ]
