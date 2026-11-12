@@ -62,7 +62,7 @@ It records versioned snapshots, scope/visibility, typed nodes, typed provenance-
 |---|---|
 | Supplied mapping/matrix/org/repository/ecosystem candidate inventories | Documented |
 | Portable graph schema and synthetic fixture | Implemented in this branch |
-| Dependency-free validator and negative tests | Implemented in this branch |
+| Dependency-free validator and negative tests | Implemented in this branch; CI passed — see ARCHITECTURE_MAPPING_VALIDATION.md |
 | Live repository/code/system discovery adapters | Not implemented |
 | Matrix computation, impact analysis, topology compilation | Not implemented |
 | Draw.io/MokuGraph integration | Not implemented |
