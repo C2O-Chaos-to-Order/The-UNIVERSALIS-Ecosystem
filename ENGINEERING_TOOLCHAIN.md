@@ -43,3 +43,7 @@ Verify canonical source, license, maintainer, release activity, security, compat
 | GitHub Actions execution | Pending |
 | Domain candidate verification | Pending |
 | Specialized integration | Not yet implemented |
+
+## OS provisioning and Golden Compass architecture
+
+See `OS_PROVISIONING_ARCHITECTURE.md` for the open, independently operable virtualization stack, runtime-selection rules, and guest conformance sequence. See `UNIVERSALIN_GUARDIAN_GOLDEN_COMPASS.md` for the non-personal grid, Guardian layers, and decentralized provenance/verification protocol. Tool names are owner-supplied candidates pending source, license, security, and compatibility review.
