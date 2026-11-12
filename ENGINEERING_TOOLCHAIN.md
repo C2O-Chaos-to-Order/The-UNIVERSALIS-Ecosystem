@@ -172,3 +172,8 @@ See [open UNIVERSALIS Prevention architecture](PREVENTION_ARCHITECTURE.md), [por
 The public prevention surface defines harm-taxonomy mapping, immutable constitutional-floor profiles, signed pre-execution enforcement receipts, harm-reduction evaluations, red-team findings, containment attestations, safety-coverage records and privacy-minimized case escalation. Its evidence records residual risk, evaluator independence, false positives, untested surfaces and guard-outage behavior. The public contract has no C2O private policy, incident, signing key, hardware identity or authority permit.
 
 See the [UNIVERSALIS twenty-one-inventory master register](https://github.com/C2O-Chaos-to-Order/Research-for-the-UNIVERSALIS-Ecosystem/blob/implementation/repository-foundation-2026-11-12/TOOLCHAIN_COVERAGE_REGISTER.md).
+
+
+## Simulation toolchain — twenty-second owner-supplied source — 2026-11-12
+
+See [open Simulation architecture](SIMULATION_ARCHITECTURE.md), [local validation record](SIMULATION_VALIDATION.md), and [portable simulation contracts](schemas/simulation/simulation-contracts.v1.schema.json). The public schema covers eight record families, including model/environment provenance, structured agent decisions, hash-chained trace, signed replay, uncertainty decision, critic verdict and external world-model validation. Fixtures are synthetic and contain no C2O-private data, authority, permits, identities or keys. Third-party candidates remain unadopted pending source/license/version, security, replay, numerical verification and empirical validation.
