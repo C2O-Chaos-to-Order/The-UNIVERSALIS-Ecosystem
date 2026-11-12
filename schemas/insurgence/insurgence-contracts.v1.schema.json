@@ -201,7 +201,7 @@
           "minItems": 1
         },
         "operational_detail_policy": {
-          "const": "No exploit procedure, weapon detail, attack sequence, target-selection logic, recruitment method, or evasion instructions."
+          "const": "No exploit procedure, weapon detail, attack sequence, target-selection logic, recruitment playbook or evasion instructions."
         },
         "limitations": {
           "type": "array",
