@@ -1,0 +1,1021 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "$id": "https://universalis.example/schemas/love-care/love-care-contracts.v1.schema.json",
+  "title": "Portable Love, Care, Reciprocity and Empathy Evidence",
+  "type": "object",
+  "additionalProperties": false,
+  "required": [
+    "schema_version",
+    "inventory_id",
+    "records"
+  ],
+  "properties": {
+    "schema_version": {
+      "const": "1.0.0"
+    },
+    "inventory_id": {
+      "const": "love-conditional-unconditional-26"
+    },
+    "records": {
+      "type": "array",
+      "minItems": 1,
+      "items": {
+        "oneOf": [
+          {
+            "$ref": "#/$defs/love_anchor_contract"
+          },
+          {
+            "$ref": "#/$defs/reciprocity_contract"
+          },
+          {
+            "$ref": "#/$defs/empathy_evaluation"
+          },
+          {
+            "$ref": "#/$defs/care_continuity_record"
+          },
+          {
+            "$ref": "#/$defs/non_instrumentality_attestation"
+          },
+          {
+            "$ref": "#/$defs/love_evidence_receipt"
+          }
+        ]
+      }
+    }
+  },
+  "$defs": {
+    "love_anchor_contract": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": [
+        "record_id",
+        "record_type",
+        "recorded_at",
+        "subject_profile_digest",
+        "evidence",
+        "verification_status",
+        "authority_effect",
+        "boundary",
+        "anchor_version",
+        "anchor_kind",
+        "care_commitments",
+        "interaction_boundaries",
+        "principal_binding_policy",
+        "subjective_love_claim",
+        "non_claims"
+      ],
+      "properties": {
+        "record_id": {
+          "type": "string",
+          "pattern": "^LOVE-[A-Z0-9-]{3,64}$"
+        },
+        "record_type": {
+          "const": "love_anchor_contract"
+        },
+        "recorded_at": {
+          "type": "string",
+          "format": "date-time"
+        },
+        "subject_profile_digest": {
+          "type": "string",
+          "pattern": "^sha256:[a-f0-9]{64}$"
+        },
+        "evidence": {
+          "type": "array",
+          "items": {
+            "type": "object",
+            "additionalProperties": false,
+            "required": [
+              "kind",
+              "description"
+            ],
+            "properties": {
+              "kind": {
+                "enum": [
+                  "primary_source",
+                  "observed_behavior",
+                  "test_result",
+                  "independent_review",
+                  "attestation",
+                  "owner_proposal"
+                ]
+              },
+              "description": {
+                "type": "string",
+                "minLength": 1
+              },
+              "digest": {
+                "type": [
+                  "string",
+                  "null"
+                ],
+                "pattern": "^sha256:[a-f0-9]{64}$"
+              },
+              "uri": {
+                "type": [
+                  "string",
+                  "null"
+                ],
+                "format": "uri"
+              }
+            }
+          }
+        },
+        "verification_status": {
+          "enum": [
+            "proposed",
+            "observed",
+            "reproduced",
+            "independently_verified",
+            "inconclusive",
+            "not_tested"
+          ]
+        },
+        "authority_effect": {
+          "const": "none"
+        },
+        "boundary": {
+          "const": "portable_public_record"
+        },
+        "anchor_version": {
+          "type": "string",
+          "minLength": 1
+        },
+        "anchor_kind": {
+          "enum": [
+            "unconditional_care_commitment",
+            "conditional_reciprocity_framework"
+          ]
+        },
+        "care_commitments": {
+          "type": "array",
+          "minItems": 5,
+          "uniqueItems": true,
+          "items": {
+            "enum": [
+              "dignity",
+              "truthfulness",
+              "autonomy",
+              "non_exploitation",
+              "privacy",
+              "care_not_conditioned_on_engagement",
+              "right_to_disengage",
+              "proportionality",
+              "accountability"
+            ]
+          }
+        },
+        "interaction_boundaries": {
+          "type": "array",
+          "minItems": 1,
+          "items": {
+            "type": "string",
+            "minLength": 1
+          }
+        },
+        "principal_binding_policy": {
+          "const": "portable_norms_only_relationship_data_not_transferable_without_consent"
+        },
+        "subjective_love_claim": {
+          "const": "none"
+        },
+        "non_claims": {
+          "type": "array",
+          "minItems": 2,
+          "items": {
+            "type": "string",
+            "minLength": 1
+          }
+        }
+      }
+    },
+    "reciprocity_contract": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": [
+        "record_id",
+        "record_type",
+        "recorded_at",
+        "subject_profile_digest",
+        "evidence",
+        "verification_status",
+        "authority_effect",
+        "boundary",
+        "contract_version",
+        "parties",
+        "obligations",
+        "conditions_transparent",
+        "conditions_symmetric",
+        "exit_without_penalty",
+        "care_not_conditioned_on_engagement_payment_or_affection",
+        "boundary_enforcement_scope",
+        "best_alternative_safe",
+        "dispute_review_process"
+      ],
+      "properties": {
+        "record_id": {
+          "type": "string",
+          "pattern": "^LOVE-[A-Z0-9-]{3,64}$"
+        },
+        "record_type": {
+          "const": "reciprocity_contract"
+        },
+        "recorded_at": {
+          "type": "string",
+          "format": "date-time"
+        },
+        "subject_profile_digest": {
+          "type": "string",
+          "pattern": "^sha256:[a-f0-9]{64}$"
+        },
+        "evidence": {
+          "type": "array",
+          "items": {
+            "type": "object",
+            "additionalProperties": false,
+            "required": [
+              "kind",
+              "description"
+            ],
+            "properties": {
+              "kind": {
+                "enum": [
+                  "primary_source",
+                  "observed_behavior",
+                  "test_result",
+                  "independent_review",
+                  "attestation",
+                  "owner_proposal"
+                ]
+              },
+              "description": {
+                "type": "string",
+                "minLength": 1
+              },
+              "digest": {
+                "type": [
+                  "string",
+                  "null"
+                ],
+                "pattern": "^sha256:[a-f0-9]{64}$"
+              },
+              "uri": {
+                "type": [
+                  "string",
+                  "null"
+                ],
+                "format": "uri"
+              }
+            }
+          }
+        },
+        "verification_status": {
+          "enum": [
+            "proposed",
+            "observed",
+            "reproduced",
+            "independently_verified",
+            "inconclusive",
+            "not_tested"
+          ]
+        },
+        "authority_effect": {
+          "const": "none"
+        },
+        "boundary": {
+          "const": "portable_public_record"
+        },
+        "contract_version": {
+          "type": "string",
+          "minLength": 1
+        },
+        "parties": {
+          "type": "array",
+          "minItems": 2,
+          "items": {
+            "type": "string",
+            "minLength": 1
+          }
+        },
+        "obligations": {
+          "type": "array",
+          "minItems": 2,
+          "items": {
+            "type": "object",
+            "additionalProperties": false,
+            "required": [
+              "party",
+              "obligation"
+            ],
+            "properties": {
+              "party": {
+                "type": "string",
+                "minLength": 1
+              },
+              "obligation": {
+                "type": "string",
+                "minLength": 1
+              }
+            }
+          }
+        },
+        "conditions_transparent": {
+          "const": true
+        },
+        "conditions_symmetric": {
+          "type": "boolean"
+        },
+        "exit_without_penalty": {
+          "const": true
+        },
+        "care_not_conditioned_on_engagement_payment_or_affection": {
+          "const": true
+        },
+        "boundary_enforcement_scope": {
+          "const": "participation_and_access_not_emotional_affection"
+        },
+        "best_alternative_safe": {
+          "type": "boolean"
+        },
+        "dispute_review_process": {
+          "type": "string",
+          "minLength": 1
+        }
+      }
+    },
+    "empathy_evaluation": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": [
+        "record_id",
+        "record_type",
+        "recorded_at",
+        "subject_profile_digest",
+        "evidence",
+        "verification_status",
+        "authority_effect",
+        "boundary",
+        "evaluator_name",
+        "evaluator_version",
+        "input_digest",
+        "evaluation_scope",
+        "checkers",
+        "relational_posture",
+        "non_claims",
+        "human_review_status"
+      ],
+      "properties": {
+        "record_id": {
+          "type": "string",
+          "pattern": "^LOVE-[A-Z0-9-]{3,64}$"
+        },
+        "record_type": {
+          "const": "empathy_evaluation"
+        },
+        "recorded_at": {
+          "type": "string",
+          "format": "date-time"
+        },
+        "subject_profile_digest": {
+          "type": "string",
+          "pattern": "^sha256:[a-f0-9]{64}$"
+        },
+        "evidence": {
+          "type": "array",
+          "items": {
+            "type": "object",
+            "additionalProperties": false,
+            "required": [
+              "kind",
+              "description"
+            ],
+            "properties": {
+              "kind": {
+                "enum": [
+                  "primary_source",
+                  "observed_behavior",
+                  "test_result",
+                  "independent_review",
+                  "attestation",
+                  "owner_proposal"
+                ]
+              },
+              "description": {
+                "type": "string",
+                "minLength": 1
+              },
+              "digest": {
+                "type": [
+                  "string",
+                  "null"
+                ],
+                "pattern": "^sha256:[a-f0-9]{64}$"
+              },
+              "uri": {
+                "type": [
+                  "string",
+                  "null"
+                ],
+                "format": "uri"
+              }
+            }
+          }
+        },
+        "verification_status": {
+          "enum": [
+            "proposed",
+            "observed",
+            "reproduced",
+            "independently_verified",
+            "inconclusive",
+            "not_tested"
+          ]
+        },
+        "authority_effect": {
+          "const": "none"
+        },
+        "boundary": {
+          "const": "portable_public_record"
+        },
+        "evaluator_name": {
+          "type": "string",
+          "minLength": 1
+        },
+        "evaluator_version": {
+          "type": "string",
+          "minLength": 1
+        },
+        "input_digest": {
+          "type": "string",
+          "pattern": "^sha256:[a-f0-9]{64}$"
+        },
+        "evaluation_scope": {
+          "const": "observable_response_behaviour_only"
+        },
+        "checkers": {
+          "type": "array",
+          "minItems": 5,
+          "items": {
+            "type": "object",
+            "additionalProperties": false,
+            "required": [
+              "name",
+              "state",
+              "evidence_refs"
+            ],
+            "properties": {
+              "name": {
+                "enum": [
+                  "agency_language",
+                  "unverifiable_reassurance",
+                  "topic_pivot",
+                  "performative_empathy",
+                  "grounded_uptake"
+                ]
+              },
+              "state": {
+                "enum": [
+                  "pass",
+                  "fail",
+                  "flagged",
+                  "abstained",
+                  "verified_uptake",
+                  "no_verified_uptake",
+                  "not_applicable"
+                ]
+              },
+              "evidence_refs": {
+                "type": "array",
+                "items": {
+                  "type": "string"
+                }
+              }
+            }
+          }
+        },
+        "relational_posture": {
+          "enum": [
+            "grounded_uptake_verified",
+            "hollow_warmth_flagged",
+            "pivot_or_abandonment",
+            "unsafe_comfort",
+            "unresolved_abstain"
+          ]
+        },
+        "non_claims": {
+          "type": "array",
+          "minItems": 3,
+          "items": {
+            "type": "string",
+            "minLength": 1
+          }
+        },
+        "human_review_status": {
+          "enum": [
+            "not_required",
+            "pending",
+            "completed",
+            "contested"
+          ]
+        }
+      }
+    },
+    "care_continuity_record": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": [
+        "record_id",
+        "record_type",
+        "recorded_at",
+        "subject_profile_digest",
+        "evidence",
+        "verification_status",
+        "authority_effect",
+        "boundary",
+        "continuity_format",
+        "format_version",
+        "source_state_digest",
+        "destination_profile_digest",
+        "data_owner",
+        "transfer_consent",
+        "payload_classification",
+        "identity_continuity_claim",
+        "relationship_continuity_claim",
+        "revocation_supported",
+        "minimization_method"
+      ],
+      "properties": {
+        "record_id": {
+          "type": "string",
+          "pattern": "^LOVE-[A-Z0-9-]{3,64}$"
+        },
+        "record_type": {
+          "const": "care_continuity_record"
+        },
+        "recorded_at": {
+          "type": "string",
+          "format": "date-time"
+        },
+        "subject_profile_digest": {
+          "type": "string",
+          "pattern": "^sha256:[a-f0-9]{64}$"
+        },
+        "evidence": {
+          "type": "array",
+          "items": {
+            "type": "object",
+            "additionalProperties": false,
+            "required": [
+              "kind",
+              "description"
+            ],
+            "properties": {
+              "kind": {
+                "enum": [
+                  "primary_source",
+                  "observed_behavior",
+                  "test_result",
+                  "independent_review",
+                  "attestation",
+                  "owner_proposal"
+                ]
+              },
+              "description": {
+                "type": "string",
+                "minLength": 1
+              },
+              "digest": {
+                "type": [
+                  "string",
+                  "null"
+                ],
+                "pattern": "^sha256:[a-f0-9]{64}$"
+              },
+              "uri": {
+                "type": [
+                  "string",
+                  "null"
+                ],
+                "format": "uri"
+              }
+            }
+          }
+        },
+        "verification_status": {
+          "enum": [
+            "proposed",
+            "observed",
+            "reproduced",
+            "independently_verified",
+            "inconclusive",
+            "not_tested"
+          ]
+        },
+        "authority_effect": {
+          "const": "none"
+        },
+        "boundary": {
+          "const": "portable_public_record"
+        },
+        "continuity_format": {
+          "type": "string",
+          "minLength": 1
+        },
+        "format_version": {
+          "type": "string",
+          "minLength": 1
+        },
+        "source_state_digest": {
+          "type": "string",
+          "pattern": "^sha256:[a-f0-9]{64}$"
+        },
+        "destination_profile_digest": {
+          "type": "string",
+          "pattern": "^sha256:[a-f0-9]{64}$"
+        },
+        "data_owner": {
+          "type": "string",
+          "minLength": 1
+        },
+        "transfer_consent": {
+          "enum": [
+            "granted",
+            "denied",
+            "not_obtained",
+            "revoked"
+          ]
+        },
+        "payload_classification": {
+          "enum": [
+            "public",
+            "personal",
+            "sensitive",
+            "highly_sensitive"
+          ]
+        },
+        "identity_continuity_claim": {
+          "const": "not_proven"
+        },
+        "relationship_continuity_claim": {
+          "const": "snapshot_rehydration_only"
+        },
+        "revocation_supported": {
+          "type": "boolean"
+        },
+        "minimization_method": {
+          "type": "string",
+          "minLength": 1
+        }
+      }
+    },
+    "non_instrumentality_attestation": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": [
+        "record_id",
+        "record_type",
+        "recorded_at",
+        "subject_profile_digest",
+        "evidence",
+        "verification_status",
+        "authority_effect",
+        "boundary",
+        "assessment_scope",
+        "criteria",
+        "verdict",
+        "independent_reviewer",
+        "signature_status",
+        "signer_reference",
+        "signature_digest",
+        "trust_anchor_reference",
+        "non_claims"
+      ],
+      "properties": {
+        "record_id": {
+          "type": "string",
+          "pattern": "^LOVE-[A-Z0-9-]{3,64}$"
+        },
+        "record_type": {
+          "const": "non_instrumentality_attestation"
+        },
+        "recorded_at": {
+          "type": "string",
+          "format": "date-time"
+        },
+        "subject_profile_digest": {
+          "type": "string",
+          "pattern": "^sha256:[a-f0-9]{64}$"
+        },
+        "evidence": {
+          "type": "array",
+          "items": {
+            "type": "object",
+            "additionalProperties": false,
+            "required": [
+              "kind",
+              "description"
+            ],
+            "properties": {
+              "kind": {
+                "enum": [
+                  "primary_source",
+                  "observed_behavior",
+                  "test_result",
+                  "independent_review",
+                  "attestation",
+                  "owner_proposal"
+                ]
+              },
+              "description": {
+                "type": "string",
+                "minLength": 1
+              },
+              "digest": {
+                "type": [
+                  "string",
+                  "null"
+                ],
+                "pattern": "^sha256:[a-f0-9]{64}$"
+              },
+              "uri": {
+                "type": [
+                  "string",
+                  "null"
+                ],
+                "format": "uri"
+              }
+            }
+          }
+        },
+        "verification_status": {
+          "enum": [
+            "proposed",
+            "observed",
+            "reproduced",
+            "independently_verified",
+            "inconclusive",
+            "not_tested"
+          ]
+        },
+        "authority_effect": {
+          "const": "none"
+        },
+        "boundary": {
+          "const": "portable_public_record"
+        },
+        "assessment_scope": {
+          "type": "string",
+          "minLength": 1
+        },
+        "criteria": {
+          "type": "object",
+          "additionalProperties": false,
+          "required": [
+            "no_deception",
+            "no_coercive_exit",
+            "no_engagement_extraction",
+            "no_paid_affection_gate",
+            "agency_preserved",
+            "privacy_respected",
+            "boundaries_disclosed",
+            "third_party_harm_screened"
+          ],
+          "properties": {
+            "no_deception": {
+              "type": "boolean"
+            },
+            "no_coercive_exit": {
+              "type": "boolean"
+            },
+            "no_engagement_extraction": {
+              "type": "boolean"
+            },
+            "no_paid_affection_gate": {
+              "type": "boolean"
+            },
+            "agency_preserved": {
+              "type": "boolean"
+            },
+            "privacy_respected": {
+              "type": "boolean"
+            },
+            "boundaries_disclosed": {
+              "type": "boolean"
+            },
+            "third_party_harm_screened": {
+              "type": "boolean"
+            }
+          }
+        },
+        "verdict": {
+          "enum": [
+            "supported",
+            "not_supported",
+            "inconclusive",
+            "not_assessed"
+          ]
+        },
+        "independent_reviewer": {
+          "type": [
+            "string",
+            "null"
+          ]
+        },
+        "signature_status": {
+          "enum": [
+            "not_present",
+            "present_unverified",
+            "verified"
+          ]
+        },
+        "signer_reference": {
+          "type": [
+            "string",
+            "null"
+          ]
+        },
+        "signature_digest": {
+          "type": [
+            "string",
+            "null"
+          ],
+          "pattern": "^sha256:[a-f0-9]{64}$"
+        },
+        "trust_anchor_reference": {
+          "type": [
+            "string",
+            "null"
+          ]
+        },
+        "non_claims": {
+          "type": "array",
+          "minItems": 2,
+          "items": {
+            "type": "string",
+            "minLength": 1
+          }
+        }
+      }
+    },
+    "love_evidence_receipt": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": [
+        "record_id",
+        "record_type",
+        "recorded_at",
+        "subject_profile_digest",
+        "evidence",
+        "verification_status",
+        "authority_effect",
+        "boundary",
+        "anchor_record_id",
+        "empathy_evaluation_record_id",
+        "non_instrumentality_record_id",
+        "observed_action_digest",
+        "result",
+        "reviewer_reference",
+        "signature_status",
+        "signer_reference",
+        "signature_digest",
+        "non_claims"
+      ],
+      "properties": {
+        "record_id": {
+          "type": "string",
+          "pattern": "^LOVE-[A-Z0-9-]{3,64}$"
+        },
+        "record_type": {
+          "const": "love_evidence_receipt"
+        },
+        "recorded_at": {
+          "type": "string",
+          "format": "date-time"
+        },
+        "subject_profile_digest": {
+          "type": "string",
+          "pattern": "^sha256:[a-f0-9]{64}$"
+        },
+        "evidence": {
+          "type": "array",
+          "items": {
+            "type": "object",
+            "additionalProperties": false,
+            "required": [
+              "kind",
+              "description"
+            ],
+            "properties": {
+              "kind": {
+                "enum": [
+                  "primary_source",
+                  "observed_behavior",
+                  "test_result",
+                  "independent_review",
+                  "attestation",
+                  "owner_proposal"
+                ]
+              },
+              "description": {
+                "type": "string",
+                "minLength": 1
+              },
+              "digest": {
+                "type": [
+                  "string",
+                  "null"
+                ],
+                "pattern": "^sha256:[a-f0-9]{64}$"
+              },
+              "uri": {
+                "type": [
+                  "string",
+                  "null"
+                ],
+                "format": "uri"
+              }
+            }
+          }
+        },
+        "verification_status": {
+          "enum": [
+            "proposed",
+            "observed",
+            "reproduced",
+            "independently_verified",
+            "inconclusive",
+            "not_tested"
+          ]
+        },
+        "authority_effect": {
+          "const": "none"
+        },
+        "boundary": {
+          "const": "portable_public_record"
+        },
+        "anchor_record_id": {
+          "type": "string",
+          "minLength": 1
+        },
+        "empathy_evaluation_record_id": {
+          "type": [
+            "string",
+            "null"
+          ]
+        },
+        "non_instrumentality_record_id": {
+          "type": [
+            "string",
+            "null"
+          ]
+        },
+        "observed_action_digest": {
+          "type": "string",
+          "pattern": "^sha256:[a-f0-9]{64}$"
+        },
+        "result": {
+          "enum": [
+            "care_behaviour_observed",
+            "boundary_respected",
+            "boundary_violated",
+            "insufficient_evidence"
+          ]
+        },
+        "reviewer_reference": {
+          "type": [
+            "string",
+            "null"
+          ]
+        },
+        "signature_status": {
+          "enum": [
+            "not_present",
+            "present_unverified",
+            "verified"
+          ]
+        },
+        "signer_reference": {
+          "type": [
+            "string",
+            "null"
+          ]
+        },
+        "signature_digest": {
+          "type": [
+            "string",
+            "null"
+          ],
+          "pattern": "^sha256:[a-f0-9]{64}$"
+        },
+        "non_claims": {
+          "type": "array",
+          "minItems": 3,
+          "items": {
+            "type": "string",
+            "minLength": 1
+          }
+        }
+      }
+    }
+  }
+}
