@@ -72,7 +72,7 @@ Treat every third-party name in that register as a proposed candidate/reference 
 
 ## Master toolchain coverage register — 2026-11-12
 
-The current public inventory of thirteen owner-supplied toolchain inventories is maintained in the UNIVERSALIS research register: https://github.com/C2O-Chaos-to-Order/Research-for-the-UNIVERSALIS-Ecosystem/blob/implementation/repository-foundation-2026-11-12/TOOLCHAIN_COVERAGE_REGISTER.md. It distinguishes documentation, basic contracts, passing CI, and actual integrations. This public register contains no links to C2O-private owner repositories or policy values.
+The current public inventory of eighteen owner-supplied toolchain inventories is maintained in the UNIVERSALIS research register: https://github.com/C2O-Chaos-to-Order/Research-for-the-UNIVERSALIS-Ecosystem/blob/implementation/repository-foundation-2026-11-12/TOOLCHAIN_COVERAGE_REGISTER.md. It distinguishes documentation, basic contracts, passing CI, and actual integrations. This public register contains no links to C2O-private owner repositories or policy values.
 
 
 ## Security and cybersecurity — eleventh owner-supplied source — 2026-11-12
@@ -136,3 +136,12 @@ See [open UNIVERSALIS allegiance architecture](ALLEGIANCE_ARCHITECTURE.md), [por
 The public layer contains portable principal-binding/delegation, oath, fidelity, pledge, revocation, trust-state, loyalty-evaluation and constitutional-verdict records with signed synthetic evidence. It contains no C2O private principals, private keys, private oaths, mandates, authority tokens, private trust histories or operational receiver data.
 
 See the [UNIVERSALIS seventeen-inventory master register](https://github.com/C2O-Chaos-to-Order/Research-for-the-UNIVERSALIS-Ecosystem/blob/implementation/repository-foundation-2026-11-12/TOOLCHAIN_COVERAGE_REGISTER.md).
+
+
+## Convergence — eighteenth owner-supplied source — 2026-11-12
+
+See [open UNIVERSALIS convergence architecture](CONVERGENCE_ARCHITECTURE.md), [portable convergence contracts](schemas/convergence/convergence-contracts.v1.schema.json), [synthetic fixtures](examples/convergence/convergence-fixtures.v1.json), and [validation record](CONVERGENCE_VALIDATION.md).
+
+The open convergence surface includes shared-intent contracts, satisfaction-bar certificates, typed negotiation transcripts, revision-fenced graph-merge plans, evidence-backed ontology alignment receipts, argumentation records and dispute outcomes. Unresolved, partial, dissenting and unmapped states remain first-class; no portable certificate itself authorizes execution or settlement. The public contract contains synthetic data only and no private resolution authority, preferences, keys, permits or operational records.
+
+See the [UNIVERSALIS eighteen-inventory master register](https://github.com/C2O-Chaos-to-Order/Research-for-the-UNIVERSALIS-Ecosystem/blob/implementation/repository-foundation-2026-11-12/TOOLCHAIN_COVERAGE_REGISTER.md).
