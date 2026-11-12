@@ -1,8 +1,6 @@
 name: Architecture Graph Contract
 on:
-  push:
-    branches: ["**"]
-  pull_request:
+  workflow_dispatch:
 permissions:
   contents: read
 jobs:

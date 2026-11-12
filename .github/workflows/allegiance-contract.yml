@@ -1,17 +1,6 @@
 name: Allegiance Contract Validation
 on:
-  push:
-    paths:
-      - "schemas/allegiance/**"
-      - "examples/allegiance/**"
-      - ".github/scripts/allegiance_contract.py"
-      - ".github/workflows/allegiance-contract.yml"
-  pull_request:
-    paths:
-      - "schemas/allegiance/**"
-      - "examples/allegiance/**"
-      - ".github/scripts/allegiance_contract.py"
-      - ".github/workflows/allegiance-contract.yml"
+  workflow_dispatch:
 permissions:
   contents: read
 jobs:

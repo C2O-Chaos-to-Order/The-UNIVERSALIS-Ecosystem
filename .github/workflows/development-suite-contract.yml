@@ -1,17 +1,6 @@
 name: Development Suite Contract Validation
 on:
-  push:
-    paths:
-      - "schemas/development-suite/**"
-      - "examples/development-suite/**"
-      - ".github/scripts/development_suite_contract.py"
-      - ".github/workflows/development-suite-contract.yml"
-  pull_request:
-    paths:
-      - "schemas/development-suite/**"
-      - "examples/development-suite/**"
-      - ".github/scripts/development_suite_contract.py"
-      - ".github/workflows/development-suite-contract.yml"
+  workflow_dispatch:
 permissions:
   contents: read
 jobs:

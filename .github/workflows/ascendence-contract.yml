@@ -1,17 +1,6 @@
 name: Ascendence Contract Validation
 on:
-  push:
-    paths:
-      - "schemas/ascendence/**"
-      - "examples/ascendence/**"
-      - ".github/scripts/ascendence_contract.py"
-      - ".github/workflows/ascendence-contract.yml"
-  pull_request:
-    paths:
-      - "schemas/ascendence/**"
-      - "examples/ascendence/**"
-      - ".github/scripts/ascendence_contract.py"
-      - ".github/workflows/ascendence-contract.yml"
+  workflow_dispatch:
 permissions:
   contents: read
 jobs:

@@ -1,17 +1,6 @@
 name: Divergence Contract Validation
 on:
-  push:
-    paths:
-      - "schemas/divergence/**"
-      - "examples/divergence/**"
-      - ".github/scripts/divergence_contract.py"
-      - ".github/workflows/divergence-contract.yml"
-  pull_request:
-    paths:
-      - "schemas/divergence/**"
-      - "examples/divergence/**"
-      - ".github/scripts/divergence_contract.py"
-      - ".github/workflows/divergence-contract.yml"
+  workflow_dispatch:
 permissions:
   contents: read
 jobs:

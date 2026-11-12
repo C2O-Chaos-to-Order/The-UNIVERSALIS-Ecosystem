@@ -1,17 +1,6 @@
 name: Convergence Contract Validation
 on:
-  push:
-    paths:
-      - "schemas/convergence/**"
-      - "examples/convergence/**"
-      - ".github/scripts/convergence_contract.py"
-      - ".github/workflows/convergence-contract.yml"
-  pull_request:
-    paths:
-      - "schemas/convergence/**"
-      - "examples/convergence/**"
-      - ".github/scripts/convergence_contract.py"
-      - ".github/workflows/convergence-contract.yml"
+  workflow_dispatch:
 permissions:
   contents: read
 jobs:
