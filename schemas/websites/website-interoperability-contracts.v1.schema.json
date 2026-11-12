@@ -1,0 +1,1214 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "$id": "urn:c2o-universalis:website-interoperability-contracts:1.0.0",
+  "title": "Portable Website Definition, Agent Capability, ChangeSet, Permission, Audit and Publishing Contracts",
+  "description": "Sanitized versioned website contracts. Uses opaque references and content digests; excludes private C2O credentials, deployment secrets, policy bodies, authority tokens and raw private content.",
+  "type": "object",
+  "properties": {
+    "schema_version": {
+      "const": "1.0.0"
+    },
+    "contract_family": {
+      "const": "website-interoperability"
+    },
+    "records": {
+      "type": "array",
+      "minItems": 6,
+      "items": {
+        "type": "object",
+        "properties": {
+          "record_type": {
+            "enum": [
+              "site_definition",
+              "agent_capability_manifest",
+              "site_change_set",
+              "site_permission_profile",
+              "site_audit_receipt",
+              "site_publish_receipt"
+            ]
+          },
+          "record": {
+            "type": "object"
+          }
+        },
+        "required": [
+          "record_type",
+          "record"
+        ],
+        "additionalProperties": false
+      }
+    },
+    "limitations": {
+      "type": "array",
+      "items": {
+        "type": "string"
+      }
+    }
+  },
+  "required": [
+    "schema_version",
+    "contract_family",
+    "records",
+    "limitations"
+  ],
+  "additionalProperties": false,
+  "$defs": {
+    "signatureEnvelope": {
+      "type": [
+        "object",
+        "null"
+      ],
+      "properties": {
+        "algorithm": {
+          "enum": [
+            "Ed25519",
+            "ML-DSA-65",
+            "hybrid-ed25519-ml-dsa-65",
+            "other"
+          ]
+        },
+        "key_fingerprint": {
+          "type": "string",
+          "pattern": "^[a-f0-9]{64}$"
+        },
+        "public_key_ref": {
+          "type": "string",
+          "minLength": 1,
+          "maxLength": 2048
+        },
+        "signed_payload_digest": {
+          "type": "string",
+          "pattern": "^[a-f0-9]{64}$"
+        },
+        "signature_ref": {
+          "type": "string",
+          "minLength": 1,
+          "maxLength": 2048
+        },
+        "signed_at": {
+          "type": "string",
+          "format": "date-time"
+        },
+        "verification_status": {
+          "enum": [
+            "not-run",
+            "valid",
+            "invalid",
+            "unknown-key",
+            "revoked-key"
+          ]
+        }
+      },
+      "required": [
+        "algorithm",
+        "key_fingerprint",
+        "signed_payload_digest",
+        "signature_ref",
+        "signed_at",
+        "verification_status"
+      ],
+      "additionalProperties": false
+    },
+    "siteDefinition": {
+      "type": "object",
+      "properties": {
+        "schema_version": {
+          "const": "1.0.0"
+        },
+        "site_id": {
+          "type": "string",
+          "minLength": 1,
+          "maxLength": 2048
+        },
+        "revision_id": {
+          "type": "string",
+          "minLength": 1,
+          "maxLength": 2048
+        },
+        "revision_number": {
+          "type": "integer",
+          "minimum": 0
+        },
+        "revision_digest": {
+          "type": "string",
+          "pattern": "^[a-f0-9]{64}$"
+        },
+        "site_kind": {
+          "enum": [
+            "static-site",
+            "cms-site",
+            "web-application",
+            "portal",
+            "documentation",
+            "commerce",
+            "other"
+          ]
+        },
+        "source_ref": {
+          "type": "string",
+          "minLength": 1,
+          "maxLength": 2048
+        },
+        "rendering_targets": {
+          "type": "array",
+          "minItems": 1,
+          "uniqueItems": true,
+          "items": {
+            "enum": [
+              "static-html",
+              "astro",
+              "nextjs",
+              "worker",
+              "node-server",
+              "container",
+              "other"
+            ]
+          }
+        },
+        "canonical_uri_ref": {
+          "type": [
+            "string",
+            "null"
+          ],
+          "maxLength": 2048
+        },
+        "content_schema_ref": {
+          "type": [
+            "string",
+            "null"
+          ],
+          "maxLength": 2048
+        },
+        "theme_digest": {
+          "type": "string",
+          "pattern": "^[a-f0-9]{64}$"
+        },
+        "pages": {
+          "type": "array",
+          "minItems": 1,
+          "items": {
+            "type": "object",
+            "properties": {
+              "page_id": {
+                "type": "string",
+                "minLength": 1,
+                "maxLength": 2048
+              },
+              "route": {
+                "type": "string",
+                "minLength": 1,
+                "maxLength": 2048
+              },
+              "page_digest": {
+                "type": "string",
+                "pattern": "^[a-f0-9]{64}$"
+              },
+              "access_classification": {
+                "enum": [
+                  "public",
+                  "internal",
+                  "confidential",
+                  "secret"
+                ]
+              },
+              "locale": {
+                "type": "string",
+                "minLength": 2,
+                "maxLength": 32
+              },
+              "block_refs": {
+                "type": "array",
+                "items": {
+                  "type": "string",
+                  "minLength": 1,
+                  "maxLength": 2048
+                }
+              },
+              "publication_state": {
+                "enum": [
+                  "draft",
+                  "preview",
+                  "approved",
+                  "published",
+                  "unpublished",
+                  "archived"
+                ]
+              }
+            },
+            "required": [
+              "page_id",
+              "route",
+              "page_digest",
+              "access_classification",
+              "locale",
+              "block_refs",
+              "publication_state"
+            ],
+            "additionalProperties": false
+          }
+        },
+        "discovery_signals": {
+          "type": "array",
+          "items": {
+            "type": "object",
+            "properties": {
+              "signal": {
+                "enum": [
+                  "robots-txt",
+                  "sitemap",
+                  "llms-txt",
+                  "llms-full-txt",
+                  "ai-txt",
+                  "agents-md",
+                  "markdown-alternate",
+                  "json-ld"
+                ]
+              },
+              "state": {
+                "enum": [
+                  "declared",
+                  "missing",
+                  "not-checked",
+                  "not-applicable"
+                ]
+              },
+              "reference": {
+                "type": [
+                  "string",
+                  "null"
+                ],
+                "maxLength": 2048
+              }
+            },
+            "required": [
+              "signal",
+              "state",
+              "reference"
+            ],
+            "additionalProperties": false
+          }
+        },
+        "site_state": {
+          "enum": [
+            "draft",
+            "preview",
+            "approved",
+            "published",
+            "retired"
+          ]
+        },
+        "build_provenance_ref": {
+          "type": [
+            "string",
+            "null"
+          ],
+          "maxLength": 2048
+        },
+        "audit_receipt_refs": {
+          "type": "array",
+          "items": {
+            "type": "string",
+            "minLength": 1,
+            "maxLength": 2048
+          }
+        },
+        "limitations": {
+          "type": "array",
+          "items": {
+            "type": "string"
+          }
+        }
+      },
+      "required": [
+        "schema_version",
+        "site_id",
+        "revision_id",
+        "revision_number",
+        "revision_digest",
+        "site_kind",
+        "source_ref",
+        "rendering_targets",
+        "canonical_uri_ref",
+        "content_schema_ref",
+        "theme_digest",
+        "pages",
+        "discovery_signals",
+        "site_state",
+        "build_provenance_ref",
+        "audit_receipt_refs",
+        "limitations"
+      ],
+      "additionalProperties": false
+    },
+    "agentCapabilityManifest": {
+      "type": "object",
+      "properties": {
+        "schema_version": {
+          "const": "1.0.0"
+        },
+        "manifest_id": {
+          "type": "string",
+          "minLength": 1,
+          "maxLength": 2048
+        },
+        "site_ref": {
+          "type": "string",
+          "minLength": 1,
+          "maxLength": 2048
+        },
+        "manifest_version": {
+          "type": "string",
+          "minLength": 1,
+          "maxLength": 2048
+        },
+        "site_revision_digest": {
+          "type": "string",
+          "pattern": "^[a-f0-9]{64}$"
+        },
+        "issuer_ref": {
+          "type": "string",
+          "minLength": 1,
+          "maxLength": 2048
+        },
+        "interaction_surfaces": {
+          "type": "array",
+          "minItems": 1,
+          "uniqueItems": true,
+          "items": {
+            "enum": [
+              "mcp",
+              "webmcp",
+              "http-api",
+              "agent-skills",
+              "other"
+            ]
+          }
+        },
+        "webmcp_spec_status": {
+          "enum": [
+            "not-used",
+            "community-group-draft",
+            "early-preview",
+            "implementation-specific",
+            "unknown"
+          ]
+        },
+        "webmcp_guarantees": {
+          "type": "object",
+          "properties": {
+            "structured_state": {
+              "type": "boolean"
+            },
+            "revision_pinning": {
+              "type": "boolean"
+            },
+            "stale_proposal_rejection": {
+              "type": "boolean"
+            },
+            "human_gate_for_publish": {
+              "type": "boolean"
+            }
+          },
+          "required": [
+            "structured_state",
+            "revision_pinning",
+            "stale_proposal_rejection",
+            "human_gate_for_publish"
+          ],
+          "additionalProperties": false
+        },
+        "discovery_signals": {
+          "type": "array",
+          "items": {
+            "type": "object",
+            "properties": {
+              "signal": {
+                "enum": [
+                  "robots-txt",
+                  "sitemap",
+                  "llms-txt",
+                  "llms-full-txt",
+                  "ai-txt",
+                  "agents-md",
+                  "markdown-alternate",
+                  "json-ld"
+                ]
+              },
+              "reference": {
+                "type": [
+                  "string",
+                  "null"
+                ],
+                "maxLength": 2048
+              },
+              "verification_status": {
+                "enum": [
+                  "not-run",
+                  "declared",
+                  "verified",
+                  "missing",
+                  "failed",
+                  "unknown"
+                ]
+              }
+            },
+            "required": [
+              "signal",
+              "reference",
+              "verification_status"
+            ],
+            "additionalProperties": false
+          }
+        },
+        "capabilities": {
+          "type": "array",
+          "items": {
+            "type": "object",
+            "properties": {
+              "capability_id": {
+                "type": "string",
+                "minLength": 1,
+                "maxLength": 2048
+              },
+              "operation": {
+                "enum": [
+                  "read-content",
+                  "propose-change",
+                  "apply-change",
+                  "preview",
+                  "audit",
+                  "manage-schema",
+                  "publish",
+                  "deploy",
+                  "manage-dns",
+                  "delete-content"
+                ]
+              },
+              "scope_refs": {
+                "type": "array",
+                "items": {
+                  "type": "string",
+                  "minLength": 1,
+                  "maxLength": 2048
+                }
+              },
+              "effect": {
+                "enum": [
+                  "read",
+                  "write",
+                  "publish",
+                  "deploy",
+                  "dns",
+                  "delete"
+                ]
+              },
+              "requires_human_approval": {
+                "type": "boolean"
+              },
+              "requires_owner_authorization": {
+                "type": "boolean"
+              },
+              "tool_schema_ref": {
+                "type": [
+                  "string",
+                  "null"
+                ],
+                "maxLength": 2048
+              }
+            },
+            "required": [
+              "capability_id",
+              "operation",
+              "scope_refs",
+              "effect",
+              "requires_human_approval",
+              "requires_owner_authorization",
+              "tool_schema_ref"
+            ],
+            "additionalProperties": false
+          }
+        },
+        "authentication_modes": {
+          "type": "array",
+          "uniqueItems": true,
+          "items": {
+            "enum": [
+              "oauth",
+              "scoped-token",
+              "mtls",
+              "session",
+              "none",
+              "other"
+            ]
+          }
+        },
+        "authorization_policy_ref": {
+          "type": [
+            "string",
+            "null"
+          ],
+          "maxLength": 2048
+        },
+        "limitations": {
+          "type": "array",
+          "items": {
+            "type": "string"
+          }
+        }
+      },
+      "required": [
+        "schema_version",
+        "manifest_id",
+        "site_ref",
+        "manifest_version",
+        "site_revision_digest",
+        "issuer_ref",
+        "interaction_surfaces",
+        "webmcp_spec_status",
+        "webmcp_guarantees",
+        "discovery_signals",
+        "capabilities",
+        "authentication_modes",
+        "authorization_policy_ref",
+        "limitations"
+      ],
+      "additionalProperties": false
+    },
+    "siteChangeSet": {
+      "type": "object",
+      "properties": {
+        "schema_version": {
+          "const": "1.0.0"
+        },
+        "change_set_id": {
+          "type": "string",
+          "minLength": 1,
+          "maxLength": 2048
+        },
+        "site_ref": {
+          "type": "string",
+          "minLength": 1,
+          "maxLength": 2048
+        },
+        "base_revision_id": {
+          "type": "string",
+          "minLength": 1,
+          "maxLength": 2048
+        },
+        "base_revision_digest": {
+          "type": "string",
+          "pattern": "^[a-f0-9]{64}$"
+        },
+        "observed_current_revision_id": {
+          "type": "string",
+          "minLength": 1,
+          "maxLength": 2048
+        },
+        "observed_current_revision_digest": {
+          "type": "string",
+          "pattern": "^[a-f0-9]{64}$"
+        },
+        "stale": {
+          "type": "boolean"
+        },
+        "status": {
+          "enum": [
+            "proposed",
+            "review",
+            "approved",
+            "rejected",
+            "stale",
+            "committed",
+            "abandoned"
+          ]
+        },
+        "actor_ref": {
+          "type": "string",
+          "minLength": 1,
+          "maxLength": 2048
+        },
+        "changes": {
+          "type": "array",
+          "minItems": 1,
+          "items": {
+            "type": "object",
+            "properties": {
+              "change_id": {
+                "type": "string",
+                "minLength": 1,
+                "maxLength": 2048
+              },
+              "operation": {
+                "enum": [
+                  "create-page",
+                  "update-page",
+                  "delete-page",
+                  "update-content",
+                  "update-theme",
+                  "update-navigation",
+                  "update-component",
+                  "update-config"
+                ]
+              },
+              "target_ref": {
+                "type": "string",
+                "minLength": 1,
+                "maxLength": 2048
+              },
+              "change_digest": {
+                "type": "string",
+                "pattern": "^[a-f0-9]{64}$"
+              },
+              "affected_paths": {
+                "type": "array",
+                "minItems": 1,
+                "items": {
+                  "type": "string",
+                  "minLength": 1,
+                  "maxLength": 2048
+                }
+              }
+            },
+            "required": [
+              "change_id",
+              "operation",
+              "target_ref",
+              "change_digest",
+              "affected_paths"
+            ],
+            "additionalProperties": false
+          }
+        },
+        "has_publish_or_deploy_effect": {
+          "type": "boolean"
+        },
+        "requires_human_approval": {
+          "type": "boolean"
+        },
+        "approval_ref": {
+          "type": [
+            "string",
+            "null"
+          ],
+          "maxLength": 2048
+        },
+        "commit_ref": {
+          "type": [
+            "string",
+            "null"
+          ],
+          "maxLength": 2048
+        },
+        "evidence_refs": {
+          "type": "array",
+          "items": {
+            "type": "string",
+            "minLength": 1,
+            "maxLength": 2048
+          }
+        },
+        "limitations": {
+          "type": "array",
+          "items": {
+            "type": "string"
+          }
+        }
+      },
+      "required": [
+        "schema_version",
+        "change_set_id",
+        "site_ref",
+        "base_revision_id",
+        "base_revision_digest",
+        "observed_current_revision_id",
+        "observed_current_revision_digest",
+        "stale",
+        "status",
+        "actor_ref",
+        "changes",
+        "has_publish_or_deploy_effect",
+        "requires_human_approval",
+        "approval_ref",
+        "commit_ref",
+        "evidence_refs",
+        "limitations"
+      ],
+      "additionalProperties": false
+    },
+    "sitePermissionProfile": {
+      "type": "object",
+      "properties": {
+        "schema_version": {
+          "const": "1.0.0"
+        },
+        "profile_id": {
+          "type": "string",
+          "minLength": 1,
+          "maxLength": 2048
+        },
+        "site_ref": {
+          "type": "string",
+          "minLength": 1,
+          "maxLength": 2048
+        },
+        "principal_ref": {
+          "type": "string",
+          "minLength": 1,
+          "maxLength": 2048
+        },
+        "role": {
+          "enum": [
+            "reader",
+            "author",
+            "editor",
+            "publisher",
+            "administrator",
+            "agent",
+            "other"
+          ]
+        },
+        "token_ref": {
+          "type": [
+            "string",
+            "null"
+          ],
+          "maxLength": 2048
+        },
+        "allowed_operations": {
+          "type": "array",
+          "uniqueItems": true,
+          "items": {
+            "enum": [
+              "read-content",
+              "propose-change",
+              "apply-change",
+              "preview",
+              "audit",
+              "manage-schema",
+              "publish",
+              "deploy",
+              "manage-dns",
+              "delete-content"
+            ]
+          }
+        },
+        "denied_operations": {
+          "type": "array",
+          "uniqueItems": true,
+          "items": {
+            "enum": [
+              "read-content",
+              "propose-change",
+              "apply-change",
+              "preview",
+              "audit",
+              "manage-schema",
+              "publish",
+              "deploy",
+              "manage-dns",
+              "delete-content"
+            ]
+          }
+        },
+        "scope_refs": {
+          "type": "array",
+          "minItems": 1,
+          "items": {
+            "type": "string",
+            "minLength": 1,
+            "maxLength": 2048
+          }
+        },
+        "human_approval_for_publish": {
+          "type": "boolean"
+        },
+        "human_approval_for_deploy": {
+          "type": "boolean"
+        },
+        "policy_ref": {
+          "type": "string",
+          "minLength": 1,
+          "maxLength": 2048
+        },
+        "expires_at": {
+          "type": "string",
+          "format": "date-time"
+        },
+        "status": {
+          "enum": [
+            "active",
+            "revoked",
+            "expired",
+            "suspended"
+          ]
+        },
+        "limitations": {
+          "type": "array",
+          "items": {
+            "type": "string"
+          }
+        }
+      },
+      "required": [
+        "schema_version",
+        "profile_id",
+        "site_ref",
+        "principal_ref",
+        "role",
+        "token_ref",
+        "allowed_operations",
+        "denied_operations",
+        "scope_refs",
+        "human_approval_for_publish",
+        "human_approval_for_deploy",
+        "policy_ref",
+        "expires_at",
+        "status",
+        "limitations"
+      ],
+      "additionalProperties": false
+    },
+    "siteAuditReceipt": {
+      "type": "object",
+      "properties": {
+        "schema_version": {
+          "const": "1.0.0"
+        },
+        "audit_id": {
+          "type": "string",
+          "minLength": 1,
+          "maxLength": 2048
+        },
+        "site_ref": {
+          "type": "string",
+          "minLength": 1,
+          "maxLength": 2048
+        },
+        "site_revision_digest": {
+          "type": "string",
+          "pattern": "^[a-f0-9]{64}$"
+        },
+        "scanner_ref": {
+          "type": "string",
+          "minLength": 1,
+          "maxLength": 2048
+        },
+        "scanner_version": {
+          "type": "string",
+          "minLength": 1,
+          "maxLength": 2048
+        },
+        "audit_kind": {
+          "enum": [
+            "full",
+            "security",
+            "accessibility",
+            "performance",
+            "seo",
+            "agent-readiness",
+            "content-quality",
+            "other"
+          ]
+        },
+        "ruleset_ref": {
+          "type": "string",
+          "minLength": 1,
+          "maxLength": 2048
+        },
+        "ruleset_digest": {
+          "type": "string",
+          "pattern": "^[a-f0-9]{64}$"
+        },
+        "scope_ref": {
+          "type": "string",
+          "minLength": 1,
+          "maxLength": 2048
+        },
+        "started_at": {
+          "type": "string",
+          "format": "date-time"
+        },
+        "completed_at": {
+          "type": "string",
+          "format": "date-time"
+        },
+        "result": {
+          "enum": [
+            "passed",
+            "failed",
+            "partial",
+            "inconclusive",
+            "not-run"
+          ]
+        },
+        "score": {
+          "type": [
+            "number",
+            "null"
+          ],
+          "minimum": 0,
+          "maximum": 100
+        },
+        "page_count": {
+          "type": "integer",
+          "minimum": 0
+        },
+        "findings": {
+          "type": "array",
+          "items": {
+            "type": "object",
+            "properties": {
+              "finding_id": {
+                "type": "string",
+                "minLength": 1,
+                "maxLength": 2048
+              },
+              "rule_id": {
+                "type": "string",
+                "minLength": 1,
+                "maxLength": 2048
+              },
+              "severity": {
+                "enum": [
+                  "info",
+                  "low",
+                  "moderate",
+                  "high",
+                  "critical"
+                ]
+              },
+              "page_ref": {
+                "type": [
+                  "string",
+                  "null"
+                ],
+                "maxLength": 2048
+              },
+              "evidence_digest": {
+                "type": "string",
+                "pattern": "^[a-f0-9]{64}$"
+              },
+              "remediation_state": {
+                "enum": [
+                  "open",
+                  "accepted",
+                  "fixed",
+                  "false-positive",
+                  "deferred"
+                ]
+              }
+            },
+            "required": [
+              "finding_id",
+              "rule_id",
+              "severity",
+              "page_ref",
+              "evidence_digest",
+              "remediation_state"
+            ],
+            "additionalProperties": false
+          }
+        },
+        "summary": {
+          "type": "object",
+          "properties": {
+            "info": {
+              "type": "integer",
+              "minimum": 0
+            },
+            "low": {
+              "type": "integer",
+              "minimum": 0
+            },
+            "moderate": {
+              "type": "integer",
+              "minimum": 0
+            },
+            "high": {
+              "type": "integer",
+              "minimum": 0
+            },
+            "critical": {
+              "type": "integer",
+              "minimum": 0
+            }
+          },
+          "required": [
+            "info",
+            "low",
+            "moderate",
+            "high",
+            "critical"
+          ],
+          "additionalProperties": false
+        },
+        "content_digest": {
+          "type": "string",
+          "pattern": "^[a-f0-9]{64}$"
+        },
+        "signature": {
+          "$ref": "#/$defs/signatureEnvelope"
+        },
+        "limitations": {
+          "type": "array",
+          "items": {
+            "type": "string"
+          }
+        }
+      },
+      "required": [
+        "schema_version",
+        "audit_id",
+        "site_ref",
+        "site_revision_digest",
+        "scanner_ref",
+        "scanner_version",
+        "audit_kind",
+        "ruleset_ref",
+        "ruleset_digest",
+        "scope_ref",
+        "started_at",
+        "completed_at",
+        "result",
+        "score",
+        "page_count",
+        "findings",
+        "summary",
+        "content_digest",
+        "signature",
+        "limitations"
+      ],
+      "additionalProperties": false
+    },
+    "sitePublishReceipt": {
+      "type": "object",
+      "properties": {
+        "schema_version": {
+          "const": "1.0.0"
+        },
+        "receipt_id": {
+          "type": "string",
+          "minLength": 1,
+          "maxLength": 2048
+        },
+        "site_ref": {
+          "type": "string",
+          "minLength": 1,
+          "maxLength": 2048
+        },
+        "site_revision_digest": {
+          "type": "string",
+          "pattern": "^[a-f0-9]{64}$"
+        },
+        "event_type": {
+          "enum": [
+            "preview",
+            "content-publish",
+            "site-deploy",
+            "dns-change",
+            "unpublish",
+            "rollback"
+          ]
+        },
+        "target_ref": {
+          "type": "string",
+          "minLength": 1,
+          "maxLength": 2048
+        },
+        "artifact_digest": {
+          "type": [
+            "string",
+            "null"
+          ],
+          "pattern": "^[a-f0-9]{64}$"
+        },
+        "initiated_by_ref": {
+          "type": "string",
+          "minLength": 1,
+          "maxLength": 2048
+        },
+        "operator_ref": {
+          "type": [
+            "string",
+            "null"
+          ],
+          "maxLength": 2048
+        },
+        "approval_ref": {
+          "type": [
+            "string",
+            "null"
+          ],
+          "maxLength": 2048
+        },
+        "result": {
+          "enum": [
+            "succeeded",
+            "failed",
+            "blocked",
+            "rolled-back",
+            "not-run"
+          ]
+        },
+        "occurred_at": {
+          "type": "string",
+          "format": "date-time"
+        },
+        "previous_receipt_ref": {
+          "type": [
+            "string",
+            "null"
+          ],
+          "maxLength": 2048
+        },
+        "audit_receipt_refs": {
+          "type": "array",
+          "items": {
+            "type": "string",
+            "minLength": 1,
+            "maxLength": 2048
+          }
+        },
+        "signature_state": {
+          "enum": [
+            "not-required",
+            "not-run",
+            "signed",
+            "verified",
+            "invalid",
+            "unknown-key"
+          ]
+        },
+        "signature": {
+          "$ref": "#/$defs/signatureEnvelope"
+        },
+        "limitations": {
+          "type": "array",
+          "items": {
+            "type": "string"
+          }
+        }
+      },
+      "required": [
+        "schema_version",
+        "receipt_id",
+        "site_ref",
+        "site_revision_digest",
+        "event_type",
+        "target_ref",
+        "artifact_digest",
+        "initiated_by_ref",
+        "operator_ref",
+        "approval_ref",
+        "result",
+        "occurred_at",
+        "previous_receipt_ref",
+        "audit_receipt_refs",
+        "signature_state",
+        "signature",
+        "limitations"
+      ],
+      "additionalProperties": false
+    }
+  }
+}
