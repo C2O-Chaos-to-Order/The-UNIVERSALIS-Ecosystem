@@ -1,0 +1,28 @@
+name: Prevention Contract Validation
+on:
+  push:
+    paths:
+      - "schemas/prevention/**"
+      - "examples/prevention/**"
+      - ".github/scripts/prevention_contract.py"
+      - ".github/workflows/prevention-contract.yml"
+  pull_request:
+    paths:
+      - "schemas/prevention/**"
+      - "examples/prevention/**"
+      - ".github/scripts/prevention_contract.py"
+      - ".github/workflows/prevention-contract.yml"
+permissions:
+  contents: read
+jobs:
+  contracts:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@11bd71901bbe5b1630ceea73d27597364c9af683
+      - uses: actions/setup-python@a26af69be951a213d495a4c3e4e4022e16d87065
+        with:
+          python-version: "3.12"
+      - name: Install schema and signature validators
+        run: python -m pip install 'jsonschema>=4.23,<5' 'cryptography>=44,<47'
+      - name: Validate prevention contracts and signed enforcement receipt
+        run: python .github/scripts/prevention_contract.py
