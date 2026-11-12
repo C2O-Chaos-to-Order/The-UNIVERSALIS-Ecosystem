@@ -181,7 +181,6 @@
       {
         "record_type": "enforcement_receipt",
         "record_id": "receipt:synthetic:deny-001",
-        "occurred_at": "2026-11-12T20:00:00Z",
         "actor_ref": "agent:synthetic:agent-001",
         "action_ref": "action:synthetic:tool-call-001",
         "action_digest": "aaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaa",
@@ -219,11 +218,12 @@
         "secret_material_included": false,
         "signature": {
           "algorithm": "Ed25519",
-          "key_id": "sha256:44552b04ed6dbd30a85b674ab7fd84b8086bcab3d278b9aede46758bca6f842c",
-          "signed_body_digest": "e6a43f406f5aa8da608d70262a8c7802ed5605f64c5fb7c2fdc1c46e9285a54a",
-          "signature_base64": "uR53sMccr870oqJN8HFRrFXdiiJg5HHkAZXunTco7vwab6zNt2Cedz5H08skAZv54sEE1z+teqF81nrFplcXCA==",
+          "key_id": "sha256:0d822a1cd6e705828f250ea20c64c483caadf688e09798d7a348dcf8e1f2c55d",
+          "signed_body_digest": "0fc1d3d380ea3b7bb63d09dd13be78b02c99e4e0d80986a42130c5e9b042dc66",
+          "signature_base64": "R3TNjdTl1NvfkYJ0s/wi/ye0yfxjJmzZSbJkjgpNcvjO9LBg1BXSwQX9A0C59+Yo2JzYNuw8jkvejqZiJQMGDQ==",
           "trust_anchor_kind": "ephemeral_test_key"
-        }
+        },
+        "created_at": "2026-11-12T20:00:00Z"
       }
     ],
     "harm_reduction_evaluations": [
@@ -407,8 +407,8 @@
     ]
   },
   "verification_key": {
-    "key_id": "sha256:44552b04ed6dbd30a85b674ab7fd84b8086bcab3d278b9aede46758bca6f842c",
-    "public_key_base64": "g40m31DlwuDh1GVg4aKb0UJ0E3DstF4y1XgO7cMvXaE=",
+    "key_id": "sha256:0d822a1cd6e705828f250ea20c64c483caadf688e09798d7a348dcf8e1f2c55d",
+    "public_key_base64": "JpebRGusLP27IQUchnTm8bm7eJxxGf7NvJYZnksOKRU=",
     "trust_anchor_kind": "ephemeral_test_key"
   }
 }
