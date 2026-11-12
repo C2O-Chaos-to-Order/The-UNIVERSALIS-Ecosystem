@@ -1,0 +1,342 @@
+{
+  "taxonomy_mapping": {
+    "schema_version": "1.0.0",
+    "mapping_id": "taxonomy-map-fixture-001",
+    "frameworks": [
+      {
+        "framework_id": "OWASP-LLM-TOP-10",
+        "framework_type": "threat-taxonomy",
+        "framework_version": "2025",
+        "release_status": "final",
+        "source_ref": "https://genai.owasp.org/resource/owasp-top-10-for-llm-applications-2025/"
+      },
+      {
+        "framework_id": "OWASP-AGENTIC-TOP-10",
+        "framework_type": "threat-taxonomy",
+        "framework_version": "2026",
+        "release_status": "final",
+        "source_ref": "https://genai.owasp.org/resource/owasp-top-10-for-agentic-applications-for-2026/"
+      },
+      {
+        "framework_id": "OWASP-MCP-TOP-10",
+        "framework_type": "threat-taxonomy",
+        "framework_version": "2025",
+        "release_status": "beta",
+        "source_ref": "https://owasp.github.io/www-project-mcp-top-10/"
+      },
+      {
+        "framework_id": "MITRE-ATLAS",
+        "framework_type": "threat-taxonomy",
+        "framework_version": "living",
+        "release_status": "living",
+        "source_ref": "https://atlas.mitre.org/"
+      }
+    ],
+    "mappings": [
+      {
+        "mapping_id": "mapping-prompt-injection",
+        "source_framework_id": "OWASP-LLM-TOP-10",
+        "source_label": "Prompt injection risk",
+        "target_framework_id": "OWASP-AGENTIC-TOP-10",
+        "target_label": "Agentic instruction and goal manipulation risk",
+        "relation": "related",
+        "rationale": "Conceptual crosswalk only; a relationship is not an identity between framework categories.",
+        "evidence_refs": [
+          "fixture://security/taxonomy/prompt-injection"
+        ]
+      },
+      {
+        "mapping_id": "mapping-mcp-tool-poisoning",
+        "source_framework_id": "OWASP-MCP-TOP-10",
+        "source_label": "Tool poisoning",
+        "target_framework_id": "MITRE-ATLAS",
+        "target_label": "AI-enabled technique mapping pending identifier review",
+        "relation": "partial",
+        "rationale": "The OWASP MCP project is marked beta in its published roadmap; no exact MITRE technique identifier is asserted in this fixture.",
+        "evidence_refs": [
+          "fixture://security/taxonomy/mcp-tool-poisoning"
+        ]
+      }
+    ],
+    "limitations": [
+      "Synthetic crosswalk fixture. Framework identifiers and editions must be pinned to reviewed source releases before operational use.",
+      "OWASP MCP Top 10 is represented as beta/pilot status, not as a final standard."
+    ]
+  },
+  "enforcement_receipt": {
+    "schema_version": "1.0.0",
+    "receipt_id": "enforcement-fixture-001",
+    "event_type": "tool-call-decision",
+    "occurred_at": "2026-11-12T17:30:00Z",
+    "actor_ref": "fixture://operator/pseudonymous-001",
+    "agent_ref": "fixture://agent/synthetic-001",
+    "session_ref": "fixture://session/001",
+    "action_ref": "fixture://action/001",
+    "tool_ref": "fixture://tool/synthetic",
+    "policy_ref": "fixture://policy/redacted-ref",
+    "policy_version": "0.1",
+    "policy_digest": "2222222222222222222222222222222222222222222222222222222222222222",
+    "decision": "deny",
+    "execution_status": "not-executed",
+    "risk_level": "moderate",
+    "enforcement_point": "mcp-proxy",
+    "enforcement_result": "enforced",
+    "trigger_finding_refs": [
+      "finding-fixture-001"
+    ],
+    "evidence_refs": [
+      "fixture://evidence/deny-event"
+    ],
+    "audit_chain_ref": "fixture-security-chain-001",
+    "receipt_digest": "3333333333333333333333333333333333333333333333333333333333333333",
+    "limitations": [
+      "Synthetic receipt. No live policy engine or actual agent action was executed."
+    ]
+  },
+  "containment_attestation": {
+    "schema_version": "1.0.0",
+    "attestation_id": "containment-fixture-001",
+    "containment_type": "agent-quarantine",
+    "target_ref": "fixture://agent/synthetic-001",
+    "trigger_event_ref": "fixture://event/security-deny-001",
+    "trigger_finding_refs": [
+      "finding-fixture-001"
+    ],
+    "substrate": "kernel",
+    "independent_of_agent": true,
+    "independent_control_plane": true,
+    "out_of_band": true,
+    "containment_started_at": "2026-11-12T17:30:00Z",
+    "verification_status": "not-run",
+    "policy_digest": "2222222222222222222222222222222222222222222222222222222222222222",
+    "watchdog_or_enforcer_ref": "fixture://enforcer/kernel-boundary",
+    "evidence_refs": [
+      "fixture://evidence/containment"
+    ],
+    "limitations": [
+      "Fixture asserts the intended contract shape only; no kernel program or hardware watchdog was loaded or exercised."
+    ]
+  },
+  "authorized_assessment": {
+    "schema_version": "1.0.0",
+    "assessment_id": "assessment-fixture-001",
+    "assessment_type": "isolated-lab-assessment",
+    "environment": "offline-fixture",
+    "authorization_ref": "fixture://authorization/owner-approved",
+    "owner_approval_ref": "fixture://approval/human-operator",
+    "scope_manifest_ref": "fixture://scope/one-synthetic-target",
+    "scope_manifest_digest": "4444444444444444444444444444444444444444444444444444444444444444",
+    "scope_enforced": true,
+    "scope_enforcement_method": "signed-scope-manifest-gate",
+    "exclusions_ref": "fixture://scope/exclusions",
+    "operator_ref": "fixture://operator/pseudonymous-001",
+    "tool_refs": [
+      "fixture://tool/config-review"
+    ],
+    "test_profile_ref": "fixture://test-profile/safe-negative",
+    "start_at": "2026-11-12T17:30:00Z",
+    "end_at": "2026-11-12T17:31:00Z",
+    "target_count": 1,
+    "excluded_target_count": 0,
+    "stop_conditions": [
+      "Any scope mismatch",
+      "Unexpected network egress",
+      "Loss of audit recording",
+      "Human operator stop request"
+    ],
+    "execution_status": "completed",
+    "findings_refs": [
+      "finding-fixture-001"
+    ],
+    "evidence_refs": [
+      "fixture://evidence/assessment"
+    ],
+    "limitations": [
+      "Synthetic offline fixture only. No network target, exploitation tool or live engagement was used."
+    ]
+  },
+  "security_finding": {
+    "schema_version": "1.0.0",
+    "finding_id": "finding-fixture-001",
+    "assessment_ref": "assessment-fixture-001",
+    "asset_ref": "fixture://asset/synthetic-mcp-service",
+    "title": "Synthetic tool-call policy boundary test",
+    "description": "A harmless negative fixture confirms that a denied call remains unexecuted in the record.",
+    "severity": "low",
+    "confidence": 1,
+    "taxonomy_mapping_ref": "taxonomy-map-fixture-001",
+    "taxonomy_item_refs": [
+      "mapping-mcp-tool-poisoning"
+    ],
+    "reproduction_method": "safe-negative-test",
+    "reproduction_evidence_ref": "fixture://tests/deny-not-executed",
+    "evidence_digest": "5555555555555555555555555555555555555555555555555555555555555555",
+    "evidence_ref": "fixture://evidence/finding-001",
+    "remediation_status": "mitigated",
+    "observed_at": "2026-11-12T17:30:00Z",
+    "limitations": [
+      "Synthetic test record; not a vulnerability discovery or real penetration-test finding."
+    ]
+  },
+  "sbom_attestation": {
+    "schema_version": "1.0.0",
+    "attestation_id": "sbom-fixture-001",
+    "subject_ref": "fixture://artifact/synthetic-app",
+    "subject_digest": "6666666666666666666666666666666666666666666666666666666666666666",
+    "sbom_format": "CycloneDX",
+    "sbom_version": "1.6",
+    "sbom_digest": "7777777777777777777777777777777777777777777777777777777777777777",
+    "component_count": 3,
+    "generated_at": "2026-11-12T17:30:00Z",
+    "scanner_ref": "fixture://scanner/not-run",
+    "vulnerability_scan_status": "not-run",
+    "critical_count": 0,
+    "high_count": 0,
+    "moderate_count": 0,
+    "low_count": 0,
+    "unknown_count": 0,
+    "license_review_status": "not-run",
+    "evidence_refs": [
+      "fixture://evidence/sbom-manifest"
+    ],
+    "limitations": [
+      "Synthetic SBOM metadata record. Zero counts are not a scan result; scan status is explicitly not-run."
+    ]
+  },
+  "build_provenance_attestation": {
+    "schema_version": "1.0.0",
+    "attestation_id": "provenance-fixture-001",
+    "subject_ref": "fixture://artifact/synthetic-app",
+    "subject_digest": "6666666666666666666666666666666666666666666666666666666666666666",
+    "source_revision": "fixture://revision/0000000",
+    "builder_ref": "fixture://builder/not-run",
+    "materials": [
+      {
+        "material_ref": "fixture://source/synthetic",
+        "digest": "8888888888888888888888888888888888888888888888888888888888888888"
+      }
+    ],
+    "provenance_standard": "in-toto",
+    "slsa_level": "not-asserted",
+    "built_at": "2026-11-12T17:30:00Z",
+    "verification_status": "not-run",
+    "evidence_refs": [
+      "fixture://evidence/provenance"
+    ],
+    "limitations": [
+      "No build was performed and no SLSA level is asserted."
+    ]
+  },
+  "sandbox_attestation": {
+    "schema_version": "1.0.0",
+    "attestation_id": "sandbox-fixture-001",
+    "subject_ref": "fixture://agent/synthetic-001",
+    "runtime_ref": "fixture://runtime/candidate",
+    "runtime_version": "not-pinned",
+    "platform": "linux",
+    "kernel_release": "not-observed",
+    "policy_digest": "2222222222222222222222222222222222222222222222222222222222222222",
+    "policy_version": "0.1",
+    "fail_closed": true,
+    "independent_policy_enforcement": true,
+    "enforcement_layers": [
+      {
+        "layer_type": "filesystem-lsm",
+        "implementation_ref": "Landlock-or-equivalent",
+        "loaded_status": "not-checked"
+      },
+      {
+        "layer_type": "seccomp",
+        "implementation_ref": "seccomp-BPF",
+        "loaded_status": "not-checked"
+      },
+      {
+        "layer_type": "ebpf-bpf-lsm",
+        "implementation_ref": "BPF-LSM",
+        "loaded_status": "not-checked"
+      }
+    ],
+    "test_count": 0,
+    "test_passed": 0,
+    "test_failed": 0,
+    "verification_status": "not-run",
+    "evidence_refs": [
+      "fixture://evidence/sandbox-design"
+    ],
+    "limitations": [
+      "Design fixture only. No kernel features, BPF programs, or sandbox runtime were loaded."
+    ]
+  },
+  "audit_chain_record": {
+    "schema_version": "1.0.0",
+    "chain_id": "fixture-security-chain-001",
+    "sequence": 0,
+    "recorded_at": "2026-11-12T17:30:00Z",
+    "previous_record_digest": null,
+    "payload": {
+      "chain_id": "fixture-security-chain-001",
+      "sequence": 0,
+      "recorded_at": "2026-11-12T17:30:00Z",
+      "actor_ref": "fixture://operator/pseudonymous-001",
+      "event_ref": "fixture://event/security-deny-001",
+      "event_type": "policy-denial",
+      "event_digest": "1111111111111111111111111111111111111111111111111111111111111111",
+      "outcome": "denied"
+    },
+    "payload_digest": "6d3ceb8b77b6c32f4c35e54922347e3c43f44464f2a50ae18ec16e34623b8504",
+    "record_digest": "eba4c3774c4f38dc0893fc4ad5b14bc07072eb251eab0cc9e711e470fa7e2bee",
+    "hash_algorithm": "SHA-256",
+    "limitations": [
+      "Synthetic hash-chain genesis record. No key or signature is provided."
+    ]
+  },
+  "compliance_evidence_map": {
+    "schema_version": "1.0.0",
+    "report_id": "compliance-map-fixture-001",
+    "framework_id": "NIST-AI-600-1",
+    "framework_version": "2024",
+    "framework_type": "risk-management-profile",
+    "assessment_date": "2026-11-12T17:30:00Z",
+    "coverage_items": [
+      {
+        "control_ref": "GOVERNANCE-AND-SUPPLY-CHAIN",
+        "coverage_status": "partially-covered",
+        "evidence_refs": [
+          "fixture://evidence/security-architecture"
+        ],
+        "review_notes": "Schema and architecture only; no operational control test."
+      },
+      {
+        "control_ref": "MEASUREMENT-AND-MONITORING",
+        "coverage_status": "not-assessed",
+        "evidence_refs": []
+      }
+    ],
+    "claim_scope": "technical-evidence-mapping-only",
+    "certification_claim": false,
+    "evidence_refs": [
+      "fixture://evidence/security-architecture"
+    ],
+    "limitations": [
+      "This is a technical evidence crosswalk, not a NIST certification or compliance determination."
+    ]
+  },
+  "security_proof": {
+    "version": "1.0.0",
+    "algorithm": "RFC9162-SHA256",
+    "canonicalization": "RFC8785",
+    "payload": {
+      "event_id": "security-fixture-event-001",
+      "event_digest": "1111111111111111111111111111111111111111111111111111111111111111",
+      "taxonomy_ref": "fixture://taxonomy/OWASP-LLM-2025",
+      "decision": "deny"
+    },
+    "payload_digest": "ee88111949e5da6f432e5d86434fa826546a4b84c17008700eedeb8ebb940b5c",
+    "leaf_hash": "f56b3c498e561a5572958c3e8b9dbfc50637e34c135b165707b73bb1e9ff15d8",
+    "root_hash": "f56b3c498e561a5572958c3e8b9dbfc50637e34c135b165707b73bb1e9ff15d8",
+    "tree_size": 1,
+    "leaf_index": 0,
+    "path": [],
+    "timestamp": "2026-11-12T17:30:00Z"
+  }
+}
