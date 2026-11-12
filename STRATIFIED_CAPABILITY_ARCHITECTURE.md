@@ -55,7 +55,7 @@ Compatibility status is `not_tested` until a defined profile, producer/consumer 
 13. `sovereign_deployment_attestation` — residency/egress, isolation, hardware-root and independent-verifier evidence; cannot self-certify compliance.
 14. `evidence_claim` — source-bounded claim, verification status, reviewer and limitations.
 
-The shared fixture is synthetic. Its Ed25519 private key was generated ephemerally and discarded; the public key is not a production trust root.
+The shared fixture is synthetic and deliberately unsigned: the composition receipt has `signature: null` and `signature_verification: not_present`. The schema defines an Ed25519 receipt envelope, but this fixture does not contain or verify a signature. Production signing and trust-anchor operations remain unimplemented.
 
 ## 4. Acceptance gates by stratum
 
