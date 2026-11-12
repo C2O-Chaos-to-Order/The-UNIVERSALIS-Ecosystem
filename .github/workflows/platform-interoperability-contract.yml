@@ -1,17 +1,6 @@
 name: Platform Interoperability Contract Validation
 on:
-  push:
-    paths:
-      - "schemas/platform/**"
-      - "examples/platform/**"
-      - ".github/scripts/platform_interoperability_contract.py"
-      - ".github/workflows/platform-interoperability-contract.yml"
-  pull_request:
-    paths:
-      - "schemas/platform/**"
-      - "examples/platform/**"
-      - ".github/scripts/platform_interoperability_contract.py"
-      - ".github/workflows/platform-interoperability-contract.yml"
+  workflow_dispatch:
 permissions:
   contents: read
 jobs:

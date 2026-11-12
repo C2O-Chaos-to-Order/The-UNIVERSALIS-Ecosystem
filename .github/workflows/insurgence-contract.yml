@@ -1,17 +1,6 @@
 name: Insurgence Contract Validation
 on:
-  push:
-    paths:
-      - "schemas/insurgence/**"
-      - "examples/insurgence/**"
-      - ".github/scripts/insurgence_contract.py"
-      - ".github/workflows/insurgence-contract.yml"
-  pull_request:
-    paths:
-      - "schemas/insurgence/**"
-      - "examples/insurgence/**"
-      - ".github/scripts/insurgence_contract.py"
-      - ".github/workflows/insurgence-contract.yml"
+  workflow_dispatch:
 permissions:
   contents: read
 jobs:

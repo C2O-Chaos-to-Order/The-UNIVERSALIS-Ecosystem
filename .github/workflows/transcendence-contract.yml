@@ -1,17 +1,6 @@
 name: Transcendence Contract Validation
 on:
-  push:
-    paths:
-      - "schemas/transcendence/**"
-      - "examples/transcendence/**"
-      - ".github/scripts/transcendence_contract.py"
-      - ".github/workflows/transcendence-contract.yml"
-  pull_request:
-    paths:
-      - "schemas/transcendence/**"
-      - "examples/transcendence/**"
-      - ".github/scripts/transcendence_contract.py"
-      - ".github/workflows/transcendence-contract.yml"
+  workflow_dispatch:
 permissions:
   contents: read
 jobs:

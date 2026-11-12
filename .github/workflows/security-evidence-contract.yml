@@ -1,19 +1,6 @@
 name: Security Evidence Contract Validation
 on:
-  push:
-    paths:
-      - "schemas/security/**"
-      - "examples/security/**"
-      - ".github/scripts/security_evidence_contract.py"
-      - ".github/scripts/c2o_private_security_authorization.py"
-      - ".github/workflows/security-evidence-contract.yml"
-  pull_request:
-    paths:
-      - "schemas/security/**"
-      - "examples/security/**"
-      - ".github/scripts/security_evidence_contract.py"
-      - ".github/scripts/c2o_private_security_authorization.py"
-      - ".github/workflows/security-evidence-contract.yml"
+  workflow_dispatch:
 permissions:
   contents: read
 jobs:

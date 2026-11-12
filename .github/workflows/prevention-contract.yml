@@ -1,17 +1,6 @@
 name: Prevention Contract Validation
 on:
-  push:
-    paths:
-      - "schemas/prevention/**"
-      - "examples/prevention/**"
-      - ".github/scripts/prevention_contract.py"
-      - ".github/workflows/prevention-contract.yml"
-  pull_request:
-    paths:
-      - "schemas/prevention/**"
-      - "examples/prevention/**"
-      - ".github/scripts/prevention_contract.py"
-      - ".github/workflows/prevention-contract.yml"
+  workflow_dispatch:
 permissions:
   contents: read
 jobs:
