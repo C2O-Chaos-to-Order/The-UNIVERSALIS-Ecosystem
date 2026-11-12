@@ -73,3 +73,12 @@ Treat every third-party name in that register as a proposed candidate/reference 
 ## Master toolchain coverage register — 2026-11-12
 
 The current public inventory for the original four toolchain documents plus the Intelligence Capabilities source is maintained in the UNIVERSALIS research register: https://github.com/C2O-Chaos-to-Order/Research-for-the-UNIVERSALIS-Ecosystem/blob/implementation/repository-foundation-2026-11-12/TOOLCHAIN_COVERAGE_REGISTER.md. It distinguishes documentation, basic contracts, passing CI, and actual integrations. This public register contains no links to C2O-private owner repositories or policy values.
+
+
+## Security and cybersecurity — eleventh owner-supplied source — 2026-11-12
+
+See [open UNIVERSALIS Security and Cybersecurity architecture](SECURITY_CYBERSECURITY_ARCHITECTURE.md), [portable evidence contracts](schemas/security/security-evidence-contracts.v1.schema.json), [synthetic fixtures](examples/security/security-evidence-fixtures.v1.json), and [validation record](SECURITY_CYBERSECURITY_VALIDATION.md).
+
+This public layer covers threat crosswalks, enforcement and containment receipts, sanitized findings, scoped assessment records, SBOM/provenance, sandbox evidence and tamper-evident audit records. It excludes C2O private policies, credentials, incidents, authority records and target data. No third-party tool or offensive assessment system is claimed integrated.
+
+See the [UNIVERSALIS eleven-source master toolchain coverage register](https://github.com/C2O-Chaos-to-Order/Research-for-the-UNIVERSALIS-Ecosystem/blob/implementation/repository-foundation-2026-11-12/TOOLCHAIN_COVERAGE_REGISTER.md).
