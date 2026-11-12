@@ -43,6 +43,19 @@ def validate_report(report: dict, axes: dict) -> None:
         if report["status"] == "no_divergence_detected":
             if len(usable) < 2 or len({x["source_ref"] for x in usable}) < 2:
                 raise ValueError("identity agreement requires two usable claims from distinct sources")
+            comparable_field_found = False
+            for field in ("subject_digest", "endpoint_digest"):
+                by_vantage = {}
+                for claim in usable:
+                    if field in claim:
+                        by_vantage.setdefault(claim.get("vantage_ref"), []).append(claim[field]["sha256"])
+                for values in by_vantage.values():
+                    if len(values) >= 2:
+                        comparable_field_found = True
+                        if len(set(values)) > 1:
+                            raise ValueError("identity agreement conflicts with observed digest values")
+            if not comparable_field_found:
+                raise ValueError("identity agreement requires at least one comparable shared field")
         if report["status"] == "divergent" and not report["findings"]:
             raise ValueError("identity divergence requires explicit finding")
 
@@ -118,6 +131,8 @@ def main() -> None:
     tests.append(("identity agreement with no claims",lambda: validate_report(item,axes)))
     item=copy.deepcopy(data["divergence_reports"][7]); item["domain"]="identity_federation"; item["status"]="no_divergence_detected"; item["identity_claims"]=[{"source_ref":"s1","vantage_ref":None,"claim":"error","observed_at":"2026-11-12T10:00:00Z"},{"source_ref":"s2","vantage_ref":None,"claim":"error","observed_at":"2026-11-12T10:00:00Z"}]
     tests.append(("identity agreement from errors",lambda: validate_report(item,axes)))
+    item=copy.deepcopy(data["divergence_reports"][7]); item["domain"]="identity_federation"; item["status"]="no_divergence_detected"; item["identity_claims"]=[{"source_ref":"s1","vantage_ref":"same-region","claim":"present","observed_at":"2026-11-12T10:00:00Z","endpoint_digest":{"sha256":"1"*64}},{"source_ref":"s2","vantage_ref":"same-region","claim":"present","observed_at":"2026-11-12T10:00:00Z","endpoint_digest":{"sha256":"2"*64}}]
+    tests.append(("identity agreement despite conflicting endpoints",lambda: validate_report(item,axes)))
     item=copy.deepcopy(data["attribution_receipts"][0]); item["envelope"]["payload"]=base64.b64encode(b"{}").decode()
     tests.append(("DSSE payload mismatch",lambda: verify_receipt(item,reports)))
     item=copy.deepcopy(data["attribution_receipts"][0]); item["envelope"]["signatures"][0]["sig"]=base64.b64encode(b"bad").decode()
