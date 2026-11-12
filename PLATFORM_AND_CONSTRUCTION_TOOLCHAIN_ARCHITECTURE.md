@@ -12,11 +12,11 @@ This layer supplies the substrate beneath and around UNIVERSALIS intelligence, k
 The seven infrastructure domains are:
 1. OS, kernel and runtime substrate.
 2. Application development SDKs and app runtimes.
-3. Workflow construction, blueprints and build orchestration.
-4. DevOps and CI/CD.
-5. Observability and lifecycle control.
-6. Networking and agent gateways.
-7. Storage, memory, evaluation and testing.
+3. Build and DevOps: workflow construction, blueprints, CI/CD, release and deployment automation.
+4. Observability and lifecycle control.
+5. Networking and agent gateways.
+6. Storage and memory.
+7. Evaluation and testing.
 
 ## 2. Open candidate inventory
 
