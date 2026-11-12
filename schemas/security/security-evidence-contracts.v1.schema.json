@@ -1404,6 +1404,90 @@
         "limitations"
       ],
       "additionalProperties": false
+    },
+    "securityProof": {
+      "type": "object",
+      "properties": {
+        "version": {
+          "const": "1.0.0"
+        },
+        "algorithm": {
+          "const": "RFC9162-SHA256"
+        },
+        "canonicalization": {
+          "const": "RFC8785"
+        },
+        "payload": {
+          "type": "object",
+          "additionalProperties": true
+        },
+        "payload_digest": {
+          "$ref": "#/$defs/digest"
+        },
+        "leaf_hash": {
+          "$ref": "#/$defs/digest"
+        },
+        "root_hash": {
+          "$ref": "#/$defs/digest"
+        },
+        "tree_size": {
+          "type": "integer",
+          "minimum": 1
+        },
+        "leaf_index": {
+          "type": "integer",
+          "minimum": 0
+        },
+        "path": {
+          "type": "array",
+          "items": {
+            "$ref": "#/$defs/digest"
+          },
+          "maxItems": 65536
+        },
+        "timestamp": {
+          "type": "string",
+          "format": "date-time"
+        }
+      },
+      "required": [
+        "version",
+        "algorithm",
+        "canonicalization",
+        "payload",
+        "payload_digest",
+        "leaf_hash",
+        "root_hash",
+        "tree_size",
+        "leaf_index",
+        "path",
+        "timestamp"
+      ],
+      "allOf": [
+        {
+          "if": {
+            "properties": {
+              "tree_size": {
+                "const": 1
+              }
+            },
+            "required": [
+              "tree_size"
+            ]
+          },
+          "then": {
+            "properties": {
+              "leaf_index": {
+                "const": 0
+              },
+              "path": {
+                "maxItems": 0
+              }
+            }
+          }
+        }
+      ],
+      "additionalProperties": false
     }
   },
   "additionalProperties": false
