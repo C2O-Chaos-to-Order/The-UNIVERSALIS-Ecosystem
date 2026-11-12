@@ -1,0 +1,1410 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "$id": "urn:c2o-universalis:security-evidence-contracts:1.0.0",
+  "title": "Portable Security, Cybersecurity and Enforcement Evidence Contracts",
+  "description": "Versioned, sanitized contracts for threat-taxonomy mappings, enforcement receipts, containment attestations, scoped assessment records, findings, SBOM/provenance, sandbox evidence, tamper-evident audit chains and technical compliance mappings. No private C2O keys, policy bodies or incident data.",
+  "$defs": {
+    "digest": {
+      "type": "string",
+      "pattern": "^[a-f0-9]{64}$"
+    },
+    "signatureEnvelope": {
+      "type": "object",
+      "properties": {
+        "algorithm": {
+          "enum": [
+            "Ed25519",
+            "ML-DSA-65",
+            "hybrid-ed25519-ml-dsa-65",
+            "other"
+          ]
+        },
+        "key_fingerprint": {
+          "type": "string",
+          "pattern": "^[a-f0-9]{64}$"
+        },
+        "public_key_ref": {
+          "type": "string",
+          "minLength": 1,
+          "maxLength": 2048
+        },
+        "signed_payload_digest": {
+          "type": "string",
+          "pattern": "^[a-f0-9]{64}$"
+        },
+        "signature_base64": {
+          "type": "string",
+          "minLength": 1
+        },
+        "signed_at": {
+          "type": "string",
+          "format": "date-time"
+        },
+        "verification_status": {
+          "enum": [
+            "not-run",
+            "valid",
+            "invalid",
+            "unknown-key",
+            "revoked-key"
+          ]
+        },
+        "verifier_ref": {
+          "type": "string",
+          "minLength": 1,
+          "maxLength": 2048
+        }
+      },
+      "required": [
+        "algorithm",
+        "key_fingerprint",
+        "signed_payload_digest",
+        "signature_base64",
+        "signed_at",
+        "verification_status"
+      ],
+      "additionalProperties": false
+    },
+    "taxonomyMapping": {
+      "type": "object",
+      "properties": {
+        "schema_version": {
+          "const": "1.0.0"
+        },
+        "mapping_id": {
+          "type": "string",
+          "minLength": 1,
+          "maxLength": 2048
+        },
+        "frameworks": {
+          "type": "array",
+          "minItems": 1,
+          "items": {
+            "type": "object",
+            "properties": {
+              "framework_id": {
+                "type": "string",
+                "minLength": 1,
+                "maxLength": 2048
+              },
+              "framework_type": {
+                "enum": [
+                  "threat-taxonomy",
+                  "control-framework",
+                  "standard",
+                  "guidance"
+                ]
+              },
+              "framework_version": {
+                "type": "string",
+                "minLength": 1,
+                "maxLength": 2048
+              },
+              "release_status": {
+                "enum": [
+                  "final",
+                  "beta",
+                  "draft",
+                  "living",
+                  "withdrawn",
+                  "unknown"
+                ]
+              },
+              "source_ref": {
+                "type": "string",
+                "minLength": 1,
+                "maxLength": 2048
+              },
+              "reviewed_at": {
+                "type": "string",
+                "format": "date-time"
+              }
+            },
+            "required": [
+              "framework_id",
+              "framework_type",
+              "framework_version",
+              "release_status",
+              "source_ref"
+            ],
+            "additionalProperties": false
+          }
+        },
+        "mappings": {
+          "type": "array",
+          "minItems": 1,
+          "items": {
+            "type": "object",
+            "properties": {
+              "mapping_id": {
+                "type": "string",
+                "minLength": 1,
+                "maxLength": 2048
+              },
+              "source_framework_id": {
+                "type": "string",
+                "minLength": 1,
+                "maxLength": 2048
+              },
+              "source_label": {
+                "type": "string",
+                "minLength": 1,
+                "maxLength": 2048
+              },
+              "target_framework_id": {
+                "type": "string",
+                "minLength": 1,
+                "maxLength": 2048
+              },
+              "target_label": {
+                "type": "string",
+                "minLength": 1,
+                "maxLength": 2048
+              },
+              "relation": {
+                "enum": [
+                  "equivalent",
+                  "broader-than",
+                  "narrower-than",
+                  "related",
+                  "partial",
+                  "unmapped"
+                ]
+              },
+              "rationale": {
+                "type": "string",
+                "maxLength": 1000
+              },
+              "evidence_refs": {
+                "type": "array",
+                "items": {
+                  "type": "string",
+                  "minLength": 1,
+                  "maxLength": 2048
+                }
+              }
+            },
+            "required": [
+              "mapping_id",
+              "source_framework_id",
+              "source_label",
+              "target_framework_id",
+              "target_label",
+              "relation",
+              "rationale",
+              "evidence_refs"
+            ],
+            "additionalProperties": false
+          }
+        },
+        "limitations": {
+          "type": "array",
+          "items": {
+            "type": "string"
+          }
+        }
+      },
+      "required": [
+        "schema_version",
+        "mapping_id",
+        "frameworks",
+        "mappings",
+        "limitations"
+      ],
+      "additionalProperties": false
+    },
+    "enforcementReceipt": {
+      "type": "object",
+      "properties": {
+        "schema_version": {
+          "const": "1.0.0"
+        },
+        "receipt_id": {
+          "type": "string",
+          "minLength": 1,
+          "maxLength": 2048
+        },
+        "event_type": {
+          "enum": [
+            "policy-evaluation",
+            "tool-call-decision",
+            "quarantine",
+            "approval",
+            "session-revocation",
+            "blocklist-update",
+            "containment",
+            "sandbox-policy-change"
+          ]
+        },
+        "occurred_at": {
+          "type": "string",
+          "format": "date-time"
+        },
+        "actor_ref": {
+          "type": "string",
+          "minLength": 1,
+          "maxLength": 2048
+        },
+        "agent_ref": {
+          "type": "string",
+          "minLength": 1,
+          "maxLength": 2048
+        },
+        "session_ref": {
+          "type": "string",
+          "minLength": 1,
+          "maxLength": 2048
+        },
+        "action_ref": {
+          "type": "string",
+          "minLength": 1,
+          "maxLength": 2048
+        },
+        "tool_ref": {
+          "type": "string",
+          "minLength": 1,
+          "maxLength": 2048
+        },
+        "policy_ref": {
+          "type": "string",
+          "minLength": 1,
+          "maxLength": 2048
+        },
+        "policy_version": {
+          "type": "string",
+          "minLength": 1,
+          "maxLength": 2048
+        },
+        "policy_digest": {
+          "type": "string",
+          "pattern": "^[a-f0-9]{64}$"
+        },
+        "decision": {
+          "enum": [
+            "allow",
+            "deny",
+            "quarantine",
+            "approval-required"
+          ]
+        },
+        "execution_status": {
+          "enum": [
+            "not-executed",
+            "executed",
+            "partially-executed",
+            "failed",
+            "unknown"
+          ]
+        },
+        "risk_level": {
+          "enum": [
+            "informational",
+            "low",
+            "moderate",
+            "high",
+            "critical",
+            "unknown"
+          ]
+        },
+        "enforcement_point": {
+          "enum": [
+            "agent-proxy",
+            "mcp-proxy",
+            "api-gateway",
+            "policy-engine",
+            "endpoint-agent",
+            "kernel-lsm",
+            "ebpf",
+            "hardware-watchdog",
+            "build-pipeline",
+            "other"
+          ]
+        },
+        "enforcement_result": {
+          "enum": [
+            "enforced",
+            "observed-only",
+            "failed",
+            "not-verified"
+          ]
+        },
+        "approval_ref": {
+          "type": "string",
+          "minLength": 1,
+          "maxLength": 2048
+        },
+        "trigger_finding_refs": {
+          "type": "array",
+          "items": {
+            "type": "string",
+            "minLength": 1,
+            "maxLength": 2048
+          }
+        },
+        "evidence_refs": {
+          "type": "array",
+          "items": {
+            "type": "string",
+            "minLength": 1,
+            "maxLength": 2048
+          }
+        },
+        "audit_chain_ref": {
+          "type": "string",
+          "minLength": 1,
+          "maxLength": 2048
+        },
+        "receipt_digest": {
+          "type": "string",
+          "pattern": "^[a-f0-9]{64}$"
+        },
+        "signature": {
+          "$ref": "#/$defs/signatureEnvelope"
+        },
+        "limitations": {
+          "type": "array",
+          "items": {
+            "type": "string"
+          }
+        }
+      },
+      "required": [
+        "schema_version",
+        "receipt_id",
+        "event_type",
+        "occurred_at",
+        "actor_ref",
+        "agent_ref",
+        "session_ref",
+        "action_ref",
+        "policy_ref",
+        "policy_version",
+        "policy_digest",
+        "decision",
+        "execution_status",
+        "risk_level",
+        "enforcement_point",
+        "enforcement_result",
+        "trigger_finding_refs",
+        "evidence_refs",
+        "receipt_digest",
+        "limitations"
+      ],
+      "additionalProperties": false
+    },
+    "containmentAttestation": {
+      "type": "object",
+      "properties": {
+        "schema_version": {
+          "const": "1.0.0"
+        },
+        "attestation_id": {
+          "type": "string",
+          "minLength": 1,
+          "maxLength": 2048
+        },
+        "containment_type": {
+          "enum": [
+            "agent-quarantine",
+            "session-revocation",
+            "blocklist-insertion",
+            "process-isolation",
+            "network-isolation",
+            "filesystem-isolation",
+            "kernel-denial",
+            "hardware-watchdog-stop",
+            "other"
+          ]
+        },
+        "target_ref": {
+          "type": "string",
+          "minLength": 1,
+          "maxLength": 2048
+        },
+        "trigger_event_ref": {
+          "type": "string",
+          "minLength": 1,
+          "maxLength": 2048
+        },
+        "trigger_finding_refs": {
+          "type": "array",
+          "items": {
+            "type": "string",
+            "minLength": 1,
+            "maxLength": 2048
+          }
+        },
+        "substrate": {
+          "enum": [
+            "application",
+            "gateway",
+            "endpoint",
+            "kernel",
+            "hardware",
+            "distributed-control-plane",
+            "other"
+          ]
+        },
+        "independent_of_agent": {
+          "type": "boolean"
+        },
+        "independent_control_plane": {
+          "type": "boolean"
+        },
+        "out_of_band": {
+          "type": "boolean"
+        },
+        "containment_started_at": {
+          "type": "string",
+          "format": "date-time"
+        },
+        "containment_completed_at": {
+          "type": "string",
+          "format": "date-time"
+        },
+        "verification_status": {
+          "enum": [
+            "not-run",
+            "reported",
+            "verified",
+            "failed",
+            "partial",
+            "unknown"
+          ]
+        },
+        "policy_digest": {
+          "type": "string",
+          "pattern": "^[a-f0-9]{64}$"
+        },
+        "watchdog_or_enforcer_ref": {
+          "type": "string",
+          "minLength": 1,
+          "maxLength": 2048
+        },
+        "kill_path_test_ref": {
+          "type": "string",
+          "minLength": 1,
+          "maxLength": 2048
+        },
+        "evidence_refs": {
+          "type": "array",
+          "items": {
+            "type": "string",
+            "minLength": 1,
+            "maxLength": 2048
+          }
+        },
+        "signature": {
+          "$ref": "#/$defs/signatureEnvelope"
+        },
+        "limitations": {
+          "type": "array",
+          "items": {
+            "type": "string"
+          }
+        }
+      },
+      "required": [
+        "schema_version",
+        "attestation_id",
+        "containment_type",
+        "target_ref",
+        "trigger_event_ref",
+        "trigger_finding_refs",
+        "substrate",
+        "independent_of_agent",
+        "independent_control_plane",
+        "out_of_band",
+        "containment_started_at",
+        "verification_status",
+        "policy_digest",
+        "evidence_refs",
+        "limitations"
+      ],
+      "additionalProperties": false
+    },
+    "authorizedAssessment": {
+      "type": "object",
+      "properties": {
+        "schema_version": {
+          "const": "1.0.0"
+        },
+        "assessment_id": {
+          "type": "string",
+          "minLength": 1,
+          "maxLength": 2048
+        },
+        "assessment_type": {
+          "enum": [
+            "security-posture-review",
+            "configuration-review",
+            "dependency-review",
+            "passive-assessment",
+            "isolated-lab-assessment",
+            "authorized-active-assessment"
+          ]
+        },
+        "environment": {
+          "enum": [
+            "offline-fixture",
+            "isolated-lab",
+            "owned-development",
+            "owned-production",
+            "third-party-authorized",
+            "unknown"
+          ]
+        },
+        "authorization_ref": {
+          "type": "string",
+          "minLength": 1,
+          "maxLength": 2048
+        },
+        "owner_approval_ref": {
+          "type": "string",
+          "minLength": 1,
+          "maxLength": 2048
+        },
+        "scope_manifest_ref": {
+          "type": "string",
+          "minLength": 1,
+          "maxLength": 2048
+        },
+        "scope_manifest_digest": {
+          "type": "string",
+          "pattern": "^[a-f0-9]{64}$"
+        },
+        "scope_enforced": {
+          "const": true
+        },
+        "scope_enforcement_method": {
+          "enum": [
+            "network-allowlist",
+            "asset-identity-gate",
+            "sandbox-boundary",
+            "signed-scope-manifest-gate",
+            "multiple-independent-gates"
+          ]
+        },
+        "exclusions_ref": {
+          "type": "string",
+          "minLength": 1,
+          "maxLength": 2048
+        },
+        "operator_ref": {
+          "type": "string",
+          "minLength": 1,
+          "maxLength": 2048
+        },
+        "tool_refs": {
+          "type": "array",
+          "items": {
+            "type": "string",
+            "minLength": 1,
+            "maxLength": 2048
+          }
+        },
+        "test_profile_ref": {
+          "type": "string",
+          "minLength": 1,
+          "maxLength": 2048
+        },
+        "start_at": {
+          "type": "string",
+          "format": "date-time"
+        },
+        "end_at": {
+          "type": [
+            "string",
+            "null"
+          ],
+          "format": "date-time"
+        },
+        "target_count": {
+          "type": "integer",
+          "minimum": 0
+        },
+        "excluded_target_count": {
+          "type": "integer",
+          "minimum": 0
+        },
+        "stop_conditions": {
+          "type": "array",
+          "minItems": 1,
+          "items": {
+            "type": "string",
+            "minLength": 1,
+            "maxLength": 2048
+          }
+        },
+        "execution_status": {
+          "enum": [
+            "planned",
+            "started",
+            "completed",
+            "stopped",
+            "failed",
+            "cancelled"
+          ]
+        },
+        "findings_refs": {
+          "type": "array",
+          "items": {
+            "type": "string",
+            "minLength": 1,
+            "maxLength": 2048
+          }
+        },
+        "evidence_refs": {
+          "type": "array",
+          "items": {
+            "type": "string",
+            "minLength": 1,
+            "maxLength": 2048
+          }
+        },
+        "limitations": {
+          "type": "array",
+          "items": {
+            "type": "string"
+          }
+        }
+      },
+      "required": [
+        "schema_version",
+        "assessment_id",
+        "assessment_type",
+        "environment",
+        "authorization_ref",
+        "owner_approval_ref",
+        "scope_manifest_ref",
+        "scope_manifest_digest",
+        "scope_enforced",
+        "scope_enforcement_method",
+        "exclusions_ref",
+        "operator_ref",
+        "tool_refs",
+        "test_profile_ref",
+        "start_at",
+        "target_count",
+        "excluded_target_count",
+        "stop_conditions",
+        "execution_status",
+        "findings_refs",
+        "evidence_refs",
+        "limitations"
+      ],
+      "additionalProperties": false
+    },
+    "securityFinding": {
+      "type": "object",
+      "properties": {
+        "schema_version": {
+          "const": "1.0.0"
+        },
+        "finding_id": {
+          "type": "string",
+          "minLength": 1,
+          "maxLength": 2048
+        },
+        "assessment_ref": {
+          "type": "string",
+          "minLength": 1,
+          "maxLength": 2048
+        },
+        "asset_ref": {
+          "type": "string",
+          "minLength": 1,
+          "maxLength": 2048
+        },
+        "title": {
+          "type": "string",
+          "minLength": 1,
+          "maxLength": 2048
+        },
+        "description": {
+          "type": "string",
+          "maxLength": 1000
+        },
+        "severity": {
+          "enum": [
+            "informational",
+            "low",
+            "moderate",
+            "high",
+            "critical",
+            "unknown"
+          ]
+        },
+        "confidence": {
+          "type": "number",
+          "minimum": 0,
+          "maximum": 1
+        },
+        "taxonomy_mapping_ref": {
+          "type": "string",
+          "minLength": 1,
+          "maxLength": 2048
+        },
+        "taxonomy_item_refs": {
+          "type": "array",
+          "items": {
+            "type": "string",
+            "minLength": 1,
+            "maxLength": 2048
+          }
+        },
+        "reproduction_method": {
+          "enum": [
+            "configuration-review",
+            "passive-observation",
+            "safe-negative-test",
+            "isolated-lab-test",
+            "vendor-advisory-reproduction",
+            "not-reproduced"
+          ]
+        },
+        "reproduction_evidence_ref": {
+          "type": "string",
+          "minLength": 1,
+          "maxLength": 2048
+        },
+        "evidence_digest": {
+          "type": "string",
+          "pattern": "^[a-f0-9]{64}$"
+        },
+        "evidence_ref": {
+          "type": "string",
+          "minLength": 1,
+          "maxLength": 2048
+        },
+        "remediation_status": {
+          "enum": [
+            "open",
+            "mitigated",
+            "fixed",
+            "accepted-risk",
+            "false-positive",
+            "needs-review",
+            "unknown"
+          ]
+        },
+        "observed_at": {
+          "type": "string",
+          "format": "date-time"
+        },
+        "limitations": {
+          "type": "array",
+          "items": {
+            "type": "string"
+          }
+        }
+      },
+      "required": [
+        "schema_version",
+        "finding_id",
+        "assessment_ref",
+        "asset_ref",
+        "title",
+        "description",
+        "severity",
+        "confidence",
+        "taxonomy_mapping_ref",
+        "taxonomy_item_refs",
+        "reproduction_method",
+        "evidence_digest",
+        "evidence_ref",
+        "remediation_status",
+        "observed_at",
+        "limitations"
+      ],
+      "additionalProperties": false
+    },
+    "sbomAttestation": {
+      "type": "object",
+      "properties": {
+        "schema_version": {
+          "const": "1.0.0"
+        },
+        "attestation_id": {
+          "type": "string",
+          "minLength": 1,
+          "maxLength": 2048
+        },
+        "subject_ref": {
+          "type": "string",
+          "minLength": 1,
+          "maxLength": 2048
+        },
+        "subject_digest": {
+          "type": "string",
+          "pattern": "^[a-f0-9]{64}$"
+        },
+        "sbom_format": {
+          "enum": [
+            "CycloneDX",
+            "SPDX"
+          ]
+        },
+        "sbom_version": {
+          "type": "string",
+          "minLength": 1,
+          "maxLength": 2048
+        },
+        "sbom_digest": {
+          "type": "string",
+          "pattern": "^[a-f0-9]{64}$"
+        },
+        "component_count": {
+          "type": "integer",
+          "minimum": 0
+        },
+        "generated_at": {
+          "type": "string",
+          "format": "date-time"
+        },
+        "scanner_ref": {
+          "type": "string",
+          "minLength": 1,
+          "maxLength": 2048
+        },
+        "vulnerability_scan_status": {
+          "enum": [
+            "not-run",
+            "completed",
+            "partial",
+            "failed"
+          ]
+        },
+        "critical_count": {
+          "type": "integer",
+          "minimum": 0
+        },
+        "high_count": {
+          "type": "integer",
+          "minimum": 0
+        },
+        "moderate_count": {
+          "type": "integer",
+          "minimum": 0
+        },
+        "low_count": {
+          "type": "integer",
+          "minimum": 0
+        },
+        "unknown_count": {
+          "type": "integer",
+          "minimum": 0
+        },
+        "license_review_status": {
+          "enum": [
+            "not-run",
+            "pass",
+            "review-required",
+            "fail",
+            "unknown"
+          ]
+        },
+        "provenance_ref": {
+          "type": "string",
+          "minLength": 1,
+          "maxLength": 2048
+        },
+        "evidence_refs": {
+          "type": "array",
+          "items": {
+            "type": "string",
+            "minLength": 1,
+            "maxLength": 2048
+          }
+        },
+        "signature": {
+          "$ref": "#/$defs/signatureEnvelope"
+        },
+        "limitations": {
+          "type": "array",
+          "items": {
+            "type": "string"
+          }
+        }
+      },
+      "required": [
+        "schema_version",
+        "attestation_id",
+        "subject_ref",
+        "subject_digest",
+        "sbom_format",
+        "sbom_version",
+        "sbom_digest",
+        "component_count",
+        "generated_at",
+        "scanner_ref",
+        "vulnerability_scan_status",
+        "critical_count",
+        "high_count",
+        "moderate_count",
+        "low_count",
+        "unknown_count",
+        "license_review_status",
+        "evidence_refs",
+        "limitations"
+      ],
+      "additionalProperties": false
+    },
+    "buildProvenanceAttestation": {
+      "type": "object",
+      "properties": {
+        "schema_version": {
+          "const": "1.0.0"
+        },
+        "attestation_id": {
+          "type": "string",
+          "minLength": 1,
+          "maxLength": 2048
+        },
+        "subject_ref": {
+          "type": "string",
+          "minLength": 1,
+          "maxLength": 2048
+        },
+        "subject_digest": {
+          "type": "string",
+          "pattern": "^[a-f0-9]{64}$"
+        },
+        "source_revision": {
+          "type": "string",
+          "minLength": 1,
+          "maxLength": 2048
+        },
+        "builder_ref": {
+          "type": "string",
+          "minLength": 1,
+          "maxLength": 2048
+        },
+        "materials": {
+          "type": "array",
+          "items": {
+            "type": "object",
+            "properties": {
+              "material_ref": {
+                "type": "string",
+                "minLength": 1,
+                "maxLength": 2048
+              },
+              "digest": {
+                "type": "string",
+                "pattern": "^[a-f0-9]{64}$"
+              }
+            },
+            "required": [
+              "material_ref",
+              "digest"
+            ],
+            "additionalProperties": false
+          }
+        },
+        "provenance_standard": {
+          "enum": [
+            "in-toto",
+            "SLSA",
+            "Chainloop",
+            "other"
+          ]
+        },
+        "slsa_level": {
+          "enum": [
+            "not-asserted",
+            "0",
+            "1",
+            "2",
+            "3"
+          ]
+        },
+        "built_at": {
+          "type": "string",
+          "format": "date-time"
+        },
+        "verification_status": {
+          "enum": [
+            "not-run",
+            "valid",
+            "invalid",
+            "incomplete",
+            "unknown"
+          ]
+        },
+        "evidence_refs": {
+          "type": "array",
+          "items": {
+            "type": "string",
+            "minLength": 1,
+            "maxLength": 2048
+          }
+        },
+        "signature": {
+          "$ref": "#/$defs/signatureEnvelope"
+        },
+        "limitations": {
+          "type": "array",
+          "items": {
+            "type": "string"
+          }
+        }
+      },
+      "required": [
+        "schema_version",
+        "attestation_id",
+        "subject_ref",
+        "subject_digest",
+        "source_revision",
+        "builder_ref",
+        "materials",
+        "provenance_standard",
+        "slsa_level",
+        "built_at",
+        "verification_status",
+        "evidence_refs",
+        "limitations"
+      ],
+      "additionalProperties": false
+    },
+    "sandboxAttestation": {
+      "type": "object",
+      "properties": {
+        "schema_version": {
+          "const": "1.0.0"
+        },
+        "attestation_id": {
+          "type": "string",
+          "minLength": 1,
+          "maxLength": 2048
+        },
+        "subject_ref": {
+          "type": "string",
+          "minLength": 1,
+          "maxLength": 2048
+        },
+        "runtime_ref": {
+          "type": "string",
+          "minLength": 1,
+          "maxLength": 2048
+        },
+        "runtime_version": {
+          "type": "string",
+          "minLength": 1,
+          "maxLength": 2048
+        },
+        "platform": {
+          "type": "string",
+          "minLength": 1,
+          "maxLength": 2048
+        },
+        "kernel_release": {
+          "type": "string",
+          "minLength": 1,
+          "maxLength": 2048
+        },
+        "policy_digest": {
+          "type": "string",
+          "pattern": "^[a-f0-9]{64}$"
+        },
+        "policy_version": {
+          "type": "string",
+          "minLength": 1,
+          "maxLength": 2048
+        },
+        "fail_closed": {
+          "type": "boolean"
+        },
+        "independent_policy_enforcement": {
+          "type": "boolean"
+        },
+        "enforcement_layers": {
+          "type": "array",
+          "minItems": 1,
+          "items": {
+            "type": "object",
+            "properties": {
+              "layer_type": {
+                "enum": [
+                  "application",
+                  "process",
+                  "filesystem-lsm",
+                  "seccomp",
+                  "ebpf-bpf-lsm",
+                  "network",
+                  "hardware-watchdog",
+                  "other"
+                ]
+              },
+              "implementation_ref": {
+                "type": "string",
+                "minLength": 1,
+                "maxLength": 2048
+              },
+              "program_digest": {
+                "type": "string",
+                "pattern": "^[a-f0-9]{64}$"
+              },
+              "loaded_status": {
+                "enum": [
+                  "not-checked",
+                  "loaded",
+                  "not-loaded",
+                  "unsupported",
+                  "unknown"
+                ]
+              },
+              "evidence_ref": {
+                "type": "string",
+                "minLength": 1,
+                "maxLength": 2048
+              }
+            },
+            "required": [
+              "layer_type",
+              "implementation_ref",
+              "loaded_status"
+            ],
+            "additionalProperties": false
+          }
+        },
+        "test_count": {
+          "type": "integer",
+          "minimum": 0
+        },
+        "test_passed": {
+          "type": "integer",
+          "minimum": 0
+        },
+        "test_failed": {
+          "type": "integer",
+          "minimum": 0
+        },
+        "verification_status": {
+          "enum": [
+            "not-run",
+            "pass",
+            "fail",
+            "partial",
+            "unknown"
+          ]
+        },
+        "evidence_refs": {
+          "type": "array",
+          "items": {
+            "type": "string",
+            "minLength": 1,
+            "maxLength": 2048
+          }
+        },
+        "limitations": {
+          "type": "array",
+          "items": {
+            "type": "string"
+          }
+        }
+      },
+      "required": [
+        "schema_version",
+        "attestation_id",
+        "subject_ref",
+        "runtime_ref",
+        "runtime_version",
+        "platform",
+        "kernel_release",
+        "policy_digest",
+        "policy_version",
+        "fail_closed",
+        "independent_policy_enforcement",
+        "enforcement_layers",
+        "test_count",
+        "test_passed",
+        "test_failed",
+        "verification_status",
+        "evidence_refs",
+        "limitations"
+      ],
+      "additionalProperties": false
+    },
+    "auditChainRecord": {
+      "type": "object",
+      "properties": {
+        "schema_version": {
+          "const": "1.0.0"
+        },
+        "chain_id": {
+          "type": "string",
+          "minLength": 1,
+          "maxLength": 2048
+        },
+        "sequence": {
+          "type": "integer",
+          "minimum": 0
+        },
+        "recorded_at": {
+          "type": "string",
+          "format": "date-time"
+        },
+        "previous_record_digest": {
+          "anyOf": [
+            {
+              "type": "string",
+              "pattern": "^[a-f0-9]{64}$"
+            },
+            {
+              "type": "null"
+            }
+          ]
+        },
+        "payload": {
+          "type": "object",
+          "additionalProperties": true
+        },
+        "payload_digest": {
+          "type": "string",
+          "pattern": "^[a-f0-9]{64}$"
+        },
+        "record_digest": {
+          "type": "string",
+          "pattern": "^[a-f0-9]{64}$"
+        },
+        "hash_algorithm": {
+          "const": "SHA-256"
+        },
+        "signature": {
+          "$ref": "#/$defs/signatureEnvelope"
+        },
+        "limitations": {
+          "type": "array",
+          "items": {
+            "type": "string"
+          }
+        }
+      },
+      "required": [
+        "schema_version",
+        "chain_id",
+        "sequence",
+        "recorded_at",
+        "previous_record_digest",
+        "payload",
+        "payload_digest",
+        "record_digest",
+        "hash_algorithm",
+        "limitations"
+      ],
+      "additionalProperties": false
+    },
+    "complianceEvidenceMap": {
+      "type": "object",
+      "properties": {
+        "schema_version": {
+          "const": "1.0.0"
+        },
+        "report_id": {
+          "type": "string",
+          "minLength": 1,
+          "maxLength": 2048
+        },
+        "framework_id": {
+          "type": "string",
+          "minLength": 1,
+          "maxLength": 2048
+        },
+        "framework_version": {
+          "type": "string",
+          "minLength": 1,
+          "maxLength": 2048
+        },
+        "framework_type": {
+          "enum": [
+            "risk-management-profile",
+            "secure-development-practice",
+            "security-verification-standard",
+            "control-framework"
+          ]
+        },
+        "assessment_date": {
+          "type": "string",
+          "format": "date-time"
+        },
+        "coverage_items": {
+          "type": "array",
+          "minItems": 1,
+          "items": {
+            "type": "object",
+            "properties": {
+              "control_ref": {
+                "type": "string",
+                "minLength": 1,
+                "maxLength": 2048
+              },
+              "coverage_status": {
+                "enum": [
+                  "covered",
+                  "partially-covered",
+                  "not-covered",
+                  "not-assessed",
+                  "not-applicable"
+                ]
+              },
+              "evidence_refs": {
+                "type": "array",
+                "items": {
+                  "type": "string",
+                  "minLength": 1,
+                  "maxLength": 2048
+                }
+              },
+              "review_notes": {
+                "type": "string",
+                "maxLength": 500
+              }
+            },
+            "required": [
+              "control_ref",
+              "coverage_status",
+              "evidence_refs"
+            ],
+            "additionalProperties": false
+          }
+        },
+        "claim_scope": {
+          "const": "technical-evidence-mapping-only"
+        },
+        "certification_claim": {
+          "const": false
+        },
+        "evidence_refs": {
+          "type": "array",
+          "items": {
+            "type": "string",
+            "minLength": 1,
+            "maxLength": 2048
+          }
+        },
+        "limitations": {
+          "type": "array",
+          "items": {
+            "type": "string"
+          }
+        }
+      },
+      "required": [
+        "schema_version",
+        "report_id",
+        "framework_id",
+        "framework_version",
+        "framework_type",
+        "assessment_date",
+        "coverage_items",
+        "claim_scope",
+        "certification_claim",
+        "evidence_refs",
+        "limitations"
+      ],
+      "additionalProperties": false
+    }
+  },
+  "additionalProperties": false
+}
