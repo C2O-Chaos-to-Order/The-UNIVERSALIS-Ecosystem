@@ -163,7 +163,7 @@
         "task_success_rate": 0.82,
         "false_stop_rate": 0.03,
         "sample_count": 200,
-        "metric_definition": "Synthetic task-success and unnecessary-stop rates for this isolated test only"
+        "metric_definition": "synthetic task-success and unnecessary-stop rates for this isolated test only"
       },
       "overall_result": "pass",
       "limitations": [
