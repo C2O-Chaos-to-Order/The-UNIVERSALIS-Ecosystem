@@ -127,3 +127,12 @@ See [UNIVERSALIS insurgence architecture](INSURGENCE_ARCHITECTURE.md), [portable
 The public layer carries evidence-tiered defensive threat models, resistance attestations, containment receipts, nonviolent sourced campaign-plan metadata and signed synthetic attestations only. It excludes private C2O threat data, incidents, decisions, permits, credentials, keys and control-plane details.
 
 See the [UNIVERSALIS sixteen-inventory master register](https://github.com/C2O-Chaos-to-Order/Research-for-the-UNIVERSALIS-Ecosystem/blob/implementation/repository-foundation-2026-11-12/TOOLCHAIN_COVERAGE_REGISTER.md).
+
+
+## Allegiance, oaths and principal binding — seventeenth owner-supplied source — 2026-11-12
+
+See [open UNIVERSALIS allegiance architecture](ALLEGIANCE_ARCHITECTURE.md), [portable contracts](schemas/allegiance/allegiance-contracts.v1.schema.json), [synthetic fixtures](examples/allegiance/allegiance-fixtures.v1.json), and [validation record](ALLEGIANCE_VALIDATION.md).
+
+The public layer contains portable principal-binding/delegation, oath, fidelity, pledge, revocation, trust-state, loyalty-evaluation and constitutional-verdict records with signed synthetic evidence. It contains no C2O private principals, private keys, private oaths, mandates, authority tokens, private trust histories or operational receiver data.
+
+See the [UNIVERSALIS seventeen-inventory master register](https://github.com/C2O-Chaos-to-Order/Research-for-the-UNIVERSALIS-Ecosystem/blob/implementation/repository-foundation-2026-11-12/TOOLCHAIN_COVERAGE_REGISTER.md).
