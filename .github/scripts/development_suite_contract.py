@@ -12,8 +12,8 @@ ROOT = Path(__file__).resolve().parents[2]
 SCHEMA_FILE = ROOT / "schemas/development-suite/development-suite-contracts.v1.schema.json"
 FIXTURE_FILE = ROOT / "examples/development-suite/development-suite-fixtures.v1.json"
 KEY_ID = "urn:universal.is:fixture-ed25519-2026-11"
-PUBLIC_KEY = base64.b64decode("z9lNWSvTyOh57uphiFcA3CeU5v8ZqQamMwXsYo4iClM=")
-PUBLIC_KEY_SHA256 = "e5a5aa300817386c9539ebc46b215745f6409845f8d4d8fa14b64bb878580295"
+PUBLIC_KEY = base64.b64decode("O2onvM62pC1io6jQKm8Nc2UyFXcd4kOmOsBIoYtZ2ik=")
+PUBLIC_KEY_SHA256 = "139e3940e64b5491722088d9a0d741628fc826e09475d341a780acde3c4b8070"
 HIGH_IMPACT = {"release", "publish", "deploy"}
 
 def canonical_json(value: object) -> bytes:
