@@ -2,7 +2,7 @@
 
 Branch: `implementation/repository-foundation-2026-11-12`  
 Contract version: 1.0.0  
-Status: **Implemented; awaiting the current PR-head CI run.**
+Status: **Passed on the current UNIVERSALIS ecosystem PR head.**
 
 ## Positive contract fixture
 
@@ -39,7 +39,12 @@ The shared schema, synthetic fixture, validator and CI workflow are public porta
 
 Workflow: `.github/workflows/website-interoperability-contract.yml`. It installs the JSON Schema validator and runs the six-record/eleven-negative-case public contract test.
 
-**CI receipts:** To be added after GitHub completes the run for the current PR head. Passing CI proves only schema and synthetic-fixture behavior.
+**Executed CI receipts (2026-11-12):**
+- Website Interoperability Contract Validation: [passed — run 43275844367](https://github.com/C2O-Chaos-to-Order/The-UNIVERSALIS-Ecosystem/actions/runs/43275844367).
+- Repository quality baseline: [passed — run 43275844143](https://github.com/C2O-Chaos-to-Order/The-UNIVERSALIS-Ecosystem/actions/runs/43275844143).
+- Repository Verification: [passed — run 43275844133](https://github.com/C2O-Chaos-to-Order/The-UNIVERSALIS-Ecosystem/actions/runs/43275844133), including changed Markdown/local-link, JSON, YAML and Python syntax checks and the existing scaffold/prototype regression.
+
+These receipts prove schema/semantic behavior on synthetic fixtures and repository-level validation only.
 
 ## Limits
 
