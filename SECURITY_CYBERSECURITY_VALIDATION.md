@@ -27,11 +27,11 @@ Ten negative cases reject: tampered Merkle root; denied action marked executed; 
 
 ## Executed CI receipts
 
-- Security Evidence Contract Validation: [passed — run 43266877113](https://github.com/C2O-Chaos-to-Order/The-UNIVERSALIS-Ecosystem/actions/runs/43266877113).
-- Repository quality baseline: [passed — run 43266877098](https://github.com/C2O-Chaos-to-Order/The-UNIVERSALIS-Ecosystem/actions/runs/43266877098).
-- Engineering Doctor: [passed — run 43266877063](https://github.com/C2O-Chaos-to-Order/The-UNIVERSALIS-Ecosystem/actions/runs/43266877063).
-- Repository Verification: [passed — run 43266876988](https://github.com/C2O-Chaos-to-Order/The-UNIVERSALIS-Ecosystem/actions/runs/43266876988).
-- Architecture Graph Contract: [passed — run 43266877097](https://github.com/C2O-Chaos-to-Order/The-UNIVERSALIS-Ecosystem/actions/runs/43266877097).
+- Security Evidence Contract Validation: [passed — run 43267172715](https://github.com/C2O-Chaos-to-Order/The-UNIVERSALIS-Ecosystem/actions/runs/43267172715).
+- Repository quality baseline: [passed — run 43267172143](https://github.com/C2O-Chaos-to-Order/The-UNIVERSALIS-Ecosystem/actions/runs/43267172143).
+- Engineering Doctor: [passed — run 43267171861](https://github.com/C2O-Chaos-to-Order/The-UNIVERSALIS-Ecosystem/actions/runs/43267171861).
+- Repository Verification: [passed — run 43267171678](https://github.com/C2O-Chaos-to-Order/The-UNIVERSALIS-Ecosystem/actions/runs/43267171678).
+- Architecture Graph Contract: [passed — run 43267174501](https://github.com/C2O-Chaos-to-Order/The-UNIVERSALIS-Ecosystem/actions/runs/43267174501).
 
 ## Limits
 
