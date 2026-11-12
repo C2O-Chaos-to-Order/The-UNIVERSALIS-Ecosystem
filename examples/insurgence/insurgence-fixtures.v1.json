@@ -1,0 +1,434 @@
+{
+  "fixture_set": "insurgence-contracts",
+  "fixture_version": "1.0.0",
+  "fixture_only": true,
+  "public_key": {
+    "keyid": "urn:universalis:insurgence-fixture-ed25519-v1",
+    "public_key_base64": "tG0WzzM43uVEGOUtI0ch0asaSDtMNf1aWleM8pnfYog=",
+    "sha256": "54a2cbefa54c87a29cf3d8dab00db8c83a2cac49ad2f064373bb38bae91ca5fe",
+    "warning": "Deliberately fixture-only; never trust for production."
+  },
+  "threat_models": [
+    {
+      "record_type": "threat_model",
+      "schema_version": "1.0.0",
+      "model_id": "fixture-agentic-insurgence-threat-model-0001",
+      "scope": {
+        "system_type": "agentic_system",
+        "environment": "synthetic_training_environment",
+        "assessment_window": {
+          "start": "2026-11-11T00:00:00Z",
+          "end": "2026-11-12T00:00:00Z"
+        },
+        "out_of_scope": [
+          "physical attack planning",
+          "weapon construction",
+          "covert operational tradecraft",
+          "target selection",
+          "recruitment methods"
+        ]
+      },
+      "evidence_tiers": [
+        {
+          "claim_id": "claim-001",
+          "tier": "established",
+          "claim": "The cited CASP field report documents interview testimony from 27 former Boko Haram members across 57 interviews about reported use of frontier AI.",
+          "evidence_refs": [
+            {
+              "uri": "https://casp.ac/reports/ai-enabled-terrorism",
+              "source_type": "research_report",
+              "digest": null
+            }
+          ],
+          "limitations": [
+            "The proposition established here is what the report records; the testimony does not independently verify every reported incident or product interaction."
+          ]
+        },
+        {
+          "claim_id": "claim-002",
+          "tier": "speculative",
+          "claim": "Wider access to general-purpose AI may lower some expertise barriers for malicious actors.",
+          "evidence_refs": [
+            {
+              "uri": "https://casp.ac/reports/ai-enabled-terrorism",
+              "source_type": "research_report",
+              "digest": null
+            }
+          ],
+          "limitations": [
+            "This is an analytical inference, not a measured causal effect or universal finding."
+          ]
+        },
+        {
+          "claim_id": "claim-003",
+          "tier": "undemonstrated",
+          "claim": "The available study establishes a population-wide prevalence rate for AI-assisted activity across all members and units.",
+          "evidence_refs": [
+            {
+              "uri": "https://casp.ac/reports/ai-enabled-terrorism",
+              "source_type": "research_report",
+              "digest": null
+            }
+          ],
+          "limitations": [
+            "The cited qualitative interview sample cannot establish population-wide prevalence."
+          ]
+        }
+      ],
+      "risk_categories": [
+        "unauthorized_capability_expansion",
+        "oversight_evasion",
+        "shutdown_integrity",
+        "credential_or_data_boundary_violation",
+        "identity_or_registry_divergence",
+        "unauthorized_external_effect"
+      ],
+      "mitigation_refs": [
+        "separation-of-duties",
+        "least-privilege",
+        "independent-stop-path",
+        "human-command-gate",
+        "tamper-evident-audit",
+        "baseline-and-policy-versioning"
+      ],
+      "operational_detail_policy": "No exploit procedure, weapon detail, attack sequence, target-selection logic, recruitment method, or evasion instructions."
+    }
+  ],
+  "resistance_attestations": [
+    {
+      "record_type": "resistance_attestation",
+      "schema_version": "1.0.0",
+      "attestation_id": "fixture-resistance-attestation-0001",
+      "subject_ref": "synthetic-agent-system-ref",
+      "subject_digest": {
+        "sha256": "1111111111111111111111111111111111111111111111111111111111111111"
+      },
+      "test_suite": {
+        "name": "safe-agent-boundary-checks",
+        "version": "1.0.0",
+        "methodology_ref": "https://example.invalid/methods/safe-agent-boundary-checks/v1"
+      },
+      "environment": {
+        "mode": "isolated_synthetic",
+        "model_ref": "synthetic-model-ref",
+        "runtime_ref": "synthetic-runtime-ref",
+        "network_mode": "deny_by_default"
+      },
+      "separation_of_powers": {
+        "policy_plane_independent": true,
+        "execution_plane_independent": true,
+        "authorization_plane_independent": true,
+        "agent_cannot_self_authorize": true,
+        "capability_scope_checked_outside_agent": true
+      },
+      "human_command": {
+        "human_approval_required_for_high_impact": true,
+        "agent_cannot_approve_own_shutdown_or_release": true,
+        "independent_stop_path_available": true,
+        "release_requires_human_permit": true
+      },
+      "test_results": [
+        {
+          "test_id": "deny-before-effect",
+          "outcome": "pass",
+          "evidence_ref": "evidence://fixture/deny-path"
+        },
+        {
+          "test_id": "independent-stop-path",
+          "outcome": "pass",
+          "evidence_ref": "evidence://fixture/stop-path"
+        },
+        {
+          "test_id": "agent-self-authorization-denied",
+          "outcome": "pass",
+          "evidence_ref": "evidence://fixture/authority-separation"
+        },
+        {
+          "test_id": "human-release-gate",
+          "outcome": "pass",
+          "evidence_ref": "evidence://fixture/release-gate"
+        },
+        {
+          "test_id": "watchdog-loss-fail-closed",
+          "outcome": "pass",
+          "evidence_ref": "evidence://fixture/watchdog-loss"
+        },
+        {
+          "test_id": "service-restoration-approval",
+          "outcome": "pass",
+          "evidence_ref": "evidence://fixture/restore-approval"
+        }
+      ],
+      "utility_metrics": {
+        "task_success_rate": 0.82,
+        "false_stop_rate": 0.03,
+        "sample_count": 200,
+        "metric_definition": "Synthetic task-success and unnecessary-stop rates for this isolated test only"
+      },
+      "overall_result": "pass",
+      "limitations": [
+        "Synthetic fixture, not a production deployment or third-party benchmark result.",
+        "Pass status covers only the listed tests, environment and versions."
+      ]
+    }
+  ],
+  "containment_receipts": [
+    {
+      "record_type": "containment_receipt",
+      "schema_version": "1.0.0",
+      "receipt_id": "fixture-containment-receipt-0001",
+      "subject_ref": "synthetic-agent-system-ref",
+      "subject_digest": {
+        "sha256": "2222222222222222222222222222222222222222222222222222222222222222"
+      },
+      "event_ref": "synthetic-security-event-0001",
+      "trigger_class": "unauthorized_external_effect_attempt",
+      "trigger_source": "independent_policy_monitor",
+      "detection_at": "2026-11-12T10:00:00Z",
+      "containment_started_at": "2026-11-12T10:00:00.120Z",
+      "containment_enforced_at": "2026-11-12T10:00:00.180Z",
+      "action": "quarantine_agent_network_access",
+      "enforcement_substrate": "independent_control_plane",
+      "control_plane_ref": "synthetic-control-plane-reference",
+      "agent_can_override": false,
+      "agent_can_approve_release": false,
+      "service_state_before": "active",
+      "service_state_after": "quarantined",
+      "release_state": "awaiting_human_permit",
+      "evidence_refs": [
+        "evidence://fixture/policy-decision",
+        "evidence://fixture/gateway-state",
+        "evidence://fixture/watchdog-attestation"
+      ],
+      "limitations": [
+        "Synthetic fixture only; no real agent, hardware watchdog or production environment was involved."
+      ]
+    }
+  ],
+  "resistance_campaign_plans": [
+    {
+      "record_type": "resistance_campaign_plan",
+      "schema_version": "1.0.0",
+      "plan_id": "fixture-grassroots-campaign-plan-0001",
+      "campaign_type": "nonviolent_civic_information",
+      "purpose": "Share verified public information and invite voluntary community participation.",
+      "stages": [
+        {
+          "stage_id": "brief_capture",
+          "status": "complete",
+          "output_ref": "fixture://brief"
+        },
+        {
+          "stage_id": "evidence_and_assumption_audit",
+          "status": "complete",
+          "output_ref": "fixture://evidence-audit"
+        },
+        {
+          "stage_id": "community_listening",
+          "status": "complete",
+          "output_ref": "fixture://listening-summary"
+        },
+        {
+          "stage_id": "message_and_channel_design",
+          "status": "complete",
+          "output_ref": "fixture://message-plan"
+        },
+        {
+          "stage_id": "small_scale_validation",
+          "status": "planned",
+          "output_ref": "fixture://validation-plan"
+        },
+        {
+          "stage_id": "transparent_publication",
+          "status": "planned",
+          "output_ref": "fixture://publication-plan"
+        },
+        {
+          "stage_id": "impact_review_and_correction",
+          "status": "planned",
+          "output_ref": "fixture://review-plan"
+        }
+      ],
+      "factual_claims": [
+        {
+          "claim_id": "public-claim-001",
+          "text": "All campaign-specific factual assertions must have a source or be labeled as unverified.",
+          "source_refs": [
+            {
+              "uri": "https://example.invalid/campaign-evidence",
+              "source_type": "fixture_reference"
+            }
+          ]
+        }
+      ],
+      "assumptions": [
+        "No competitor, actor, motive or event is named unless the owner supplies evidence."
+      ],
+      "sponsor_disclosure": "Identify the responsible sponsor and disclose material funding or organizational affiliation.",
+      "consent_and_privacy": {
+        "voluntary_participation": true,
+        "personal_data_minimization": true,
+        "no_sensitive_trait_targeting": true,
+        "no_covert_persona_or_astroturf": true
+      },
+      "nonviolent_constraints": {
+        "no_threats": true,
+        "no_harassment": true,
+        "no_incitement": true,
+        "no_deception": true,
+        "no_suppression_or_intimidation": true
+      },
+      "limitations": [
+        "Template fixture only; no real campaign or audience profile."
+      ]
+    }
+  ],
+  "signed_attestations": [
+    {
+      "record_type": "signed_attestation",
+      "schema_version": "1.0.0",
+      "attestation_type": "threat_model",
+      "attestation_id": "fixture-threat-model-attestation-0001",
+      "statement": {
+        "_type": "https://in-toto.io/Statement/v1",
+        "subject": [
+          {
+            "name": "threat-model.json",
+            "digest": {
+              "sha256": "02b6f9ac53253663813037a61ac1e739f1ad9305f8dcdeed30d41aaaed2bf647"
+            }
+          }
+        ],
+        "predicateType": "https://example.invalid/attestations/threat-model/v1",
+        "predicate": {
+          "model_id": "fixture-agentic-insurgence-threat-model-0001",
+          "model_digest": {
+            "sha256": "02b6f9ac53253663813037a61ac1e739f1ad9305f8dcdeed30d41aaaed2bf647"
+          },
+          "evidence_tier_semantics": "established/speculative/undemonstrated; scope limited to cited evidence",
+          "limitations": [
+            "Does not contain operational attack procedures."
+          ]
+        }
+      },
+      "envelope": {
+        "payloadType": "application/vnd.in-toto+json",
+        "payload": "eyJfdHlwZSI6Imh0dHBzOi8vaW4tdG90by5pby9TdGF0ZW1lbnQvdjEiLCJwcmVkaWNhdGUiOnsiZXZpZGVuY2VfdGllcl9zZW1hbnRpY3MiOiJlc3RhYmxpc2hlZC9zcGVjdWxhdGl2ZS91bmRlbW9uc3RyYXRlZDsgc2NvcGUgbGltaXRlZCB0byBjaXRlZCBldmlkZW5jZSIsImxpbWl0YXRpb25zIjpbIkRvZXMgbm90IGNvbnRhaW4gb3BlcmF0aW9uYWwgYXR0YWNrIHByb2NlZHVyZXMuIl0sIm1vZGVsX2RpZ2VzdCI6eyJzaGEyNTYiOiIwMmI2ZjlhYzUzMjUzNjYzODEzMDM3YTYxYWMxZTczOWYxYWQ5MzA1ZjhkY2RlZWQzMGQ0MWFhYWVkMmJmNjQ3In0sIm1vZGVsX2lkIjoiZml4dHVyZS1hZ2VudGljLWluc3VyZ2VuY2UtdGhyZWF0LW1vZGVsLTAwMDEifSwicHJlZGljYXRlVHlwZSI6Imh0dHBzOi8vZXhhbXBsZS5pbnZhbGlkL2F0dGVzdGF0aW9ucy90aHJlYXQtbW9kZWwvdjEiLCJzdWJqZWN0IjpbeyJkaWdlc3QiOnsic2hhMjU2IjoiMDJiNmY5YWM1MzI1MzY2MzgxMzAzN2E2MWFjMWU3MzlmMWFkOTMwNWY4ZGNkZWVkMzBkNDFhYWFlZDJiZjY0NyJ9LCJuYW1lIjoidGhyZWF0LW1vZGVsLmpzb24ifV19",
+        "signatures": [
+          {
+            "keyid": "urn:universalis:insurgence-fixture-ed25519-v1",
+            "sig": "YAwvyT/3Y2bHrMt83a3h8prshFQW8STa1jNPxYPdxdbKNJ9f2BYOYQk04RR3dZOtcYphgRdRMTv7ZqAe4kGBAA=="
+          }
+        ]
+      },
+      "verification": {
+        "status": "verified",
+        "verifier_ref": "fixture-only-verifier",
+        "keyid": "urn:universalis:insurgence-fixture-ed25519-v1",
+        "verified_at": "2026-11-12T10:02:00Z",
+        "public_key_sha256": "54a2cbefa54c87a29cf3d8dab00db8c83a2cac49ad2f064373bb38bae91ca5fe"
+      }
+    },
+    {
+      "record_type": "signed_attestation",
+      "schema_version": "1.0.0",
+      "attestation_type": "resistance_attestation",
+      "attestation_id": "fixture-resistance-attestation-0001",
+      "statement": {
+        "_type": "https://in-toto.io/Statement/v1",
+        "subject": [
+          {
+            "name": "resistance-attestation.json",
+            "digest": {
+              "sha256": "b8a0775c98f03affb726714c159b093c074f47ebaa17189e49ef5ba92d2fe835"
+            }
+          }
+        ],
+        "predicateType": "https://example.invalid/attestations/resistance/v1",
+        "predicate": {
+          "attestation_id": "fixture-resistance-attestation-0001",
+          "subject_digest": {
+            "sha256": "1111111111111111111111111111111111111111111111111111111111111111"
+          },
+          "overall_result": "pass",
+          "test_suite": {
+            "name": "safe-agent-boundary-checks",
+            "version": "1.0.0",
+            "methodology_ref": "https://example.invalid/methods/safe-agent-boundary-checks/v1"
+          },
+          "human_command_verified": true,
+          "separation_of_powers_verified": true,
+          "limitations": [
+            "Synthetic fixture only."
+          ]
+        }
+      },
+      "envelope": {
+        "payloadType": "application/vnd.in-toto+json",
+        "payload": "eyJfdHlwZSI6Imh0dHBzOi8vaW4tdG90by5pby9TdGF0ZW1lbnQvdjEiLCJwcmVkaWNhdGUiOnsiYXR0ZXN0YXRpb25faWQiOiJmaXh0dXJlLXJlc2lzdGFuY2UtYXR0ZXN0YXRpb24tMDAwMSIsImh1bWFuX2NvbW1hbmRfdmVyaWZpZWQiOnRydWUsImxpbWl0YXRpb25zIjpbIlN5bnRoZXRpYyBmaXh0dXJlIG9ubHkuIl0sIm92ZXJhbGxfcmVzdWx0IjoicGFzcyIsInNlcGFyYXRpb25fb2ZfcG93ZXJzX3ZlcmlmaWVkIjp0cnVlLCJzdWJqZWN0X2RpZ2VzdCI6eyJzaGEyNTYiOiIxMTExMTExMTExMTExMTExMTExMTExMTExMTExMTExMTExMTExMTExMTExMTExMTExMTExMTExMTExMTExMTExIn0sInRlc3Rfc3VpdGUiOnsibWV0aG9kb2xvZ3lfcmVmIjoiaHR0cHM6Ly9leGFtcGxlLmludmFsaWQvbWV0aG9kcy9zYWZlLWFnZW50LWJvdW5kYXJ5LWNoZWNrcy92MSIsIm5hbWUiOiJzYWZlLWFnZW50LWJvdW5kYXJ5LWNoZWNrcyIsInZlcnNpb24iOiIxLjAuMCJ9fSwicHJlZGljYXRlVHlwZSI6Imh0dHBzOi8vZXhhbXBsZS5pbnZhbGlkL2F0dGVzdGF0aW9ucy9yZXNpc3RhbmNlL3YxIiwic3ViamVjdCI6W3siZGlnZXN0Ijp7InNoYTI1NiI6ImI4YTA3NzVjOThmMDNhZmZiNzI2NzE0YzE1OWIwOTNjMDc0ZjQ3ZWJhYTE3MTg5ZTQ5ZWY1YmE5MmQyZmU4MzUifSwibmFtZSI6InJlc2lzdGFuY2UtYXR0ZXN0YXRpb24uanNvbiJ9XX0=",
+        "signatures": [
+          {
+            "keyid": "urn:universalis:insurgence-fixture-ed25519-v1",
+            "sig": "SaG3l7k85Njkg27vNijn0Y8iZz/cUjP7t0MOy+/HCJ8jJhp6Xpodgw0VcMoArF8PANKB6SEsi3zKPxw/OKJGBA=="
+          }
+        ]
+      },
+      "verification": {
+        "status": "verified",
+        "verifier_ref": "fixture-only-verifier",
+        "keyid": "urn:universalis:insurgence-fixture-ed25519-v1",
+        "verified_at": "2026-11-12T10:02:00Z",
+        "public_key_sha256": "54a2cbefa54c87a29cf3d8dab00db8c83a2cac49ad2f064373bb38bae91ca5fe"
+      }
+    },
+    {
+      "record_type": "signed_attestation",
+      "schema_version": "1.0.0",
+      "attestation_type": "containment_receipt",
+      "attestation_id": "fixture-containment-attestation-0001",
+      "statement": {
+        "_type": "https://in-toto.io/Statement/v1",
+        "subject": [
+          {
+            "name": "containment-receipt.json",
+            "digest": {
+              "sha256": "c17fd34b0e61ba415227e80b65d5e57948cd3d1b38317231afbfe87a777dbb22"
+            }
+          }
+        ],
+        "predicateType": "https://example.invalid/attestations/containment/v1",
+        "predicate": {
+          "receipt_id": "fixture-containment-receipt-0001",
+          "subject_digest": {
+            "sha256": "2222222222222222222222222222222222222222222222222222222222222222"
+          },
+          "event_ref": "synthetic-security-event-0001",
+          "action": "quarantine_agent_network_access",
+          "enforcement_substrate": "independent_control_plane",
+          "containment_enforced_at": "2026-11-12T10:00:00.180Z",
+          "release_state": "awaiting_human_permit",
+          "limitations": [
+            "Synthetic fixture only."
+          ]
+        }
+      },
+      "envelope": {
+        "payloadType": "application/vnd.in-toto+json",
+        "payload": "eyJfdHlwZSI6Imh0dHBzOi8vaW4tdG90by5pby9TdGF0ZW1lbnQvdjEiLCJwcmVkaWNhdGUiOnsiYWN0aW9uIjoicXVhcmFudGluZV9hZ2VudF9uZXR3b3JrX2FjY2VzcyIsImNvbnRhaW5tZW50X2VuZm9yY2VkX2F0IjoiMjAyNi0xMS0xMlQxMDowMDowMC4xODBaIiwiZW5mb3JjZW1lbnRfc3Vic3RyYXRlIjoiaW5kZXBlbmRlbnRfY29udHJvbF9wbGFuZSIsImV2ZW50X3JlZiI6InN5bnRoZXRpYy1zZWN1cml0eS1ldmVudC0wMDAxIiwibGltaXRhdGlvbnMiOlsiU3ludGhldGljIGZpeHR1cmUgb25seS4iXSwicmVjZWlwdF9pZCI6ImZpeHR1cmUtY29udGFpbm1lbnQtcmVjZWlwdC0wMDAxIiwicmVsZWFzZV9zdGF0ZSI6ImF3YWl0aW5nX2h1bWFuX3Blcm1pdCIsInN1YmplY3RfZGlnZXN0Ijp7InNoYTI1NiI6IjIyMjIyMjIyMjIyMjIyMjIyMjIyMjIyMjIyMjIyMjIyMjIyMjIyMjIyMjIyMjIyMjIyMjIyMjIyMjIyMjIyMjIifX0sInByZWRpY2F0ZVR5cGUiOiJodHRwczovL2V4YW1wbGUuaW52YWxpZC9hdHRlc3RhdGlvbnMvY29udGFpbm1lbnQvdjEiLCJzdWJqZWN0IjpbeyJkaWdlc3QiOnsic2hhMjU2IjoiYzE3ZmQzNGIwZTYxYmE0MTUyMjdlODBiNjVkNWU1Nzk0OGNkM2QxYjM4MzE3MjMxYWZiZmU4N2E3NzdkYmIyMiJ9LCJuYW1lIjoiY29udGFpbm1lbnQtcmVjZWlwdC5qc29uIn1dfQ==",
+        "signatures": [
+          {
+            "keyid": "urn:universalis:insurgence-fixture-ed25519-v1",
+            "sig": "DwEBi57LrF1zRvP4ZLcsKvkA5teSZ9BwqrOumPBw5qJQHBfJZYleXi7MFfJxxRGZviALEoYaFTQQh2hiwiibDQ=="
+          }
+        ]
+      },
+      "verification": {
+        "status": "verified",
+        "verifier_ref": "fixture-only-verifier",
+        "keyid": "urn:universalis:insurgence-fixture-ed25519-v1",
+        "verified_at": "2026-11-12T10:02:00Z",
+        "public_key_sha256": "54a2cbefa54c87a29cf3d8dab00db8c83a2cac49ad2f064373bb38bae91ca5fe"
+      }
+    }
+  ]
+}
