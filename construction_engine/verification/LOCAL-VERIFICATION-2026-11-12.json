@@ -1,0 +1,33 @@
+{
+  "verification_id": "UNIVERSALIS-CONSTRUCTION-ENGINE-LOCAL-2026-11-12",
+  "date": "2026-11-12",
+  "environment": {
+    "python": "3.13.5",
+    "dependencies": "Python standard library only",
+    "execution": "isolated temporary directory"
+  },
+  "commands": [
+    "python -m unittest discover -s construction_engine/tests -v",
+    "python -m construction_engine build construction_engine/examples/hello-tool.json --output <temporary-output>",
+    "python -m construction_engine verify <temporary-output>"
+  ],
+  "automated_tests": {
+    "passed": 5,
+    "failed": 0,
+    "exit_code": 0,
+    "cases": [
+      "build and verify declared output files",
+      "detect post-build tampering",
+      "reject path traversal",
+      "reject unsupported target ecosystem",
+      "load valid JSON specification"
+    ]
+  },
+  "scope": "Local source-level verification of the v0.1.0 engine implementation. GitHub Actions workflow is committed but has not yet run in GitHub.",
+  "limitations": [
+    "Generated code is not executed by the engine.",
+    "No release, deployment, merge, or authorization is performed.",
+    "JSON is the accepted v0.1 specification syntax; YAML parsing is not implemented."
+  ],
+  "result": "PASS_LOCAL_TESTS_CI_PENDING"
+}
