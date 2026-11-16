@@ -1,6 +1,6 @@
 # UNIVERSALIS Simulation local validation
 
-**Runtime:** Python 3.13.5; jsonschema 4.26.0; cryptography 46.0.4.  
+**Runtime:** Python 3.13.5; jsonschema 4.26.0; cryptography 46.0.4.
 **Mode:** local execution only; no GitHub Actions workflow added or dispatched.
 
     python -m pip install 'jsonschema>=4.23,<5' 'cryptography>=44,<47'

@@ -1,6 +1,6 @@
 # Unification Contract Validation
 
-**Inventory:** 24th owner-supplied inventory  
+**Inventory:** 24th owner-supplied inventory
 **Status:** Source committed; execution evidence pending. No passing test claim is made for this revision.
 
 ## Shared artifacts

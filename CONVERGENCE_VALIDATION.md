@@ -1,6 +1,6 @@
 # Convergence Contract Validation
 
-**Date:** 2026-11-12  
+**Date:** 2026-11-12
 **Scope:** Synthetic contract and cryptographic-fixture validation only.
 
 ## Implemented checks

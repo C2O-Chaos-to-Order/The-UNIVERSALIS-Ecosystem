@@ -1,6 +1,6 @@
 # Divergence Detection and Reconciliation — UNIVERSALIS Open Architecture
 
-**Date:** 2026-11-12  
+**Date:** 2026-11-12
 **Status:** Open architecture and portable contract foundation; candidates remain proposed pending independent verification.
 
 ## 1. Scope and principles

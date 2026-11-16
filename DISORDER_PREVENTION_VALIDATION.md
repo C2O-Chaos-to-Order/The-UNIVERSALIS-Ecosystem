@@ -1,6 +1,6 @@
 # Disorder Prevention Contract Validation
 
-**Inventory:** 25th owner-supplied inventory  
+**Inventory:** 25th owner-supplied inventory
 **Status:** Source committed; validator execution pending. No test pass is claimed.
 
 ## Shared artifacts

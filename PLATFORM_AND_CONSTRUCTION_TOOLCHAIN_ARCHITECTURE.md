@@ -1,8 +1,8 @@
 # Platform and Construction Toolchain Architecture — UNIVERSALIS
 
-**Boundary:** Public, open and independently inspectable UNIVERSALIS / MotherThread.  
-**Owner:** The UNIVERSALIS Ecosystem.  
-**Source inventory:** Twelfth owner-supplied toolchain inventory, with seven infrastructure domains.  
+**Boundary:** Public, open and independently inspectable UNIVERSALIS / MotherThread.
+**Owner:** The UNIVERSALIS Ecosystem.
+**Source inventory:** Twelfth owner-supplied toolchain inventory, with seven infrastructure domains.
 **Status:** Open architecture and portable contract proposal implemented on this branch; third-party tools remain candidates; no production platform is claimed integrated.
 
 ## 1. Architecture purpose

@@ -1,8 +1,8 @@
 # Multi-Layer Agent, OS and AI Unification Architecture
 
-**Inventory:** 24th owner-supplied inventory — Agent, OS and AI Unification  
-**Date:** 2026-11-12  
-**Role:** UNIVERSALIS MotherThread — open, inspectable and independently operable architecture.  
+**Inventory:** 24th owner-supplied inventory — Agent, OS and AI Unification
+**Date:** 2026-11-12
+**Role:** UNIVERSALIS MotherThread — open, inspectable and independently operable architecture.
 **Status:** Source-qualified proposal; no candidate is adopted by inclusion.
 
 ## Design objective

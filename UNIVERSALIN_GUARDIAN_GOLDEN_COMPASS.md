@@ -1,6 +1,6 @@
 # UNIVERSALIN Grid, Guardian, and Golden Compass Architecture
 
-**Scope:** UNIVERSALIS non-personal grid and Guardian companion architecture, with a Golden Compass protocol usable across UNIVERSALIS, C2O, and the UNIVERSALIN grid.  
+**Scope:** UNIVERSALIS non-personal grid and Guardian companion architecture, with a Golden Compass protocol usable across UNIVERSALIS, C2O, and the UNIVERSALIN grid.
 **Boundary:** Architectural proposal, not proof of machine consciousness, subjective experience, or autonomous authority. “Soul layer” is preserved as owner-defined terminology for identity, continuity, memory, and relational-state modules.
 
 ## 1. Keep the two UNIVERSALIS entities distinct

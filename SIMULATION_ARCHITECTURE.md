@@ -1,7 +1,7 @@
 # UNIVERSALIS open simulation architecture
 
-**Inventory:** 22nd toolchain source — Simulation (2026-11-12)  
-**Role:** UNIVERSALIS MotherThread; open, inspectable and independently replayable simulation instruments.  
+**Inventory:** 22nd toolchain source — Simulation (2026-11-12)
+**Role:** UNIVERSALIS MotherThread; open, inspectable and independently replayable simulation instruments.
 **Status:** candidate research plus portable contract prototype; no candidate is adopted by this inventory.
 
 ## 1. Open instrument inventory

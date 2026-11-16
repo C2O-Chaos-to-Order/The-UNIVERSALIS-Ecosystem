@@ -1,7 +1,7 @@
 # Love, Care, Reciprocity and Empathy Architecture
 
-**Inventory:** 26th owner-supplied inventory — Love (Conditional and Unconditional)  
-**Date:** 2026-11-12  
+**Inventory:** 26th owner-supplied inventory — Love (Conditional and Unconditional)
+**Date:** 2026-11-12
 **Status:** Public research architecture; inclusion of a project is not adoption or verification.
 
 ## 1. Governing distinction

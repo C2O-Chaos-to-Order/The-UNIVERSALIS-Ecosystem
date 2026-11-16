@@ -1,8 +1,8 @@
 # Website Construction and Agent-Ready Publishing Architecture — UNIVERSALIS
 
-**Boundary:** Public, open and independently inspectable UNIVERSALIS / MotherThread.  
-**Owner:** The UNIVERSALIS Ecosystem.  
-**Source inventory:** Thirteenth owner-supplied toolchain inventory — Websites.  
+**Boundary:** Public, open and independently inspectable UNIVERSALIS / MotherThread.
+**Owner:** The UNIVERSALIS Ecosystem.
+**Source inventory:** Thirteenth owner-supplied toolchain inventory — Websites.
 **Status:** Open architecture and portable contract proposal implemented on this branch; third-party tools remain candidates; no production site builder or CMS is claimed integrated.
 
 ## 1. Architecture purpose

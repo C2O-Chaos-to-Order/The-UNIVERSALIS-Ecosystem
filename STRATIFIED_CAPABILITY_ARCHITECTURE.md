@@ -1,8 +1,8 @@
 # UNIVERSALIS Eight-Stratum Capability Architecture
 
-**Inventory:** 23rd owner-supplied toolchain inventory — Eight-Stratum Capability Ladder  
-**Date:** 2026-11-12  
-**Role:** UNIVERSALIS MotherThread — open, inspectable and independently operable instruments.  
+**Inventory:** 23rd owner-supplied toolchain inventory — Eight-Stratum Capability Ladder
+**Date:** 2026-11-12
+**Role:** UNIVERSALIS MotherThread — open, inspectable and independently operable instruments.
 **Status:** source inventory and portable contract prototype; no candidate is adopted merely by appearing in this document.
 
 ## 1. Architectural meaning of the ladder

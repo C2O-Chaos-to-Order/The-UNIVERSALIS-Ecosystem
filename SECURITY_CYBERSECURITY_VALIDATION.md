@@ -1,7 +1,7 @@
 # Security and Cybersecurity Validation — UNIVERSALIS
 
-Branch: `implementation/repository-foundation-2026-11-12`  
-Contract version: 1.0.0  
+Branch: `implementation/repository-foundation-2026-11-12`
+Contract version: 1.0.0
 Status: **Passed** — open portable contracts, semantic checks, RFC 9162 proof and SHA-256 audit-chain verification.
 
 ## Positive contract coverage

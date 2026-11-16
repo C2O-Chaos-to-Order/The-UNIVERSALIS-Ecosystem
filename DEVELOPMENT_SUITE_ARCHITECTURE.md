@@ -1,7 +1,7 @@
 # Full-Spectrum Development Suite — UNIVERSALIS Open Architecture
 
-**Date:** 2026-11-12  
-**Owner:** UNIVERSALIS / open MotherThread ecosystem  
+**Date:** 2026-11-12
+**Owner:** UNIVERSALIS / open MotherThread ecosystem
 **Status:** Open architecture and portable contract foundation; candidates remain proposed, not adopted.
 
 ## 1. Purpose and public boundary

@@ -1,7 +1,7 @@
 # UNIVERSALIS Convergence Architecture
 
-**Date:** 2026-11-12  
-**Inventory:** Eighteenth owner-supplied toolchain inventory  
+**Date:** 2026-11-12
+**Inventory:** Eighteenth owner-supplied toolchain inventory
 **Boundary:** Open, inspectable, independently operable instruments and portable records; no C2O-private material.
 
 ## Purpose

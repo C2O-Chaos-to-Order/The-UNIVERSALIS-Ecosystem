@@ -1,6 +1,6 @@
 # Ascendence Contract Validation
 
-**Date:** 2026-11-12  
+**Date:** 2026-11-12
 **Scope:** Synthetic contract, invariant and fixture-signature validation only.
 
 ## Shared validation

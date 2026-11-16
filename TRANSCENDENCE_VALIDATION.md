@@ -1,6 +1,6 @@
 # Transcendence Contract Validation
 
-**Date:** 2026-11-12  
+**Date:** 2026-11-12
 **Scope:** Synthetic schema, cross-record, succession, formal-witness, corrigibility and fixture-signature checks only.
 
 ## Shared validation

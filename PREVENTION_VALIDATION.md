@@ -1,6 +1,6 @@
 # Prevention Contract Validation
 
-**Date:** 2026-11-12  
+**Date:** 2026-11-12
 **Scope:** Synthetic harm-taxonomy, constitutional-floor, enforcement, harm-measurement, red-team, containment, coverage, escalation and signature checks.
 
 ## Shared validation

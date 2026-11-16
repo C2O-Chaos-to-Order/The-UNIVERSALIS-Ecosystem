@@ -1,7 +1,7 @@
 # Insurgence, Resistance and Defensive Threat Modeling — UNIVERSALIS Open Architecture
 
-**Date:** 2026-11-12  
-**Owner:** UNIVERSALIS / open MotherThread ecosystem  
+**Date:** 2026-11-12
+**Owner:** UNIVERSALIS / open MotherThread ecosystem
 **Status:** Public research and portable contract foundation; candidates remain proposed pending independent review.
 
 ## 1. Purpose and boundaries

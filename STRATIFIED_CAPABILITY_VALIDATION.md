@@ -1,7 +1,7 @@
 # UNIVERSALIS Eight-Stratum Capability — repository validation record
 
-**Branch:** `implementation/repository-foundation-2026-11-12`  
-**Runtime target:** Python 3.13.5; jsonschema 4.26.0.  
+**Branch:** `implementation/repository-foundation-2026-11-12`
+**Runtime target:** Python 3.13.5; jsonschema 4.26.0.
 **Execution status:** schemas, fixtures and validator are committed. The validator script was **not executed during this repository-integration operation**; no test pass is claimed for the committed revision until the command below is run against this branch.
 
 ## Files

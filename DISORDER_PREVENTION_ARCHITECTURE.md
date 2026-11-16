@@ -1,7 +1,7 @@
 # Disorder and Chaos Prevention Architecture
 
-**Inventory:** 25th owner-supplied inventory — Disorder and Chaos Prevention  
-**Date:** 2026-11-12  
+**Inventory:** 25th owner-supplied inventory — Disorder and Chaos Prevention
+**Date:** 2026-11-12
 **Status:** Public research architecture; candidate tools are not adopted by inclusion.
 
 ## Purpose

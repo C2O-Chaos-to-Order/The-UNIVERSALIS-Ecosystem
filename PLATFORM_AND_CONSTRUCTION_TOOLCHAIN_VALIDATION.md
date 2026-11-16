@@ -1,7 +1,7 @@
 # Platform and Construction Toolchain Validation — UNIVERSALIS
 
-Branch: `implementation/repository-foundation-2026-11-12`  
-Contract version: 1.0.0  
+Branch: `implementation/repository-foundation-2026-11-12`
+Contract version: 1.0.0
 Status: **Passed on the current UNIVERSALIS ecosystem PR head.**
 
 ## Positive contract fixture

@@ -1,7 +1,7 @@
 # UNIVERSALIS OS Provisioning and Virtualization Architecture
 
-**Owner:** UNIVERSALIS / MotherThread  
-**Boundary:** Public, reusable, independently operable. Do not include C2O-private credentials, tenant data, authority state, policies, or operational logs.  
+**Owner:** UNIVERSALIS / MotherThread
+**Boundary:** Public, reusable, independently operable. Do not include C2O-private credentials, tenant data, authority state, policies, or operational logs.
 **Status:** Proposed; portable interfaces and candidate verification pending.
 
 ## 1. Requirement

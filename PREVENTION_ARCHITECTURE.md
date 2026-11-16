@@ -1,6 +1,6 @@
 # UNIVERSALIS Prevention Architecture
 
-**Date:** 2026-11-12 | **Inventory:** Twenty-first owner-supplied toolchain inventory  
+**Date:** 2026-11-12 | **Inventory:** Twenty-first owner-supplied toolchain inventory
 **Boundary:** Publicly reusable schemas, synthetic fixtures and source references only. No private C2O policy, incident records, signing keys, device identities or authority tokens.
 
 ## Governing principle

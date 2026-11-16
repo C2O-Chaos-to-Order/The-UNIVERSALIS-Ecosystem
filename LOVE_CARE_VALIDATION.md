@@ -1,6 +1,6 @@
 # Love and Care Contract Validation
 
-**Inventory:** 26th owner-supplied inventory  
+**Inventory:** 26th owner-supplied inventory
 **Status:** Source committed; validator execution pending. No passing test claim is made.
 
 ## Shared artifacts

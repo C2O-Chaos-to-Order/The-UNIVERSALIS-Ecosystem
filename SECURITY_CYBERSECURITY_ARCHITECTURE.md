@@ -1,7 +1,7 @@
 # Security and Cybersecurity Toolchain — UNIVERSALIS
 
-**Boundary:** Open, inspectable, independently operable MotherThread.  
-**Owner repository:** The UNIVERSALIS Ecosystem.  
+**Boundary:** Open, inspectable, independently operable MotherThread.
+**Owner repository:** The UNIVERSALIS Ecosystem.
 **Status:** Portable security evidence contracts and validators implemented; no third-party security tool is installed or integrated by this change.
 
 ## 1. Architecture principles
