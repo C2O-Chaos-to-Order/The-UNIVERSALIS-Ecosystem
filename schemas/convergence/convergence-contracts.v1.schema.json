@@ -1,0 +1,1008 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "$id": "https://universalis.foundation/schemas/convergence/convergence-contracts.v1.schema.json",
+  "title": "Portable Convergence Contracts",
+  "description": "Shared, authority-neutral records for shared intent, consensus, negotiation, graph merge planning, ontology alignment, argumentation and dispute outcomes. These records do not themselves authorize execution.",
+  "oneOf": [
+    {
+      "$ref": "#/$defs/shared_intent_contract"
+    },
+    {
+      "$ref": "#/$defs/consensus_certificate"
+    },
+    {
+      "$ref": "#/$defs/negotiation_transcript"
+    },
+    {
+      "$ref": "#/$defs/merge_plan"
+    },
+    {
+      "$ref": "#/$defs/ontology_alignment_receipt"
+    },
+    {
+      "$ref": "#/$defs/argumentation_receipt"
+    },
+    {
+      "$ref": "#/$defs/dispute_outcome"
+    }
+  ],
+  "$defs": {
+    "nonempty": {
+      "type": "string",
+      "minLength": 1
+    },
+    "digest": {
+      "type": "string",
+      "pattern": "^(sha256:)?[a-f0-9]{64}$"
+    },
+    "base": {
+      "type": "object",
+      "required": [
+        "record_type",
+        "record_id",
+        "created_at"
+      ],
+      "properties": {
+        "record_type": {
+          "type": "string"
+        },
+        "record_id": {
+          "$ref": "#/$defs/nonempty"
+        },
+        "created_at": {
+          "type": "string",
+          "format": "date-time"
+        },
+        "evidence_refs": {
+          "type": "array",
+          "items": {
+            "$ref": "#/$defs/nonempty"
+          },
+          "uniqueItems": true
+        }
+      }
+    },
+    "participant": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": [
+        "participant_ref",
+        "role"
+      ],
+      "properties": {
+        "participant_ref": {
+          "$ref": "#/$defs/nonempty"
+        },
+        "role": {
+          "enum": [
+            "owner",
+            "contributor",
+            "reviewer",
+            "mediator",
+            "arbitrator",
+            "verifier"
+          ]
+        },
+        "scope_ref": {
+          "type": "string"
+        }
+      }
+    },
+    "shared_intent_contract": {
+      "allOf": [
+        {
+          "$ref": "#/$defs/base"
+        },
+        {
+          "type": "object",
+          "additionalProperties": false,
+          "required": [
+            "record_type",
+            "record_id",
+            "created_at",
+            "participants",
+            "problem_readings",
+            "scope",
+            "key_terms",
+            "check_method",
+            "status",
+            "dissent_refs"
+          ],
+          "properties": {
+            "record_type": {
+              "const": "shared_intent_contract"
+            },
+            "record_id": {
+              "$ref": "#/$defs/nonempty"
+            },
+            "created_at": {
+              "type": "string",
+              "format": "date-time"
+            },
+            "evidence_refs": {
+              "type": "array",
+              "items": {
+                "$ref": "#/$defs/nonempty"
+              },
+              "uniqueItems": true
+            },
+            "participants": {
+              "type": "array",
+              "minItems": 2,
+              "items": {
+                "$ref": "#/$defs/participant"
+              }
+            },
+            "problem_readings": {
+              "type": "array",
+              "minItems": 2,
+              "items": {
+                "type": "object",
+                "additionalProperties": false,
+                "required": [
+                  "participant_ref",
+                  "reading",
+                  "included"
+                ],
+                "properties": {
+                  "participant_ref": {
+                    "$ref": "#/$defs/nonempty"
+                  },
+                  "reading": {
+                    "$ref": "#/$defs/nonempty"
+                  },
+                  "included": {
+                    "type": "boolean"
+                  }
+                }
+              }
+            },
+            "scope": {
+              "$ref": "#/$defs/nonempty"
+            },
+            "key_terms": {
+              "type": "array",
+              "minItems": 1,
+              "items": {
+                "type": "object",
+                "additionalProperties": false,
+                "required": [
+                  "term",
+                  "definition",
+                  "source_ref"
+                ],
+                "properties": {
+                  "term": {
+                    "$ref": "#/$defs/nonempty"
+                  },
+                  "definition": {
+                    "$ref": "#/$defs/nonempty"
+                  },
+                  "source_ref": {
+                    "$ref": "#/$defs/nonempty"
+                  }
+                }
+              }
+            },
+            "check_method": {
+              "type": "object",
+              "additionalProperties": false,
+              "required": [
+                "method",
+                "criteria",
+                "verifier_ref"
+              ],
+              "properties": {
+                "method": {
+                  "$ref": "#/$defs/nonempty"
+                },
+                "criteria": {
+                  "type": "array",
+                  "minItems": 1,
+                  "items": {
+                    "$ref": "#/$defs/nonempty"
+                  }
+                },
+                "verifier_ref": {
+                  "$ref": "#/$defs/nonempty"
+                }
+              }
+            },
+            "status": {
+              "enum": [
+                "draft",
+                "locked",
+                "blocked",
+                "superseded"
+              ]
+            },
+            "unresolved_issues": {
+              "type": "array",
+              "items": {
+                "$ref": "#/$defs/nonempty"
+              }
+            },
+            "dissent_refs": {
+              "type": "array",
+              "items": {
+                "$ref": "#/$defs/nonempty"
+              }
+            }
+          }
+        }
+      ]
+    },
+    "consensus_certificate": {
+      "allOf": [
+        {
+          "$ref": "#/$defs/base"
+        },
+        {
+          "type": "object",
+          "additionalProperties": false,
+          "required": [
+            "record_type",
+            "record_id",
+            "created_at",
+            "participants",
+            "options_considered",
+            "selected_option",
+            "outcome",
+            "dissent_refs"
+          ],
+          "properties": {
+            "record_type": {
+              "const": "consensus_certificate"
+            },
+            "record_id": {
+              "$ref": "#/$defs/nonempty"
+            },
+            "created_at": {
+              "type": "string",
+              "format": "date-time"
+            },
+            "evidence_refs": {
+              "type": "array",
+              "items": {
+                "$ref": "#/$defs/nonempty"
+              },
+              "uniqueItems": true
+            },
+            "participants": {
+              "type": "array",
+              "minItems": 2,
+              "items": {
+                "type": "object",
+                "additionalProperties": false,
+                "required": [
+                  "participant_ref",
+                  "role",
+                  "score",
+                  "satisfaction_bar",
+                  "status"
+                ],
+                "properties": {
+                  "participant_ref": {
+                    "$ref": "#/$defs/nonempty"
+                  },
+                  "role": {
+                    "enum": [
+                      "owner",
+                      "contributor",
+                      "reviewer",
+                      "mediator",
+                      "arbitrator",
+                      "verifier"
+                    ]
+                  },
+                  "score": {
+                    "type": "number",
+                    "minimum": 0,
+                    "maximum": 1
+                  },
+                  "satisfaction_bar": {
+                    "type": "number",
+                    "minimum": 0,
+                    "maximum": 1
+                  },
+                  "status": {
+                    "enum": [
+                      "pass",
+                      "below_bar",
+                      "unknown",
+                      "abstained"
+                    ]
+                  }
+                }
+              }
+            },
+            "options_considered": {
+              "type": "array",
+              "minItems": 1,
+              "items": {
+                "$ref": "#/$defs/nonempty"
+              }
+            },
+            "selected_option": {
+              "type": [
+                "string",
+                "null"
+              ]
+            },
+            "outcome": {
+              "enum": [
+                "converged",
+                "no_agreement",
+                "partial",
+                "withdrawn"
+              ]
+            },
+            "dissent_refs": {
+              "type": "array",
+              "items": {
+                "$ref": "#/$defs/nonempty"
+              }
+            },
+            "note": {
+              "type": "string"
+            }
+          }
+        }
+      ]
+    },
+    "negotiation_transcript": {
+      "allOf": [
+        {
+          "$ref": "#/$defs/base"
+        },
+        {
+          "type": "object",
+          "additionalProperties": false,
+          "required": [
+            "record_type",
+            "record_id",
+            "created_at",
+            "parties",
+            "objective",
+            "moves",
+            "accepted_by",
+            "reservation_checks",
+            "batna_claim",
+            "outcome"
+          ],
+          "properties": {
+            "record_type": {
+              "const": "negotiation_transcript"
+            },
+            "record_id": {
+              "$ref": "#/$defs/nonempty"
+            },
+            "created_at": {
+              "type": "string",
+              "format": "date-time"
+            },
+            "evidence_refs": {
+              "type": "array",
+              "items": {
+                "$ref": "#/$defs/nonempty"
+              },
+              "uniqueItems": true
+            },
+            "parties": {
+              "type": "array",
+              "minItems": 2,
+              "items": {
+                "$ref": "#/$defs/nonempty"
+              },
+              "uniqueItems": true
+            },
+            "objective": {
+              "$ref": "#/$defs/nonempty"
+            },
+            "moves": {
+              "type": "array",
+              "minItems": 2,
+              "items": {
+                "type": "object",
+                "additionalProperties": false,
+                "required": [
+                  "sequence",
+                  "actor_ref",
+                  "move_type",
+                  "occurred_at",
+                  "summary"
+                ],
+                "properties": {
+                  "sequence": {
+                    "type": "integer",
+                    "minimum": 1
+                  },
+                  "actor_ref": {
+                    "$ref": "#/$defs/nonempty"
+                  },
+                  "move_type": {
+                    "enum": [
+                      "proposal",
+                      "clarification",
+                      "counteroffer",
+                      "accept",
+                      "reject",
+                      "withdraw",
+                      "refer",
+                      "pause"
+                    ]
+                  },
+                  "occurred_at": {
+                    "type": "string",
+                    "format": "date-time"
+                  },
+                  "summary": {
+                    "$ref": "#/$defs/nonempty"
+                  },
+                  "terms_digest": {
+                    "$ref": "#/$defs/digest"
+                  }
+                }
+              }
+            },
+            "accepted_by": {
+              "type": "array",
+              "items": {
+                "$ref": "#/$defs/nonempty"
+              },
+              "uniqueItems": true
+            },
+            "reservation_checks": {
+              "type": "array",
+              "items": {
+                "type": "object",
+                "additionalProperties": false,
+                "required": [
+                  "party_ref",
+                  "result",
+                  "method"
+                ],
+                "properties": {
+                  "party_ref": {
+                    "$ref": "#/$defs/nonempty"
+                  },
+                  "result": {
+                    "enum": [
+                      "pass",
+                      "fail",
+                      "unverified",
+                      "not_claimed"
+                    ]
+                  },
+                  "method": {
+                    "enum": [
+                      "independent_evaluator",
+                      "party_signed_commitment",
+                      "zero_knowledge_proof",
+                      "not_disclosed"
+                    ]
+                  },
+                  "evidence_ref": {
+                    "type": "string"
+                  }
+                }
+              }
+            },
+            "batna_claim": {
+              "enum": [
+                "verified_safe",
+                "not_claimed",
+                "failed",
+                "unverified"
+              ]
+            },
+            "outcome": {
+              "enum": [
+                "agreement",
+                "no_agreement",
+                "referred",
+                "expired",
+                "disputed",
+                "withdrawn"
+              ]
+            },
+            "settlement_digest": {
+              "$ref": "#/$defs/digest"
+            }
+          }
+        }
+      ]
+    },
+    "merge_plan": {
+      "allOf": [
+        {
+          "$ref": "#/$defs/base"
+        },
+        {
+          "type": "object",
+          "additionalProperties": false,
+          "required": [
+            "record_type",
+            "record_id",
+            "created_at",
+            "source_ref",
+            "target_ref",
+            "base_digest",
+            "expected_target_digest",
+            "operations",
+            "conflicts",
+            "status",
+            "approval_ref",
+            "observed_target_digest"
+          ],
+          "properties": {
+            "record_type": {
+              "const": "merge_plan"
+            },
+            "record_id": {
+              "$ref": "#/$defs/nonempty"
+            },
+            "created_at": {
+              "type": "string",
+              "format": "date-time"
+            },
+            "evidence_refs": {
+              "type": "array",
+              "items": {
+                "$ref": "#/$defs/nonempty"
+              },
+              "uniqueItems": true
+            },
+            "source_ref": {
+              "$ref": "#/$defs/nonempty"
+            },
+            "target_ref": {
+              "$ref": "#/$defs/nonempty"
+            },
+            "base_digest": {
+              "$ref": "#/$defs/digest"
+            },
+            "expected_target_digest": {
+              "$ref": "#/$defs/digest"
+            },
+            "observed_target_digest": {
+              "type": [
+                "string",
+                "null"
+              ],
+              "pattern": "^(sha256:)?[a-f0-9]{64}$"
+            },
+            "operations": {
+              "type": "array",
+              "items": {
+                "type": "object",
+                "additionalProperties": false,
+                "required": [
+                  "operation_id",
+                  "kind",
+                  "subject_ref",
+                  "proposed_value_digest"
+                ],
+                "properties": {
+                  "operation_id": {
+                    "$ref": "#/$defs/nonempty"
+                  },
+                  "kind": {
+                    "enum": [
+                      "add",
+                      "update",
+                      "delete",
+                      "repoint"
+                    ]
+                  },
+                  "subject_ref": {
+                    "$ref": "#/$defs/nonempty"
+                  },
+                  "proposed_value_digest": {
+                    "$ref": "#/$defs/digest"
+                  }
+                }
+              }
+            },
+            "conflicts": {
+              "type": "array",
+              "items": {
+                "type": "object",
+                "additionalProperties": false,
+                "required": [
+                  "conflict_id",
+                  "status",
+                  "resolution_ref"
+                ],
+                "properties": {
+                  "conflict_id": {
+                    "$ref": "#/$defs/nonempty"
+                  },
+                  "status": {
+                    "enum": [
+                      "open",
+                      "resolved",
+                      "deferred",
+                      "rejected"
+                    ]
+                  },
+                  "resolution_ref": {
+                    "type": [
+                      "string",
+                      "null"
+                    ]
+                  }
+                }
+              }
+            },
+            "status": {
+              "enum": [
+                "proposed",
+                "reviewed",
+                "approved",
+                "applied",
+                "rejected",
+                "stale"
+              ]
+            },
+            "approval_ref": {
+              "type": [
+                "string",
+                "null"
+              ]
+            },
+            "applied_at": {
+              "type": [
+                "string",
+                "null"
+              ],
+              "format": "date-time"
+            }
+          }
+        }
+      ]
+    },
+    "ontology_alignment_receipt": {
+      "allOf": [
+        {
+          "$ref": "#/$defs/base"
+        },
+        {
+          "type": "object",
+          "additionalProperties": false,
+          "required": [
+            "record_type",
+            "record_id",
+            "created_at",
+            "source_snapshot_digest",
+            "target_snapshot_digest",
+            "correspondences",
+            "status",
+            "round_trip_validation",
+            "reviewer_ref"
+          ],
+          "properties": {
+            "record_type": {
+              "const": "ontology_alignment_receipt"
+            },
+            "record_id": {
+              "$ref": "#/$defs/nonempty"
+            },
+            "created_at": {
+              "type": "string",
+              "format": "date-time"
+            },
+            "evidence_refs": {
+              "type": "array",
+              "items": {
+                "$ref": "#/$defs/nonempty"
+              },
+              "uniqueItems": true
+            },
+            "source_snapshot_digest": {
+              "$ref": "#/$defs/digest"
+            },
+            "target_snapshot_digest": {
+              "$ref": "#/$defs/digest"
+            },
+            "correspondences": {
+              "type": "array",
+              "minItems": 1,
+              "items": {
+                "type": "object",
+                "additionalProperties": false,
+                "required": [
+                  "source_concept_ref",
+                  "target_concept_ref",
+                  "relation",
+                  "confidence",
+                  "evidence_refs"
+                ],
+                "properties": {
+                  "source_concept_ref": {
+                    "$ref": "#/$defs/nonempty"
+                  },
+                  "target_concept_ref": {
+                    "type": [
+                      "string",
+                      "null"
+                    ]
+                  },
+                  "relation": {
+                    "enum": [
+                      "equivalent",
+                      "exact_match",
+                      "close_match",
+                      "broader",
+                      "narrower",
+                      "related",
+                      "unmapped"
+                    ]
+                  },
+                  "confidence": {
+                    "type": "number",
+                    "minimum": 0,
+                    "maximum": 1
+                  },
+                  "evidence_refs": {
+                    "type": "array",
+                    "items": {
+                      "$ref": "#/$defs/nonempty"
+                    },
+                    "minItems": 1
+                  }
+                }
+              }
+            },
+            "status": {
+              "enum": [
+                "candidate",
+                "accepted",
+                "rejected",
+                "deferred",
+                "incompatible"
+              ]
+            },
+            "round_trip_validation": {
+              "enum": [
+                "not_run",
+                "passed",
+                "failed",
+                "not_applicable"
+              ]
+            },
+            "reviewer_ref": {
+              "type": [
+                "string",
+                "null"
+              ]
+            },
+            "clarification_transcript_ref": {
+              "type": "string"
+            }
+          }
+        }
+      ]
+    },
+    "argumentation_receipt": {
+      "allOf": [
+        {
+          "$ref": "#/$defs/base"
+        },
+        {
+          "type": "object",
+          "additionalProperties": false,
+          "required": [
+            "record_type",
+            "record_id",
+            "created_at",
+            "arguments",
+            "attack_edges",
+            "semantics",
+            "accepted_argument_refs",
+            "rejected_argument_refs",
+            "status"
+          ],
+          "properties": {
+            "record_type": {
+              "const": "argumentation_receipt"
+            },
+            "record_id": {
+              "$ref": "#/$defs/nonempty"
+            },
+            "created_at": {
+              "type": "string",
+              "format": "date-time"
+            },
+            "evidence_refs": {
+              "type": "array",
+              "items": {
+                "$ref": "#/$defs/nonempty"
+              },
+              "uniqueItems": true
+            },
+            "arguments": {
+              "type": "array",
+              "minItems": 1,
+              "items": {
+                "type": "object",
+                "additionalProperties": false,
+                "required": [
+                  "argument_ref",
+                  "claim_ref",
+                  "evidence_refs"
+                ],
+                "properties": {
+                  "argument_ref": {
+                    "$ref": "#/$defs/nonempty"
+                  },
+                  "claim_ref": {
+                    "$ref": "#/$defs/nonempty"
+                  },
+                  "evidence_refs": {
+                    "type": "array",
+                    "items": {
+                      "$ref": "#/$defs/nonempty"
+                    }
+                  }
+                }
+              }
+            },
+            "attack_edges": {
+              "type": "array",
+              "items": {
+                "type": "object",
+                "additionalProperties": false,
+                "required": [
+                  "attacker_ref",
+                  "target_ref",
+                  "confidence"
+                ],
+                "properties": {
+                  "attacker_ref": {
+                    "$ref": "#/$defs/nonempty"
+                  },
+                  "target_ref": {
+                    "$ref": "#/$defs/nonempty"
+                  },
+                  "confidence": {
+                    "type": "number",
+                    "minimum": 0,
+                    "maximum": 1
+                  }
+                }
+              }
+            },
+            "semantics": {
+              "enum": [
+                "grounded",
+                "preferred",
+                "stable",
+                "custom"
+              ]
+            },
+            "acceptance_threshold": {
+              "type": "number",
+              "minimum": 0,
+              "maximum": 1
+            },
+            "accepted_argument_refs": {
+              "type": "array",
+              "items": {
+                "$ref": "#/$defs/nonempty"
+              },
+              "uniqueItems": true
+            },
+            "rejected_argument_refs": {
+              "type": "array",
+              "items": {
+                "$ref": "#/$defs/nonempty"
+              },
+              "uniqueItems": true
+            },
+            "status": {
+              "enum": [
+                "resolved",
+                "partially_resolved",
+                "unresolved",
+                "referred_to_human"
+              ]
+            }
+          }
+        }
+      ]
+    },
+    "dispute_outcome": {
+      "allOf": [
+        {
+          "$ref": "#/$defs/base"
+        },
+        {
+          "type": "object",
+          "additionalProperties": false,
+          "required": [
+            "record_type",
+            "record_id",
+            "created_at",
+            "parties",
+            "outcome",
+            "ruling_summary",
+            "awards",
+            "enforcement_authorized"
+          ],
+          "properties": {
+            "record_type": {
+              "const": "dispute_outcome"
+            },
+            "record_id": {
+              "$ref": "#/$defs/nonempty"
+            },
+            "created_at": {
+              "type": "string",
+              "format": "date-time"
+            },
+            "evidence_refs": {
+              "type": "array",
+              "items": {
+                "$ref": "#/$defs/nonempty"
+              },
+              "uniqueItems": true
+            },
+            "parties": {
+              "type": "array",
+              "minItems": 2,
+              "items": {
+                "$ref": "#/$defs/nonempty"
+              },
+              "uniqueItems": true
+            },
+            "outcome": {
+              "enum": [
+                "settled",
+                "no_agreement",
+                "expired_unresolved",
+                "referred",
+                "appealed",
+                "void"
+              ]
+            },
+            "ruling_summary": {
+              "$ref": "#/$defs/nonempty"
+            },
+            "awards": {
+              "type": "array",
+              "items": {
+                "type": "object",
+                "additionalProperties": false,
+                "required": [
+                  "party_ref",
+                  "percentage"
+                ],
+                "properties": {
+                  "party_ref": {
+                    "$ref": "#/$defs/nonempty"
+                  },
+                  "percentage": {
+                    "type": "number",
+                    "minimum": 0,
+                    "maximum": 100
+                  }
+                }
+              }
+            },
+            "enforcement_authorized": {
+              "const": false
+            },
+            "decision_maker_ref": {
+              "type": "string"
+            },
+            "appeal_window_ends": {
+              "type": "string",
+              "format": "date-time"
+            }
+          }
+        }
+      ]
+    }
+  }
+}

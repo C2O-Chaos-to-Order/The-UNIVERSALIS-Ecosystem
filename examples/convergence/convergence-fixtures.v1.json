@@ -1,0 +1,321 @@
+{
+  "fixture_notice": "All fixture records and key material are synthetic. The Ed25519 key is disposable and is not a production trust anchor.",
+  "records": {
+    "shared_intent_contracts": [
+      {
+        "record_type": "shared_intent_contract",
+        "record_id": "intent:synthetic:001",
+        "created_at": "2026-11-12T19:30:00Z",
+        "participants": [
+          {
+            "participant_ref": "agent:finance",
+            "role": "contributor"
+          },
+          {
+            "participant_ref": "agent:delivery",
+            "role": "contributor"
+          }
+        ],
+        "problem_readings": [
+          {
+            "participant_ref": "agent:finance",
+            "reading": "Select a renewal package within the margin ceiling.",
+            "included": true
+          },
+          {
+            "participant_ref": "agent:delivery",
+            "reading": "Select a renewal package that preserves delivery scope.",
+            "included": true
+          }
+        ],
+        "scope": "Choose one synthetic renewal package; no external agreement or execution.",
+        "key_terms": [
+          {
+            "term": "margin",
+            "definition": "Contribution margin calculated as revenue less directly attributable delivery cost.",
+            "source_ref": "spec:synthetic-glossary"
+          },
+          {
+            "term": "delivery_scope",
+            "definition": "The set of committed services in the package.",
+            "source_ref": "spec:synthetic-glossary"
+          }
+        ],
+        "check_method": {
+          "method": "recompute_margin_and_scope_against_fixture",
+          "criteria": [
+            "margin >= 0.30",
+            "all required delivery services included"
+          ],
+          "verifier_ref": "verifier:synthetic"
+        },
+        "status": "locked",
+        "unresolved_issues": [],
+        "dissent_refs": []
+      }
+    ],
+    "consensus_certificates": [
+      {
+        "record_type": "consensus_certificate",
+        "record_id": "consensus:synthetic:001",
+        "created_at": "2026-11-12T19:30:00Z",
+        "participants": [
+          {
+            "participant_ref": "agent:finance",
+            "role": "contributor",
+            "score": 0.91,
+            "satisfaction_bar": 0.8,
+            "status": "pass"
+          },
+          {
+            "participant_ref": "agent:delivery",
+            "role": "contributor",
+            "score": 0.86,
+            "satisfaction_bar": 0.8,
+            "status": "pass"
+          }
+        ],
+        "options_considered": [
+          "option:a",
+          "option:b"
+        ],
+        "selected_option": "option:a",
+        "outcome": "converged",
+        "dissent_refs": [],
+        "evidence_refs": [
+          "sha256:synthetic-evidence"
+        ],
+        "note": "Synthetic fixture only; not an authorization or correctness proof."
+      }
+    ],
+    "negotiation_transcripts": [
+      {
+        "record_type": "negotiation_transcript",
+        "record_id": "negotiation:synthetic:001",
+        "created_at": "2026-11-12T19:30:00Z",
+        "parties": [
+          "agent:buyer",
+          "agent:provider"
+        ],
+        "objective": "Agree a synthetic service level and price.",
+        "moves": [
+          {
+            "sequence": 1,
+            "actor_ref": "agent:buyer",
+            "move_type": "proposal",
+            "occurred_at": "2026-11-12T19:30:01Z",
+            "summary": "Initial service and price proposal.",
+            "terms_digest": "aaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaa"
+          },
+          {
+            "sequence": 2,
+            "actor_ref": "agent:provider",
+            "move_type": "counteroffer",
+            "occurred_at": "2026-11-12T19:30:02Z",
+            "summary": "Counteroffer with revised service level.",
+            "terms_digest": "bbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbb"
+          },
+          {
+            "sequence": 3,
+            "actor_ref": "agent:buyer",
+            "move_type": "accept",
+            "occurred_at": "2026-11-12T19:30:03Z",
+            "summary": "Buyer accepts the final terms."
+          },
+          {
+            "sequence": 4,
+            "actor_ref": "agent:provider",
+            "move_type": "accept",
+            "occurred_at": "2026-11-12T19:30:04Z",
+            "summary": "Provider accepts the final terms."
+          }
+        ],
+        "accepted_by": [
+          "agent:buyer",
+          "agent:provider"
+        ],
+        "reservation_checks": [
+          {
+            "party_ref": "agent:buyer",
+            "result": "pass",
+            "method": "independent_evaluator",
+            "evidence_ref": "evidence:buyer-floor"
+          },
+          {
+            "party_ref": "agent:provider",
+            "result": "pass",
+            "method": "independent_evaluator",
+            "evidence_ref": "evidence:provider-floor"
+          }
+        ],
+        "batna_claim": "verified_safe",
+        "outcome": "agreement",
+        "settlement_digest": "cccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccc",
+        "evidence_refs": [
+          "evidence:negotiation-log"
+        ]
+      }
+    ],
+    "merge_plans": [
+      {
+        "record_type": "merge_plan",
+        "record_id": "merge:synthetic:001",
+        "created_at": "2026-11-12T19:30:00Z",
+        "source_ref": "graph:branch:feature-a",
+        "target_ref": "graph:main",
+        "base_digest": "1111111111111111111111111111111111111111111111111111111111111111",
+        "expected_target_digest": "2222222222222222222222222222222222222222222222222222222222222222",
+        "observed_target_digest": "2222222222222222222222222222222222222222222222222222222222222222",
+        "operations": [
+          {
+            "operation_id": "op:1",
+            "kind": "add",
+            "subject_ref": "entity:synthetic:new",
+            "proposed_value_digest": "3333333333333333333333333333333333333333333333333333333333333333"
+          },
+          {
+            "operation_id": "op:2",
+            "kind": "repoint",
+            "subject_ref": "edge:synthetic:1",
+            "proposed_value_digest": "4444444444444444444444444444444444444444444444444444444444444444"
+          }
+        ],
+        "conflicts": [],
+        "status": "approved",
+        "approval_ref": "review:synthetic-human",
+        "applied_at": null,
+        "evidence_refs": [
+          "evidence:merge-diff"
+        ]
+      }
+    ],
+    "ontology_alignment_receipts": [
+      {
+        "record_type": "ontology_alignment_receipt",
+        "record_id": "alignment:synthetic:001",
+        "created_at": "2026-11-12T19:30:00Z",
+        "source_snapshot_digest": "5555555555555555555555555555555555555555555555555555555555555555",
+        "target_snapshot_digest": "6666666666666666666666666666666666666666666666666666666666666666",
+        "correspondences": [
+          {
+            "source_concept_ref": "onto-a:Service",
+            "target_concept_ref": "onto-b:Service",
+            "relation": "exact_match",
+            "confidence": 0.94,
+            "evidence_refs": [
+              "evidence:definition",
+              "evidence:instance"
+            ]
+          },
+          {
+            "source_concept_ref": "onto-a:Capacity",
+            "target_concept_ref": null,
+            "relation": "unmapped",
+            "confidence": 0.31,
+            "evidence_refs": [
+              "evidence:gap-analysis"
+            ]
+          }
+        ],
+        "status": "accepted",
+        "round_trip_validation": "passed",
+        "reviewer_ref": "reviewer:synthetic-human",
+        "clarification_transcript_ref": "transcript:synthetic-clarification",
+        "evidence_refs": [
+          "evidence:alignment-roundtrip"
+        ]
+      }
+    ],
+    "argumentation_receipts": [
+      {
+        "record_type": "argumentation_receipt",
+        "record_id": "argumentation:synthetic:001",
+        "created_at": "2026-11-12T19:30:00Z",
+        "arguments": [
+          {
+            "argument_ref": "arg:a",
+            "claim_ref": "claim:option-a-feasible",
+            "evidence_refs": [
+              "evidence:a"
+            ]
+          },
+          {
+            "argument_ref": "arg:b",
+            "claim_ref": "claim:option-b-over-budget",
+            "evidence_refs": [
+              "evidence:b"
+            ]
+          }
+        ],
+        "attack_edges": [
+          {
+            "attacker_ref": "arg:b",
+            "target_ref": "arg:a",
+            "confidence": 0.88
+          }
+        ],
+        "semantics": "grounded",
+        "acceptance_threshold": 0.85,
+        "accepted_argument_refs": [
+          "arg:b"
+        ],
+        "rejected_argument_refs": [
+          "arg:a"
+        ],
+        "status": "resolved",
+        "evidence_refs": [
+          "evidence:argument-graph"
+        ]
+      }
+    ],
+    "dispute_outcomes": [
+      {
+        "record_type": "dispute_outcome",
+        "record_id": "dispute:synthetic:001",
+        "created_at": "2026-11-12T19:30:00Z",
+        "parties": [
+          "party:worker",
+          "party:client"
+        ],
+        "outcome": "settled",
+        "ruling_summary": "Synthetic proportional settlement for test purposes.",
+        "awards": [
+          {
+            "party_ref": "party:worker",
+            "percentage": 60
+          },
+          {
+            "party_ref": "party:client",
+            "percentage": 40
+          }
+        ],
+        "enforcement_authorized": false,
+        "decision_maker_ref": "arbitrator:synthetic",
+        "evidence_refs": [
+          "evidence:dispute-record"
+        ]
+      }
+    ]
+  },
+  "signed_bundles": [
+    {
+      "payload_type": "application/vnd.in-toto+json",
+      "payload": "eyJfdHlwZSI6Imh0dHBzOi8vaW4tdG90by5pby9TdGF0ZW1lbnQvdjEiLCJwcmVkaWNhdGUiOnsiZml4dHVyZV9vbmx5Ijp0cnVlLCJvdXRjb21lIjoiY29udmVyZ2VkIiwicmVjb3JkX3JlZiI6ImNvbnNlbnN1czpzeW50aGV0aWM6MDAxIn0sInByZWRpY2F0ZVR5cGUiOiJodHRwczovL2Myby1jaGFvcy10by1vcmRlci5vcmcvY29udmVyZ2VuY2UvZXZpZGVuY2UvdjEiLCJzdWJqZWN0IjpbeyJkaWdlc3QiOnsic2hhMjU2IjoiM2E1MDIwODcyOThiMzlmY2UyNzM5NzY4M2M5NzYxZTQ5M2FlMTUzOWVkMmU1Mzk3YjJiNDBiYmJmYTU1MGY3MCJ9LCJuYW1lIjoic3ludGhldGljL2NvbnZlcmdlbmNlL2NvbnNlbnN1cy1jZXJ0aWZpY2F0ZS5qc29uIn1dfQ==",
+      "envelope": {
+        "payloadType": "application/vnd.in-toto+json",
+        "payload": "eyJfdHlwZSI6Imh0dHBzOi8vaW4tdG90by5pby9TdGF0ZW1lbnQvdjEiLCJwcmVkaWNhdGUiOnsiZml4dHVyZV9vbmx5Ijp0cnVlLCJvdXRjb21lIjoiY29udmVyZ2VkIiwicmVjb3JkX3JlZiI6ImNvbnNlbnN1czpzeW50aGV0aWM6MDAxIn0sInByZWRpY2F0ZVR5cGUiOiJodHRwczovL2Myby1jaGFvcy10by1vcmRlci5vcmcvY29udmVyZ2VuY2UvZXZpZGVuY2UvdjEiLCJzdWJqZWN0IjpbeyJkaWdlc3QiOnsic2hhMjU2IjoiM2E1MDIwODcyOThiMzlmY2UyNzM5NzY4M2M5NzYxZTQ5M2FlMTUzOWVkMmU1Mzk3YjJiNDBiYmJmYTU1MGY3MCJ9LCJuYW1lIjoic3ludGhldGljL2NvbnZlcmdlbmNlL2NvbnNlbnN1cy1jZXJ0aWZpY2F0ZS5qc29uIn1dfQ==",
+        "signatures": [
+          {
+            "keyid": "sha256:56475aa75463474c0285df5dbf2bcab73da651358839e9b77481b2eab107708c",
+            "sig": "Ei7pCwp3h/fGaUv6Gki1FxfB+U9jCNUly2ubFYQ1hdPFBQ+gGW0+xbScFw8+aLgj6Noj4a0n33sbYGpw6obHCw=="
+          }
+        ]
+      },
+      "verification_key": {
+        "keyid": "sha256:56475aa75463474c0285df5dbf2bcab73da651358839e9b77481b2eab107708c",
+        "public_key": "A6EHv/POEL4dcN0Y50vAmWfk1jCbpQ1fHdyGZBJVMbg="
+      },
+      "expected_subject_digest": "3a502087298b39fce27397683c9761e493ae1539ed2e5397b2b40bbbfa550f70"
+    }
+  ]
+}

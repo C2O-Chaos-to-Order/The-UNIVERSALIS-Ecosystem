@@ -1,0 +1,275 @@
+{
+  "schema_version": "1.0.0",
+  "contract_family": "website-interoperability",
+  "records": [
+    {
+      "record_type": "site_definition",
+      "record": {
+        "schema_version": "1.0.0",
+        "site_id": "fixture:site",
+        "revision_id": "fixture:revision-1",
+        "revision_number": 1,
+        "revision_digest": "aaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaa",
+        "site_kind": "static-site",
+        "source_ref": "fixture:git-source",
+        "rendering_targets": [
+          "static-html",
+          "astro"
+        ],
+        "canonical_uri_ref": "https://example.invalid/",
+        "content_schema_ref": "fixture:content-schema",
+        "theme_digest": "bbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbb",
+        "pages": [
+          {
+            "page_id": "fixture:page-home",
+            "route": "/",
+            "page_digest": "cccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccc",
+            "access_classification": "public",
+            "locale": "en",
+            "block_refs": [
+              "fixture:hero",
+              "fixture:body"
+            ],
+            "publication_state": "draft"
+          }
+        ],
+        "discovery_signals": [
+          {
+            "signal": "robots-txt",
+            "state": "declared",
+            "reference": "fixture:robots"
+          },
+          {
+            "signal": "llms-txt",
+            "state": "declared",
+            "reference": "fixture:llms"
+          },
+          {
+            "signal": "agents-md",
+            "state": "not-checked",
+            "reference": null
+          }
+        ],
+        "site_state": "draft",
+        "build_provenance_ref": "fixture:build-provenance",
+        "audit_receipt_refs": [],
+        "limitations": [
+          "Synthetic site definition; page content is referenced by digest and opaque block IDs."
+        ]
+      }
+    },
+    {
+      "record_type": "agent_capability_manifest",
+      "record": {
+        "schema_version": "1.0.0",
+        "manifest_id": "fixture:capability-manifest",
+        "site_ref": "fixture:site",
+        "manifest_version": "0.1.0",
+        "site_revision_digest": "aaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaa",
+        "issuer_ref": "fixture:site-owner",
+        "interaction_surfaces": [
+          "mcp",
+          "webmcp",
+          "agent-skills"
+        ],
+        "webmcp_spec_status": "community-group-draft",
+        "webmcp_guarantees": {
+          "structured_state": true,
+          "revision_pinning": true,
+          "stale_proposal_rejection": true,
+          "human_gate_for_publish": true
+        },
+        "discovery_signals": [
+          {
+            "signal": "robots-txt",
+            "reference": "fixture:robots",
+            "verification_status": "declared"
+          },
+          {
+            "signal": "llms-txt",
+            "reference": "fixture:llms",
+            "verification_status": "declared"
+          },
+          {
+            "signal": "markdown-alternate",
+            "reference": null,
+            "verification_status": "not-run"
+          }
+        ],
+        "capabilities": [
+          {
+            "capability_id": "fixture:read",
+            "operation": "read-content",
+            "scope_refs": [
+              "fixture:public-pages"
+            ],
+            "effect": "read",
+            "requires_human_approval": false,
+            "requires_owner_authorization": false,
+            "tool_schema_ref": "fixture:mcp-read-schema"
+          },
+          {
+            "capability_id": "fixture:propose",
+            "operation": "propose-change",
+            "scope_refs": [
+              "fixture:public-pages"
+            ],
+            "effect": "write",
+            "requires_human_approval": true,
+            "requires_owner_authorization": false,
+            "tool_schema_ref": "fixture:mcp-change-schema"
+          }
+        ],
+        "authentication_modes": [
+          "oauth",
+          "scoped-token"
+        ],
+        "authorization_policy_ref": "fixture:site-policy",
+        "limitations": [
+          "A manifest declares capabilities; it does not grant credentials, consent or execution authority. WebMCP is recorded as a draft implementation surface."
+        ]
+      }
+    },
+    {
+      "record_type": "site_change_set",
+      "record": {
+        "schema_version": "1.0.0",
+        "change_set_id": "fixture:changeset",
+        "site_ref": "fixture:site",
+        "base_revision_id": "fixture:revision-1",
+        "base_revision_digest": "aaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaa",
+        "observed_current_revision_id": "fixture:revision-1",
+        "observed_current_revision_digest": "aaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaa",
+        "stale": false,
+        "status": "proposed",
+        "actor_ref": "fixture:agent",
+        "changes": [
+          {
+            "change_id": "fixture:change-title",
+            "operation": "update-content",
+            "target_ref": "fixture:page-home",
+            "change_digest": "dddddddddddddddddddddddddddddddddddddddddddddddddddddddddddddddd",
+            "affected_paths": [
+              "/pages/home/blocks/hero/title"
+            ]
+          }
+        ],
+        "has_publish_or_deploy_effect": false,
+        "requires_human_approval": true,
+        "approval_ref": null,
+        "commit_ref": null,
+        "evidence_refs": [],
+        "limitations": [
+          "Proposal only; no commit, publish or deployment is performed."
+        ]
+      }
+    },
+    {
+      "record_type": "site_permission_profile",
+      "record": {
+        "schema_version": "1.0.0",
+        "profile_id": "fixture:editor-profile",
+        "site_ref": "fixture:site",
+        "principal_ref": "fixture:agent",
+        "role": "author",
+        "token_ref": "fixture:scoped-token-reference",
+        "allowed_operations": [
+          "read-content",
+          "propose-change",
+          "preview",
+          "audit"
+        ],
+        "denied_operations": [
+          "publish",
+          "deploy",
+          "manage-dns",
+          "delete-content"
+        ],
+        "scope_refs": [
+          "fixture:public-pages"
+        ],
+        "human_approval_for_publish": true,
+        "human_approval_for_deploy": true,
+        "policy_ref": "fixture:site-policy",
+        "expires_at": "2027-01-01T00:00:00Z",
+        "status": "active",
+        "limitations": [
+          "Token values and credentials are never included."
+        ]
+      }
+    },
+    {
+      "record_type": "site_audit_receipt",
+      "record": {
+        "schema_version": "1.0.0",
+        "audit_id": "fixture:audit",
+        "site_ref": "fixture:site",
+        "site_revision_digest": "aaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaa",
+        "scanner_ref": "fixture:scanner",
+        "scanner_version": "0.1.0",
+        "audit_kind": "agent-readiness",
+        "ruleset_ref": "fixture:agent-rules",
+        "ruleset_digest": "eeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeee",
+        "scope_ref": "fixture:public-pages",
+        "started_at": "2026-11-12T18:00:00Z",
+        "completed_at": "2026-11-12T18:00:10Z",
+        "result": "passed",
+        "score": 98,
+        "page_count": 1,
+        "findings": [
+          {
+            "finding_id": "fixture:finding-1",
+            "rule_id": "fixture:optional-meta",
+            "severity": "info",
+            "page_ref": "fixture:page-home",
+            "evidence_digest": "ffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffff",
+            "remediation_state": "deferred"
+          }
+        ],
+        "summary": {
+          "info": 1,
+          "low": 0,
+          "moderate": 0,
+          "high": 0,
+          "critical": 0
+        },
+        "content_digest": "0000000000000000000000000000000000000000000000000000000000000000",
+        "signature": null,
+        "limitations": [
+          "Synthetic fixture. No live website was scanned and no signature was generated."
+        ]
+      }
+    },
+    {
+      "record_type": "site_publish_receipt",
+      "record": {
+        "schema_version": "1.0.0",
+        "receipt_id": "fixture:preview",
+        "site_ref": "fixture:site",
+        "site_revision_digest": "aaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaa",
+        "event_type": "preview",
+        "target_ref": "fixture:preview-environment",
+        "artifact_digest": "1111111111111111111111111111111111111111111111111111111111111111",
+        "initiated_by_ref": "fixture:agent",
+        "operator_ref": null,
+        "approval_ref": null,
+        "result": "succeeded",
+        "occurred_at": "2026-11-12T18:00:20Z",
+        "previous_receipt_ref": null,
+        "audit_receipt_refs": [
+          "fixture:audit"
+        ],
+        "signature_state": "not-required",
+        "signature": null,
+        "limitations": [
+          "Synthetic preview record; no public publishing or deployment occurred."
+        ]
+      }
+    }
+  ],
+  "limitations": [
+    "All fixture records are synthetic and use reserved example.invalid references.",
+    "Contract validation does not establish site ownership, authorization, accessibility conformance, security, SEO quality or production deployment.",
+    "robots.txt, llms.txt, ai.txt, AGENTS.md and WebMCP declarations are descriptive/discovery signals, not access-control enforcement."
+  ]
+}

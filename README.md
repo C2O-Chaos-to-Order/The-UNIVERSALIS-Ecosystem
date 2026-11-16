@@ -84,3 +84,13 @@ Do not interpret this README, a successful build, or an experimental prototype a
 ## License
 
 Licensed under the Apache License, Version 2.0. See [LICENSE](LICENSE) and [NOTICE](NOTICE).
+
+
+## Open Security and Cybersecurity foundation
+
+- [UNIVERSALIS security architecture](SECURITY_CYBERSECURITY_ARCHITECTURE.md)
+- [Portable threat, enforcement, containment, SBOM and audit contracts](schemas/security/security-evidence-contracts.v1.schema.json)
+- [Synthetic public evidence fixtures](examples/security/security-evidence-fixtures.v1.json)
+- [Validation evidence and CI receipts](SECURITY_CYBERSECURITY_VALIDATION.md)
+
+This repository publishes portable contracts and synthetic fixtures only. No C2O-private policies, keys, incidents, assets, or authority records are included, and no security product or offensive assessment tool is installed or invoked.
