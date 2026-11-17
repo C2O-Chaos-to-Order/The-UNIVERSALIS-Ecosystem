@@ -46,12 +46,12 @@ Source head: `76498b6f84c12286647b0f685c08a4ae15aa8416`; changed paths: 105; sou
 | #21 | `.github/workflows/convergence-contract.yml` | `dcfbde333662d63ee71d061c1d7eb8b44661a27b` | `—` | explicitly held outside active tree |
 | #21 | `.github/workflows/development-suite-contract.yml` | `73856b0b6a000209587109f5cbb6a81471b82bc9` | `—` | explicitly held outside active tree |
 | #21 | `.github/workflows/divergence-contract.yml` | `69738827dabf0fa6e5b00c97bbb7f365613dd900` | `—` | explicitly held outside active tree |
-| #21 | `.github/workflows/engineering-doctor.yml` | `796ccb32b8fbdca22aa6b81f181ff4a4e3028967` | `796ccb32b8fbdca22aa6b81f181ff4a4e3028967` | listed in held inventory but byte-identical in active tree |
+| #21 | `.github/workflows/engineering-doctor.yml` | `796ccb32b8fbdca22aa6b81f181ff4a4e3028967` | `796ccb32b8fbdca22aa6b81f181ff4a4e3028967` | byte-identical to active main baseline; remove from held list |
 | #21 | `.github/workflows/insurgence-contract.yml` | `bbf5df9956063ad448055cb383af3091272c248b` | `—` | explicitly held outside active tree |
 | #21 | `.github/workflows/platform-interoperability-contract.yml` | `12a513263f378d8ce14d3c03e511cacbdba08dc0` | `—` | explicitly held outside active tree |
 | #21 | `.github/workflows/prevention-contract.yml` | `cc04938ac39d73c1f8adbf8f242df72ebd104fef` | `—` | explicitly held outside active tree |
 | #21 | `.github/workflows/repository-quality.yml` | `4455975bd07a1b4ea53e31cde5b7014e0afb69d2` | `—` | explicitly held outside active tree |
-| #21 | `.github/workflows/repository-verification.yml` | `de20b5525f82052e00fa1443bdec369aa86843a2` | `de20b5525f82052e00fa1443bdec369aa86843a2` | listed in held inventory but byte-identical in active tree |
+| #21 | `.github/workflows/repository-verification.yml` | `de20b5525f82052e00fa1443bdec369aa86843a2` | `de20b5525f82052e00fa1443bdec369aa86843a2` | byte-identical to active main baseline; remove from held list |
 | #21 | `.github/workflows/security-evidence-contract.yml` | `9d488e62cc61b94585131e30292c4eb055e23214` | `—` | explicitly held outside active tree |
 | #21 | `.github/workflows/transcendence-contract.yml` | `8416069b410ea2de7e043cfae1bc6d134ddeaa53` | `—` | explicitly held outside active tree |
 | #21 | `.github/workflows/website-interoperability-contract.yml` | `b5ee96c9d081193e9deff67b90bc7038018d2a03` | `—` | explicitly held outside active tree |
@@ -142,3 +142,12 @@ Source head: `26a37739337d4e824d0b79003695953b96e8a575`; changed paths: 10; sour
 | #20 | `construction_engine/tests/__init__.py` | `e69de29bb2d1d6434b8b29ae775ad8c2e48c5391` | `e69de29bb2d1d6434b8b29ae775ad8c2e48c5391` | byte-identical |
 | #20 | `construction_engine/tests/test_engine.py` | `310985dfbcce8535b5e3db8ad7473c103712f8da` | `310985dfbcce8535b5e3db8ad7473c103712f8da` | byte-identical |
 | #20 | `construction_engine/verification/LOCAL-VERIFICATION-2026-11-12.json` | `02d95f52eee84fb8e46b22ae333f2ff080ac0170` | `02d95f52eee84fb8e46b22ae333f2ff080ac0170` | byte-identical |
+## Final current-head reconciliation and hold correction — 2026-11-17
+
+**Final master head containing this audit:** 235e03a18efae34d3a8c6873ecf00fd75fce454a. The two source PRs contain 115 changed-file/PR records across 115 distinct paths. All source and master recursive trees were complete (truncated=false). The inventory records 44 byte-identical files, 37 present with different blobs (matching the earlier aggregate rework count), and 32 source changes explicitly held outside the active tree. No source path is missing from its source tree and no changed path is absent from master without a recorded hold.
+
+### Corrected hold inventory
+
+The earlier 34-path hold list included two files that are already present byte-identically in the active main baseline and master tree: .github/workflows/engineering-doctor.yml and .github/workflows/repository-verification.yml. Remove those two from the held-path list. The remaining 32 source changes are held: 31 from PR #21 and one from PR #20. They remain preserved in source commit history and are not activated as workflows.
+
+The 37 different-blob paths match the integration rework totals; the exact source and master blob IDs are retained in the per-file records.
