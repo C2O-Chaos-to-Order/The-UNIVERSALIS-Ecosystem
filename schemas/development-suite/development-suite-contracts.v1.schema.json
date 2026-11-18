@@ -1,0 +1,670 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "$id": "https://universal.is/schemas/development-suite/development-suite-contracts.v1.schema.json",
+  "title": "Portable Development Suite Contracts",
+  "description": "Project-format contracts, agent capability manifests and signed provenance receipts. No record grants authority.",
+  "oneOf": [
+    {
+      "$ref": "#/$defs/project_format_contract"
+    },
+    {
+      "$ref": "#/$defs/agent_capability_manifest"
+    },
+    {
+      "$ref": "#/$defs/build_provenance_receipt"
+    }
+  ],
+  "$defs": {
+    "project_format_contract": {
+      "type": "object",
+      "properties": {
+        "record_type": {
+          "const": "project_format_contract"
+        },
+        "schema_version": {
+          "const": "1.0.0"
+        },
+        "contract_id": {
+          "type": "string",
+          "minLength": 3
+        },
+        "domain": {
+          "enum": [
+            "game",
+            "music_audio",
+            "3d_cad",
+            "video",
+            "vr_ar",
+            "ide_vcs",
+            "build_ci_cd",
+            "project_management",
+            "documentation"
+          ]
+        },
+        "format_name": {
+          "type": "string",
+          "minLength": 2
+        },
+        "format_version": {
+          "type": "string",
+          "minLength": 1
+        },
+        "media_type": {
+          "type": "string",
+          "minLength": 3
+        },
+        "specification_uri": {
+          "type": "string",
+          "format": "uri"
+        },
+        "schema_uri": {
+          "type": "string",
+          "format": "uri"
+        },
+        "schema_sha256": {
+          "type": "string",
+          "pattern": "^[a-f0-9]{64}$"
+        },
+        "serialization": {
+          "enum": [
+            "canonical_json",
+            "canonical_yaml",
+            "git_native",
+            "archive_with_manifest",
+            "opaque_native_with_exports",
+            "standard_binary"
+          ]
+        },
+        "canonicalization": {
+          "type": "string",
+          "minLength": 5
+        },
+        "portability": {
+          "type": "object",
+          "properties": {
+            "portable": {
+              "type": "boolean"
+            },
+            "content_addressed_assets": {
+              "type": "boolean"
+            },
+            "asset_digest_algorithm": {
+              "const": "sha256"
+            },
+            "extension_policy": {
+              "enum": [
+                "declared_only",
+                "reject_unknown",
+                "preserve_unknown"
+              ]
+            },
+            "required_runtime_dependencies": {
+              "type": "array",
+              "items": {
+                "type": "string"
+              },
+              "uniqueItems": true
+            },
+            "lossless_round_trip_required": {
+              "type": "boolean"
+            }
+          },
+          "required": [
+            "portable",
+            "content_addressed_assets",
+            "asset_digest_algorithm",
+            "extension_policy",
+            "required_runtime_dependencies",
+            "lossless_round_trip_required"
+          ],
+          "additionalProperties": false
+        },
+        "project": {
+          "type": "object",
+          "properties": {
+            "project_id": {
+              "type": "string",
+              "minLength": 1
+            },
+            "revision": {
+              "type": "string",
+              "minLength": 1
+            },
+            "content_digest": {
+              "type": "object",
+              "properties": {
+                "sha256": {
+                  "type": "string",
+                  "pattern": "^[a-f0-9]{64}$"
+                }
+              },
+              "required": [
+                "sha256"
+              ],
+              "additionalProperties": false
+            }
+          },
+          "required": [
+            "project_id",
+            "revision",
+            "content_digest"
+          ],
+          "additionalProperties": false
+        },
+        "assets": {
+          "type": "array",
+          "items": {
+            "type": "object",
+            "properties": {
+              "logical_name": {
+                "type": "string",
+                "minLength": 1
+              },
+              "media_type": {
+                "type": "string",
+                "minLength": 3
+              },
+              "digest": {
+                "type": "object",
+                "properties": {
+                  "sha256": {
+                    "type": "string",
+                    "pattern": "^[a-f0-9]{64}$"
+                  }
+                },
+                "required": [
+                  "sha256"
+                ],
+                "additionalProperties": false
+              },
+              "license_reference": {
+                "type": "string"
+              },
+              "origin_reference": {
+                "type": "string"
+              }
+            },
+            "required": [
+              "logical_name",
+              "media_type",
+              "digest"
+            ],
+            "additionalProperties": false
+          }
+        },
+        "notes": {
+          "type": "array",
+          "items": {
+            "type": "string"
+          }
+        }
+      },
+      "required": [
+        "record_type",
+        "schema_version",
+        "contract_id",
+        "domain",
+        "format_name",
+        "format_version",
+        "media_type",
+        "specification_uri",
+        "schema_uri",
+        "schema_sha256",
+        "serialization",
+        "canonicalization",
+        "portability",
+        "project",
+        "assets"
+      ],
+      "additionalProperties": false
+    },
+    "agent_capability_manifest": {
+      "type": "object",
+      "properties": {
+        "record_type": {
+          "const": "agent_capability_manifest"
+        },
+        "schema_version": {
+          "const": "1.0.0"
+        },
+        "manifest_id": {
+          "type": "string",
+          "minLength": 3
+        },
+        "provider": {
+          "type": "string",
+          "minLength": 2
+        },
+        "provider_version": {
+          "type": "string",
+          "minLength": 1
+        },
+        "protocol": {
+          "enum": [
+            "MCP",
+            "CLI",
+            "HTTP_API",
+            "EDITOR_BRIDGE",
+            "PLUGIN_API",
+            "AGENT_SKILL",
+            "MULTI_INTERFACE"
+          ]
+        },
+        "transport": {
+          "enum": [
+            "stdio",
+            "streamable_http",
+            "local_http",
+            "websocket",
+            "cli_process",
+            "in_process",
+            "mixed"
+          ]
+        },
+        "deployment_model": {
+          "enum": [
+            "local",
+            "self_hosted",
+            "hosted",
+            "hybrid",
+            "unknown"
+          ]
+        },
+        "data_residency": {
+          "enum": [
+            "local_only",
+            "operator_controlled",
+            "provider_hosted",
+            "mixed",
+            "unknown"
+          ]
+        },
+        "authentication_modes": {
+          "type": "array",
+          "minItems": 1,
+          "items": {
+            "enum": [
+              "none_local_only",
+              "os_identity",
+              "mcp_session",
+              "api_key",
+              "oauth",
+              "mutual_tls",
+              "service_identity",
+              "operator_defined"
+            ]
+          },
+          "uniqueItems": true
+        },
+        "capabilities": {
+          "type": "array",
+          "minItems": 1,
+          "items": {
+            "type": "object",
+            "properties": {
+              "capability_id": {
+                "type": "string",
+                "minLength": 2
+              },
+              "name": {
+                "type": "string",
+                "minLength": 2
+              },
+              "effect": {
+                "enum": [
+                  "read",
+                  "write",
+                  "generate",
+                  "observe",
+                  "import",
+                  "export",
+                  "build",
+                  "test",
+                  "release",
+                  "publish",
+                  "deploy",
+                  "execute"
+                ]
+              },
+              "scope": {
+                "type": "array",
+                "minItems": 1,
+                "items": {
+                  "type": "string",
+                  "minLength": 1
+                },
+                "uniqueItems": true
+              },
+              "input_schema_sha256": {
+                "type": "string",
+                "pattern": "^[a-f0-9]{64}$"
+              },
+              "output_schema_sha256": {
+                "type": "string",
+                "pattern": "^[a-f0-9]{64}$"
+              },
+              "approval_mode": {
+                "enum": [
+                  "none",
+                  "per_call_confirmation",
+                  "human_permit",
+                  "owner_policy_gate"
+                ]
+              },
+              "destructive_or_external_effect": {
+                "type": "boolean"
+              }
+            },
+            "required": [
+              "capability_id",
+              "name",
+              "effect",
+              "scope",
+              "approval_mode",
+              "destructive_or_external_effect"
+            ],
+            "additionalProperties": false
+          }
+        },
+        "declared_limitations": {
+          "type": "array",
+          "items": {
+            "type": "string"
+          }
+        },
+        "manifest_digest": {
+          "type": "string",
+          "pattern": "^[a-f0-9]{64}$"
+        }
+      },
+      "required": [
+        "record_type",
+        "schema_version",
+        "manifest_id",
+        "provider",
+        "provider_version",
+        "protocol",
+        "transport",
+        "deployment_model",
+        "data_residency",
+        "authentication_modes",
+        "capabilities",
+        "declared_limitations",
+        "manifest_digest"
+      ],
+      "additionalProperties": false
+    },
+    "in_toto_statement": {
+      "type": "object",
+      "properties": {
+        "_type": {
+          "const": "https://in-toto.io/Statement/v1"
+        },
+        "subject": {
+          "type": "array",
+          "minItems": 1,
+          "items": {
+            "type": "object",
+            "properties": {
+              "name": {
+                "type": "string",
+                "minLength": 1
+              },
+              "digest": {
+                "type": "object",
+                "minProperties": 1,
+                "additionalProperties": {
+                  "type": "string"
+                }
+              }
+            },
+            "required": [
+              "name",
+              "digest"
+            ],
+            "additionalProperties": false
+          }
+        },
+        "predicateType": {
+          "const": "https://slsa.dev/provenance/v1"
+        },
+        "predicate": {
+          "type": "object",
+          "properties": {
+            "buildDefinition": {
+              "type": "object",
+              "properties": {
+                "buildType": {
+                  "type": "string",
+                  "format": "uri"
+                },
+                "externalParameters": {
+                  "type": "object"
+                },
+                "internalParameters": {
+                  "type": "object"
+                },
+                "resolvedDependencies": {
+                  "type": "array",
+                  "items": {
+                    "type": "object",
+                    "properties": {
+                      "uri": {
+                        "type": "string",
+                        "format": "uri"
+                      },
+                      "digest": {
+                        "type": "object",
+                        "minProperties": 1,
+                        "additionalProperties": {
+                          "type": "string"
+                        }
+                      }
+                    },
+                    "required": [
+                      "uri",
+                      "digest"
+                    ],
+                    "additionalProperties": false
+                  }
+                }
+              },
+              "required": [
+                "buildType",
+                "externalParameters",
+                "internalParameters",
+                "resolvedDependencies"
+              ],
+              "additionalProperties": false
+            },
+            "runDetails": {
+              "type": "object",
+              "properties": {
+                "builder": {
+                  "type": "object",
+                  "properties": {
+                    "id": {
+                      "type": "string",
+                      "format": "uri"
+                    }
+                  },
+                  "required": [
+                    "id"
+                  ],
+                  "additionalProperties": false
+                },
+                "metadata": {
+                  "type": "object",
+                  "properties": {
+                    "invocationId": {
+                      "type": "string",
+                      "minLength": 1
+                    },
+                    "startedOn": {
+                      "type": "string",
+                      "format": "date-time"
+                    },
+                    "finishedOn": {
+                      "type": "string",
+                      "format": "date-time"
+                    }
+                  },
+                  "required": [
+                    "invocationId",
+                    "startedOn",
+                    "finishedOn"
+                  ],
+                  "additionalProperties": false
+                },
+                "byproducts": {
+                  "type": "array",
+                  "items": {
+                    "type": "object",
+                    "properties": {
+                      "name": {
+                        "type": "string",
+                        "minLength": 1
+                      },
+                      "digest": {
+                        "type": "object",
+                        "minProperties": 1,
+                        "additionalProperties": {
+                          "type": "string"
+                        }
+                      }
+                    },
+                    "required": [
+                      "name",
+                      "digest"
+                    ],
+                    "additionalProperties": false
+                  }
+                }
+              },
+              "required": [
+                "builder",
+                "metadata",
+                "byproducts"
+              ],
+              "additionalProperties": false
+            }
+          },
+          "required": [
+            "buildDefinition",
+            "runDetails"
+          ],
+          "additionalProperties": false
+        }
+      },
+      "required": [
+        "_type",
+        "subject",
+        "predicateType",
+        "predicate"
+      ],
+      "additionalProperties": false
+    },
+    "dsse_envelope": {
+      "type": "object",
+      "properties": {
+        "payloadType": {
+          "const": "application/vnd.in-toto+json"
+        },
+        "payload": {
+          "type": "string",
+          "minLength": 1
+        },
+        "signatures": {
+          "type": "array",
+          "minItems": 1,
+          "items": {
+            "type": "object",
+            "properties": {
+              "keyid": {
+                "type": "string",
+                "minLength": 1
+              },
+              "sig": {
+                "type": "string",
+                "minLength": 1
+              }
+            },
+            "required": [
+              "keyid",
+              "sig"
+            ],
+            "additionalProperties": false
+          }
+        }
+      },
+      "required": [
+        "payloadType",
+        "payload",
+        "signatures"
+      ],
+      "additionalProperties": false
+    },
+    "build_provenance_receipt": {
+      "type": "object",
+      "properties": {
+        "record_type": {
+          "const": "build_provenance_receipt"
+        },
+        "schema_version": {
+          "const": "1.0.0"
+        },
+        "receipt_id": {
+          "type": "string",
+          "minLength": 3
+        },
+        "statement": {
+          "$ref": "#/$defs/in_toto_statement"
+        },
+        "envelope": {
+          "$ref": "#/$defs/dsse_envelope"
+        },
+        "verification": {
+          "type": "object",
+          "properties": {
+            "status": {
+              "const": "verified"
+            },
+            "verifier_id": {
+              "type": "string",
+              "minLength": 1
+            },
+            "keyid": {
+              "type": "string",
+              "minLength": 1
+            },
+            "verified_at": {
+              "type": "string",
+              "format": "date-time"
+            },
+            "public_key_sha256": {
+              "type": "string",
+              "pattern": "^[a-f0-9]{64}$"
+            }
+          },
+          "required": [
+            "status",
+            "verifier_id",
+            "keyid",
+            "verified_at",
+            "public_key_sha256"
+          ],
+          "additionalProperties": false
+        }
+      },
+      "required": [
+        "record_type",
+        "schema_version",
+        "receipt_id",
+        "statement",
+        "envelope",
+        "verification"
+      ],
+      "additionalProperties": false
+    }
+  }
+}

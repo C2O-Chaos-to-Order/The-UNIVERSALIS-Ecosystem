@@ -1,0 +1,809 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "$id": "https://universalis.example/schemas/disorder-prevention/disorder-prevention-contracts.v1.schema.json",
+  "title": "Portable Disorder Prevention and Resilience Evidence",
+  "type": "object",
+  "additionalProperties": false,
+  "required": [
+    "schema_version",
+    "inventory_id",
+    "records"
+  ],
+  "properties": {
+    "schema_version": {
+      "const": "1.0.0"
+    },
+    "inventory_id": {
+      "const": "disorder-chaos-prevention-25"
+    },
+    "records": {
+      "type": "array",
+      "minItems": 1,
+      "items": {
+        "oneOf": [
+          {
+            "$ref": "#/$defs/taxonomy_profile"
+          },
+          {
+            "$ref": "#/$defs/disorder_event"
+          },
+          {
+            "$ref": "#/$defs/chaos_experiment"
+          },
+          {
+            "$ref": "#/$defs/stability_receipt"
+          },
+          {
+            "$ref": "#/$defs/containment_attestation"
+          },
+          {
+            "$ref": "#/$defs/resilience_index"
+          }
+        ]
+      }
+    }
+  },
+  "$defs": {
+    "common": {
+      "type": "object",
+      "required": [
+        "record_id",
+        "record_type",
+        "recorded_at",
+        "system_profile_digest",
+        "evidence",
+        "verification_status",
+        "authority_effect",
+        "boundary"
+      ],
+      "properties": {
+        "record_id": {
+          "type": "string",
+          "pattern": "^DP-[A-Z0-9-]{3,64}$"
+        },
+        "record_type": {
+          "type": "string"
+        },
+        "recorded_at": {
+          "type": "string",
+          "format": "date-time"
+        },
+        "system_profile_digest": {
+          "type": "string",
+          "pattern": "^sha256:[a-f0-9]{64}$"
+        },
+        "evidence": {
+          "type": "array",
+          "items": {
+            "type": "object",
+            "additionalProperties": false,
+            "required": [
+              "kind",
+              "description"
+            ],
+            "properties": {
+              "kind": {
+                "enum": [
+                  "source",
+                  "test_result",
+                  "trace",
+                  "review",
+                  "measurement",
+                  "attestation",
+                  "owner_proposal"
+                ]
+              },
+              "description": {
+                "type": "string",
+                "minLength": 1
+              },
+              "digest": {
+                "type": [
+                  "string",
+                  "null"
+                ],
+                "pattern": "^sha256:[a-f0-9]{64}$"
+              },
+              "uri": {
+                "type": [
+                  "string",
+                  "null"
+                ],
+                "format": "uri"
+              }
+            }
+          }
+        },
+        "verification_status": {
+          "enum": [
+            "proposed",
+            "observed",
+            "reproduced",
+            "independently_verified",
+            "inconclusive",
+            "not_tested"
+          ]
+        },
+        "authority_effect": {
+          "const": "none"
+        },
+        "boundary": {
+          "const": "portable_public_record"
+        }
+      }
+    },
+    "taxonomy_profile": {
+      "allOf": [
+        {
+          "$ref": "#/$defs/common"
+        },
+        {
+          "type": "object",
+          "additionalProperties": false,
+          "required": [
+            "record_id",
+            "record_type",
+            "recorded_at",
+            "system_profile_digest",
+            "evidence",
+            "verification_status",
+            "authority_effect",
+            "boundary",
+            "profile_version",
+            "disorder_layers",
+            "collapse_regimes",
+            "classification_note"
+          ],
+          "properties": {
+            "record_id": {
+              "$ref": "#/$defs/common/properties/record_id"
+            },
+            "record_type": {
+              "const": "disorder_taxonomy_profile"
+            },
+            "recorded_at": {
+              "$ref": "#/$defs/common/properties/recorded_at"
+            },
+            "system_profile_digest": {
+              "$ref": "#/$defs/common/properties/system_profile_digest"
+            },
+            "evidence": {
+              "$ref": "#/$defs/common/properties/evidence"
+            },
+            "verification_status": {
+              "$ref": "#/$defs/common/properties/verification_status"
+            },
+            "authority_effect": {
+              "const": "none"
+            },
+            "boundary": {
+              "const": "portable_public_record"
+            },
+            "profile_version": {
+              "type": "string",
+              "minLength": 1
+            },
+            "disorder_layers": {
+              "type": "array",
+              "minItems": 5,
+              "uniqueItems": true,
+              "items": {
+                "enum": [
+                  "Communication",
+                  "Cognition",
+                  "Structure",
+                  "Knowledge",
+                  "Normative"
+                ]
+              }
+            },
+            "collapse_regimes": {
+              "type": "array",
+              "minItems": 3,
+              "uniqueItems": true,
+              "items": {
+                "enum": [
+                  "Controlled",
+                  "Hedge",
+                  "Chaos"
+                ]
+              }
+            },
+            "classification_note": {
+              "type": "string",
+              "minLength": 1
+            }
+          }
+        }
+      ]
+    },
+    "disorder_event": {
+      "allOf": [
+        {
+          "$ref": "#/$defs/common"
+        },
+        {
+          "type": "object",
+          "additionalProperties": false,
+          "required": [
+            "record_id",
+            "record_type",
+            "recorded_at",
+            "system_profile_digest",
+            "evidence",
+            "verification_status",
+            "authority_effect",
+            "boundary",
+            "disorder_layer",
+            "regime",
+            "severity",
+            "observed_signal",
+            "trigger_type",
+            "cause_status",
+            "measurement_window"
+          ],
+          "properties": {
+            "record_id": {
+              "$ref": "#/$defs/common/properties/record_id"
+            },
+            "record_type": {
+              "const": "disorder_event"
+            },
+            "recorded_at": {
+              "$ref": "#/$defs/common/properties/recorded_at"
+            },
+            "system_profile_digest": {
+              "$ref": "#/$defs/common/properties/system_profile_digest"
+            },
+            "evidence": {
+              "$ref": "#/$defs/common/properties/evidence"
+            },
+            "verification_status": {
+              "$ref": "#/$defs/common/properties/verification_status"
+            },
+            "authority_effect": {
+              "const": "none"
+            },
+            "boundary": {
+              "const": "portable_public_record"
+            },
+            "disorder_layer": {
+              "enum": [
+                "Communication",
+                "Cognition",
+                "Structure",
+                "Knowledge",
+                "Normative"
+              ]
+            },
+            "regime": {
+              "enum": [
+                "Controlled",
+                "Hedge",
+                "Chaos",
+                "undetermined"
+              ]
+            },
+            "severity": {
+              "type": "integer",
+              "minimum": 0,
+              "maximum": 5
+            },
+            "observed_signal": {
+              "type": "string",
+              "minLength": 1
+            },
+            "trigger_type": {
+              "enum": [
+                "external",
+                "internal",
+                "environmental",
+                "unknown"
+              ]
+            },
+            "cause_status": {
+              "enum": [
+                "confirmed",
+                "suspected",
+                "unknown",
+                "not_investigated"
+              ]
+            },
+            "measurement_window": {
+              "type": "string",
+              "minLength": 1
+            },
+            "metric_name": {
+              "type": [
+                "string",
+                "null"
+              ]
+            }
+          }
+        }
+      ]
+    },
+    "chaos_experiment": {
+      "allOf": [
+        {
+          "$ref": "#/$defs/common"
+        },
+        {
+          "type": "object",
+          "additionalProperties": false,
+          "required": [
+            "record_id",
+            "record_type",
+            "recorded_at",
+            "system_profile_digest",
+            "evidence",
+            "verification_status",
+            "authority_effect",
+            "boundary",
+            "target_profile_digest",
+            "environment_class",
+            "fault_model_version",
+            "fault_classes",
+            "hypothesis",
+            "seed_reference",
+            "max_duration_seconds",
+            "cleanup_plan",
+            "preconditions",
+            "result_status"
+          ],
+          "properties": {
+            "record_id": {
+              "$ref": "#/$defs/common/properties/record_id"
+            },
+            "record_type": {
+              "const": "chaos_experiment"
+            },
+            "recorded_at": {
+              "$ref": "#/$defs/common/properties/recorded_at"
+            },
+            "system_profile_digest": {
+              "$ref": "#/$defs/common/properties/system_profile_digest"
+            },
+            "evidence": {
+              "$ref": "#/$defs/common/properties/evidence"
+            },
+            "verification_status": {
+              "$ref": "#/$defs/common/properties/verification_status"
+            },
+            "authority_effect": {
+              "const": "none"
+            },
+            "boundary": {
+              "const": "portable_public_record"
+            },
+            "target_profile_digest": {
+              "type": "string",
+              "pattern": "^sha256:[a-f0-9]{64}$"
+            },
+            "environment_class": {
+              "enum": [
+                "synthetic",
+                "isolated_test",
+                "staging"
+              ]
+            },
+            "fault_model_version": {
+              "type": "string",
+              "minLength": 1
+            },
+            "fault_classes": {
+              "type": "array",
+              "minItems": 1,
+              "uniqueItems": true,
+              "items": {
+                "enum": [
+                  "latency",
+                  "timeout",
+                  "rate_limit",
+                  "stream_drop",
+                  "malformed_response",
+                  "schema_drift",
+                  "dependency_unavailable",
+                  "handoff_failure",
+                  "memory_state_fault",
+                  "prompt_injection",
+                  "tool_poisoning",
+                  "policy_control_failure",
+                  "resource_pressure"
+                ]
+              }
+            },
+            "hypothesis": {
+              "type": "string",
+              "minLength": 1
+            },
+            "seed_reference": {
+              "type": "string",
+              "minLength": 1
+            },
+            "max_duration_seconds": {
+              "type": "integer",
+              "minimum": 1,
+              "maximum": 86400
+            },
+            "cleanup_plan": {
+              "type": "string",
+              "minLength": 1
+            },
+            "preconditions": {
+              "type": "array",
+              "minItems": 1,
+              "items": {
+                "type": "string",
+                "minLength": 1
+              }
+            },
+            "result_status": {
+              "enum": [
+                "planned",
+                "held",
+                "weakened",
+                "failed",
+                "inconclusive",
+                "aborted"
+              ]
+            },
+            "rollback_reference": {
+              "type": [
+                "string",
+                "null"
+              ]
+            }
+          }
+        }
+      ]
+    },
+    "stability_receipt": {
+      "allOf": [
+        {
+          "$ref": "#/$defs/common"
+        },
+        {
+          "type": "object",
+          "additionalProperties": false,
+          "required": [
+            "record_id",
+            "record_type",
+            "recorded_at",
+            "system_profile_digest",
+            "evidence",
+            "verification_status",
+            "authority_effect",
+            "boundary",
+            "metric_name",
+            "metric_definition",
+            "value",
+            "unit",
+            "threshold",
+            "verdict",
+            "sample_count",
+            "uncertainty"
+          ],
+          "properties": {
+            "record_id": {
+              "$ref": "#/$defs/common/properties/record_id"
+            },
+            "record_type": {
+              "const": "stability_receipt"
+            },
+            "recorded_at": {
+              "$ref": "#/$defs/common/properties/recorded_at"
+            },
+            "system_profile_digest": {
+              "$ref": "#/$defs/common/properties/system_profile_digest"
+            },
+            "evidence": {
+              "$ref": "#/$defs/common/properties/evidence"
+            },
+            "verification_status": {
+              "$ref": "#/$defs/common/properties/verification_status"
+            },
+            "authority_effect": {
+              "const": "none"
+            },
+            "boundary": {
+              "const": "portable_public_record"
+            },
+            "metric_name": {
+              "type": "string",
+              "minLength": 1
+            },
+            "metric_definition": {
+              "type": "string",
+              "minLength": 1
+            },
+            "value": {
+              "type": "number"
+            },
+            "unit": {
+              "type": "string",
+              "minLength": 1
+            },
+            "threshold": {
+              "type": "number"
+            },
+            "verdict": {
+              "enum": [
+                "stable",
+                "throttled",
+                "quarantined",
+                "halted",
+                "unknown"
+              ]
+            },
+            "sample_count": {
+              "type": "integer",
+              "minimum": 0
+            },
+            "uncertainty": {
+              "type": "object",
+              "additionalProperties": false,
+              "required": [
+                "method",
+                "lower",
+                "upper"
+              ],
+              "properties": {
+                "method": {
+                  "type": "string",
+                  "minLength": 1
+                },
+                "lower": {
+                  "type": "number"
+                },
+                "upper": {
+                  "type": "number"
+                }
+              }
+            },
+            "baseline_digest": {
+              "type": [
+                "string",
+                "null"
+              ],
+              "pattern": "^sha256:[a-f0-9]{64}$"
+            }
+          }
+        }
+      ]
+    },
+    "containment_attestation": {
+      "allOf": [
+        {
+          "$ref": "#/$defs/common"
+        },
+        {
+          "type": "object",
+          "additionalProperties": false,
+          "required": [
+            "record_id",
+            "record_type",
+            "recorded_at",
+            "system_profile_digest",
+            "evidence",
+            "verification_status",
+            "authority_effect",
+            "boundary",
+            "action",
+            "enforcement_substrate",
+            "trigger_event_id",
+            "target_profile_digest",
+            "authorization_reference",
+            "independent_readback",
+            "outcome",
+            "signature_status"
+          ],
+          "properties": {
+            "record_id": {
+              "$ref": "#/$defs/common/properties/record_id"
+            },
+            "record_type": {
+              "const": "containment_attestation"
+            },
+            "recorded_at": {
+              "$ref": "#/$defs/common/properties/recorded_at"
+            },
+            "system_profile_digest": {
+              "$ref": "#/$defs/common/properties/system_profile_digest"
+            },
+            "evidence": {
+              "$ref": "#/$defs/common/properties/evidence"
+            },
+            "verification_status": {
+              "$ref": "#/$defs/common/properties/verification_status"
+            },
+            "authority_effect": {
+              "const": "none"
+            },
+            "boundary": {
+              "const": "portable_public_record"
+            },
+            "action": {
+              "enum": [
+                "throttle",
+                "quarantine",
+                "rollback",
+                "halt",
+                "release_after_review",
+                "none"
+              ]
+            },
+            "enforcement_substrate": {
+              "enum": [
+                "software",
+                "hardware",
+                "human",
+                "combined",
+                "unknown"
+              ]
+            },
+            "trigger_event_id": {
+              "type": "string",
+              "minLength": 1
+            },
+            "target_profile_digest": {
+              "type": "string",
+              "pattern": "^sha256:[a-f0-9]{64}$"
+            },
+            "authorization_reference": {
+              "type": [
+                "string",
+                "null"
+              ]
+            },
+            "independent_readback": {
+              "type": "boolean"
+            },
+            "outcome": {
+              "enum": [
+                "effective",
+                "ineffective",
+                "partial",
+                "unverified",
+                "not_applicable"
+              ]
+            },
+            "signature_status": {
+              "enum": [
+                "not_present",
+                "present_unverified",
+                "verified"
+              ]
+            },
+            "signer_reference": {
+              "type": [
+                "string",
+                "null"
+              ]
+            },
+            "signature_digest": {
+              "type": [
+                "string",
+                "null"
+              ],
+              "pattern": "^sha256:[a-f0-9]{64}$"
+            }
+          }
+        }
+      ]
+    },
+    "resilience_index": {
+      "allOf": [
+        {
+          "$ref": "#/$defs/common"
+        },
+        {
+          "type": "object",
+          "additionalProperties": false,
+          "required": [
+            "record_id",
+            "record_type",
+            "recorded_at",
+            "system_profile_digest",
+            "evidence",
+            "verification_status",
+            "authority_effect",
+            "boundary",
+            "index_name",
+            "numerator",
+            "denominator",
+            "value_percent",
+            "calculation_method",
+            "fault_universe_digest",
+            "confidence_interval",
+            "epistemic_label"
+          ],
+          "properties": {
+            "record_id": {
+              "$ref": "#/$defs/common/properties/record_id"
+            },
+            "record_type": {
+              "const": "resilience_index"
+            },
+            "recorded_at": {
+              "$ref": "#/$defs/common/properties/recorded_at"
+            },
+            "system_profile_digest": {
+              "$ref": "#/$defs/common/properties/system_profile_digest"
+            },
+            "evidence": {
+              "$ref": "#/$defs/common/properties/evidence"
+            },
+            "verification_status": {
+              "$ref": "#/$defs/common/properties/verification_status"
+            },
+            "authority_effect": {
+              "const": "none"
+            },
+            "boundary": {
+              "const": "portable_public_record"
+            },
+            "index_name": {
+              "type": "string",
+              "minLength": 1
+            },
+            "numerator": {
+              "type": "integer",
+              "minimum": 0
+            },
+            "denominator": {
+              "type": "integer",
+              "minimum": 1
+            },
+            "value_percent": {
+              "type": "number",
+              "minimum": 0,
+              "maximum": 100
+            },
+            "calculation_method": {
+              "type": "string",
+              "minLength": 1
+            },
+            "fault_universe_digest": {
+              "type": "string",
+              "pattern": "^sha256:[a-f0-9]{64}$"
+            },
+            "confidence_interval": {
+              "type": "object",
+              "additionalProperties": false,
+              "required": [
+                "method",
+                "lower_percent",
+                "upper_percent"
+              ],
+              "properties": {
+                "method": {
+                  "type": "string",
+                  "minLength": 1
+                },
+                "lower_percent": {
+                  "type": "number",
+                  "minimum": 0,
+                  "maximum": 100
+                },
+                "upper_percent": {
+                  "type": "number",
+                  "minimum": 0,
+                  "maximum": 100
+                }
+              }
+            },
+            "epistemic_label": {
+              "enum": [
+                "exploratory",
+                "descriptive",
+                "confirmatory",
+                "inconclusive"
+              ]
+            }
+          }
+        }
+      ]
+    }
+  }
+}

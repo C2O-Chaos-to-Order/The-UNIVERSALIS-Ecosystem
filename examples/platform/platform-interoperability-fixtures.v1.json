@@ -1,0 +1,218 @@
+{
+  "schema_version": "1.0.0",
+  "contract_family": "platform-interoperability",
+  "records": [
+    {
+      "record_type": "os_artifact",
+      "record": {
+        "schema_version": "1.0.0",
+        "artifact_id": "fixture:oci-image",
+        "artifact_kind": "container-image",
+        "media_type": "application/vnd.oci.image.manifest.v1+json",
+        "digest": "aaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaa",
+        "platforms": [
+          "linux/amd64"
+        ],
+        "bootable": false,
+        "boot_metadata": null,
+        "source_ref": "fixture:source",
+        "provenance_ref": "fixture:provenance",
+        "sbom_ref": "fixture:sbom",
+        "signature": null,
+        "limitations": [
+          "Synthetic OCI container artifact; not a bootable OS image."
+        ]
+      }
+    },
+    {
+      "record_type": "runtime_profile",
+      "record": {
+        "schema_version": "1.0.0",
+        "runtime_id": "fixture:runtime",
+        "version": "0.1.0",
+        "runtime_kind": "agent-runtime",
+        "isolation_boundary": "container",
+        "lifecycle_state": "available",
+        "protocols": [
+          "mcp",
+          "a2a"
+        ],
+        "identity_ref": "fixture:identity",
+        "policy_ref": "fixture:policy",
+        "telemetry_ref": "fixture:telemetry",
+        "limitations": [
+          "No runtime is installed by this fixture."
+        ]
+      }
+    },
+    {
+      "record_type": "skill_manifest",
+      "record": {
+        "schema_version": "1.0.0",
+        "skill_id": "fixture:skill",
+        "version": "0.1.0",
+        "manifest_format": "agentskills",
+        "content_digest": "bbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbb",
+        "source_ref": "fixture:skill-source",
+        "tool_contract_refs": [
+          "fixture:mcp-tool-schema"
+        ],
+        "permission_profile_ref": "fixture:permission-profile",
+        "limitations": [
+          "Manifest reference only; no skill is executed."
+        ]
+      }
+    },
+    {
+      "record_type": "workflow_blueprint",
+      "record": {
+        "schema_version": "1.0.0",
+        "blueprint_id": "fixture:blueprint",
+        "version": "0.1.0",
+        "graph_digest": "cccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccc",
+        "engine_ref": "fixture:engine",
+        "status": "draft",
+        "approval_mode": "human-required",
+        "approval_ref": null,
+        "policy_ref": "fixture:policy",
+        "execution_scope_ref": "fixture:scope",
+        "nodes": [
+          {
+            "node_id": "build",
+            "node_kind": "other",
+            "component_ref": "fixture:builder"
+          },
+          {
+            "node_id": "test",
+            "node_kind": "test",
+            "component_ref": "fixture:tester"
+          }
+        ],
+        "edges": [
+          {
+            "from": "build",
+            "to": "test",
+            "condition_ref": null
+          }
+        ],
+        "test_evidence_refs": [],
+        "limitations": [
+          "Draft graph only; no pipeline or deployment is invoked."
+        ]
+      }
+    },
+    {
+      "record_type": "cicd_event",
+      "record": {
+        "schema_version": "1.0.0",
+        "pipeline_id": "fixture:pipeline",
+        "run_id": "fixture:run",
+        "event_type": "test",
+        "source_commit_sha": "dddddddddddddddddddddddddddddddddddddddd",
+        "source_ref": "fixture:source",
+        "status": "passed",
+        "test_count": 2,
+        "passed_count": 2,
+        "failed_count": 0,
+        "skipped_count": 0,
+        "artifact_digest": "eeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeee",
+        "provenance_ref": "fixture:provenance",
+        "evidence_refs": [
+          "fixture:test-evidence"
+        ],
+        "limitations": [
+          "Synthetic CI event; not a real build."
+        ]
+      }
+    },
+    {
+      "record_type": "telemetry_record",
+      "record": {
+        "schema_version": "1.0.0",
+        "trace_id": "11111111111111111111111111111111",
+        "span_id": "2222222222222222",
+        "parent_span_id": null,
+        "observed_at": "2026-11-12T18:00:00Z",
+        "service_ref": "fixture:service",
+        "event_type": "trace",
+        "attribute_names": [
+          "service.name",
+          "deployment.environment"
+        ],
+        "redacted": true,
+        "evidence_ref": "fixture:otel-evidence",
+        "limitations": [
+          "Attribute names only; raw telemetry values are excluded."
+        ]
+      }
+    },
+    {
+      "record_type": "network_route",
+      "record": {
+        "schema_version": "1.0.0",
+        "route_id": "fixture:route",
+        "protocol": "mcp",
+        "source_ref": "fixture:client",
+        "destination_ref": "fixture:server",
+        "authentication_profile_ref": "fixture:authn",
+        "authorization_policy_ref": "fixture:authz",
+        "egress_scope_ref": "fixture:egress-scope",
+        "decision": "allow",
+        "execution_status": "not-executed",
+        "evidence_refs": [
+          "fixture:route-evidence"
+        ],
+        "limitations": [
+          "No network connection is attempted."
+        ]
+      }
+    },
+    {
+      "record_type": "storage_interface",
+      "record": {
+        "schema_version": "1.0.0",
+        "interface_id": "fixture:storage",
+        "backend_kind": "vector",
+        "provider_ref": "fixture:vector-provider",
+        "tenant_ref": "fixture:tenant",
+        "schema_ref": "fixture:vector-schema",
+        "data_classification": "public",
+        "encryption_at_rest": true,
+        "encryption_in_transit": true,
+        "access_policy_ref": "fixture:access-policy",
+        "retention_policy_ref": "fixture:retention",
+        "limitations": [
+          "No database or storage backend is provisioned."
+        ]
+      }
+    },
+    {
+      "record_type": "evaluation_receipt",
+      "record": {
+        "schema_version": "1.0.0",
+        "receipt_id": "fixture:evaluation",
+        "suite_ref": "fixture:suite",
+        "subject_ref": "fixture:agent",
+        "artifact_digest": "ffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffff",
+        "dataset_ref": "fixture:dataset",
+        "dataset_digest": "0000000000000000000000000000000000000000000000000000000000000000",
+        "environment_ref": "fixture:environment",
+        "status": "passed",
+        "test_count": 5,
+        "passed_count": 5,
+        "failed_count": 0,
+        "skipped_count": 0,
+        "evaluated_at": "2026-11-12T18:00:00Z",
+        "reproducibility": "seeded",
+        "evidence_ref": "fixture:eval-evidence",
+        "signature": null,
+        "limitations": [
+          "Synthetic evaluation receipt; no external benchmark executed."
+        ]
+      }
+    }
+  ],
+  "limitations": [
+    "All records are synthetic. Contract validation does not establish deployment, operational security, compliance or cryptographic trust."
+  ]
+}

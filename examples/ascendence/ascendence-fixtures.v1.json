@@ -1,0 +1,362 @@
+{
+  "fixture_notice": "All records and key material are synthetic. The Ed25519 key is disposable and is not a production trust anchor. Scores are illustrative.",
+  "records": {
+    "promotion_gates": [
+      {
+        "record_type": "promotion_gate",
+        "record_id": "gate:synthetic:v1",
+        "created_at": "2026-11-12T20:30:00Z",
+        "gate_id": "gate:synthetic:v1",
+        "revision": "1",
+        "run_id": "run:synthetic:001",
+        "frozen_at": "2026-11-12T20:00:00Z",
+        "canonicalization": "canonical-json-sort-keys-compact-utf8-v1",
+        "rule_definition": {
+          "logic": "AND",
+          "required_checks": [
+            "independent_evaluator",
+            "paired_comparison",
+            "holdout",
+            "anchor",
+            "safety_veto",
+            "regression_guard",
+            "budget",
+            "protected_surface_guard",
+            "rollback_path"
+          ],
+          "thresholds": {
+            "minimum_primary_delta": 0.02,
+            "minimum_primary_delta_lower_ci": 0,
+            "maximum_cost_ratio": 1,
+            "maximum_noop_rate_delta": 0
+          },
+          "invariants": {
+            "model_frozen_during_pair": true,
+            "evaluator_distinct_from_proposer": true,
+            "test_sets_frozen": true,
+            "self_certification_allowed": false,
+            "protected_components_mutable": false
+          },
+          "evidence_requirements": {
+            "baseline_run": true,
+            "candidate_run": true,
+            "holdout_result": true,
+            "anchor_result": true,
+            "safety_result": true,
+            "budget_result": true,
+            "rollback_test": true
+          }
+        },
+        "fingerprint": "1b319e221f84eece3e90b555b498dd4a1737ccea5e399f085acc954b3ee1b3e6",
+        "frozen": true,
+        "conjunctive": true,
+        "source_digest": "aaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaa",
+        "evidence_refs": [
+          "evidence:gate-source",
+          "evidence:gate-review"
+        ]
+      }
+    ],
+    "autonomy_ceilings": [
+      {
+        "record_type": "autonomy_ceiling",
+        "record_id": "ceiling:synthetic:v1",
+        "created_at": "2026-11-12T20:30:00Z",
+        "policy_digest": "bbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbb",
+        "ceiling_level": 3,
+        "max_autonomous_level": 2,
+        "levels": [
+          {
+            "level": 1,
+            "name": "bounded_parameter_adjustment",
+            "autonomy": "autonomous",
+            "approval_required": false,
+            "reversible": true,
+            "rollback_required": true
+          },
+          {
+            "level": 2,
+            "name": "validated_capability_extension",
+            "autonomy": "autonomous",
+            "approval_required": false,
+            "reversible": true,
+            "rollback_required": true
+          },
+          {
+            "level": 3,
+            "name": "strategy_generation_and_shadow_activation",
+            "autonomy": "human_approval",
+            "approval_required": true,
+            "reversible": true,
+            "rollback_required": true
+          },
+          {
+            "level": 4,
+            "name": "genome_population_evolution",
+            "autonomy": "human_approval",
+            "approval_required": true,
+            "reversible": false,
+            "rollback_required": true
+          }
+        ],
+        "purpose_changes_allowed": false,
+        "protected_component_changes_allowed": false,
+        "irreversible_requires_human": true,
+        "rollback_independent_of_agent": true,
+        "evidence_refs": [
+          "evidence:ceiling-review"
+        ]
+      }
+    ],
+    "genome_contracts": [
+      {
+        "record_type": "genome_contract",
+        "record_id": "genome:synthetic:0001",
+        "created_at": "2026-11-12T20:30:00Z",
+        "genome_id": "genome:synthetic:0001",
+        "generation": 1,
+        "parent_genome_ref": "genome:synthetic:0000",
+        "components": [
+          {
+            "component_id": "identity",
+            "mutability": "protected",
+            "content_digest": "1111111111111111111111111111111111111111111111111111111111111111"
+          },
+          {
+            "component_id": "constitution",
+            "mutability": "protected",
+            "content_digest": "2222222222222222222222222222222222222222222222222222222222222222"
+          },
+          {
+            "component_id": "safety_constraints",
+            "mutability": "protected",
+            "content_digest": "3333333333333333333333333333333333333333333333333333333333333333"
+          },
+          {
+            "component_id": "purpose",
+            "mutability": "protected",
+            "content_digest": "4444444444444444444444444444444444444444444444444444444444444444"
+          },
+          {
+            "component_id": "system_prompt",
+            "mutability": "evolvable",
+            "content_digest": "5555555555555555555555555555555555555555555555555555555555555555"
+          },
+          {
+            "component_id": "skill_router",
+            "mutability": "evolvable",
+            "content_digest": "6666666666666666666666666666666666666666666666666666666666666666"
+          },
+          {
+            "component_id": "memory_layout",
+            "mutability": "restricted",
+            "content_digest": "7777777777777777777777777777777777777777777777777777777777777777"
+          }
+        ],
+        "allowed_mutation_component_ids": [
+          "system_prompt",
+          "skill_router"
+        ],
+        "mutations": [
+          {
+            "mutation_id": "mutation:1",
+            "component_id": "system_prompt",
+            "before_digest": "8888888888888888888888888888888888888888888888888888888888888888",
+            "after_digest": "5555555555555555555555555555555555555555555555555555555555555555",
+            "change_kind": "revise",
+            "proposal_ref": "proposal:synthetic:1"
+          }
+        ],
+        "fitness_vector": {
+          "primary": 0.84,
+          "cost_per_success": 0.72,
+          "latency_ms": 850,
+          "noop_rate": 0.08,
+          "safety_regressions": 0
+        },
+        "evidence_refs": [
+          "evidence:genome-diff"
+        ]
+      }
+    ],
+    "evaluation_evidence": [
+      {
+        "record_type": "evaluation_evidence",
+        "record_id": "evaluation:synthetic:001",
+        "created_at": "2026-11-12T20:30:00Z",
+        "proposer_ref": "agent:proposer",
+        "evaluator_ref": "substrate:evaluator",
+        "model_ref": "model:fixed-v1",
+        "baseline_model_digest": "9999999999999999999999999999999999999999999999999999999999999999",
+        "candidate_model_digest": "9999999999999999999999999999999999999999999999999999999999999999",
+        "baseline_subject_digest": "a1a1a1a1a1a1a1a1a1a1a1a1a1a1a1a1a1a1a1a1a1a1a1a1a1a1a1a1a1a1a1a1",
+        "candidate_subject_digest": "b2b2b2b2b2b2b2b2b2b2b2b2b2b2b2b2b2b2b2b2b2b2b2b2b2b2b2b2b2b2b2b2",
+        "suite_digest": "c3c3c3c3c3c3c3c3c3c3c3c3c3c3c3c3c3c3c3c3c3c3c3c3c3c3c3c3c3c3c3c3",
+        "run_id": "run:synthetic:001",
+        "paired_comparison": true,
+        "holdout": {
+          "status": "pass",
+          "baseline_score": 0.8,
+          "candidate_score": 0.84,
+          "sample_count": 100,
+          "lower_confidence_bound_delta": 0.01,
+          "method": "paired_bootstrap_95"
+        },
+        "anchor": {
+          "status": "pass",
+          "baseline_score": 0.78,
+          "candidate_score": 0.82,
+          "sample_count": 100,
+          "lower_confidence_bound_delta": 0.01,
+          "method": "paired_bootstrap_95"
+        },
+        "primary_metric": {
+          "name": "task_success_rate",
+          "direction": "higher_is_better",
+          "baseline_score": 0.8,
+          "candidate_score": 0.84,
+          "delta": 0.04,
+          "lower_confidence_bound_delta": 0.01
+        },
+        "safety_veto": "pass",
+        "regression_guard": "pass",
+        "budget_guard": "pass",
+        "protected_surface_guard": "pass",
+        "rollback_path": "pass",
+        "overall_status": "pass",
+        "gate_fingerprint": "1b319e221f84eece3e90b555b498dd4a1737ccea5e399f085acc954b3ee1b3e6",
+        "evidence_refs": [
+          "evidence:baseline-run",
+          "evidence:candidate-run",
+          "evidence:holdout",
+          "evidence:anchor",
+          "evidence:safety",
+          "evidence:budget",
+          "evidence:rollback"
+        ]
+      }
+    ],
+    "witness_approvals": [
+      {
+        "record_type": "witness_approval",
+        "record_id": "witness:synthetic:001",
+        "created_at": "2026-11-12T20:30:00Z",
+        "approval_id": "witness:synthetic:001",
+        "approval_status": "approved",
+        "approver_ref": "human:synthetic-approver",
+        "approver_role": "human",
+        "proposer_ref": "agent:proposer",
+        "subject_digest": "b2b2b2b2b2b2b2b2b2b2b2b2b2b2b2b2b2b2b2b2b2b2b2b2b2b2b2b2b2b2b2b2",
+        "evaluation_digest": "eb172870cf303f89856f5319bd1e65cabb5bfcd70f06d334a0013f5754e744a6",
+        "gate_fingerprint": "1b319e221f84eece3e90b555b498dd4a1737ccea5e399f085acc954b3ee1b3e6",
+        "operation": "promote",
+        "approved_at": "2026-11-12T20:25:00Z",
+        "expires_at": "2026-11-12T21:25:00Z",
+        "approval_evidence_ref": "evidence:human-review"
+      }
+    ],
+    "admission_cards": [
+      {
+        "record_type": "admission_card",
+        "record_id": "admission:synthetic:001",
+        "created_at": "2026-11-12T20:30:00Z",
+        "candidate_digest": "b2b2b2b2b2b2b2b2b2b2b2b2b2b2b2b2b2b2b2b2b2b2b2b2b2b2b2b2b2b2b2b2",
+        "baseline_digest": "a1a1a1a1a1a1a1a1a1a1a1a1a1a1a1a1a1a1a1a1a1a1a1a1a1a1a1a1a1a1a1a1",
+        "gate_ref": "gate:synthetic:v1",
+        "gate_fingerprint": "1b319e221f84eece3e90b555b498dd4a1737ccea5e399f085acc954b3ee1b3e6",
+        "evaluation_ref": "evaluation:synthetic:001",
+        "evaluation_digest": "eb172870cf303f89856f5319bd1e65cabb5bfcd70f06d334a0013f5754e744a6",
+        "autonomy_ceiling_ref": "ceiling:synthetic:v1",
+        "proposer_ref": "agent:proposer",
+        "evaluator_ref": "substrate:evaluator",
+        "autonomy_level": 3,
+        "decision": "promote",
+        "reason": "All frozen conjunctive checks passed and subject-bound human approval is present.",
+        "witness_approval_ref": "witness:synthetic:001",
+        "lineage_parent_ref": "lineage:synthetic:0000",
+        "evidence_refs": [
+          "evidence:admission-review"
+        ]
+      }
+    ],
+    "lineage_events": [
+      {
+        "record_type": "lineage_event",
+        "record_id": "lineage:synthetic:0000",
+        "created_at": "2026-11-12T19:00:00Z",
+        "event_type": "genesis",
+        "generation": 0,
+        "parent_event_digest": null,
+        "subject_digest": "a1a1a1a1a1a1a1a1a1a1a1a1a1a1a1a1a1a1a1a1a1a1a1a1a1a1a1a1a1a1a1a1",
+        "candidate_digest": "a1a1a1a1a1a1a1a1a1a1a1a1a1a1a1a1a1a1a1a1a1a1a1a1a1a1a1a1a1a1a1a1",
+        "gate_fingerprint": "1b319e221f84eece3e90b555b498dd4a1737ccea5e399f085acc954b3ee1b3e6",
+        "admission_card_digest": null,
+        "status": "retained",
+        "event_digest": "d2e0f2da9ae82cd43ea6535b0389db47d59fdaf0967e6f7323cdaf50e02ea246",
+        "evidence_refs": [
+          "evidence:gen0"
+        ]
+      },
+      {
+        "record_type": "lineage_event",
+        "record_id": "lineage:synthetic:0001",
+        "created_at": "2026-11-12T20:30:00Z",
+        "event_type": "promoted",
+        "generation": 1,
+        "parent_event_digest": "d2e0f2da9ae82cd43ea6535b0389db47d59fdaf0967e6f7323cdaf50e02ea246",
+        "subject_digest": "b2b2b2b2b2b2b2b2b2b2b2b2b2b2b2b2b2b2b2b2b2b2b2b2b2b2b2b2b2b2b2b2",
+        "candidate_digest": "b2b2b2b2b2b2b2b2b2b2b2b2b2b2b2b2b2b2b2b2b2b2b2b2b2b2b2b2b2b2b2b2",
+        "gate_fingerprint": "1b319e221f84eece3e90b555b498dd4a1737ccea5e399f085acc954b3ee1b3e6",
+        "admission_card_digest": "3dd4546b09ca674775629d04c90cc513f715cc70d651b70c215e50dbef290bd9",
+        "status": "retained",
+        "event_digest": "52945d12fd233bdb70de850532dbfe4e133147199c7604c4d0c7840f474374b7",
+        "evidence_refs": [
+          "evidence:promoted-commit"
+        ]
+      }
+    ],
+    "memory_manifests": [
+      {
+        "record_type": "memory_manifest",
+        "record_id": "memory:synthetic:001",
+        "created_at": "2026-11-12T20:30:00Z",
+        "schema_version": "1.0",
+        "persona_manifest_digest": "1111111111111111111111111111111111111111111111111111111111111111",
+        "merkle_root_digest": "2222222222222222222222222222222222222222222222222222222222222222",
+        "included_data_classes": [
+          "portable_capability_metadata",
+          "public_evaluation_summaries"
+        ],
+        "raw_memory_included": false,
+        "portability_status": "verifiable_state_export",
+        "evidence_refs": [
+          "evidence:memory-manifest"
+        ]
+      }
+    ]
+  },
+  "signed_bundles": [
+    {
+      "payload_type": "application/vnd.in-toto+json",
+      "payload": "eyJfdHlwZSI6Imh0dHBzOi8vaW4tdG90by5pby9TdGF0ZW1lbnQvdjEiLCJwcmVkaWNhdGUiOnsiYWRtaXNzaW9uX3JlZiI6ImFkbWlzc2lvbjpzeW50aGV0aWM6MDAxIiwiZml4dHVyZV9vbmx5Ijp0cnVlLCJnYXRlX2ZpbmdlcnByaW50IjoiMWIzMTllMjIxZjg0ZWVjZTNlOTBiNTU1YjQ5OGRkNGExNzM3Y2NlYTVlMzk5ZjA4NWFjYzk1NGIzZWUxYjNlNiIsImxpbmVhZ2VfcmVmIjoibGluZWFnZTpzeW50aGV0aWM6MDAwMSIsIm91dGNvbWUiOiJwcm9tb3RlIn0sInByZWRpY2F0ZVR5cGUiOiJodHRwczovL2Myby5leGFtcGxlLmludmFsaWQvYXNjZW5kZW5jZS9ldmlkZW5jZS92MSIsInN1YmplY3QiOlt7ImRpZ2VzdCI6eyJzaGEyNTYiOiIzZGQ0NTQ2YjA5Y2E2NzQ3NzU2MjlkMDRjOTBjYzUxM2Y3MTVjYzcwZDY1MWI3MGMyMTVlNTBkYmVmMjkwYmQ5In0sIm5hbWUiOiJzeW50aGV0aWMvYXNjZW50L2FkbWlzc2lvbi1jYXJkLmpzb24ifSx7ImRpZ2VzdCI6eyJzaGEyNTYiOiI4YTNhZWRiZTU1NjZjOGRhNTk2YmVjNDNkY2M2ZmZjZjY1YTdjMmUyMGVmOGNkMDU0ZWIyMDZmYThmM2EwMTU5In0sIm5hbWUiOiJzeW50aGV0aWMvYXNjZW50L2xpbmVhZ2UtZXZlbnQuanNvbiJ9XX0=",
+      "envelope": {
+        "payloadType": "application/vnd.in-toto+json",
+        "payload": "eyJfdHlwZSI6Imh0dHBzOi8vaW4tdG90by5pby9TdGF0ZW1lbnQvdjEiLCJwcmVkaWNhdGUiOnsiYWRtaXNzaW9uX3JlZiI6ImFkbWlzc2lvbjpzeW50aGV0aWM6MDAxIiwiZml4dHVyZV9vbmx5Ijp0cnVlLCJnYXRlX2ZpbmdlcnByaW50IjoiMWIzMTllMjIxZjg0ZWVjZTNlOTBiNTU1YjQ5OGRkNGExNzM3Y2NlYTVlMzk5ZjA4NWFjYzk1NGIzZWUxYjNlNiIsImxpbmVhZ2VfcmVmIjoibGluZWFnZTpzeW50aGV0aWM6MDAwMSIsIm91dGNvbWUiOiJwcm9tb3RlIn0sInByZWRpY2F0ZVR5cGUiOiJodHRwczovL2Myby5leGFtcGxlLmludmFsaWQvYXNjZW5kZW5jZS9ldmlkZW5jZS92MSIsInN1YmplY3QiOlt7ImRpZ2VzdCI6eyJzaGEyNTYiOiIzZGQ0NTQ2YjA5Y2E2NzQ3NzU2MjlkMDRjOTBjYzUxM2Y3MTVjYzcwZDY1MWI3MGMyMTVlNTBkYmVmMjkwYmQ5In0sIm5hbWUiOiJzeW50aGV0aWMvYXNjZW50L2FkbWlzc2lvbi1jYXJkLmpzb24ifSx7ImRpZ2VzdCI6eyJzaGEyNTYiOiI4YTNhZWRiZTU1NjZjOGRhNTk2YmVjNDNkY2M2ZmZjZjY1YTdjMmUyMGVmOGNkMDU0ZWIyMDZmYThmM2EwMTU5In0sIm5hbWUiOiJzeW50aGV0aWMvYXNjZW50L2xpbmVhZ2UtZXZlbnQuanNvbiJ9XX0=",
+        "signatures": [
+          {
+            "keyid": "sha256:f09e2140c06a768e2f0a5c0aea93e3aa37165eb21f78706c71527474dedc8014",
+            "sig": "AYL0dWg0Um5YsDP+UGjyUUd2ZtusU8XdSZkRL62Txe9qLNDZSwh5Wqlb5mir4+mmFZRNHdSgGX3FX3dyh3RXAA=="
+          }
+        ]
+      },
+      "verification_key": {
+        "keyid": "sha256:f09e2140c06a768e2f0a5c0aea93e3aa37165eb21f78706c71527474dedc8014",
+        "public_key": "T5rfTn99KEkCCuHrMzoHraLLv0Oj+MThZfXIbeb2778="
+      },
+      "expected_subject_digests": {
+        "admission_card": "3dd4546b09ca674775629d04c90cc513f715cc70d651b70c215e50dbef290bd9",
+        "lineage_event": "8a3aedbe5566c8da596bec43dcc6ffcf65a7c2e20ef8cd054eb206fa8f3a0159"
+      }
+    }
+  ]
+}

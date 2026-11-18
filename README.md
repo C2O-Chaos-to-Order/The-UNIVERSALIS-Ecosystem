@@ -4,6 +4,8 @@
 
 **Guiding principle:** *With Power, Comes Responsibility.*
 
+> Rule No. 1 — "Do No Harm. Do No Destruction." Canonical: `foundation/RULE_1.md` in The-UNIVERSALIS-Ecosystem, canonical-text sha256 `b029644d741d99dab4bfcdd0d28f25a03dad67dff0a8032f2b999109f7d31317`.
+
 ## Repository purpose
 
 This repository is the source home for the open-source UNIVERSALIS product: architecture specifications, implementation code, automated tests, developer documentation, build and verification workflows, packages, and release artifacts.
@@ -84,3 +86,21 @@ Do not interpret this README, a successful build, or an experimental prototype a
 ## License
 
 Licensed under the Apache License, Version 2.0. See [LICENSE](LICENSE) and [NOTICE](NOTICE).
+
+
+## Open Security and Cybersecurity foundation
+
+- [UNIVERSALIS security architecture](SECURITY_CYBERSECURITY_ARCHITECTURE.md)
+- [Portable threat, enforcement, containment, SBOM and audit contracts](schemas/security/security-evidence-contracts.v1.schema.json)
+- [Synthetic public evidence fixtures](examples/security/security-evidence-fixtures.v1.json)
+- [Validation evidence and CI receipts](SECURITY_CYBERSECURITY_VALIDATION.md)
+
+This repository publishes portable contracts and synthetic fixtures only. No C2O-private policies, keys, incidents, assets, or authority records are included, and no security product or offensive assessment tool is installed or invoked.
+
+
+## Governed Execution and Worker Lifecycle Service — proposed architecture
+
+- [Governed Execution and Worker Lifecycle Service](ARCHITECTURE/GOVERNED_EXECUTION_AND_WORKER_LIFECYCLE_SERVICE_v0.1.0.md) defines the public product architecture for bounded request admission, independent gates, worker observation, resource reservation, lifecycle and cancellation, candidate persistence, and independent acceptance/release boundaries.
+- The companion [UNI-DP-11 public research specification](https://github.com/C2O-Chaos-to-Order/Research-for-the-UNIVERSALIS-Ecosystem/blob/integrate/master-2026-11-16/RESEARCH/DOMAIN_PACKS/UNI-DP-11_Governed_Execution_Worker_Lifecycle_and_Thermodynamic_Accounting_v0.1.0.md) records the research scope, thermodynamic distinctions, failure analysis, proposed tests and evidence requirements.
+
+**Disposition:** proposed architecture only. No worker runtime, process supervisor, authorization integration, enforceable resource broker, or production execution service is implemented or authorized by these documents.

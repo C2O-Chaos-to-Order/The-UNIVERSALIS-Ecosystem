@@ -1,0 +1,835 @@
+{
+  "schema_version": "1.0.0",
+  "inventory_id": "agent-os-ai-unification-24",
+  "records": [
+    {
+      "record_id": "UNIF-QUALIXAR",
+      "kind": "candidate",
+      "layer": "runtime_substrate",
+      "name": "Qualixar OS",
+      "source_url": "https://github.com/qualixar/qualixar-os",
+      "version": null,
+      "license_status": "FSL-1.1-ALv2 source-available; competing-use restriction; review terms before adoption",
+      "maturity": "Runtime/orchestration candidate; claims release-specific",
+      "claim_status": "source_documented",
+      "scope": "Agent runtime, framework adapters, MCP/A2A and product command surface",
+      "interfaces": [
+        {
+          "name": "MCP",
+          "role": "tool_client_server",
+          "classification": "formal_standard",
+          "status": "published",
+          "scope": "Client/server tool interaction"
+        },
+        {
+          "name": "A2A",
+          "role": "agent_agent",
+          "classification": "formal_standard",
+          "status": "published",
+          "scope": "Agent-to-agent task collaboration"
+        },
+        {
+          "name": "Universal Command Protocol",
+          "role": "product_command_surface",
+          "classification": "product_interface",
+          "status": "not_tested",
+          "scope": "Qualixar-specific command surface"
+        }
+      ],
+      "limitations": [
+        "Current upstream describes 15 providers, 13 topologies and 25 CLI commands; prior submitted counts differ.",
+        "FSL-1.1-ALv2 is not OSI-approved unrestricted open source.",
+        "Adapters/importers do not demonstrate semantic equivalence across all agent runtimes."
+      ],
+      "evidence": [
+        {
+          "type": "primary_source",
+          "description": "Source and evidence qualification recorded in the companion architecture.",
+          "source_url": "https://github.com/qualixar/qualixar-os"
+        }
+      ],
+      "authority_effect": "none",
+      "boundary": "portable_public_record"
+    },
+    {
+      "record_id": "UNIF-KHY-OS",
+      "kind": "candidate",
+      "layer": "runtime_substrate",
+      "name": "khy-os",
+      "source_url": "https://pypi.org/project/khy-os/",
+      "version": null,
+      "license_status": "Source-available; non-commercial unless additional written permission",
+      "maturity": "Beta package; kernel claims require independent testing",
+      "claim_status": "source_claim_only",
+      "scope": "Hand-written C kernel, agentic CLI and multi-backend gateway per package metadata",
+      "interfaces": [],
+      "limitations": [
+        "Not an unrestricted OSI-open dependency.",
+        "Kernel, loader and backend claims must be pinned to source and independently tested.",
+        "Does not eliminate host-kernel, device-driver or accelerator differences."
+      ],
+      "evidence": [
+        {
+          "type": "primary_source",
+          "description": "Source and evidence qualification recorded in the companion architecture.",
+          "source_url": "https://pypi.org/project/khy-os/"
+        }
+      ],
+      "authority_effect": "none",
+      "boundary": "portable_public_record"
+    },
+    {
+      "record_id": "UNIF-FORMICX",
+      "kind": "candidate",
+      "layer": "runtime_substrate",
+      "name": "Formicx",
+      "source_url": "https://pypi.org/project/formicx/",
+      "version": null,
+      "license_status": "MIT",
+      "maturity": "Alpha 0.1.0; published 2026-09-24",
+      "claim_status": "source_claim_only",
+      "scope": "Linux-oriented agent process/control layer with PID mapping, ACL and mDNS discovery claims",
+      "interfaces": [
+        {
+          "name": "MCP",
+          "role": "tool_client_server",
+          "classification": "formal_standard",
+          "status": "published",
+          "scope": "Tool interface"
+        }
+      ],
+      "limitations": [
+        "Not a cross-OS universal kernel.",
+        "PID association and ACL claims require OS-level enforcement verification.",
+        "Alpha maturity; single package version inspected."
+      ],
+      "evidence": [
+        {
+          "type": "primary_source",
+          "description": "Source and evidence qualification recorded in the companion architecture.",
+          "source_url": "https://pypi.org/project/formicx/"
+        }
+      ],
+      "authority_effect": "none",
+      "boundary": "portable_public_record"
+    },
+    {
+      "record_id": "UNIF-CORTEX",
+      "kind": "candidate",
+      "layer": "runtime_substrate",
+      "name": "SleekAI Cortex",
+      "source_url": "https://www.npmjs.com/package/@sleekai/cortex",
+      "version": null,
+      "license_status": "Exact license/release not pinned",
+      "maturity": "Published package; maturity and production suitability not established",
+      "claim_status": "source_claim_only",
+      "scope": "Model/harness dispatch, context and budget planning, DAG execution, validation",
+      "interfaces": [
+        {
+          "name": "MCP",
+          "role": "tool_client_server",
+          "classification": "formal_standard",
+          "status": "not_tested",
+          "scope": "Extensible tool harness"
+        },
+        {
+          "name": "A2A",
+          "role": "agent_agent",
+          "classification": "formal_standard",
+          "status": "not_tested",
+          "scope": "Extensible agent collaboration"
+        }
+      ],
+      "limitations": [
+        "No universal OS kernel or hardware abstraction established.",
+        "Exact package release, license, platform and security behavior require pinning."
+      ],
+      "evidence": [
+        {
+          "type": "primary_source",
+          "description": "Source and evidence qualification recorded in the companion architecture.",
+          "source_url": "https://www.npmjs.com/package/@sleekai/cortex"
+        }
+      ],
+      "authority_effect": "none",
+      "boundary": "portable_public_record"
+    },
+    {
+      "record_id": "UNIF-PQMS-UAL",
+      "kind": "unresolved",
+      "layer": "runtime_substrate",
+      "name": "PQMS-UAL-OS",
+      "source_url": null,
+      "version": null,
+      "license_status": "Unresolved",
+      "maturity": "Owner-proposed hardware abstraction concept; canonical public implementation not identified",
+      "claim_status": "unresolved",
+      "scope": "Proposed universal accelerator abstraction across GPU, TPU, FPGA, neuromorphic and quantum resources",
+      "interfaces": [],
+      "limitations": [
+        "No canonical source, release, license or conformance suite identified.",
+        "Must not be described as an available or validated implementation."
+      ],
+      "evidence": [
+        {
+          "type": "owner_proposal",
+          "description": "Source and evidence qualification recorded in the companion architecture.",
+          "source_url": null
+        }
+      ],
+      "authority_effect": "none",
+      "boundary": "portable_public_record"
+    },
+    {
+      "record_id": "UNIF-OMNIGENT",
+      "kind": "candidate",
+      "layer": "orchestration_composition",
+      "name": "Omnigent",
+      "source_url": "https://github.com/omnigent-ai/omnigent",
+      "version": null,
+      "license_status": "Apache-2.0",
+      "maturity": "Independent open-source meta-harness; maturity/release pinning required",
+      "claim_status": "source_documented",
+      "scope": "Composition, control, collaboration and supervision of agent harnesses",
+      "interfaces": [],
+      "limitations": [
+        "Independent project; do not identify it as a Databricks product.",
+        "Managed vendor offering is a separate service.",
+        "Harness adapters do not prove equivalent lifecycle or safety semantics."
+      ],
+      "evidence": [
+        {
+          "type": "primary_source",
+          "description": "Source and evidence qualification recorded in the companion architecture.",
+          "source_url": "https://github.com/omnigent-ai/omnigent"
+        }
+      ],
+      "authority_effect": "none",
+      "boundary": "portable_public_record"
+    },
+    {
+      "record_id": "UNIF-AGNO",
+      "kind": "candidate",
+      "layer": "orchestration_composition",
+      "name": "Agno AgentOS",
+      "source_url": "https://docs.agno.com/agent-os/introduction",
+      "version": null,
+      "license_status": "Verify selected Agno release terms",
+      "maturity": "Framework runtime; multi-framework adapter support announced Beta",
+      "claim_status": "source_documented",
+      "scope": "Service/runtime layer with API/MCP and adapters for supported third-party agent frameworks",
+      "interfaces": [
+        {
+          "name": "Agno AgentProtocol",
+          "role": "framework_adapter",
+          "classification": "product_interface",
+          "status": "beta",
+          "scope": "Agno-specific Python runtime adapter seam"
+        }
+      ],
+      "limitations": [
+        "Agno AgentProtocol is not A2A or the separate Agent Protocol REST API.",
+        "Framework adapters require lifecycle, memory, state, error and tool-semantics testing.",
+        "Beta support is release-dependent."
+      ],
+      "evidence": [
+        {
+          "type": "primary_source",
+          "description": "Source and evidence qualification recorded in the companion architecture.",
+          "source_url": "https://docs.agno.com/agent-os/introduction"
+        }
+      ],
+      "authority_effect": "none",
+      "boundary": "portable_public_record"
+    },
+    {
+      "record_id": "UNIF-NEXUS-AGENTOS",
+      "kind": "unresolved",
+      "layer": "orchestration_composition",
+      "name": "AgentOS (nexus-agentos)",
+      "source_url": null,
+      "version": null,
+      "license_status": "Unresolved",
+      "maturity": "Exact project identity not verified",
+      "claim_status": "unresolved",
+      "scope": "Owner-supplied skill marketplace and MCP/sub-agent dispatcher description",
+      "interfaces": [],
+      "limitations": [
+        "Canonical repository, owner, release and license not established.",
+        "Do not conflate with Agno AgentOS or similarly named projects."
+      ],
+      "evidence": [
+        {
+          "type": "owner_proposal",
+          "description": "Source and evidence qualification recorded in the companion architecture.",
+          "source_url": null
+        }
+      ],
+      "authority_effect": "none",
+      "boundary": "portable_public_record"
+    },
+    {
+      "record_id": "UNIF-LAROS",
+      "kind": "candidate",
+      "layer": "orchestration_composition",
+      "name": "LAR-OS Antigravity Gateway",
+      "source_url": "https://huggingface.co/Jun33550336/lar-os-antigravity-gateway",
+      "version": null,
+      "license_status": "MIT per model card",
+      "maturity": "Gateway artifact; broader claims require source pinning",
+      "claim_status": "source_claim_only",
+      "scope": "Anthropic-to-Gemini tool-call translation experiment",
+      "interfaces": [],
+      "limitations": [
+        "Model card is not evidence of hardened production OS.",
+        "Multi-node delegation claims require separate source artifacts and tests.",
+        "Translation must preserve schemas, error semantics and loop control."
+      ],
+      "evidence": [
+        {
+          "type": "primary_source",
+          "description": "Source and evidence qualification recorded in the companion architecture.",
+          "source_url": "https://huggingface.co/Jun33550336/lar-os-antigravity-gateway"
+        }
+      ],
+      "authority_effect": "none",
+      "boundary": "portable_public_record"
+    },
+    {
+      "record_id": "UNIF-OMNIROUTE",
+      "kind": "candidate",
+      "layer": "model_gateway",
+      "name": "OmniRoute",
+      "source_url": "https://github.com/cheaper-inference/OmniRoute",
+      "version": null,
+      "license_status": "MIT",
+      "maturity": "Active gateway; catalog counts change by release",
+      "claim_status": "source_claim_only",
+      "scope": "Multi-provider inference routing, fallbacks, compression and client interfaces",
+      "interfaces": [
+        {
+          "name": "OpenAI-compatible API",
+          "role": "inference_api",
+          "classification": "api_compatibility",
+          "status": "not_tested",
+          "scope": "Selected inference operations only"
+        }
+      ],
+      "limitations": [
+        "Current upstream advertises 375 providers and 1,400+ models; counts are maintainer claims and version-sensitive.",
+        "Compression savings require independent workload-specific measurement.",
+        "API compatibility does not imply model feature parity or data sovereignty."
+      ],
+      "evidence": [
+        {
+          "type": "primary_source",
+          "description": "Source and evidence qualification recorded in the companion architecture.",
+          "source_url": "https://github.com/cheaper-inference/OmniRoute"
+        }
+      ],
+      "authority_effect": "none",
+      "boundary": "portable_public_record"
+    },
+    {
+      "record_id": "UNIF-GLOBAI",
+      "kind": "candidate",
+      "layer": "model_gateway",
+      "name": "Glob.AI OS",
+      "source_url": "https://www.globant.com/news/globai-os-enterprise-ai-operating-system",
+      "version": null,
+      "license_status": "Commercial vendor platform",
+      "maturity": "Announced 2026-10-27",
+      "claim_status": "source_documented",
+      "scope": "Enterprise model routing, identity, agent lifecycle, budgets and audit",
+      "interfaces": [],
+      "limitations": [
+        "Not an open-source router implementation.",
+        "Vendor-reported 320+ models and 25+ providers are not a standard.",
+        "Customer-cloud deployment does not itself prove sovereignty or residency compliance."
+      ],
+      "evidence": [
+        {
+          "type": "primary_source",
+          "description": "Source and evidence qualification recorded in the companion architecture.",
+          "source_url": "https://www.globant.com/news/globai-os-enterprise-ai-operating-system"
+        }
+      ],
+      "authority_effect": "none",
+      "boundary": "portable_public_record"
+    },
+    {
+      "record_id": "UNIF-G8E",
+      "kind": "candidate",
+      "layer": "model_gateway",
+      "name": "g8e",
+      "source_url": "https://github.com/g8e-ai/g8e",
+      "version": null,
+      "license_status": "Verify exact project license and release",
+      "maturity": "Public project reference design; independent security review not established",
+      "claim_status": "source_claim_only",
+      "scope": "Gateway/operator pattern with governance envelopes, local verification and signed execution evidence",
+      "interfaces": [
+        {
+          "name": "GovernanceEnvelope",
+          "role": "governance_envelope",
+          "classification": "product_interface",
+          "status": "not_tested",
+          "scope": "g8e-specific transaction/governance binding"
+        }
+      ],
+      "limitations": [
+        "GovernanceEnvelope is project-specific, not a universal cryptographic standard.",
+        "Claims about consensus, mTLS, WebAuthn and containment need independent review.",
+        "A private C2O deployment is not established by the public repository."
+      ],
+      "evidence": [
+        {
+          "type": "primary_source",
+          "description": "Source and evidence qualification recorded in the companion architecture.",
+          "source_url": "https://github.com/g8e-ai/g8e"
+        }
+      ],
+      "authority_effect": "none",
+      "boundary": "portable_public_record"
+    },
+    {
+      "record_id": "UNIF-AEVRA",
+      "kind": "candidate",
+      "layer": "local_execution",
+      "name": "aevra",
+      "source_url": "https://github.com/the-long-ride/aevra",
+      "version": null,
+      "license_status": "Verify pinned release license",
+      "maturity": "Public local MCP gateway; exact release and security behavior require testing",
+      "claim_status": "source_claim_only",
+      "scope": "Local host execution gateway, MCP aggregation, path/command policy and audit",
+      "interfaces": [
+        {
+          "name": "MCP stdio/Streamable HTTP",
+          "role": "tool_client_server",
+          "classification": "formal_standard",
+          "status": "published",
+          "scope": "Client/server tool interaction"
+        }
+      ],
+      "limitations": [
+        "Tool counts and audit claims are version-sensitive.",
+        "Tamper-evident logs do not prove all host activity was mediated.",
+        "Remote connections require separate authentication, egress and containment review."
+      ],
+      "evidence": [
+        {
+          "type": "primary_source",
+          "description": "Source and evidence qualification recorded in the companion architecture.",
+          "source_url": "https://github.com/the-long-ride/aevra"
+        }
+      ],
+      "authority_effect": "none",
+      "boundary": "portable_public_record"
+    },
+    {
+      "record_id": "UNIF-OMNIPILOT",
+      "kind": "candidate",
+      "layer": "local_execution",
+      "name": "OmniPilot",
+      "source_url": "https://github.com/xrchris7/OmniPilot",
+      "version": null,
+      "license_status": "MIT",
+      "maturity": "Public Python project; cross-platform claims require release-pinned tests",
+      "claim_status": "source_claim_only",
+      "scope": "Cross-platform computer-use agent with risk-tiered action permission claims",
+      "interfaces": [],
+      "limitations": [
+        "13-provider and Windows/macOS/Linux claims are project descriptions, not conformance evidence.",
+        "Computer-use permission tiers do not replace OS account controls or external containment."
+      ],
+      "evidence": [
+        {
+          "type": "primary_source",
+          "description": "Source and evidence qualification recorded in the companion architecture.",
+          "source_url": "https://github.com/xrchris7/OmniPilot"
+        }
+      ],
+      "authority_effect": "none",
+      "boundary": "portable_public_record"
+    },
+    {
+      "record_id": "UNIF-SHINKEN",
+      "kind": "candidate",
+      "layer": "local_execution",
+      "name": "Shinken",
+      "source_url": "https://github.com/Meirtz/Shinken",
+      "version": null,
+      "license_status": "Verify pinned release license",
+      "maturity": "Local/reference implementation; production hardening and broader cross-platform scope are later stages",
+      "claim_status": "source_claim_only",
+      "scope": "Computer-use infrastructure, typed ACI, scoped sandbox and checkpoint/fork/resume design",
+      "interfaces": [
+        {
+          "name": "Shinken ACI",
+          "role": "computer_use_aci",
+          "classification": "product_interface",
+          "status": "not_tested",
+          "scope": "Project-specific computer-use action/observation format"
+        }
+      ],
+      "limitations": [
+        "Design distinguishes current reference implementation from production hardening and cross-OS fleet coverage.",
+        "Project ACI is not a universal OS ABI or authorization grant.",
+        "Recording ledger was described as deferred in inspected design."
+      ],
+      "evidence": [
+        {
+          "type": "primary_source",
+          "description": "Source and evidence qualification recorded in the companion architecture.",
+          "source_url": "https://github.com/Meirtz/Shinken"
+        }
+      ],
+      "authority_effect": "none",
+      "boundary": "portable_public_record"
+    },
+    {
+      "record_id": "UNIF-OCI",
+      "kind": "contract",
+      "layer": "cross_layer_contract",
+      "name": "OCI image and runtime specifications",
+      "source_url": "https://specs.opencontainers.org/runtime-spec/",
+      "version": null,
+      "license_status": "Open specification",
+      "maturity": "Published specification",
+      "claim_status": "source_documented",
+      "scope": "Container image artifacts and runtime configuration/lifecycle",
+      "interfaces": [
+        {
+          "name": "OCI image/runtime",
+          "role": "container_artifact",
+          "classification": "formal_standard",
+          "status": "published",
+          "scope": "Image artifact and runtime lifecycle"
+        }
+      ],
+      "limitations": [
+        "Does not provide a universal host kernel, arbitrary guest OS or device driver.",
+        "Does not imply accelerator or hardware equivalence."
+      ],
+      "evidence": [
+        {
+          "type": "primary_source",
+          "description": "Source and evidence qualification recorded in the companion architecture.",
+          "source_url": "https://specs.opencontainers.org/runtime-spec/"
+        }
+      ],
+      "authority_effect": "none",
+      "boundary": "portable_public_record"
+    },
+    {
+      "record_id": "UNIF-MCP",
+      "kind": "contract",
+      "layer": "cross_layer_contract",
+      "name": "Model Context Protocol",
+      "source_url": "https://github.com/modelcontextprotocol/modelcontextprotocol/tree/main/docs/specification",
+      "version": null,
+      "license_status": "Open protocol specification",
+      "maturity": "Published; transport revision 2026-07-28 inspected",
+      "claim_status": "source_documented",
+      "scope": "Client/server tool, resource and prompt interaction using JSON-RPC",
+      "interfaces": [
+        {
+          "name": "MCP stdio",
+          "role": "tool_client_server",
+          "classification": "formal_standard",
+          "status": "published",
+          "scope": "Local subprocess transport"
+        },
+        {
+          "name": "MCP Streamable HTTP",
+          "role": "tool_client_server",
+          "classification": "formal_standard",
+          "status": "published",
+          "scope": "HTTP-based client/server transport"
+        }
+      ],
+      "limitations": [
+        "MCP is not the agent-to-agent delegation protocol.",
+        "Protocol conformance does not grant tool authority.",
+        "Authentication and host-level enforcement remain deployment responsibilities."
+      ],
+      "evidence": [
+        {
+          "type": "primary_source",
+          "description": "Source and evidence qualification recorded in the companion architecture.",
+          "source_url": "https://github.com/modelcontextprotocol/modelcontextprotocol/tree/main/docs/specification"
+        }
+      ],
+      "authority_effect": "none",
+      "boundary": "portable_public_record"
+    },
+    {
+      "record_id": "UNIF-A2A",
+      "kind": "contract",
+      "layer": "cross_layer_contract",
+      "name": "Agent2Agent Protocol",
+      "source_url": "https://a2a-protocol.org/v1.0.0/specification/",
+      "version": null,
+      "license_status": "Open protocol specification",
+      "maturity": "Published v1.0.0",
+      "claim_status": "source_documented",
+      "scope": "Agent-to-agent discovery, task collaboration and artifact exchange",
+      "interfaces": [
+        {
+          "name": "A2A 1.0",
+          "role": "agent_agent",
+          "classification": "formal_standard",
+          "status": "published",
+          "scope": "Agent-to-agent task exchange"
+        }
+      ],
+      "limitations": [
+        "Not MCP tool-server semantics.",
+        "Advertised capabilities are not proof of capability or permission.",
+        "Authentication/authorization remain deployment responsibilities."
+      ],
+      "evidence": [
+        {
+          "type": "primary_source",
+          "description": "Source and evidence qualification recorded in the companion architecture.",
+          "source_url": "https://a2a-protocol.org/v1.0.0/specification/"
+        }
+      ],
+      "authority_effect": "none",
+      "boundary": "portable_public_record"
+    },
+    {
+      "record_id": "UNIF-ACP",
+      "kind": "contract",
+      "layer": "cross_layer_contract",
+      "name": "Agent Client Protocol",
+      "source_url": "https://agentclientprotocol.com/",
+      "version": null,
+      "license_status": "Open protocol specification",
+      "maturity": "Published specification; exact revision to pin",
+      "claim_status": "source_documented",
+      "scope": "Agent-to-client integration surface",
+      "interfaces": [
+        {
+          "name": "ACP",
+          "role": "client_agent",
+          "classification": "formal_standard",
+          "status": "published",
+          "scope": "Agent-client interaction"
+        }
+      ],
+      "limitations": [
+        "ACP is not A2A agent-to-agent communication.",
+        "Protocol compatibility does not grant execution authority."
+      ],
+      "evidence": [
+        {
+          "type": "primary_source",
+          "description": "Source and evidence qualification recorded in the companion architecture.",
+          "source_url": "https://agentclientprotocol.com/"
+        }
+      ],
+      "authority_effect": "none",
+      "boundary": "portable_public_record"
+    },
+    {
+      "record_id": "UNIF-AGENT-PROTOCOL",
+      "kind": "contract",
+      "layer": "cross_layer_contract",
+      "name": "Agent Protocol REST specification",
+      "source_url": "https://github.com/agi-inc/agent-protocol",
+      "version": null,
+      "license_status": "Separate client-to-agent specification",
+      "maturity": "Release/activity to pin",
+      "claim_status": "source_documented",
+      "scope": "Runs, tasks, steps and artifacts over a client-to-agent API",
+      "interfaces": [],
+      "limitations": [
+        "Not Agno's internal AgentProtocol Python adapter.",
+        "Not MCP tool-server access or A2A agent-to-agent collaboration."
+      ],
+      "evidence": [
+        {
+          "type": "primary_source",
+          "description": "Source and evidence qualification recorded in the companion architecture.",
+          "source_url": "https://github.com/agi-inc/agent-protocol"
+        }
+      ],
+      "authority_effect": "none",
+      "boundary": "portable_public_record"
+    },
+    {
+      "record_id": "UNIF-OPENAI-COMPAT",
+      "kind": "contract",
+      "layer": "cross_layer_contract",
+      "name": "OpenAI-compatible inference API profile",
+      "source_url": null,
+      "version": null,
+      "license_status": "Compatibility convention, not a single governing protocol standard",
+      "maturity": "Operation-specific profiles required",
+      "claim_status": "proposed",
+      "scope": "Declare and test selected model request/response operations",
+      "interfaces": [
+        {
+          "name": "OpenAI-compatible inference API",
+          "role": "inference_api",
+          "classification": "api_compatibility",
+          "status": "not_tested",
+          "scope": "Selected operations/fields only"
+        }
+      ],
+      "limitations": [
+        "API compatibility does not establish model, modality, tool-call or context equivalence.",
+        "No inference about privacy, residency or sovereignty.",
+        "Streaming, cancellation and error behavior need tests."
+      ],
+      "evidence": [
+        {
+          "type": "owner_proposal",
+          "description": "Source and evidence qualification recorded in the companion architecture.",
+          "source_url": null
+        }
+      ],
+      "authority_effect": "none",
+      "boundary": "portable_public_record"
+    },
+    {
+      "record_id": "UNIF-AGNO-ADAPTER",
+      "kind": "contract",
+      "layer": "cross_layer_contract",
+      "name": "Agno AgentProtocol adapter interface",
+      "source_url": "https://docs.agno.com/agent-os/multi-framework/overview",
+      "version": null,
+      "license_status": "Agno-specific runtime interface",
+      "maturity": "Beta/release dependent",
+      "claim_status": "source_documented",
+      "scope": "Framework-to-Agno runtime adapter",
+      "interfaces": [
+        {
+          "name": "Agno AgentProtocol",
+          "role": "framework_adapter",
+          "classification": "product_interface",
+          "status": "beta",
+          "scope": "Agno-specific interface"
+        }
+      ],
+      "limitations": [
+        "Not A2A, ACP or Agent Protocol REST.",
+        "No assumption of identical lifecycle, memory, tool or error semantics."
+      ],
+      "evidence": [
+        {
+          "type": "primary_source",
+          "description": "Source and evidence qualification recorded in the companion architecture.",
+          "source_url": "https://docs.agno.com/agent-os/multi-framework/overview"
+        }
+      ],
+      "authority_effect": "none",
+      "boundary": "portable_public_record"
+    },
+    {
+      "record_id": "UNIF-G8E-ENVELOPE",
+      "kind": "contract",
+      "layer": "cross_layer_contract",
+      "name": "g8e GovernanceEnvelope",
+      "source_url": "https://github.com/g8e-ai/g8e",
+      "version": null,
+      "license_status": "Project-specific format",
+      "maturity": "Project-described v2; pin exact release",
+      "claim_status": "source_claim_only",
+      "scope": "Project transaction envelope for execution-side governance proofs",
+      "interfaces": [
+        {
+          "name": "GovernanceEnvelope",
+          "role": "governance_envelope",
+          "classification": "product_interface",
+          "status": "not_tested",
+          "scope": "g8e-specific binding format"
+        }
+      ],
+      "limitations": [
+        "Not a widely adopted universal standard.",
+        "Do not place C2O private trust roots, keys or policies in shared records."
+      ],
+      "evidence": [
+        {
+          "type": "primary_source",
+          "description": "Source and evidence qualification recorded in the companion architecture.",
+          "source_url": "https://github.com/g8e-ai/g8e"
+        }
+      ],
+      "authority_effect": "none",
+      "boundary": "portable_public_record"
+    },
+    {
+      "record_id": "UNIF-SHINKEN-ACI",
+      "kind": "contract",
+      "layer": "cross_layer_contract",
+      "name": "Shinken Agent-Computer Interface",
+      "source_url": "https://github.com/Meirtz/Shinken",
+      "version": null,
+      "license_status": "Project-specific interface",
+      "maturity": "Release to pin",
+      "claim_status": "source_claim_only",
+      "scope": "Typed computer-use action and observation exchange",
+      "interfaces": [
+        {
+          "name": "Shinken ACI",
+          "role": "computer_use_aci",
+          "classification": "product_interface",
+          "status": "not_tested",
+          "scope": "Project-specific action/observation data"
+        }
+      ],
+      "limitations": [
+        "Not a standardized OS control ABI.",
+        "Must be host/session and capability bound.",
+        "Does not establish human authorization or physical safety."
+      ],
+      "evidence": [
+        {
+          "type": "primary_source",
+          "description": "Source and evidence qualification recorded in the companion architecture.",
+          "source_url": "https://github.com/Meirtz/Shinken"
+        }
+      ],
+      "authority_effect": "none",
+      "boundary": "portable_public_record"
+    },
+    {
+      "record_id": "UNIF-ASSIMILATION",
+      "kind": "contract",
+      "layer": "cross_layer_contract",
+      "name": "UNIVERSALIS component assimilation profile",
+      "source_url": null,
+      "version": null,
+      "license_status": "Owner-proposed profile",
+      "maturity": "Proposed v1",
+      "claim_status": "proposed",
+      "scope": "Identify component, declared interfaces, capability boundaries and evidence for independent admission review",
+      "interfaces": [
+        {
+          "name": "Component assimilation",
+          "role": "assimilation_profile",
+          "classification": "research_proposal",
+          "status": "proposed",
+          "scope": "Evidence and admission proposal only"
+        }
+      ],
+      "limitations": [
+        "Not an external standard or automatic mesh admission.",
+        "A record does not establish trust, identity, authorization or execution."
+      ],
+      "evidence": [
+        {
+          "type": "owner_proposal",
+          "description": "Source and evidence qualification recorded in the companion architecture.",
+          "source_url": null
+        }
+      ],
+      "authority_effect": "none",
+      "boundary": "portable_public_record"
+    }
+  ]
+}

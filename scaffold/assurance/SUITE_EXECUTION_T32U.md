@@ -16,7 +16,7 @@ ran them. It records what happened so someone else can re-run it and disagree.
 | Interpreter | `3.13.5` |
 | Full version | `3.13.5 (main, Aug 10 2026, 12:06:59) [GCC 14.2.0]` |
 | Platform | `Linux-6.12.94+-x86_64-with-glibc2.41` |
-| Working directory | `/workspace/work/p4-work` |
+| Working directory | repository root (box-local absolute path removed 2026-11-16) |
 | Branch | `hf06/record-validator-semantics` |
 | Base commit | `c1020a9`, with the corrections committed on top |
 | Test runner | stdlib `unittest`; no pytest is installed |
@@ -43,14 +43,14 @@ test_real_corpus_parses_with_thirteen_clauses_per_file
 
 ## Exact commands
 
-Both run from `/workspace/work/p4-work`.
+Both run from the repository root.
 
 ```
-/workspace/work/manuscript-intake/venv/bin/python -m unittest discover -s scaffold/tests
+python -m unittest discover -s scaffold/tests
 ```
 
 ```
-/workspace/work/manuscript-intake/venv/bin/python -m unittest discover -s prototype/tests
+python -m unittest discover -s prototype/tests
 ```
 
 ## Captured output: scaffold suite, after the corrections
@@ -76,22 +76,22 @@ to it. The suite exits 0 with them present.
 ```
   placeholders = ", ".join("?" for _ in columns)
 ResourceWarning: Enable tracemalloc to get the object allocation traceback
-/workspace/work/p4-work/prototype/universalis/store.py:515: ResourceWarning: unclosed database in <sqlite3.Connection object at 0x7f3e03990040>
+prototype/universalis/store.py:515: ResourceWarning: unclosed database in <sqlite3.Connection object at 0x7f3e03990040>
   placeholders = ", ".join("?" for _ in columns)
 ResourceWarning: Enable tracemalloc to get the object allocation traceback
-/workspace/work/p4-work/prototype/universalis/store.py:515: ResourceWarning: unclosed database in <sqlite3.Connection object at 0x7f3e03990130>
+prototype/universalis/store.py:515: ResourceWarning: unclosed database in <sqlite3.Connection object at 0x7f3e03990130>
   placeholders = ", ".join("?" for _ in columns)
 ResourceWarning: Enable tracemalloc to get the object allocation traceback
-/workspace/work/p4-work/prototype/universalis/store.py:515: ResourceWarning: unclosed database in <sqlite3.Connection object at 0x7f3e03990220>
+prototype/universalis/store.py:515: ResourceWarning: unclosed database in <sqlite3.Connection object at 0x7f3e03990220>
   placeholders = ", ".join("?" for _ in columns)
 ResourceWarning: Enable tracemalloc to get the object allocation traceback
-/workspace/work/p4-work/prototype/universalis/store.py:515: ResourceWarning: unclosed database in <sqlite3.Connection object at 0x7f3e03a90c70>
+prototype/universalis/store.py:515: ResourceWarning: unclosed database in <sqlite3.Connection object at 0x7f3e03a90c70>
   placeholders = ", ".join("?" for _ in columns)
 ResourceWarning: Enable tracemalloc to get the object allocation traceback
-/workspace/work/p4-work/prototype/universalis/store.py:515: ResourceWarning: unclosed database in <sqlite3.Connection object at 0x7f3e03a90d60>
+prototype/universalis/store.py:515: ResourceWarning: unclosed database in <sqlite3.Connection object at 0x7f3e03a90d60>
   placeholders = ", ".join("?" for _ in columns)
 ResourceWarning: Enable tracemalloc to get the object allocation traceback
-/workspace/work/p4-work/prototype/universalis/store.py:515: ResourceWarning: unclosed database in <sqlite3.Connection object at 0x7f3e03990310>
+prototype/universalis/store.py:515: ResourceWarning: unclosed database in <sqlite3.Connection object at 0x7f3e03990310>
   placeholders = ", ".join("?" for _ in columns)
 ResourceWarning: Enable tracemalloc to get the object allocation traceback
 ....................................
@@ -121,22 +121,22 @@ Exit code: 0.
 ```
   placeholders = ", ".join("?" for _ in columns)
 ResourceWarning: Enable tracemalloc to get the object allocation traceback
-/workspace/work/p4-work/prototype/universalis/store.py:515: ResourceWarning: unclosed database in <sqlite3.Connection object at 0x7fcd79188040>
+prototype/universalis/store.py:515: ResourceWarning: unclosed database in <sqlite3.Connection object at 0x7fcd79188040>
   placeholders = ", ".join("?" for _ in columns)
 ResourceWarning: Enable tracemalloc to get the object allocation traceback
-/workspace/work/p4-work/prototype/universalis/store.py:515: ResourceWarning: unclosed database in <sqlite3.Connection object at 0x7fcd79188130>
+prototype/universalis/store.py:515: ResourceWarning: unclosed database in <sqlite3.Connection object at 0x7fcd79188130>
   placeholders = ", ".join("?" for _ in columns)
 ResourceWarning: Enable tracemalloc to get the object allocation traceback
-/workspace/work/p4-work/prototype/universalis/store.py:515: ResourceWarning: unclosed database in <sqlite3.Connection object at 0x7fcd79188220>
+prototype/universalis/store.py:515: ResourceWarning: unclosed database in <sqlite3.Connection object at 0x7fcd79188220>
   placeholders = ", ".join("?" for _ in columns)
 ResourceWarning: Enable tracemalloc to get the object allocation traceback
-/workspace/work/p4-work/prototype/universalis/store.py:515: ResourceWarning: unclosed database in <sqlite3.Connection object at 0x7fcd79284c70>
+prototype/universalis/store.py:515: ResourceWarning: unclosed database in <sqlite3.Connection object at 0x7fcd79284c70>
   placeholders = ", ".join("?" for _ in columns)
 ResourceWarning: Enable tracemalloc to get the object allocation traceback
-/workspace/work/p4-work/prototype/universalis/store.py:515: ResourceWarning: unclosed database in <sqlite3.Connection object at 0x7fcd79284d60>
+prototype/universalis/store.py:515: ResourceWarning: unclosed database in <sqlite3.Connection object at 0x7fcd79284d60>
   placeholders = ", ".join("?" for _ in columns)
 ResourceWarning: Enable tracemalloc to get the object allocation traceback
-/workspace/work/p4-work/prototype/universalis/store.py:515: ResourceWarning: unclosed database in <sqlite3.Connection object at 0x7fcd79188310>
+prototype/universalis/store.py:515: ResourceWarning: unclosed database in <sqlite3.Connection object at 0x7fcd79188310>
   placeholders = ", ".join("?" for _ in columns)
 ResourceWarning: Enable tracemalloc to get the object allocation traceback
 ....................................
